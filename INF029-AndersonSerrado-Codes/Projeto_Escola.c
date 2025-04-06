@@ -54,27 +54,50 @@ int main (){
     //Declarações
     int opcao;
 
+    //while 1
     while (opcao != 0){
         
         //Menu de opções
-        printf("1 - Alunos");
-        printf("2 - Professores");
-        printf("3 - Disciplinas");
+        printf("\n0 - Sair");
+        printf("\n1 - Alunos");
+        printf("\n2 - Professores");
+        printf("\n3 - Disciplinas\n");
+    
+        //Entrada de dados: opcão
+        scanf("%d",&opcao);
 
+        switch (opcao) {
 
+            case 0: {
+                printf("\nPrograma encerrado.");
+                break;
+            }
+            
+            case 1: {
+                printf("\nModulo Alunos:\n");
+                printf("\n1 - Listar Alunos");
+                printf("\n2 - Listar Alunos por sexo (Masculino/Feminino)");
+                printf("\n3 - Listar Alunos ordenados por Nome");
+                printf("\n4 - Listar Alunos ordenados por data de nascimento");
+                printf("\n5 - Aniversariantes do mês");
+                printf("\n6 - Lista de alunos matriculados em menos de 3 disciplinas");
+                break;
+            }
 
+            case 2: {
+                printf("\nModulo Professores:\n");
+                break;
+            }
 
+            case 3: {
+                printf("\nModulo Disciplinas:\n");
+                break;
+            }
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-}
+            default: {
+                printf("\nOpcao invalida.");
+                break;
+            }
+        }
+    } //Fim do while 1
+} //Fim do programa
