@@ -1,0 +1,104 @@
+
+/* Slides 8C
+1- Declare o vetor "carros" com 5 posições do tipo da
+estrutura definida abaixo. Faça a leitura de "carros" e em
+seguida mostre seu conteúdo na tela.
+a. nome (máximo 10 caracteres)
+b. marca (máximo 15 caracteres)
+c. ano (inteiro)
+d. cor(máximo 10 caracteres)
+e. preço (real)
+*/
+
+#include <stdio.h>
+#include <string.h>
+#define tamanho 1
+
+int main() {
+
+    //Registro
+    struct carros {
+        //Campos
+        char modelo[10];
+        char marca [15];
+        int ano;
+        char cor[10];
+        float preco;
+    };
+    
+    struct carros veiculo[5];
+    int cont;
+
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nInforme o modelo do carro: ");
+        fgets(veiculo[cont].modelo, sizeof(veiculo[cont].modelo), stdin);
+        veiculo[cont].modelo[strcspn(veiculo[cont].modelo, "\n")] = '\0';
+        
+        printf("\nInforme a marca do carro: ");
+        fgets(veiculo[cont].marca, sizeof(veiculo[cont].marca), stdin);
+        veiculo[cont].marca[strcspn(veiculo[cont].marca, "\n")] = '\0';
+        
+        printf("\nInforme o ano do carro: ");
+        scanf(" %d", &veiculo[cont].ano);
+        getchar(); // Consome o '\n' deixado pelo scanf
+        
+        printf("\nInforme a cor do carro: ");
+        fgets(veiculo[cont].cor, sizeof(veiculo[cont].cor), stdin);
+        veiculo[cont].cor[strcspn(veiculo[cont].cor, "\n")] = '\0';
+        
+        printf("\nInforme o preco do carro: ");
+        scanf(" %f", &veiculo[cont].preco);
+        getchar(); // Consome o '\n' deixado pelo scanf
+    }
+    
+    for (cont = 0; cont < tamanho; cont++){
+        printf("\nModelo: %s", veiculo[cont].modelo);
+        printf("\nMarca: %s", veiculo[cont].marca);
+        printf("\nAno: %d", veiculo[cont].ano);
+        printf("\nCor: %s", veiculo[cont].cor);
+        printf("\nPreco: R$%.2f", veiculo[cont].preco);
+    }
+}
+
+
+
+/* Slides 8C
+2- Faça um programa para ler o nome e a média de 5 alunos. Ao final exiba o nome do aluno que possui a maior média. Use uma estrutura para representar os dados do aluno.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#define tamanho 5
+
+int main() {
+
+    struct alunos{
+        char nome[30];
+        float media;
+    };
+
+    struct alunos estudante[tamanho];
+    int cont, contFinal;
+    int maior = 0;
+    
+    for (cont = 0; cont < tamanho; cont++){
+        
+        //Obtendo o nome do estudante
+        printf("\nInforme o nome do estudante: ");
+        fgets(estudante[cont].nome, sizeof(estudante[cont].nome), stdin);
+        estudante[cont].nome[strcspn(estudante[cont].nome, "\n")] = '\0';
+        
+        //Obtendo a média do estudante
+        printf("\nInforme a media do estudante: ");
+        scanf(" %f", &estudante[cont].media);
+        getchar(); //Limpando o buffer
+        
+        if (estudante[cont].media > maior){
+            maior = estudante[cont].media;
+            contFinal = cont;
+        }
+    }
+    
+    printf("\nO estudante %s chegou a uma media de %.2f, sendo a maior da turma.", estudante[contFinal].nome, estudante[contFinal].media);
+}
