@@ -96,7 +96,8 @@ int main() {
 
 
 /*Avaliação III - 2024.2
-QUESTÃO II – Escreva um programa em C, que leia uma string qualquer e como saída gere a posição da primeira ocorrência de cada letra do alfabeto na string. Considere, que a letra pode ter sido digitada tanto em maiúscula como em minúscula.
+QUESTÃO II – Escreva um programa em C, que leia uma string qualquer e como saída gere a posição da primeira ocorrência de cada letra do alfabeto na string. 
+Considere, que a letra pode ter sido digitada tanto em maiúscula como em minúscula.
 
 Por exemplo para a string: “Olha! Eu sei como processar Strings!”.
 
@@ -159,7 +160,9 @@ int main() {
 
 
 /*Avaliação III - 2024.1
-Uma folha de papel é composta de uma sequência de retângulos com diferentes alturas mas com larguras fixas, tal que as bases dos retângulos estão assentadas em uma linha horizontal. A figura ilustra uma folha exemplo com 33 retângulos. Nós gostaríamos de fazer um único corte horizontal, com a ajuda de um estilete e uma régua, que maximize o número resultante de pedaços separados pelo corte. A figura mostra quatro diferentes cortes que resultariam, respectivamente, em 4, 11, 10 e 3 pedaços. 
+Uma folha de papel é composta de uma sequência de retângulos com diferentes alturas mas com larguras fixas, tal que as bases dos retângulos estão assentadas em uma linha horizontal. 
+A figura ilustra uma folha exemplo com 33 retângulos. Nós gostaríamos de fazer um único corte horizontal, com a ajuda de um estilete e uma régua, que maximize o número resultante 
+de pedaços separados pelo corte. A figura mostra quatro diferentes cortes que resultariam, respectivamente, em 4, 11, 10 e 3 pedaços. 
 
 Considere que a o seu programa opera sobre uma folha quadrada de no máximo 50 unidades de altura por 50 unidades (retângulos) de largura. 
 Escreva um programa em C, que leia as 50 alturas dos retângulos, calcule e informe e qual a maior quantidade de pedaços obtidas por um único corte horizontal e qual a altura deste corte.
@@ -172,7 +175,8 @@ int main() {
 
 
 /*Avaliação III - 2024.1
-Um algoritmo de redução de sequências de proteínas por equivalentes foi construído baseado na regra de substituição de subcadeias. A ideia geral do algoritmo é a seguinte. Considere um dicionário de subcadeias como se segue:
+Um algoritmo de redução de sequências de proteínas por equivalentes foi construído baseado na regra de substituição de subcadeias. 
+A ideia geral do algoritmo é a seguinte. Considere um dicionário de subcadeias como se segue:
 
 “AA” → “C”
 “BB” → “D”
@@ -180,11 +184,15 @@ Um algoritmo de redução de sequências de proteínas por equivalentes foi cons
 “ABC” → “C”
 “CB” → “A”
 
-Considere uma fita de proteína qualquer como entrada, e o algoritmo substituirá interativamente as subcadeias por seus equivalentes, priorizando as primeiras entradas do dicionário (se for o caso), gerando uma nova interação, até que nenhuma substituição seja mais possível. No exemplo acima, as seguintes subcadeias serão geradas até a parada do algoritmo:
+Considere uma fita de proteína qualquer como entrada, e o algoritmo substituirá interativamente as subcadeias por seus equivalentes, 
+priorizando as primeiras entradas do dicionário (se for o caso), gerando uma nova interação, até que nenhuma substituição seja mais possível. 
+No exemplo acima, as seguintes subcadeias serão geradas até a parada do algoritmo:
 
 AABABBD → CBABBD → CBADD→ AADD→ CDD.
 
-Neste caso, a proteína equivalente CDD será a saída do algoritmo. Considere uma cadeia de proteína de tamanho máximo 50 e um dicionário de equivalência de tamanho máximo 10 e escreva um programa em C, que leia uma string representando uma proteína e escreva a string que representa a proteína equivalente gerada pelo algoritmo.
+Neste caso, a proteína equivalente CDD será a saída do algoritmo. 
+Considere uma cadeia de proteína de tamanho máximo 50 e um dicionário de equivalência de tamanho máximo 10 e escreva um programa em C, que leia 
+uma string representando uma proteína e escreva a string que representa a proteína equivalente gerada pelo algoritmo.
 */
 
 #include <stdio.h>
@@ -277,7 +285,8 @@ int main(){
 
 
 /*Avaliação III - 2023.2
-Questão II (5.0) - Palavras como “Belo”, “fiNo”, “CrUz” e “FLor” possuem a interessante propriedade de que suas letras aparecem todas em ordem alfabética. Por exemplo, em “FLor”, F vem antes de L no alfabeto, L vem antes de o, e o vem antes de r. Dizemos que palavras com essa propriedade são ordenadas. 
+Questão II (5.0) - Palavras como “Belo”, “fiNo”, “CrUz” e “FLor” possuem a interessante propriedade de que suas letras aparecem todas em ordem alfabética. 
+Por exemplo, em “FLor”, F vem antes de L no alfabeto, L vem antes de o, e o vem antes de r. Dizemos que palavras com essa propriedade são ordenadas. 
 Escreva um programa em C, que leia uma palavra e determine se ela é uma palavra ordenada.
 */
 
@@ -537,7 +546,11 @@ int main() {
 
 /*Avaliação III - 2023.1
 QUESTÃO II: 
-Um laboratório é responsável pelo sequenciamento do DNA de vírus. O DNA dos vírus é uma sequência das enzimas: citosina, guanina, adenosina e timina (representados pelas letras C, G, A, e T). A manipulação do DNA pode acarretar em erro na identificação das enzimas. Para tentar recuperar as enzimas perdidas, o laboratório usa a técnica de consenso que consiste na leitura de cinco sequências do DNA (todas do mesmo tamanho) e a montagem da sequência correta através do cálculo do caracter mais frequente de cada posição. Em caso de ausência de consenso (empate entre os caracteres mais frequentes), o caracter da posição será marcado com ‘?’. Por exemplo, considere as fitas abaixo e o consenso montado segundo a técnica:
+Um laboratório é responsável pelo sequenciamento do DNA de vírus. O DNA dos vírus é uma sequência das enzimas: citosina, guanina, adenosina e timina 
+(representados pelas letras C, G, A, e T). A manipulação do DNA pode acarretar em erro na identificação das enzimas. Para tentar recuperar as enzimas perdidas, 
+o laboratório usa a técnica de consenso que consiste na leitura de cinco sequências do DNA (todas do mesmo tamanho) e a montagem da sequência correta através 
+do cálculo do caracter mais frequente de cada posição. Em caso de ausência de consenso (empate entre os caracteres mais frequentes), o caracter da posição 
+será marcado com ‘?’. Por exemplo, considere as fitas abaixo e o consenso montado segundo a técnica:
 
 Fitas lidas
 CGGATTTT
@@ -642,7 +655,10 @@ int main() {
 
 /*Avaliação III - 2023.1
 Questão I (5.0)
-Um jogo de caças palavras é realizado através da apresentação de um conjunto de letras arranjadas de forma aparentemente aleatórias em uma grade quadrada ou retangular. Nesta grade, os jogadores devem identificar, de forma alternada, palavras, que devem ser procuradas no sentido horizontal e/ou vertical da grade. Nesta variação do jogo, a pontuação por palavra é dependente do tamanho da palavra encontrada: i) caso a palavra indicada pelo jogador não exista, ele recebe -5 pontos; caso exista, ii) a pontuação é o tamanho da palavra encontrada. Por exemplo, para a grade abaixo:
+Um jogo de caças palavras é realizado através da apresentação de um conjunto de letras arranjadas de forma aparentemente aleatórias em uma grade quadrada ou retangular. 
+Nesta grade, os jogadores devem identificar, de forma alternada, palavras, que devem ser procuradas no sentido horizontal e/ou vertical da grade. 
+Nesta variação do jogo, a pontuação por palavra é dependente do tamanho da palavra encontrada: i) caso a palavra indicada pelo jogador não exista, ele recebe -5 pontos; 
+caso exista, ii) a pontuação é o tamanho da palavra encontrada. Por exemplo, para a grade abaixo:
 
     ABLNHEHLLTBQJFRGQH
     KJULOCALIZARARVMNT
@@ -660,7 +676,8 @@ As palavras a seguir terão, respectivamente, a pontuação indicada:
 • TESTE - 5 pontos
 • LOGICA - -5 pontos.
 
-Escreva um programa que leia uma grade de MxN (para fins de teste, considere o valor de M como 7 e N como 17) caracteres e uma string (tamanho máximo igual ao maior(M,N) + 1, para fins de teste), procure a string na grade e indique a pontuação marcada, segundo as regras apresentadas.
+Escreva um programa que leia uma grade de MxN (para fins de teste, considere o valor de M como 7 e N como 17) caracteres e uma string 
+(tamanho máximo igual ao maior(M,N) + 1, para fins de teste), procure a string na grade e indique a pontuação marcada, segundo as regras apresentadas.
 */
 
 #include <stdio.h>
@@ -767,9 +784,15 @@ int main() {
 
 /*Avaliação III - 2019.1
 Questão I
-Uma faixa de letras é um conjunto de letras minúsculas alfabeticamente consecutivas tomadas de 'a' até 'z'. A menor e maior letras da faixa, separadas por dois pontos (o caractere ':'), são usadas para representar a faixa de letras. Por exemplo, a faixa "a:c" representa as letras consecutivas 'a', 'b' e 'c'. (as aspas não fazem parte da faixa). A faixa "w:z" representa as letras 'w', 'x', 'y' e 'z'. A faixa "m:m" representa apenas a letra 'm'. Escreva um programa em C, que leia uma string composta por letras minúsculas e espaços em branco e imprima as faixas de letras que a compõe, ordenadas alfabeticamente pelo menor valor de cada faixa. Faixas de letras a serem impressas devem representar a maior sequência possível de letras de entrada em ordem crescente. Ignore espaços e letras duplicadas contidas na entrada.
+Uma faixa de letras é um conjunto de letras minúsculas alfabeticamente consecutivas tomadas de 'a' até 'z'. A menor e maior letras da faixa, 
+separadas por dois pontos (o caractere ':'), são usadas para representar a faixa de letras. Por exemplo, a faixa "a:c" representa as letras 
+consecutivas 'a', 'b' e 'c'. (as aspas não fazem parte da faixa). A faixa "w:z" representa as letras 'w', 'x', 'y' e 'z'. A faixa "m:m" representa 
+apenas a letra 'm'. Escreva um programa em C, que leia uma string composta por letras minúsculas e espaços em branco e imprima as faixas de letras 
+que a compõe, ordenadas alfabeticamente pelo menor valor de cada faixa. Faixas de letras a serem impressas devem representar a maior sequência possível 
+de letras de entrada em ordem crescente. Ignore espaços e letras duplicadas contidas na entrada.
 
-Por exemplo, a string "iron maiden" tem cinco faixas de letras, "a:a" (a letra 'a'), "d:e" (as letras 'd' e 'e'), "i:i" (a letra 'i'), "m:o" (as letras 'm', 'n' e 'o') e "r:r" (a letra 'x'). Assim a saída do programa deveria ser: "a:a d:e i:i m:o r:r".
+Por exemplo, a string "iron maiden" tem cinco faixas de letras, "a:a" (a letra 'a'), "d:e" (as letras 'd' e 'e'), "i:i" (a letra 'i'), "m:o" 
+(as letras 'm', 'n' e 'o') e "r:r" (a letra 'x'). Assim a saída do programa deveria ser: "a:a d:e i:i m:o r:r".
 */
 
 #include <stdio.h>
