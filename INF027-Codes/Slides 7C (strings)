@@ -1,0 +1,349 @@
+
+/* Slides 7C
+1. Escreva um programa que leia duas strings e as coloque na tela. Imprima também a segunda letra de cada string.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+
+    char palavra[30];
+    
+    printf("\nInforme uma string: ");
+    
+    /*fgets:
+    - Lê até n - 1 caracteres ou até encontrar \n (nova linha).
+    - Se encontrar \n, ele será armazenado no array.
+    - Sempre adiciona \0 no final da string para garantir que
+    seja uma string válida em C.
+    - Possui como parâmetros o array onde a string será
+    armazenada, o número de caracteres lidos e o fluxo de
+    entrada (teclado ou arquivo, por exemplo).
+    */
+    fgets(palavra, sizeof(palavra), stdin);  
+
+    /*Remove o caractere de nova linha (\n) que fgets adiciona
+    Substitui o '\n' por '\0'
+    strcspn busca a primeira posição do caractere desejado (no caso, \n).
+    */
+    palavra[strcspn(palavra, "\n")] = '\0';  
+
+    printf("\nA palavra digita e: %s.\n", palavra);
+    printf("\nA segunda letra da string digitada e: %c\n", palavra[1]);
+    
+    printf("\nInforme uma segunda string: ");
+    
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    printf("\nA palavra digita e: %s.", palavra);
+    printf("\nA segunda letra da string digitada e: %c", palavra[1]);
+}
+
+
+
+/* Slides 7C
+2. Escreva um programa que leia uma string, conte quantos caracteres desta string são iguais a 'a' e substitua os que forem iguais a 'a' por 'b'. O programa deve imprimir o número de caracteres modificados e a string modificada.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    //Declarações
+    char string[30];
+    int tamanho, i, contaA = 0;
+    
+    //Entrada de dados
+    printf("\nInforme uma string: ");
+    fgets(string, sizeof(string), stdin);  
+    string[strcspn(string, "\n")] = '\0';
+
+    tamanho = strlen(string);
+    
+    for (i = 0; i < tamanho; i++){
+        if (string[i] == 'a'){
+            contaA++;
+            string[i] = 'b';
+        }
+    }
+    
+    printf("\nO nº de caracteres modificados e %d.", contaA);
+    printf("\nA string modificada e %s.", string);
+}
+
+
+
+/* Slides 7C
+3. Faca um programa que leia o nome de 5 pessoas e mostre os nomes armazenados. Utilize vetores.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    char nomes[5][10];
+    int cont;
+    
+    for (cont = 0; cont < 5; cont++){
+        printf("\nInforme o nome da %dª pessoa: ", cont+1);
+        fgets(nomes[cont], sizeof(nomes[cont]), stdin);  
+        nomes[cont][strcspn(nomes[cont], "\n")] = '\0';
+    }
+    
+    for (cont = 0; cont < 5; cont++){
+        printf("\nO nome armazenada na posicao %d e %s.", cont+1, nomes[cont]);
+    }
+}
+
+
+
+/* Slides 7C
+4. Uma empresa concederá um aumento de salário aos seus funcionários, variável de acordo com o cargo, conforme a tabela abaixo. Faça um programa que leia o salário e o cargo de um funcionário e calcule o novo salário. Se o cargo do funcionário não estiver na tabela, ele deverá então receber 40% de aumento. Mostre o salário antigo, o novo salário e a diferença.
+    •Cargo          Percentual
+    •Gerente        10%
+    •Engenheiro     20%
+    •Técnico        30%
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    float salarioAtual, salarioNovo, diferenca;
+    float reajuste[] = {0.10, 0.20, 0.30, 0.40};
+    char vCargo[][15] = {"gerente", "engenheiro", "técnico"};
+    char cargo[100];
+    int cont, encontrado = 0, contFinal = 3;
+    
+    printf("\nInforme o cargo do funcionario: ");
+    fgets(cargo, sizeof(cargo), stdin);  
+    cargo[strcspn(cargo, "\n")] = '\0';
+    
+    //Converte para minúsculas
+    for (cont = 0; cargo[cont]; cont++){
+        if (cargo[cont] >= 'A' && cargo[cont] <= 'Z')
+            cargo[cont] = cargo[cont] + 32;
+    }
+    
+    //Espaço antes do %f para evitar a captura da quebra de linha
+    printf("\nInforme o salario atual do funcionario: ");
+    scanf(" %f", &salarioAtual);
+    
+    for (cont = 0; cont < 3; cont++){
+        //Retorna 0 se são iguais
+        if (strcmp(cargo, vCargo[cont]) == 0){
+            salarioNovo = salarioAtual * (1 + reajuste[cont]);
+            encontrado = 1;
+            contFinal = cont;
+            break;
+        }
+    }
+    
+    if (encontrado == 0)
+        salarioNovo = salarioAtual * (1 + reajuste[3]);
+    
+    diferenca = salarioNovo - salarioAtual;
+    
+    //strupr não funciona em todos os compiladores
+    printf("\nO reajuste para o cargo %s e de %.0f%%.", strupr(cargo), reajuste[contFinal]*100);
+    printf("\nO salario atual e de R$ %.2f. O novo salario sera de R$ %.2f, um aumento de R$ %.2f.", salarioAtual, salarioNovo, diferenca);
+}
+
+
+
+/* Slides 7C
+1. Faça um programa que carregue e imprima um vetor com o seu nome (nome completo) e o total de letras que ele possui.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    char nome[1000];
+    int tamanho, letras, cont; 
+    
+    printf("\nInforme um nome completo: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    tamanho = strlen(nome);
+    letras = tamanho;
+    
+    //Conta apenas letras, excluindo espaços vazios
+    for (cont = 0; cont <= tamanho; cont++){
+        if (nome[cont] == ' ')
+            letras--;
+    }
+    
+    printf("\nO nome %s possui %d letras.", nome, letras);
+    
+}
+
+
+
+/* Slides 7C
+2. Faça um programa que carregue o vetor nome com o seu nome (nome completo), fornecido via teclado. Utilize a função gets para a leitura e em seguida use a função a função puts para imprimir o nome. Substitua a função gets pela função scanf e avalie os resultados.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    char nome[1000];
+    int tamanho, letras, cont; 
+    
+    printf("\nInforme um nome completo: ");
+    //fgets(nome, sizeof(nome), stdin);
+    //nome[strcspn(nome, "\n")] = '\0';
+    //scanf só captura a primeira palavra ou caractere
+    scanf("%s", &nome);
+    
+    printf("\n");
+    puts(nome);
+    
+}
+
+
+
+/* Slides 7C
+3. Faça um programa que verifique se uma palavra armazenada em um vetor de caracteres é um palíndromo.
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    char palavra[100];
+    int tamanho, teste, cont, cont2;
+    
+    printf("\nInforme uma palavra: ");
+    scanf("%s", palavra);
+    
+    //Converte para minúsculas
+    for (cont = 0; palavra[cont]; cont++){
+        if (palavra[cont] >= 'A' && palavra[cont] <= 'Z')
+            palavra[cont] = palavra[cont] + 32;
+    }
+    
+    tamanho = strlen(palavra);
+    
+    //Inicializações
+    teste = 1; //São iguais
+    
+    //Iniciando na última posição da palavra
+    cont2 = tamanho - 1; 
+    
+    for (cont = 0; cont < tamanho/2; cont++){
+        if (palavra[cont] != palavra[cont2]){
+            teste = 0;
+            break;
+        }
+        cont2--;
+    }
+
+    if (teste == 1)
+        printf("\nA palavra %s e um palindromo.", palavra);
+    else
+        printf("\nA palavra %s nao e um palindromo.", palavra);
+}
+
+
+
+/* Slides 7C
+3. Faça um programa que verifique se uma palavra armazenada em um vetor de caracteres é um palíndromo.
+
+Solução 2
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    
+    char palavra[100], inversa[100];
+    int cont;
+    
+    printf("\nInforme uma palavra: ");
+    scanf("%s", palavra);
+    
+    //Converte para minúsculas
+    for (cont = 0; palavra[cont]; cont++){
+        if (palavra[cont] >= 'A' && palavra[cont] <= 'Z')
+            palavra[cont] = palavra[cont] + 32;
+    }
+    
+    //Copia de palavra para inversa
+    strcpy(inversa, palavra);
+    
+    //Inverte a palavra
+    //strrev não funciona em todos os compiladores
+    strrev(inversa);
+    
+    if (strcmp(palavra, inversa) == 0)
+    	printf("\nA palavra %s e um palindromo.", palavra);
+    else{
+		printf("\nA palavra %s nao e um palindromo.", palavra);
+		printf("\nInversa: ");
+		puts(inversa);
+	}
+}
+
+
+
+/* Slides 7C
+4. Faça um programa que carregue um vetor de caracteres e imprima o mesmo vetor com as letras minúsculas substituídas por letras maiúsculas.
+*/
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    
+    char palavra[100];
+    int cont;
+    
+    printf("\nInforme uma palavra: ");
+    scanf("%s", palavra);
+    
+    for (cont = 0; palavra[cont] != '\0'; cont++){
+        if (islower(palavra[cont]))
+            palavra[cont] = toupper(palavra[cont]);
+        
+        printf("%c", palavra[cont]);
+    }
+}
+
+
+
+/* Slides 7C
+5. Faça um programa que carregue um vetor de caracteres, gere e imprima um outro vetor onde as vogais, do primeiro vetor, sejam substituídas pelo caracter *.
+*/
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 100
+
+int main() {
+    
+    char palavra[tamanho], vogais[] = {'a','e','i','o','u'};
+    int cont, cont2;
+    
+    printf("\nInforme uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Converte para minúsculas
+    for (cont = 0; palavra[cont]; cont++){
+        if (palavra[cont] >= 'A' && palavra[cont] <= 'Z')
+            palavra[cont] += 32;
+    }
+    
+    for (cont = 0; palavra[cont] != '\0'; cont++){
+        for (cont2 = 0; cont2 < 5; cont2++){
+            if (palavra[cont] == vogais[cont2])
+                palavra[cont] = '*';
+        }
+    }
+    
+    printf("%s", palavra);
+}
