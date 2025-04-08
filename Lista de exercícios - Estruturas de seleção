@@ -1,0 +1,497 @@
+
+/*Lista de exercícios - Estruturas de seleção
+1. Ler uma letra e mostrar se ela é vogal ou consoante.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    char letra;
+  
+    printf("\nInforme uma letra: ");
+    scanf("%c", &letra);
+  
+    if (letra == 'a' || letra == 'A' || letra == 'e' || letra == 'E' || letra == 'i' || letra == 'I' || letra == 'o' || letra == 'O' || letra == 'u' || letra == 'U')
+ 
+        printf("\nA letra e uma vogal.");
+        
+    else
+        
+        printf("\nA letra e uma consoante.");
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+2. Ler 3 valores e escrever a soma dos 2 maiores.
+*/
+#include <stdio.h>
+
+main()
+{
+    int a, b, c;
+    
+    printf("\nInforme tres numeros: ");
+    scanf("%d %d %d", &a, &b, &c);
+    
+    if (a<=b && a<=c)
+    
+        printf("\nA soma dos dois maiores e %d", b+c);
+        
+    else if (b<=a && b<=c)
+    
+        printf("\nA soma dos dois maiores e %d", a+c);
+        
+    else
+        
+        printf("\nA soma dos dois maiores e %d", a+b);
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+3. Ler um número e imprimir se este número é ou não par.
+*/
+#include <stdio.h>
+
+main()
+{
+    int numero;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    if (numero == 0)
+        printf("O numero %d nao e par nem impar.", numero);
+    
+    else if (numero % 2 == 0)
+        printf("O numero %d e par.", numero);
+    
+    else
+        printf("O numero %d e impar.", numero);
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+4. Ler um número e mostrar seu quadrado, sem usar a função pow().
+*/
+#include <stdio.h>
+
+main()
+{
+    int numero;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    printf("O quadro do numero e %d", numero*numero);
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+5. Um posto está vendendo combustíveis com a seguinte tabela de descontos:
+- Álcool: 
+Até 25 litros, desconto de 2% por litro;
+Acima de 25 litros, desconto de 4% por litro.
+
+- Gasolina:
+Até 25 litros, desconto de 3% por litro;
+Acima de 25 litros, desconto de 5% por litro.
+
+Escreva um programa que leia o número de litros vendidos e o tipo de combustível (codificado da seguinte forma: A-álcool, G-gasolina), calcule e imprima o valor a ser pago pelo cliente sabendo-se que o preço do litro da gasolina é R$ 3,10 e o preço do litro do álcool é R$ 2,30.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    float volume, preco;
+    char combustivel;
+    
+    printf("\nInforme o tipo de combustivel (A - Alcool ou G - Gasolina) e a quantidade em litros: ");
+    scanf("%c %f", &combustivel, &volume);
+    
+    if (combustivel=='A')
+        {
+        if (volume<=25)
+            {
+            preco = 2.30*volume*0.98;
+            }
+        else
+            {
+            preco = 2.30*volume*0.96;
+            }
+        printf("\nVolume de combustivel = %.2f", volume);
+	    printf("\nTipo de combustivel = %c", combustivel);
+	    printf("\nPreco do combustivel = %.2f", preco);
+        } 
+    else if (combustivel=='G')
+        {
+        if (volume<=25)
+            {
+            preco = 3.10*volume*(0.97);
+            }
+        else
+            {
+            preco = 3.10*volume*(0.95);
+            }
+        printf("\nVolume de combustivel = %.2f", volume);
+    	printf("\nTipo de combustivel = %c", combustivel);
+    	printf("\nPreco do combustivel = %.2f", preco);
+        }
+	else
+        {
+            printf("\nO tipo de combustivel informado e desconhecido. Informe 'A' para acool ou 'G' para gasolina");
+        }   
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+6. Uma Cia de pulverização utiliza avião para
+pulverizar lavouras. Os custos de pulverização 
+dependem do tipo de praga e da área a ser
+contratada conforme a tabela: 
+
+• Tipo 1 – ervas daninhas R$ 50,00 por acre; 
+• Tipo 2 – gafanhotos R$ 100,00 por acre; 
+• Tipo 3 – broca R$ 150,00 por acre; 
+• Tipo 4 – todos acima R$ 250,00 por acre.
+
+Se a área a ser pulverizada for superior a 1000
+acres, o fazendeiro tem um desconto de 5%. Em
+adição, qualquer fazendeiro cujo custo for
+maior do que R$ 750,00 tem um desconto de 10%
+sobre o valor que ultrapassar os R$ 750,00.
+Caso ambos os descontos se apliquem, o da área
+é calculado antes. Fazer um programa que leia:
+o tipo de pulverização (1 a 4) e área a ser
+pulverizada; e imprima o valor a ser pago.
+
+Solução 1
+
+*/
+
+#include <stdio.h>
+
+#define preco1 50
+#define preco2 100
+#define preco3 150
+#define preco4 250
+
+main()
+{
+    char tipo;
+    float area, precoi=0, precof=0; /*"precoi" é o preço sem desconto. "precof" é o preço com desconto.*/
+     
+    printf("\nInforme o tipo de praga: \n\nTipo 1 – ervas daninhas R$ 50,00 por acre; \nTipo 2 – gafanhotos R$ 100,00 por acre; \nTipo 3 – broca R$ 150,00 por acre; \nTipo 4 – todos acima R$ 250,00 por acre.\n\n");
+    
+    scanf("%c", &tipo);
+    
+    //Tratamento de erro
+    if (tipo <= '0' || tipo > '4')
+        {
+        printf("\nOpcao invalida. Escolha um numero de 1 a 4.");
+        return 1; //Encerra o código
+        }
+        
+    printf("\nInforme o tamanho da area, em acres, a ser pulvierizada:\n\n");
+    scanf("%f", &area);
+    
+    //printf("\n%c %.2f", tipo, area);
+    
+    if (tipo == '1') precoi = area*preco1;
+    else if (tipo == '2') precoi = area*preco2;
+    else if (tipo == '3') precoi = area*preco3;
+    else if (tipo == '4') precoi = area*preco4;
+        
+    if (area > 1000)
+        {
+        precof = precoi*0.95; //Desconto de 5% para áreas > 1000;
+        }
+    
+    if (precof == 0)
+        {
+        if (precoi > 750)
+            {   
+            precof = 750 + (precoi-750)*0.90; //Desconto de 10% no excedente de 750
+            }
+        }
+        
+    else
+        {
+        if (precof > 750)
+            {
+            precof = 750 + (precof-750)*0.90;
+            }
+        }
+        
+    printf("\nA opcao escolhida foi o tipo %c.", tipo);
+    printf("\nA area informada e de %.2f acres.", area);
+    printf("\nO preco sem desconto e de %.2f reais.", precoi);
+    
+    if (precof != 0)
+        {
+        printf("\nO preco com desconto e de %.2f reais.", precof);
+        printf("\nO valor do desconto e de %.2f reais.", precoi-precof);
+        }
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+6. Uma Cia de pulverização utiliza avião para
+pulverizar lavouras. Os custos de pulverização 
+dependem do tipo de praga e da área a ser
+contratada conforme a tabela: 
+
+• Tipo 1 – ervas daninhas R$ 50,00 por acre; 
+• Tipo 2 – gafanhotos R$ 100,00 por acre; 
+• Tipo 3 – broca R$ 150,00 por acre; 
+• Tipo 4 – todos acima R$ 250,00 por acre.
+
+Se a área a ser pulverizada for superior a 1000
+acres, o fazendeiro tem um desconto de 5%. Em
+adição, qualquer fazendeiro cujo custo for
+maior do que R$ 750,00 tem um desconto de 10%
+sobre o valor que ultrapassar os R$ 750,00.
+Caso ambos os descontos se apliquem, o da área
+é calculado antes. Fazer um programa que leia:
+o tipo de pulverização (1 a 4) e área a ser
+pulverizada; e imprima o valor a ser pago.
+
+Solução 2: fazendo precof = precoi caso area <= 1000 (else).
+
+*/
+
+#include <stdio.h>
+
+#define preco1 50
+#define preco2 100
+#define preco3 150
+#define preco4 250
+
+main()
+{
+    char tipo;
+    float area, precoi=0, precof=0; /*"precoi" é o preço sem desconto. "precof" é o preço com desconto.*/
+     
+    printf("\nInforme o tipo de praga: \n\nTipo 1 – ervas daninhas R$ 50,00 por acre; \nTipo 2 – gafanhotos R$ 100,00 por acre; \nTipo 3 – broca R$ 150,00 por acre; \nTipo 4 – todos acima R$ 250,00 por acre.\n\n");
+    
+    scanf("%c", &tipo);
+    
+    //Tratamento de erro
+    if (tipo <= '0' || tipo > '4')
+        {
+        printf("\nOpcao invalida. Escolha um numero de 1 a 4.");
+        return 1; //Encerra o código
+        }
+        
+    printf("\nInforme o tamanho da area, em acres, a ser pulvierizada:\n\n");
+    scanf("%f", &area);
+    
+    //printf("\n%c %.2f", tipo, area);
+    
+    if (tipo == '1') precoi = area*preco1;
+    else if (tipo == '2') precoi = area*preco2;
+    else if (tipo == '3') precoi = area*preco3;
+    else if (tipo == '4') precoi = area*preco4;
+        
+    if (area > 1000)
+        
+        precof = precoi*0.95; //Desconto de 5% para áreas > 1000;
+        
+    else
+        
+        precof = precoi;
+    
+    if (precof > 750)
+        
+        precof = 750 + (precof-750)*0.90; //Desconto de 10% no excedente de 750
+
+    printf("\nA opcao escolhida foi o tipo %c.", tipo);
+    printf("\nA area informada e de %.2f acres.", area);
+    printf("\nO preco sem desconto e de %.2f reais.", precoi);
+    
+    if (precof != precoi)
+        {
+        printf("\nO preco com desconto e de %.2f reais.", precof);
+        printf("\nO valor do desconto e de %.2f reais.", precoi-precof);
+        }
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+7. Ler um número e informar se ele é divisível por 10, por 5, por 2 ou se não é divisível por nenhum
+destes.
+*/
+#include <stdio.h>
+
+main()
+{
+    int numero, teste = 0;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    if (numero%10 == 0)
+        printf("\nO numero %d e divisivel por 10, 5 e 2.", numero);
+        
+    else if (numero%5 == 0)
+        printf("\nO numero %d e divisivel por 5.", numero);
+        
+    else if (numero%2 == 0)
+        printf("\nO numero %d e divisivel por 2.", numero);
+
+    else 
+        printf("\nO numero %d nao e divisivel por 10, 5 ou 2.", numero);
+}
+
+
+
+/*Lista de exercícios - Estruturas de seleção
+8. Receba um número inteiro de 1 a 100 e mostre na tela o número por extenso.
+#include <stdio.h>
+#include <stdlib.h>
+*/
+
+main()
+{
+    int numero, x1, x2;
+    
+    printf("\nDigite um numero de 1 a 100: ");
+    scanf("%d", &numero);
+    
+    if (numero==0||numero>100)
+        
+        printf("\n\nNumero invalido.");
+        
+    else if (numero<=19||numero==100)
+        {
+            if (numero==1)
+                printf("\n\nO numero por extenso e: um");
+                
+            if (numero==2)
+                printf("\n\nO numero por extenso e: dois"); 
+            
+            if (numero==3)
+                printf("\n\nO numero por extenso e: tres"); 
+            
+            if (numero==4)
+                printf("\n\nO numero por extenso e: quatro"); 
+            
+            if (numero==5)
+                printf("\n\nO numero por extenso e: cinco"); 
+            
+            if (numero==6)
+                printf("\n\nO numero por extenso e: seis"); 
+            
+            if (numero==7)
+                printf("\n\nO numero por extenso e: sete"); 
+            
+            if (numero==8)
+                printf("\n\nO numero por extenso e: oito");
+            
+            if (numero==9)
+                printf("\n\nO numero por extenso e: nove"); 
+            
+            if (numero==10)
+                printf("\n\nO numero por extenso e: dez");
+                
+            if (numero==11)
+                printf("\n\nO numero por extenso e: onze");
+                
+            if (numero==12)
+                printf("\n\nO numero por extenso e: doze");
+                
+            if (numero==13)
+                printf("\n\nO numero por extenso e: treze");
+                
+             if (numero==14)
+                printf("\n\nO numero por extenso e: quatorze");
+                
+            if (numero==15)
+                printf("\n\nO numero por extenso e: quinze");
+                
+            if (numero==16)
+                printf("\n\nO numero por extenso e: dezesseis");
+                
+            if (numero==17)
+                printf("\n\nO numero por extenso e: dezessete");
+                
+            if (numero==18)
+                printf("\n\nO numero por extenso e: dezoito");
+                
+            if (numero==19)
+                printf("\n\nO numero por extenso e: dezenove");
+                
+            if (numero==100)
+            printf("\n\nO numero por extenso e: cem");
+        }
+        
+    else
+        {
+        x1 = (numero/10)%10; //Para separar a dezena
+        x2 = (numero%10); //Para separar a unidade
+        
+        if (x1==2)
+            printf("\n\nO numero por extenso e: vinte");
+            
+        else if (x1==3)
+            printf("\n\nO numero por extenso e: trinta");
+            
+        else if (x1==4)
+            printf("\n\nO numero por extenso e: quarenta");
+            
+        else if (x1==5)
+            printf("\n\nO numero por extenso e: cinquenta");
+            
+        else if (x1==6)
+            printf("\n\nO numero por extenso e: sessenta");
+            
+        else if (x1==7)
+            printf("\n\nO numero por extenso e: setenta");
+            
+        else if (x1==8)
+            printf("\n\nO numero por extenso e: oitenta");
+            
+         else if (x1==9)
+            printf("\n\nO numero por extenso e: noventa");
+                
+        if (x2==0)
+            printf("");
+        
+        else if (x2==1)
+            printf(" e um");
+        
+        else if (x2==2)
+            printf(" e dois"); 
+        
+        else if (x2==3)
+            printf(" e tres"); 
+        
+        else if (x2==4)
+            printf(" e quatro"); 
+        
+        else if (x2==5)
+            printf(" e cinco"); 
+        
+        else if (x2==6)
+            printf(" e seis"); 
+        
+        else if (x2==7)
+            printf(" e sete"); 
+        
+        else if (x2==8)
+            printf(" e oito");
+        
+        else if (x2==9)
+            printf(" e nove"); 
+        }
+
+}
