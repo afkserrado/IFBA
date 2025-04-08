@@ -1,0 +1,915 @@
+
+/*Exercício 3.7. O quadrado de um número natural n é dado pela soma dos n
+primeiros números ímpares consecutivos. Por exemplo, 12=1, 22=1+3, 32=1+3+5,
+42=1+3+5+7, etc. Dado um número n, calcule seu quadrado usando a soma de
+ímpares ao invés de produto.
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+    int n, impar, cont, quadrado;
+    
+    printf("Informe um numero: ");
+    scanf("%d", &n);
+    
+    quadrado = 0;
+    cont = 1;
+    
+    for(impar = 1; cont <= n; impar++)
+        {
+        if(impar%2 != 0)
+            {
+            quadrado += impar;
+            cont++;
+            }
+        }
+    
+    /*Solução mais fácil
+    quadrado = 0;
+    impar = 1;
+    
+    for (cont = 1; cont <= n; cont++)
+        {
+            quadrado += impar;
+            impar +=2;
+        }*/
+
+    printf("O quadrado e %d.", quadrado);
+
+}
+
+
+
+/*Exercício 3.8. A série de Fibonacci é 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ... Os dois primeiros termos são iguais a 1 e, a partir do terceiro, o termo é dado pela soma dos dois termos anteriores. Dado um número n≥3, exiba o n-ésimo termo da série de Fibonacci.
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+    int n, cont, i1, i2, fibo;
+    
+    printf("Informe um numero: ");
+    scanf("%d", &n);
+
+    // Verifica se n é menor que 3
+    if (n < 3) {
+        {printf("O termo %d da série de Fibonacci é 1.\n", n);
+        return 1;  // Termina o programa}
+    }
+    
+    i1 = 1;  // Primeiro termo da série
+    i2 = 1;  // Segundo termo da série
+
+    // Calcula os termos a partir do terceiro até o n-ésimo
+    for (cont = 3; cont <= n; cont++) 
+    {
+        fibo = i1 + i2;  // Soma dos dois termos anteriores
+        i1 = i2;         // Atualiza i1 para o próximo cálculo
+        i2 = fibo;       // Atualiza i2 para o próximo cálculo
+    }
+
+    printf("O termo %d da série de Fibonacci é %d.\n", n, fibo);
+
+}
+
+
+
+
+/*Exercício 3.9. Dados dois números naturais m e n, exiba um retângulo com
+m caracteres de altura e n caracteres de largura. Por exemplo, se forem
+dados os números 3 e 6, deverá ser exibido o seguinte desenho:*/
+
+#include <stdio.h>
+#include <windows.h>
+
+void setColor(int color) {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);}
+		
+/*A função GetStdHandle obtém um 'handle'. O handle é um identificador que o sistema operacional usa para referenciar recursos de forma eficiente (arquivos, console, erros, etc.).
+		
+Sendo assim, 'STD_OUTPUT_HANDLE' faz referência ao canal de saída do console.
+		
+Portanto, GetStdHandle(STD_OUTPUT_HANDLE) obtém o identificador que representa o canal de saída do console.
+		
+A SetConsoleTextAttribute modifica algum atributo de texto do console. No caso em questão, ela está modificando a cor do canal de saída.
+		
+O 'void' é utilizado para criar funções ou variáveis que não retornam nada. Se você criar uma função com void, ela será responsável por realizar alguma ação, mas não fornecerá um valor de volta.
+
+A função 'setColor' é uma função personalizada. Ou seja, ela não é nativa do C. É como uma função personalizada do Excel.
+	
+No programa em questão, setColor obtém o identificador que representa o canal de saída do console e muda a sua cor. O parâmetro 'int color' representa a cor de destino.
+	
+Como a função personalizada setColor foi declarada como void, ela não retorna nada ao ser executada. Apenas muda a cor do texto.
+*/
+
+int main() {
+    int lin, col, m, n;
+
+    printf("\nInforme m e n: ");
+    scanf("%d %d", &m, &n);
+
+    for (lin = 1; lin <= m; lin++) {
+        printf("\n");
+        for (col = 1; col <= n; col++) {
+            if ((lin + col) % 2 == 0)
+                setColor(14); // Amarelo
+            else
+                setColor(10); // Verde
+			
+			/*'219' na tabela ASCII corresponde a um caractere no formato de 
+			um retângulo. Os dois retângulos seguidos foram só para aumentar
+			a largura de uma coluna.*/
+            printf("%c%c", 219,219); // Desenha o tabuleiro
+        }
+    }
+
+    setColor(7); // Reseta a cor para branco padrão
+    printf("\n");
+    return 0;
+}
+
+
+
+/*Exercício 3.10. Numa certa agência bancária, as contas são identificadas
+por números de até seis dígitos seguidos de um dígito verificador, calculado
+conforme exemplificado a seguir. Dado um número de conta n, exiba o
+número de conta completo correspondente.
+Seja n = 7314 o número da conta.
+1º Adicionamos os dígitos de n e obtemos a soma s = 4+1+3+7 = 15;
+2º Calculamos o resto da divisão de s por 10 e obtemos o dígito d = 5.
+Número de conta completo: 007314−5*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() 
+{
+    int conta, n, soma, digito;
+    
+    printf("Informe o numero da conta: ");
+    scanf("%d", &conta);
+    
+    system("cls"); //Limpa a tela do console
+    
+    n = conta;
+    soma = 0;
+    
+    /* n != 0 significa que o laço vai parar quando o resto for 0, o que significa que chegamos no último algarismo (casa da unidade), aquele que é o mais significativo, o mais à esquerda.*/
+    while (n != 0)
+        {soma += n%10;
+        n = n/10;}
+        
+    digito = soma%10;
+    
+    printf("O numero da conta e %d%d%d-%d\n.", 0, 0, conta, digito);
+}
+
+
+
+/*Exercício 3.11. Um número natural é triangular se é igual à soma dos n
+primeiros números naturais consecutivos, a partir de 1. Por exemplo, 1, 3, 6,
+10, 15, ... são triangulares. Dado um natural n≥1, informe se ele é triangular.*/
+
+#include <stdio.h>
+//#include <stdlib.h>
+
+int main() 
+{
+    int n, cont, soma;
+    
+    printf("Informe um numero natural: ");
+    scanf("%d", &n);
+    
+    if (n <= 0)
+        {printf("Informe um numero natural.");
+        return 1;}
+    
+    cont = 1;
+    soma = 0;
+    
+    while (soma < n)
+        {
+            soma += cont;
+            cont++;
+        }
+        
+    //printf("%d %d", soma, cont);
+    //soma = soma - cont + 1;
+    
+    if (soma == n)
+        printf("\nO numero %d e triangular.", n);
+    else
+        printf("\nO numero %d nao e triangular.", n);
+}
+
+
+
+#include <stdio.h>
+#include <windows.h>
+
+void move_cursor(int col, int lin) {
+	
+	COORD coord;
+    coord.X = col - 1;  // Ajusta para a posição 0-indexed
+    coord.Y = lin - 1;  // Ajusta para a posição 0-indexed
+    
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    
+	/*'COORD é um tipo de estrutura da biblioteca windows.h. Ela armazena
+	*coordenadas X e Y.
+	
+	'coord' é a variável declarada
+	
+	O '-1' é porque as primeiras linha e coluna do console são de número 1,
+	mas a primeira coordenada é 0,0. Portanto, é necessário fazer esse ajuste.
+	*/
+    
+}
+
+int main() {
+    int col = 40, lin = 12;
+    
+    while (1) {
+        move_cursor(col, lin);  // Move o cursor
+        putchar(219);  // Imprime o caractere na posição do cursor
+        
+        switch (toupper(getchar())) {
+            case 'N': if (lin > 1) lin--; break;
+            case 'S': if (lin < 24) lin++; break;
+            case 'L': if (col < 80) col++; break;
+            case 'O': if (col > 1) col--; break;
+            case 'F': exit(1);  // Finaliza o programa
+        }
+    }
+}
+
+
+
+/*Exemplo 3.9. Simulando o movimento de uma bola de ping-pong.*/
+
+#include <stdio.h>
+#include <windows.h>
+
+// Função para mover o cursor na tela
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x - 1; // Corrige para coordenadas baseadas em 0
+    coord.Y = y - 1;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// Função para verificar se a tecla ESC foi pressionada
+int kbhit() {
+    return (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0; // Verifica o bit mais significativo
+}
+
+int main() {
+    int x = 1, y = 1;   // Posição inicial do caractere
+    int dx = -1, dy = -1; // Direção de movimento
+
+    system("cls"); // Limpa a tela antes de começar
+
+    do {
+        gotoxy(x, y);       // Move o cursor para (x, y)
+        printf("%c", 219);    // Exibe o caractere ☺
+        Sleep(800);         // Pausa por 800ms
+        gotoxy(x, y);       // Retorna para (x, y)
+        printf(" ");        // Apaga o caractere anterior
+
+        if (x == 1 || x == 80) { // Verifica limites horizontais
+            Beep(500, 800);      // Emite som
+            dx = -dx;            // Inverte a direção horizontal
+        }
+        if (y == 1 || y == 24) { // Verifica limites verticais
+            Beep(500, 800);      // Emite som
+            dy = -dy;            // Inverte a direção vertical
+        }
+
+        x += dx; // Atualiza a posição x
+        y += dy; // Atualiza a posição y
+    } while (!kbhit()); // Sai do loop quando a tecla ESC é pressionada
+    
+    /*'while(1)' funciona de forma infinita.
+    kbhit() retorna 0 se a tecla não for pressionada e 1 se for pressionada.
+    !kbhit inverte o retorno de kbhit, pois se a tecla não for pressionada,
+    o loop deve continuar. Logo, kbhit retorna 0 e ! inverte para 1, mantendo
+    o loop.*/
+
+    return 0;
+}
+
+
+
+/*Exercício 3.14. Dada uma série de números positivos (finalizada com um valor nulo) que representam as idades das pessoas que moram num certo bairro, determine a idade da pessoa mais nova e a da pessoa mais velha.*/
+
+#include <stdio.h>
+#include <limits.h>
+
+int main() 
+{
+    //Declarações
+    int idade, menor, maior;
+    
+    //Inicializações
+    /*'INT_MAX' é uma função da biblioteca '<limits.h>. Ela retorna
+    o maior valor que uma variável do tipo int pode armazenar.'*/
+    menor = INT_MAX;
+    maior = 0;
+    
+    do
+    {
+        printf("\nInforme uma idade (digite 0 para parar): ");
+        scanf("%d", &idade);
+
+        if (idade < menor && idade != 0)
+        {
+            menor = idade;
+        }
+        
+        if (idade > maior)
+        {
+            maior = idade;
+        }
+    
+    }
+    while (idade != 0);
+    
+    printf("\nA pessoa mais jovem tem %d anos de idade e a mais velha, %d anos de idade.", menor, maior);
+
+}
+
+
+
+/*Exercício 3.15. Um comerciante precisa informatizar o caixa de sua loja. Para isso ele precisa de um programa que leia uma série de valores correspondendo aos preços das mercadorias compradas por um cliente (o valor zero finaliza a entrada), calcule o valor total, subtraia deste valor o desconto devido (vide tabela ao lado) e, finalmente, mostre o valor a ser pago pelo cliente. Codifique esse programa.*/
+
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração das variáveis
+    float preco, total;
+    
+    //Inicializando
+    preco = 0;
+    total = 0;
+    
+    //Operações
+    do
+    {
+        printf("\nInforme o preco da mercadoria: ");
+        scanf("%f", &preco);
+        
+        total += preco;
+        //printf("\nO total e R$%.2f.\n", total);
+    }
+    while (preco != 0);
+    
+    if (total <= 50)
+        total = total * 0.95;
+    else if (total <= 100)
+        total = total * 0.90;
+    else if (total <= 200)
+        total = total * 0.85;
+    else
+        total = total * 0.80;
+        
+    printf("\nO total e R$%.2f.\n", total);
+}
+
+
+
+/*Exercício 3.16. Faça um programa que calcule o saldo de uma conta bancá-
+ria tendo como entrada o saldo inicial e uma série de operações de crédito
+e/ou débito finalizada com o valor zero. O programa deve apresentar como
+saída o total de créditos, o total de débitos, a C.P.M.F. paga (0,35% do total de
+débitos) e o saldo final. Veja um exemplo:*/
+
+#include <stdio.h>
+
+int main() 
+{
+    float saldo, credito = 0, debito = 0, operacao = 0, imposto;
+    
+    printf("\nSaldo inicial? ");
+    scanf("%f", &saldo);
+   
+    do 
+    {
+        printf("Operacao? ");
+        scanf("%f", &operacao);
+        
+        if (operacao == 0)
+	        break;
+    
+        if (operacao < 0)
+            debito += operacao;
+            
+        if (operacao > 0)
+            credito += operacao;
+            
+    }
+    
+    while (operacao != 0);
+    
+    //C.P.M.F (0,35% do total de débitos)
+    imposto = debito*0.0035;
+    
+    //Saldo final (somando débito e imposto, porque já são negativos)
+    saldo = saldo + credito + debito + imposto;
+    
+    printf("\nTotal de créditos ....: R$%.2f\n", credito);
+    printf("Total de debitos .....: R$%.2f\n", debito*(-1));
+    printf("C.P.M.F paga .........: R$%.2f\n", imposto*(-1));
+    printf("Saldo final ..........: R$%.2f\n", saldo);
+    
+}
+
+
+
+/**Exercício 3.17. Usando a tabela de notas musicais abaixo, codifique um
+programa para simular um piano de sete teclas. [Dica: use as funções
+sound(), nosound() e delay(), do exemplo 3.9, e o comando switch.]*/
+
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+
+int main()
+{
+	char tecla;
+	
+	printf("\nPressione uma tecla para tocar uma nota (A, S, D, F, G, H, J) ou 0 para sair: \n");
+	
+	do
+	{
+		//'getch' lê um caractere sem exibi-lo no console
+		tecla = getch();
+				
+		switch (tecla)
+		{
+			case 'A': Beep(262,800); break; //Dó
+			case 'S': Beep(294,800); break; //Ré
+			case 'D': Beep(330,800); break; //Mi
+			case 'F': Beep(349,800); break; //Fá
+			case 'G': Beep(392,800); break; //Sol
+			case 'H': Beep(440,800); break; //Lá
+			case 'J': Beep(494,800); break; //Si
+			case '0': printf("\nEncerrando programa.\n"); break;
+			default: printf("\nTecla invalida! Tente novamente.\n");
+		}			
+	}
+	while (tecla != '0');
+	
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.3. Codifique um programa para solicitar 5 números,
+via teclado, e exibi-los na ordem inversa àquela em que foram
+fornecidos.*/
+
+#include <stdio.h>
+
+int main()
+{
+    int num[5];
+    int i = 0;
+    
+    do
+    {
+        printf("\nInforme um numero: ");
+        scanf("%d", &num[i]);
+        
+        i++;
+    }
+    while(i < 5);
+    
+    printf("\n");
+    
+    for (i = 4; i >= 0; i--)
+        printf(" %d", num[i]);
+        
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.4. Implemente um algoritmo para calcular o desvio padrão δ de uma coleção de n números reais.*/
+
+#include <stdio.h>
+#include <math.h>
+
+#define tamanho 100
+
+int main()
+{
+    float n[tamanho], x = 0, d = 0;
+    int i = 0, nTamanho;
+    
+    printf("\nInforme o tamanho do vetor n: ");
+    scanf("%d", &nTamanho);
+    
+    if (nTamanho > tamanho)
+        {printf("\nInforme um tamanho menor ou igual a %d.", tamanho);
+        return 1;}
+    
+    //Entrada de dados
+    do
+    {
+        printf("\nInforme um numero real: ");
+        scanf("%f", &n[i]);
+
+        i++;
+        
+    }
+    while(i < nTamanho);
+    
+    //Calculando a média
+    for (i = 0; i < nTamanho; i++)
+        {x += n[i];}
+    
+    x = x/nTamanho; 
+    
+    //Calculando o desvio padrão
+    for (i = 0; i < nTamanho; i++)
+        {d += (n[i] - x)*(n[i] - x);}
+        
+    d = d/(nTamanho - 1);
+    
+    d = sqrt(d);
+    
+    printf("\nO desvio padrao e %.2f.", d);
+    
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.5. Dados os coeficientes a0, a1, a2, …, an de um polinômio p(x) = a0⋅xn + a1⋅xn-1 + … + an-1⋅x + an, e uma seqüência de valores de x, avaliar o polinômio para cada um dos valores de x.
+*/
+#include <stdio.h>
+#include <math.h>
+
+#define tamanho 100
+
+int main() 
+{
+    int n, i, x, soma = 0;
+    int a[tamanho], p[tamanho];
+    
+    printf("\nInforme uma quantidade n de elementos: ");
+    scanf("%d", &n);
+    
+    printf("\nInforme um valor para x: ");
+    scanf("%d", &x);
+    printf("\n");
+    
+    /*'a' é o vetor que armazena os coeficientes. A quantidade de coeficientes é n+1, pois p(x) vai da a[0] até a[n].*/
+    
+    //Entrada dos coeficientes
+    for (i = 0; i <= n; i++)
+       {printf("Informe a[%d]: ", i);
+        scanf("%d", &a[i]);}
+    
+    //Cálculos do vetor polinômio p(x)
+    for (i = 0; i <= n; i++)
+        {p[i] = a[i]*pow(x,n-i);
+        soma += p[i];}
+        
+    //Exibição do resultado
+    printf("\nOs elementos do vetor p são: ");
+    for (i = 0; i <= n; i++)
+        printf("|p[%d] = %d|", i, p[i]);
+        
+    printf("\np(x) = %d", soma);
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.6. Codifique um programa que indique a quantidade mínima
+de cédulas equivalente a uma dada quantia em dinheiro. Considere
+apenas valores inteiros e cédulas de 1, 5, 10, 50 e 100 reais.
+
+Quantia? R$ 209↵
+2 cédulas de R$100,00
+1 cédula de R$5,00
+4 cédulas de R$1,00
+*/
+#include <stdio.h>
+#define n 5
+
+int main() 
+{
+    int c[] = {100, 50, 10, 5, 1};
+    int i, q, r[5];
+    
+    printf("\nInforme uma quantia em dinheiro: ");
+    scanf("%d", &q);
+    printf("\n");
+    
+    for (i = 0; i < n; i++)
+    {
+        r[i] = q/c[i];
+        q %= c[i];
+        
+        if (r[i] > 0)
+            printf("Cedulas de %d = %d\n", c[i], r[i]);
+        
+        /*if  (i == 0)
+            r[i] = q/c[i];
+        else
+            r[i] = (q%c[i-1])/c[i];*/
+            
+        //printf("Cedulas de %d = %d\n", c[i], r[i]);
+    }
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.7. Os pares (749,400), (749,400), (841,400), (749,400), (1000,400), (844,800), (749,400), (749,400), (841,400), (749,400), (1122,400), (1000,800), (749,400), (749,400), (1498,400), (1260,400), (1000,400), (944,400), (841,800), (1335,400), (1335,400), (1260,400), (1000,400), (1122,400) e (1000,800) representam as freqüências e durações de cada uma das notas de uma canção. Usando as funções sound(), delay() e nosound(), definidas em conio.h, crie um programa para tocá-la!
+*/
+
+#include <stdio.h>
+#include <windows.h>
+
+int main() 
+{
+    // Vetores separados para frequências e durações
+    int freq[] = {749, 749, 841, 749, 1000, 844, 749, 749, 841, 749, 1122, 1000, 749, 749, 1498, 1260, 1000, 944, 841, 1335, 1335, 1260, 1000, 1122, 1000};
+    int dur[] = {400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 400, 800};
+
+    // Determina o número total de notas
+    int totalNotas = sizeof(freq) / sizeof(freq[0]);
+
+    // Mensagem inicial
+    printf("Tocando a cancao...\n");
+
+    // Loop para tocar as notas
+    for (int i = 0; i < totalNotas; i++) {
+        Beep(freq[i], dur[i]);  // Toca a frequência `freq[i]` pela duração `dur[i]`
+    }
+
+    // Mensagem final
+    printf("Cancao finalizada!\n");
+
+    return 0;
+}
+
+
+
+
+/*Livro Silvio Lago
+Exercício 5.8. Digite as funções apresentadas e teste o funcionamento do
+programa que resolve o problema das temperaturas acima da média.
+
+Exercício 5.9. Uma variável simples pode ser interpretada como um vetor
+contendo um único elemento e, portanto, pode ser passada por referência se
+usarmos a notação de vetor9. Com base nessa idéia, codifique a rotina
+minimax(t,x,y), que devolve através dos parâmetros x e y, respectivamente, a
+mínima e a máxima entre as temperaturas armazenadas no vetor t.
+*/
+#include <stdio.h>
+#define MAX_TEMPS 7  // Usando um nome mais específico para a constante
+
+// Declaração das funções
+void obtem(float t[]);
+float media(float t[]);
+int conta(float t[], float md);
+void minmax(float t[], float *x, float *y);
+
+int main(void) {
+    float temp[MAX_TEMPS], m, min, max;
+    obtem(temp);               // Função para obter as temperaturas
+    m = media(temp);           // Função para calcular a média
+    minmax(temp, &min, &max);   // Função para calcular a temperatura mínima e máxima			
+    printf("Estatística: %d", conta(temp, m));  // Função para contar quantas temperaturas são maiores que a média
+    printf("\nA temperatura minima e %f, e a maxima, %f.", min, max);
+    return 0;  // Retorna 0 indicando sucesso
+}
+
+// Função para obter as temperaturas
+void obtem(float t[]) {
+    int i;
+    puts("Informe as temperaturas: ");
+    for(i = 0; i < MAX_TEMPS; i++) {
+        printf("%do valor? ", i + 1);
+        scanf("%f", &t[i]);
+    }
+}
+
+// Função para calcular a média
+float media(float t[]) {
+    int i;
+    float s = 0;
+    for(i = 0; i < MAX_TEMPS; i++)
+        s += t[i];
+    return s / MAX_TEMPS;  // Retorna a média das temperaturas
+}
+
+// Função para contar as temperaturas maiores que a média
+int conta(float t[], float md) {
+    int i, c = 0;
+    for(i = 0; i < MAX_TEMPS; i++) {
+        if(t[i] > md)  // Usa md para comparação
+            c++;  // Conta as temperaturas maiores que a média
+    }
+    return c;
+}
+
+// Função para retornar as temperaturas mínima e máxima
+void minmax(float t[], float *x, float *y) {
+    int i;
+
+    // Inicializa os valores de x e y com o primeiro valor do vetor
+    *x = t[0];
+    *y = t[0];
+
+    // Verifica o valor mínimo e máximo a partir do índice 1
+    for (i = 1; i < MAX_TEMPS; i++) {  // Usa MAX_TEMPS em vez de max
+        if (t[i] < *x)
+            *x = t[i];  // Atualiza a temperatura mínima
+        if (t[i] > *y)
+            *y = t[i];  // Atualiza a temperatura máxima
+            
+    /*'*x' e '*y' foram declaradas como ponteiros. Por isso possuem um '*' antes. Ponteiros passam os dados por
+	referência, não por valor. Eles permitem modificar as variáveis originais, já que você passa o endereço 
+	delas para a função. Assim, os valores de *x e *y da função minmax são passados para min e max da função main.
+	Se não as declarássemos como ponteiros, somente x e y, os valores de x e y não seriam passados para min e max.
+	É possível retornar um valor com o 'return' e sem usar ponteiros, como na função 'conta'. Para retornar mais 
+	de um valor ao mesmo tempo, é preciso usar uma 'struct'.*/
+    }
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.10. Codifique a função histograma(t), que exibe um histograma
+da variação da temperatura durante a semana. Por exemplo, se as temperaturas em t forem 19, 21, 25, 22, 20, 17 e 15°C, a função deverá exibir:
+
+D: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+T: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Q: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Q: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Suponha que as temperaturas em t sejam todas positivas e que nenhuma
+seja maior que 50°C. [Dica: crie uma função para exibir uma linha.
+
+Solução 1
+*/
+
+#include <stdio.h>
+#define tamanho 7
+
+// Função auxiliar para exibir uma linha do histograma
+void exibirLinha(char dia, int temperatura) {
+    printf("%c: ", dia);
+    for (int i = 0; i < temperatura; i++) {
+        printf("▄");
+    }
+    printf("\n");
+}
+
+// Função para exibir o histograma completo
+void histograma(int t[], int n) {
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    for (int i = 0; i < n; i++) {
+        exibirLinha(dias[i], t[i]);
+    }
+}
+
+int main() {
+    // Temperaturas da semana
+    int i, j, temperaturas[tamanho];
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    
+    for (i = 0; i < tamanho; i++){
+        printf("Informe a temperatua do dia %c :\n", dias[i]);
+        scanf("%d", &temperaturas[i]);}
+        
+    printf("\n");
+
+    // Exibe o histograma
+    histograma(temperaturas, tamanho);
+}
+
+
+
+
+/*Livro Silvio Lago
+Exercício 5.10. Codifique a função histograma(t), que exibe um histograma
+da variação da temperatura durante a semana. Por exemplo, se as temperaturas em t forem 19, 21, 25, 22, 20, 17 e 15°C, a função deverá exibir:
+
+D: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+T: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Q: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Q: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+S: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+Suponha que as temperaturas em t sejam todas positivas e que nenhuma
+seja maior que 50°C. [Dica: crie uma função para exibir uma linha.
+
+Solução 2
+*/
+
+#include <stdio.h>
+#define tamanho 7
+
+// Função para exibir o histograma completo
+void histograma(int t[], int n) {
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    int i, j;
+    
+    for (int i = 0; i < n; i++) {
+        printf("%c: ", dias[i]);
+        
+        for (int j = 0; j < t[i]; j++){
+           printf("▄");}
+           
+    printf("\n");
+        
+    }
+}
+
+int main() {
+    // Temperaturas da semana
+    int i, temperaturas[tamanho];
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    
+    for (i = 0; i < tamanho; i++){
+        printf("Informe a temperatura do dia %c :\n", dias[i]);
+        scanf("%d", &temperaturas[i]);}
+        
+    printf("\n");
+
+    // Exibe o histograma
+    histograma(temperaturas, tamanho);
+}
+
+
+
+/*Livro Silvio Lago
+Exercício 5.11. Usando as funções desenvolvidas nos exercícios anteriores,
+altere o programa apresentado de modo que sejam exibidos a temperatura
+média, a mínima, a máxima e também o histograma de temperaturas.
+*/
+
+#include <stdio.h>
+#define tamanho 7
+
+// Função para exibir o histograma completo
+void histograma(int t[], int n) {
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    int i, j;
+    
+    for (int i = 0; i < n; i++) {
+        printf("%c: ", dias[i]);
+        
+        for (int j = 0; j < t[i]; j++){
+           printf("▄");}
+           
+    printf("\n");
+        
+    }
+}
+
+int main() {
+    // Temperaturas da semana
+    int i, temperaturas[tamanho], min, max, md, soma;
+    char dias[] = {'D', 'S', 'T', 'Q', 'Q', 'S', 'S'}; // Dias da semana
+    
+    for (i = 0; i < tamanho; i++){
+        printf("Informe a temperatura do dia %c :\n", dias[i]);
+        scanf("%d", &temperaturas[i]);}
+        
+    printf("\n");
+    
+    min = temperaturas[0];
+    max = temperaturas [0];
+    soma = 0;
+    
+    for (i = 0; i < tamanho; i++){
+        if (min > temperaturas[i])
+            min = temperaturas[i];
+        
+        if (max < temperaturas[i])
+            max = temperaturas[i];
+            
+        soma += temperaturas[i];
+    }
+
+    md = soma/tamanho;
+
+    // Exibe o histograma
+    histograma(temperaturas, tamanho);
+    
+    printf("\nA temperatura minima e %d graus, e a maxima, %d graus. A media da temperatura e %d.", min, max, md);
+}
