@@ -1,0 +1,1259 @@
+
+/*Avaliação II - 2024.1
+
+Questão I
+A conjectura de Collatz é uma conjectura matemática que recebeu este nome em referência ao matemático alemão Lothar Collatz, que foi o primeiro a propô-la, em 1937. Esta conjectura aplica-se a qualquer número natural inteiro, e diz-nos para, se este número for par, o dividir por 2; e se for ímpar, para multiplicá-lo por 3 e adicionar 1. Desta forma, por exemplo, se a sequência iniciar com o número 5 ter-se-á: 5; 16; 8; 4; 2; 1. A conjectura apresenta uma regra dizendo que, qualquer número natural inteiro, quando aplicado a esta regra, eventualmente sempre chegará a 4, que se converte em 2 e termina em 1. Essa sequência em questão também pode ser chamada de Números de Granizo ou Números Maravilhosos. A explicação destes últimos nomes está em "como o granizo nas nuvens antes de cair, os números saltam de um lugar ao outro antes de chegar ao 4, 2, 1". 
+
+Escreva um programa em C, que calcule quantos números são necessários para que um número inteiro chegue a 1 quando aplicada regra da conjectura de Collatz. Por exemplo, caso o número informado seja 5, a saída deverá ser 6 (5, 16, 8, 4, 2 e 1).
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int num, cont;
+    
+    printf("\nInforme um numero maior que zero: ");
+    scanf("%d", &num);
+    
+    //Tratamento de erros
+    if (num <= 0){
+        printf("\nNumero invalido.");
+        return 1;}
+        
+    //Inicialização
+    cont = 1; //Contando a entrada
+    
+    //Loop
+    do
+    {
+        if (num%2 == 0) //Par
+            num /= 2;
+        else //Ímpar
+            num = num*3 + 1;
+            
+        cont++;
+    }
+    while (num != 1);
+    
+    printf("A quantidade de numeros e: %d", cont);
+}
+
+
+
+/*INCOMPLETA
+
+Avaliação II - 2024.1
+
+Questão II
+A sala de aulas utilizadas no campus Salvador do IFBA tem uma grande janela, composta de três folhas de vidro. A janela tem um metro de altura por seis metros (600 centimetros) de comprimento. Cada folha da janela tem um metro de altura e comprimento de tamanho variável (porém, de até seis metros, para caber na janela). As folhas deslizam sobre trilhos, e podem ser colocadas em qualquer ponto ao longo do comprimento da janela, de forma que é possível controlar a abertura da janela, para circulação de ar. A figura abaixo ilustra duas configurações das folhas da janela. Considerou-se nestes dois exemplos que as folhas possuem o mesmo tamanho de dois metros, cada uma. Na figura, os cantos inferiores esquerdos de cada folha são indicados por F1, F2 e F3. Na configuração (a) a janela está totalmente fechada, e portanto o total da área aberta é igual a zero. Na configuração (b) há duas aberturas, e o total de área aberta é igual a (100 x 100) + (50 x 100) = 15.000 cm2.
+
+    Escreva um programa em C, que leia as posições das três folhas da janela, bem como os respectivos comprimentos e determine qual a área da janela que está aberta, em centímetros quadrados.
+*/
+
+#include <stdio.h>
+#define numFolhas 3
+#define altura 100
+
+int main() {
+
+    //Declaração das variáveis
+    int cont, cont2;
+    
+    //Comprimentos
+    float comprimento[numFolhas], compTotal = 0, sobreposicao, areaTotal, areaAberta;
+    
+    //Posições
+    float posicao[numFolhas], pFinal[numFolhas];
+    
+    //Entrada de dados: comprimentos
+    for (cont = 0; cont < numFolhas; cont++){
+        printf("\nInforme o comprimento da folha %d (cm): ", cont+1);
+        scanf("%f", &comprimento[cont]);
+        
+        //Tratamento de erros
+        if (comprimento[cont] <= 0){
+            printf("\nComprimento invalido. Informe um comprimento maior que 0.");
+            return 1;
+        }
+        compTotal += comprimento[cont];
+    }
+    
+    //Área total da janela fechada
+    areaTotal = compTotal * altura;
+    
+    //Entrada de dados: posições
+    for (cont = 0; cont < numFolhas; cont++){
+        printf("\nInforme a posicao da folha %d (cm): ", cont+1);
+        scanf("%f", &posicao[cont]);
+        pFinal[cont] = posicao[cont] + comprimento[cont];
+        
+        //Tratamento de erros
+        if (posicao[cont] < 0){
+            printf("\nPosicao invalida. Informe uma posicao maior ou igual a 0.");
+            return 1;
+        }
+        else if (pFinal[cont] > compTotal){
+            printf("Posicao invalida. A folha ultrapassa o comprimento total da janela.");
+            return 1;
+        }
+            
+    }
+
+    //Exibindo o vetor comprimento
+    printf("\n--- Resultado ---");
+    printf("\nComprimentos = [");
+    
+    for (cont = 0; cont < numFolhas; cont++){
+        if (cont < numFolhas - 1)
+            printf("%.2f, ", comprimento[cont]);
+        else
+            printf("%.2f", comprimento[cont]);
+    }
+    printf("]");
+    
+    //Exibindo o vetor posicao
+    printf("\nPosições = [");
+    
+    for (cont = 0; cont < numFolhas; cont++){
+        if (cont < numFolhas - 1)
+            printf("%.2f, ", pFinal[cont]);
+        else
+            printf("%.2f", pFinal[cont]);
+    }
+    printf("]");
+    
+    //printf("\nComprimento total (cm2) = %.2f", compTotal);
+    
+    //Calculando a área aberta
+
+    }
+    
+    printf("\nArea aberta = %.2f", areaAberta);
+}
+
+
+
+/*Avaliação II - 2023.2
+Questão II (5,0) - Um Expoente de Mersenne é um número natural
+n, tal que o número de Mersenne (número da forma Mn = 2n -1)
+por ele gerado também é primo. Escreva um programa em C, que
+gere a lista dos primeiros 20 Expoentes de Mersenne, com seus
+respectivos números de Mersenne.
+*/
+
+#include <stdio.h>
+#include <math.h>
+#define quantidade 20
+
+int main() {
+
+    //Declaração
+    int n, primo, cont, cont2, Expoente[quantidade];
+    unsigned long long M, Mersenne[quantidade];
+    
+    //Inicialização
+    //Cont conta os números de Mersenne encontrados
+    cont = 0;
+    
+    //Operações
+    /*n = 2, pois: n = 0 > M = 0 | n = 1 > M = 1
+    Os números 0 e 1 não são primos*/
+    for (n = 2; cont < quantidade; n++){
+        
+        //Inicialização
+        primo = 1;
+        
+        //Cálculo do número de Mersenne
+        //Usa deslocamento de bits para evitar erro de precisão
+        M = (1ULL << n) - 1;
+        
+        //Eliminando números pares
+        if (M%2 == 0)
+            primo = 0;
+
+        //Verificação da primalidade para M ímpar
+        else{
+            for (cont2 = 3; cont2 <= sqrt(M); cont2+= 2){
+                
+                //Números não primos
+                if (M%cont2 == 0){
+                    primo = 0;
+                    break;
+                }
+            }
+        }
+        
+        //Números primos
+        //Armazenando M e n
+        if (primo == 1){
+            Mersenne[cont] = M;
+            Expoente[cont] = n;
+            cont++;
+        }
+    }
+        
+    //Exibição do resultado
+    printf("\n--- Resultado ---");
+    
+    //Números de Mersenne
+    printf("\nMersenne = [");
+    
+    for (cont = 0; cont < quantidade; cont++){
+        if (cont < quantidade - 1)
+            printf("%llu, ", Mersenne[cont]);
+        else
+            printf("%llu", Mersenne[cont]);
+    }
+    printf("]");
+    
+    //Expoentes
+    printf("\n");
+    printf("\nExpoente n = [");
+    
+    for (cont = 0; cont < quantidade; cont++){
+        if (cont < quantidade - 1)
+            printf("%d, ", Expoente[cont]);
+        else
+            printf("%d", Expoente[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Avaliação II - 2023.2
+Sua tarefa é escrever um programa que determine a soma das vendas de seu chefe. A entrada será uma sequência de inteiros com os valores das vendas (incluindo os comandos de exclusão ‘zeros’) e a saída deverá ser um único valor representando o total vendido pelo seu chefe.
+
+Para fins de teste, considere que o seu chefe irá informar no máximo 10 inteiros, contudo seu algoritmo deve ser genérico o suficiente para executar em sequências de qualquer tamanho.
+*/
+
+#include <stdio.h>
+#define tamanho 100
+
+int main() {
+
+    int n, op[tamanho], cont, contFinal = 0, soma = 0;
+    
+    for (cont = 0;; cont++){
+        printf("\nInforme o %dº numero (apenas inteiros positivos ou -1 para encerrar): ", cont+1);
+        scanf("%d", &n);
+        
+        //Encerramento do programa
+        if (n == -1)
+            break;
+        
+        //Tratamento de erros
+        //Números negativos diferentes de -1
+        if (n < 0){
+            printf("\nNúmero inválido.");
+            cont--;
+            continue;
+        }
+        
+        //Remoção do último número
+        //Não altera o vetor op
+        if (n == 0){
+            if (contFinal > 0){ //Se o vetor não estiver vazio
+                contFinal--; //Remove o último número
+                soma -= op[contFinal]; //Atualiza a soma
+            }
+        }
+        //Armazena o número no vetor
+        else{
+            op[contFinal] = n;
+            soma += n;
+            contFinal++; //Contando os elementos existentes
+        }
+    }
+
+    //Exibição do vetor final
+    printf("\n--- Resultado ---");
+    printf("\nOperações = [");
+    
+    for (cont = 0; cont < contFinal; cont++){
+        if (cont < contFinal - 1)
+            printf("%d, ", op[cont]);
+        else
+            printf("%d", op[cont]);
+    }
+    printf("]");
+    printf("\n\nSoma = %d", soma);
+    
+}
+
+
+
+/*Avaliação II - 2022.1
+QUESTÃO I (5.0)
+Um grupo de estudantes de ADS, está desenvolvendo uma nova notação posicional para representar números inteiros. Este grupo chamou esta representação de "A Curious Method" ("Um Método Curioso"), representado pela sigla ACM. A notação ACM usa os mesmos dígitos que a notação decimal, isto é, de 0 a 9.
+Para converter um número A da notação ACM para a notação decimal, você deve adicionar k termos, onde k é o número de dígitos de A (na notação ACM), O valor do i-ésimo termo, correspondente ao i-ésimo dígito ai, contando da direita para a esquerda, é ai × i!. Por exemplo, 719(ACM) é equivalente a 53(10), já que 7 × 3! + 1 × 2! + 9 × 1! = 53. Escreva um programa em C, que leia um número na notação ACM e imprima o equivalente na notação decimal.
+*/
+
+#include <stdio.h>
+#define tamanho 100
+
+int main() {
+
+    int n, nAux, nDec = 0, vNum[tamanho], fatorial, cont, cont2, contFinal;
+    
+    printf("\nInforme um numero inteiro em ACM: ");
+    scanf("%d", &n);
+    
+    nAux = n;
+    
+    //Separando os algarismos
+    cont = 0;
+    
+    do
+    {
+        vNum[cont] = nAux%10;
+        nAux = nAux/10;
+        cont++;
+    }
+    while (nAux != 0);
+
+    //Posição do último algarismo
+    //Algarismo mais significativo
+    contFinal = cont-1;
+    
+    /*for (cont = 0; cont <= contFinal; cont++)
+        printf("| %d |", vNum[cont]);*/
+
+    //Conversão
+    for (cont = contFinal; cont >= 0; cont--){
+        
+        //Número cujo fatorial será calculado
+        nAux = contFinal + 1; 
+        fatorial = 1;
+        
+        for (cont2 = 1; cont2 <= nAux; cont2++)
+            fatorial *= cont2;
+            
+        nDec += vNum[contFinal]*fatorial;
+        contFinal--;
+    }
+    
+    printf("\nO numero %d na base ACM pode ser convertido para %d na base decimal.", n, nDec);
+}
+
+
+
+/*Avaliação II - 2022.1
+QUESTÃO I (5.0)
+Um grupo de estudantes de ADS, está desenvolvendo uma nova notação posicional para representar números inteiros. Este grupo chamou esta representação de "A Curious Method" ("Um Método Curioso"), representado pela sigla ACM. A notação ACM usa os mesmos dígitos que a notação decimal, isto é, de 0 a 9.
+Para converter um número A da notação ACM para a notação decimal, você deve adicionar k termos, onde k é o número de dígitos de A (na notação ACM), O valor do i-ésimo termo, correspondente ao i-ésimo dígito ai, contando da direita para a esquerda, é ai × i!. Por exemplo, 719(ACM) é equivalente a 53(10), já que 7 × 3! + 1 × 2! + 9 × 1! = 53. Escreva um programa em C, que leia um número na notação ACM e imprima o equivalente na notação decimal.
+
+Solução 2, mudando algumas variáveis para double e long long int.
+*/
+
+#include <stdio.h>
+
+#define TAMANHO 100
+
+int main() {
+
+    long long int n, nAux;
+    double nDec = 0.0, fatorial;
+    int vNum[TAMANHO], cont, cont2, contFinal;
+
+    printf("\nInforme um numero inteiro em ACM: ");
+    scanf("%lld", &n);
+
+    nAux = n;
+
+    // Separando os algarismos
+    cont = 0;
+    do {
+        vNum[cont] = nAux % 10;
+        nAux = nAux / 10;
+        cont++;
+    } while (nAux != 0);
+
+    // Posição do último algarismo (Algarismo mais significativo)
+    contFinal = cont - 1;
+
+    // Conversão ACM -> Decimal
+    for (cont = contFinal; cont >= 0; cont--) {
+
+        // Número cujo fatorial será calculado
+        nAux = contFinal + 1;
+        fatorial = 1.0;
+
+        // Cálculo do fatorial com `double`
+        for (cont2 = 1; cont2 <= nAux; cont2++)
+            fatorial *= cont2;
+
+        // Atualiza o valor decimal com o dígito e seu fatorial correspondente
+        nDec += vNum[contFinal] * fatorial;
+        contFinal--;
+    }
+
+    printf("\nO numero %lld na base ACM pode ser convertido para %.0lf na base decimal.\n", n, nDec);
+    return 0;
+}
+
+
+
+/*Avaliação II - 2022.1
+QUESTÃO II (5.0)
+Considere uma lista com todos os inteiros positivos entre A e B (inclusive), na base decimal e sem zeros à esquerda. Deseja-se saber quantas vezes cada um dos dígitos aparece nesta lista.
+
+Por exemplo, se a entrada for 1 e 9, a saída deverá ser 0 1 1 1 1 1 1 1 1 1.
+    
+Se a entrada for 10 e 22, a saída deverá ser 2 12 5 1 1 1 1 1 1 1.
+    
+Escreva um programa em C, que leia os números A e B, onde 1 ≤ A ≤ B ≤ 1000, e imprima a sequência de vezes que cada dígito aparece no intervalo.
+*/
+
+#include <stdio.h>
+#define tamanho 2893
+
+/*Entre 1 e 1000, existem 2893 dígitos.
+9 números com 1 dígito = 9 dígitos
+90 números com 2 dígitos = 180 dígitos
+900 números com 3 dígitos = 2700 dígitos
+1 número com 4 dígitos = 4 dígitos
+*/
+
+int main() {
+
+    int A, B, n, contador[10]={0};
+    int cont, cont2 = 0, contFinal, algarismos[tamanho]={0};
+    
+    //Entrada de dados
+    printf("\nInforme um numero A: ");
+    scanf("%d", &A);
+    
+    //Tratamento de erros
+    if (A < 1 || A > 1000){
+        printf("\nNumero invalido.");
+        return 1;
+    }
+    
+    //Entrada de dados
+    printf("\nInforme um numero B: ");
+    scanf("%d", &B);
+    
+    //Tratamento de erros
+    if (B < 1 || B > 1000 || B < A){
+        printf("\nNumero invalido.");
+        return 1;
+    }
+
+    //Percorrendo o intervalo entre A e B
+    for (cont = A; cont <= B; cont++){
+        
+        n = cont;
+        //Separando e guardando os algarismos
+        do {
+            algarismos[cont2] = n%10;
+            n = n/10;
+            cont2++;
+        }        
+        while (n != 0);
+    }
+    
+    contFinal = cont2 - 1;
+    
+    //Vetor algarismos
+    printf("\nAlgarismos: ");
+    for (cont = 0; cont <= contFinal; cont++)
+        printf("| %d ", algarismos[cont]);
+    
+    //Contando os digitos
+    for (cont = 0; cont <= 9; cont++){
+        for (cont2 = 0; cont2 <= contFinal; cont2++){
+            if (algarismos[cont2] == cont)
+                contador[cont]++;
+        }
+    }
+    
+    //Exibição do resultado
+    printf("\n");
+    printf("\nContador: ");
+    for (cont = 0; cont <= 9; cont++)
+        printf("| %d ", contador[cont]);
+
+}
+
+
+
+/*Avaliação II - 2022.1
+QUESTÃO II (5.0)
+Considere uma lista com todos os inteiros positivos entre A e B (inclusive), na base decimal e sem zeros à esquerda. Deseja-se saber quantas vezes cada um dos dígitos aparece nesta lista.
+
+Por exemplo, se a entrada for 1 e 9, a saída deverá ser 0 1 1 1 1 1 1 1 1 1.
+    
+Se a entrada for 10 e 22, a saída deverá ser 2 12 5 1 1 1 1 1 1 1.
+    
+Escreva um programa em C, que leia os números A e B, onde 1 ≤ A ≤ B ≤ 1000, e imprima a sequência de vezes que cada dígito aparece no intervalo.
+
+Solução 2
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int A, B, n, contador[10]={0};
+    int cont, digito;
+    
+    //Entrada de dados
+    printf("\nInforme um numero A: ");
+    scanf("%d", &A);
+    
+    //Tratamento de erros
+    if (A < 1 || A > 1000){
+        printf("\nNumero invalido.");
+        return 1;
+    }
+    
+    //Entrada de dados
+    printf("\nInforme um numero B: ");
+    scanf("%d", &B);
+    
+    //Tratamento de erros
+    if (B < 1 || B > 1000 || B < A){
+        printf("\nNumero invalido.");
+        return 1;
+    }
+
+    //Percorrendo o intervalo entre A e B
+    for (cont = A; cont <= B; cont++){
+        
+        n = cont;
+        //Separando e guardando os algarismos
+        while (n != 0) {
+            digito = n%10;
+            contador[digito]++;
+            n /= 10;
+        }
+    }
+    
+    //Exibição do resultado
+    printf("\n");
+    printf("\nContador: ");
+    for (cont = 0; cont <= 9; cont++)
+        printf("| %d ", contador[cont]);
+
+}
+
+
+
+/*Avaliação II - 2021.1
+QUESTÃO I (5.0)
+*/
+#include <stdio.h>
+#include <math.h>
+#define tamanho 10
+
+int main() {
+    
+    //Declaração de variáveis
+    //Variáveis simples
+    int n, repetido, cont, cont2, cont3, contFinal, primo, raiz;
+    
+    //Arrays
+    int vetor1[tamanho], vetor2[tamanho], vUnico[tamanho] = {0}, vResultado[tamanho] = {0}, primo1[tamanho] = {0}, primo2[tamanho] = {0}, primoR[tamanho] = {0};
+    
+    //Entrada de dados: vetor 1
+    for (cont = 0; cont < tamanho; cont++){
+        printf("\nInforme o %dº numero do vetor 1: ", cont+1);
+        scanf("%d", &n);
+        
+        //Variável de teste
+        repetido = 0; //Assumindo que não é repetido
+        
+        //Verificando se o número n já foi digitado
+        //Teste não precisa ser feito quando cont = 0
+        if (cont > 0){
+            //Percorrendo vetor1 para verificar se n já consta
+            for (cont2 = 0; cont2 < cont; cont2++){
+                if (vetor1[cont2] == n){
+                    printf("\nO numero %d ja foi digitado.", n);
+                    cont--;
+                    repetido = 1; //n já foi digitado
+                    break;
+                }
+            }
+        }
+        //Se n não tiver sido digitado
+        if (repetido == 0)
+            vetor1[cont] = n;
+    }
+
+    //Entrada de dados: vetor 2
+    for (cont = 0; cont < tamanho; cont++){
+        printf("\nInforme o %dº numero do vetor 2: ", cont+1);
+        scanf("%d", &n);
+        
+        //Variável de teste
+        repetido = 0; //Assumindo que não é repetido
+        
+        //Verificando se o número n já foi digitado
+        //Teste não precisa ser feito quando cont = 0
+        if (cont > 0){
+            //Percorrendo vetor1 para verificar se n já consta
+            for (cont2 = 0; cont2 < cont; cont2++){
+                if (vetor2[cont2] == n){
+                    printf("\nO numero %d ja foi digitado.", n);
+                    cont--;
+                    repetido = 1; //n já foi digitado
+                    break;
+                }
+            }
+        }
+        //Se n não tiver sido digitado
+        if (repetido == 0)
+            vetor2[cont] = n;
+    }
+    
+    //Exibindo o vetor 1
+    printf("\n");
+    printf("\nVetor 1: | ");
+    for (cont = 0; cont < tamanho; cont++)
+        printf("%d | ", vetor1[cont]);
+    
+    //Exibindo o vetor 2
+    printf("\n");
+    printf("\nVetor 2: | ");
+    for (cont = 0; cont < tamanho; cont++)
+        printf("%d | ", vetor2[cont]);
+    
+    //Desafio 1: verificando os números do vetor1 que não estão no vetor2
+    cont3 = 0;
+    for (cont = 0; cont < tamanho; cont++){
+        repetido = 0; //Assumindo que não está
+        
+        for (cont2 = 0; cont2 < tamanho; cont2++){
+            if (vetor1[cont] == vetor2[cont2]){
+                repetido = 1; //Está
+                break;
+            }
+        }
+        //Se vetor1[cont] não estiver em vetor2 
+        if (repetido == 0){
+            vUnico[cont3] = vetor1[cont];
+            cont3++;
+        }
+    }
+    
+    //Posição do último elemento do vUnico
+    contFinal = cont3 - 1;
+
+    //Exibindo o vUnico
+    //cont3 > 0 significa que o vUnico não está vazio
+    printf("\n");
+    
+    if (cont3 == 0)
+        printf("\nTodos os elementos do vetor1 estão contidos no vetor2.");
+    
+    else{
+        printf("\nElementos do vetor1 que não estão no vetor 2: | ");
+        for (cont = 0; cont <= contFinal; cont++)
+            printf("%d | ", vUnico[cont]); 
+    }
+    
+    printf("\n");
+    printf("\nVetor resultado: | ");
+    //Desafio 2: imprimindo o vResultado = vetor1 + vetor2
+    for (cont = 0; cont < tamanho; cont++){
+        vResultado[cont] = vetor1[cont] + vetor2[cont];
+        printf("%d | ", vResultado[cont]);
+    }
+        
+    //Desafio 3: números primos dos vetores 1, 2 e resultado
+    //Vetor1
+    cont3 = 0;
+    for (cont = 0; cont < tamanho; cont++){
+        primo = 1; //Assumindo que é primo
+        raiz = sqrt(vetor1[cont]);
+        
+        //0, 1 e números negativos não são primos
+        if (vetor1[cont] < 2)
+            primo = 0;
+            
+        else if (vetor1[cont] == 2)
+            primo = 1;
+        
+        //Verificando a primalidade
+        else{
+            for (cont2 = 2; cont2 <= raiz; cont2++){
+                if (vetor1[cont]%cont2 == 0){ //Não é primo
+                    primo = 0;
+                    break; //Sai do loop se não for primo
+                }
+            }    
+        }
+        
+        //Se for primo, armazenar no vetor
+        if (primo == 1){
+            primo1[cont3] = vetor1[cont];
+            cont3++;
+        }
+    }
+    
+    contFinal = cont3 - 1;
+    
+    //Exibindo o vetor primo1
+    printf("\n");
+    printf("\nNúmeros primos do vetor 1: | ");
+    for (cont = 0; cont <= contFinal; cont++){
+        printf("%d | ", primo1[cont]);
+    }
+    
+    //Vetor 2
+    cont3 = 0;
+    for (cont = 0; cont < tamanho; cont++){
+        primo = 1; //Assumindo que é primo
+        raiz = sqrt(vetor2[cont]);
+        
+        //0, 1 e números negativos não são primos
+        if (vetor2[cont] < 2)
+            primo = 0;
+            
+        else if (vetor2[cont] == 2)
+            primo = 1;
+        
+        //Verificando a primalidade
+        else{
+            for (cont2 = 2; cont2 <= raiz; cont2++){
+                if (vetor2[cont]%cont2 == 0){ //Não é primo
+                    primo = 0;
+                    break; //Sai do loop se não for primo
+                }
+            }    
+        }
+        
+        //Se for primo, armazenar no vetor
+        if (primo == 1){
+            primo2[cont3] = vetor2[cont];
+            cont3++;
+        }
+    }
+    
+    contFinal = cont3 - 1;
+    
+    //Exibindo o vetor primo2
+    printf("\n");
+    printf("\nNúmeros primos do vetor 2: | ");
+    for (cont = 0; cont <= contFinal; cont++){
+        printf("%d | ", primo2[cont]);
+    }  
+    
+    //Vetor resultado
+    cont3 = 0;
+    for (cont = 0; cont < tamanho; cont++){
+        primo = 1; //Assumindo que é primo
+        raiz = sqrt(vResultado[cont]);
+        
+        //0, 1 e números negativos não são primos
+        if (vResultado[cont] < 2)
+            primo = 0;
+            
+        else if (vResultado[cont] == 2)
+            primo = 1;
+        
+        //Verificando a primalidade
+        else{
+            for (cont2 = 2; cont2 <= raiz; cont2++){
+                if (vResultado[cont]%cont2 == 0){ //Não é primo
+                    primo = 0;
+                    break; //Sai do loop se não for primo
+                }
+            }    
+        }
+        
+        //Se for primo, armazenar no vetor
+        if (primo == 1){
+            primoR[cont3] = vResultado[cont];
+            cont3++;
+        }
+    }
+    
+    contFinal = cont3 - 1;
+    
+    //Exibindo o vetor primoR
+    printf("\n");
+    printf("\nNúmeros primos do vResultado: | ");
+    for (cont = 0; cont <= contFinal; cont++){
+        printf("%d | ", primoR[cont]);
+    } 
+}
+
+
+
+/*Avaliação II - 2021.1
+QUESTÃO II (5.0)
+*/
+
+#include <stdio.h>
+#define tamanho 10
+
+int main() {
+
+    //Declaração de variáveis
+    //Variáveis simples
+    int n, cont, cont2, chutes = 0;
+    
+    //Arrays
+    int senha[tamanho] = {0}, chute[tamanho] = {0};
+    int r[2] = {0}; //r[0] = Excelente, r[1] = Bom
+    int usadoSenha[tamanho] = {0}, usadoChute[tamanho] = {0};
+    
+    //--------------------------------------------------------//
+    
+    //Entrada de dados: senha
+    printf("\nJogador 1 - Informe uma senha de %d digitos: ", tamanho);
+    scanf("%d", &n);
+    
+    //Separando os dígitos da senha
+    for (cont = tamanho - 1; cont >= 0; cont--){
+        senha[cont] = n%10; //Armazenando o dígito
+        n = n/10; //Eliminando o dígito armazenado de n
+    }
+    
+    //Exibindo o vetor senha
+    /*printf("\nVeto senha: | ");
+    for (cont = 0; cont < tamanho; cont++)
+        printf("%d | ", senha[cont]);
+    printf("\n");*/
+    
+    //Entrada de dados: chutes
+    //Loop infinito
+    while (1){
+        
+        //Recebendo a senha
+        printf("\nJogador 2 - Informe o %dº chute de %d digitos: ", chutes + 1, tamanho);
+        scanf("%d", &n);
+
+        //Contando os chutes
+        chutes++;
+        
+        //Separando os dígitos do chute
+        for (cont = tamanho - 1; cont >= 0; cont--){
+            chute[cont] = n%10; //Armazenando o dígito
+            n = n/10; //Eliminando o dígito armazenado de n
+        }
+        
+        //Exibindo o vetor chute
+        /*printf("\nVeto chute: | ");
+        for (cont = 0; cont < tamanho; cont++)
+            printf("%d | ", chute[cont]);
+        printf("\n");*/
+        
+        //Zerando o vetor r (resultado)
+        r[0] = 0; r[1] = 0;
+        
+        //Zerando os vetores auxiliares antes de cada chute
+        for (cont = 0; cont < tamanho; cont++){
+            usadoSenha[cont] = 0;
+            usadoChute[cont] = 0;
+        }
+            
+        //Contando os Excelentes
+        for (cont = 0; cont < tamanho; cont++){
+            if (chute[cont] == senha[cont]){
+                r[0]++; //Conta como Excelente
+                usadoSenha[cont] = 1; 
+                usadoChute[cont] = 1;
+            }
+        }
+        //Contando os bons
+        for (cont = 0; cont < tamanho; cont++){
+            // Se não foi contado como excelente
+            if (usadoChute[cont] == 0){
+                for (cont2 = 0; cont2 < tamanho; cont2++){
+                    if (usadoSenha[cont2] == 0 && chute[cont] == senha[cont2]) {
+                        r[1]++; //Conta como Bom
+                        //Marca essa posição da senha como usada
+                        usadoSenha[cont2] = 1; 
+                        //Garante que cada número do chute seja usado no máximo uma vez
+                        break; 
+                    }
+                }
+            }
+        }    
+        
+        //Exibindo o resultado do chute
+        printf("\n(%d,%d)", r[0], r[1]);
+        printf("\n");
+        
+        //Condição de encerramento
+        if (r[0] == tamanho){
+            printf("\nParabens! Voce acertou a senha com %d chutes.", chutes);
+            break;
+        }
+    }
+}
+
+
+
+/*Avaliação II - 2017.2
+2) (5.0) - Um número n é dito abundante se ele for um número inteiro positivo para o qual a soma dos seus divisores excede o seu dobro (2n).
+Assim 10 não é abundante pois (1+2+5+10 = 17 não é maior que 20 = 2*10), mas 12 é abundante pois (1+2+3+4+6+12=28 é maior que 24 = 2 *12).
+Escreva um programa em C, que leia um valor K qualquer, e gere uma sequência com os primeiro K números abundantes
+*/
+
+#include <stdio.h>
+
+int main() {
+    
+    //Declarações
+    //Variáveis simples
+    int k, soma = 0;
+    
+    //Vetores
+    int cont, cont2, cont3 = 0; 
+    
+    //Entrada de dados
+    printf("\nInforme um numero inteiro positivo: ");
+    scanf("%d", &k);
+    
+    //Tratamento de erros
+    if (k <= 0){
+        printf("\nInforme um numero maior que 0.");
+        return 1;
+    }
+    
+    //Loop para encontrar os k primeiros números abundantes
+    for (cont = 1; cont3 < k; cont++){
+        soma = 0;
+        
+        //Somandos 'cont2', que são os divisores de 'cont'
+        for (cont2 = 1; cont2 <= cont; cont2++){
+            if (cont % cont2 == 0) //É divisível
+                soma += cont2;
+        }
+        
+        //Verificando se o número 'cont' é abundante
+        if (soma > 2 * cont){
+            printf("%d ", cont);
+            //Conta os números abundantes já encontrados
+            cont3++; 
+        }
+            
+    }
+}
+
+
+
+/*Avaliação II - 2017.2
+1) Röntgen percebeu que dada a primeira seqüência, a próxima podia ser obtida descrevendo os números da seqüência anterior. Por exemplo: se a primeira seqüência for 2 então a próxima é 12 (ou seja, a seqüência anterior é formada por "um 2"), a seguinte 1112 (ou seja, a seqüência anterior é formada por um 1 e um 2), 3112 (ou seja, a seqüência anterior é formada por três 1 e um 2), e assim por diante.
+Além de um cientista brilhante, Röntgen era extremamente organizado. Ele guardava todos os registros de seus experimentos. Infelizmente, com o tempo algumas seqüências foram danificadas e outras perdidas. 
+Escreva um programa em C, que dada uma seqüência inicial e um valor N, determine as próximas N seqüências do experimento.
+*/
+
+#include <stdio.h>
+#define tamanho 1000
+
+int main() {
+    
+    //Declarações
+    //Variáveis simples
+    int seq, n;
+    int cont, cont2, cont3, cont4, cont5, contInicial, contFinal;
+    
+    //Vetores
+    int vSeq[tamanho] = {0}, vSeq2[tamanho] = {0};
+    
+    //Entradas
+    printf("\nInforme uma sequencia inicial: ");
+    scanf("%d", &seq);
+    
+    //Tratamento de erros
+    if (seq < 0){
+        printf("\nInforme um numero maior que 0.");
+        return 1;
+    }
+    
+    //Entradas
+    printf("\nInforme a quantidade de sequencias: ");
+    scanf("%d", &n);
+    
+    //Tratamento de erros
+    if (n <= 0){
+        printf("\nInforme um numero maior que 0.");
+        return 1;
+    }
+    
+    //Separando os dígitos da sequência inicial
+    //A ordem não importa
+    for (cont = 0; cont < tamanho; cont++){
+        vSeq[cont] = seq%10; //Armazenando o dígito
+        seq = seq/10; //Eliminando o dígito armazenado
+        if (seq == 0) break;
+    }
+    
+    //Marca o último elemento do vetor vSeq
+    contFinal = cont;
+    
+    //Exibindo a sequência
+    for (cont = contFinal; cont >= 0; cont--){
+        printf("%d", vSeq[cont]);
+    }
+    
+    printf("\n");
+    
+    //Inicializando
+    //cont5 conta a quantidade de sequências
+    cont5 = 1;
+    
+    //Loop infinito
+    while (1){
+    
+        //Inicializando
+        cont4 = 0;
+ 
+        //Contando os elementos da sequência
+        for (cont = 0; cont <= 9; cont++){
+            
+            //cont3 armazena a quantidade de cada número
+            cont3 = 0;
+            
+            //Contando cada número
+            for (cont2 = 0; cont2 <= contFinal; cont2++){
+                if (cont == vSeq[cont2]){
+                    cont3++;
+                }
+            }
+            //Se existir pelo menos uma unidade do número
+            if (cont3 > 0){
+                //Armazena a quantidade do número
+                vSeq2[cont4++] = cont3;
+                //Armazena o próprio número
+                vSeq2[cont4++] = cont;
+            }
+        }
+        //Marca o último elemento do vSeq2
+        contFinal = cont4 - 1;
+        
+        //Exibindo a sequência
+        for (cont = 0; cont <= contFinal; cont++){
+            printf("%d", vSeq2[cont]);
+        }
+        
+        printf("\n");
+
+        //Limpa vSeq
+        for (cont = 0; cont < tamanho; cont++){
+            vSeq[cont] = 0;
+        }
+
+        //Copia vSeq para vSeq2
+        for (cont = 0; cont <= contFinal; cont++){
+            vSeq[cont] = vSeq2[cont];
+            vSeq2[cont] = 0; //Limpa vSeq2 
+        }
+        
+        //Incrementando o contador de sequências
+        cont5++;
+        
+        //Interrompe o loop infinito (while, loop mais externo)
+        if (cont5 > n)
+            break;
+    }
+}
+
+
+
+/*Avaliação II - 2024.2
+QUESTÃO I - Escreva um programa em C capaz de gerar uma sequência numérica inteira, com as seguintes características:
+- O primeiro número da sequência é uma entrada fornecida pelo usuário, sendo uma entrada válida valores inteiros não negativos e menores que 100.
+- A partir daí, o próximo número da sequência é obtido somando os quadrados dos dígitos do número anterior.
+- Caso este número seja maior ou igual a 100, o número da sequência é obtido através da divisão deste número por dois.
+- A sequência se encerra quando um número repetido é encontrado (ciclo).
+
+O exemplo abaixo mostra a sequência gerada, quando o número 16 é informado como entrada ao algoritmo:
+1² + 6² = 1 + 36 = 37
+3² + 7² = 9 + 49 = 58
+5² + 8² = 25 + 64 = 89
+8² + 9² = 64 + 81 = 145 / 2 = 72
+7² + 2² = 49 + 4 = 53
+5² + 3² = 25 + 9 = 34
+3² + 4² = 9 + 16 = 25
+2² + 5² = 4 + 25 = 29
+2² + 9² = 4 + 81 = 85
+8² + 5² = 64 + 25 = 89 -- CICLO ENCONTRADO
+Sequência: 16, 37, 58, 89, 72, 53, 34, 25, 29, 85
+*/
+
+#include <stdio.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    int n, x, soma, teste = 0;
+    int cont, cont2 = 0;
+    int sequencia[tamanho] = {0};
+    
+    //Entrada
+    printf("\nInforme o primeiro numero da sequencia: ");
+    scanf("%d", &n);
+    
+    //Tratamento de erros
+    if (n < 0 || n >= 100){
+        printf("\nInforme apenas numeros inteiros positivos e menores que 100.");
+        return 1;
+    }
+    
+    //Armazenando o primeiro elemento da sequencia
+    sequencia[cont2] = n;
+    cont2++;
+    
+    //Loop infinito
+    while (1){
+        
+        soma = 0;
+        
+        //Separação dos dígitos
+        while (n > 0){
+            //Somando os quadrados
+            x = n%10;
+            soma += x*x;
+            
+            //Elimina o dígito menos significativo
+            n = n/10;
+        }
+        
+        if (soma >= 100)
+            soma /= 2;
+        
+        //Buscando o valor atual da sequência no vetor
+        for (cont = 0; cont < cont2; cont++){
+            if (soma == sequencia[cont]){
+                teste = 1;
+                break;
+            }
+        }
+        
+        if (teste == 0){
+            //Armazenando o valor atual da sequência
+            sequencia[cont2] = soma;
+            cont2++;
+            
+            //Atualizando n
+            n = soma;
+        }
+        //Encerra o loop infinito
+        else //teste == 1
+            break;    
+    }
+    
+    //Exibição da sequência
+    printf("\nSequencia: ");
+    for (cont = 0; cont < cont2; cont++){
+        printf("%d ", sequencia[cont]);
+    }
+}
+
+
+
+/*Avaliação II - 2024.2
+QUESTÃO II - A Liga do Reizinho resolveu inovar mais uma vez e adotou no seu campeonato o seguinte sistema de pontuação: 
+O número de pontos de uma equipe é calculado exclusivamente em função da sequência formada pelo número de gols marcados nas suas partidas, não importando o resultado destas. Assim, considere que cada time joga P partidas p0, p1, ..., pP-1, que são agrupadas em janelas sobrepostas de J partidas. A i-ésima janela é formada pelas partidas {pi, pi+1, ..., pi+J-1}. Assim, a primeira janela do campeonato (Janela 0) corresponde às partidas {p0, p1, ..., pj-1}, a segunda janela (Janela 1) corresponde às partidas {p1, p2, ..., pJ}, e assim por diante, totalizando P-J+1 janelas no campeonato. Sejam g0, g1, ..., gJ-1 os gols marcados por uma equipe em uma determinada janela do campeonato. A pontuação da equipe nessa janela é dada pelo menor número de gols ma janela em questão, somado ao maior número de gols na mesma janela: (min{g0, g1, ..., gJ-1}) + max{g0, g1, ..., gJ-1}. A pontuação total de um time no campeonato é igual ao somatório da sua pontuação em cada janela do campeonato. Por exemplo, se um time jogou 5 partidas em um campeonato com janelas de 3 jogos, tendo marcado 1, 3, 2, 1, 4 gols, sua pontuação total será igual a (min{1,3,2}+max{1,3,2}) + (min{3,2,1}+max{3,2,1}) + (min{2,1,4}+max{2,1,4}) = (1+3)+(1+3)+(1+4) = 13 pontos. Sua tarefa é fazer um programa para calcular o número de pontos de uma equipe, dada a quantidade de gols marcados em cada um das P partidas do campeonato. Seu algoritmo deve ser genérico o suficiente, mas considere que o campeonato atual será composto de 5 partidas e janela de tamanho 3.
+*/
+
+#include <stdio.h>
+#define tamanho 100
+
+int main() {
+
+    int p, j, pi, pf, menor, maior, pontos = 0;
+    int cont;
+    int gols[tamanho] = {0};
+    
+    //Entrada de dados: partidas e janelas
+    printf("\nInforme o numero de partidas e o numero de janelas: ");
+    scanf("%d %d", &p, &j);
+    
+    //Tratamento de erros
+    if (p <= 0 || j <= 0){
+        printf("\nO numero de partidas e de janelas deve ser maior que 0.");
+        return 1;
+    }
+    
+    //Entrada de dados: gols marcados
+    for (cont = 0; cont < p; cont++){
+        printf("\nInforme o nº de gols da %dª partida: ", cont+1);
+        scanf("%d", &gols[cont]);
+    }
+    
+    //Inicializando os limites da janela
+    pi = 0;
+    pf = pi+j-1;
+    
+    //Loop infinito
+    while (pf < p){
+        
+        //Inicializando
+        menor = gols[pi];
+        maior = gols[pi];
+        
+        //Obtendo o menor e maior nº de gols da janela
+        for (cont = pi; cont <= pf; cont++){
+            if (gols[cont] < menor)
+                menor = gols[cont];
+                
+            if (gols[cont] > maior)
+                maior = gols[cont];
+        }
+        printf("\nJanela: ");
+        for (cont = pi; cont <= pf; cont++)
+            printf("%d ", gols[cont]);
+        
+        printf("\nMenor e maior: %d e %d.", menor, maior);
+        printf("\n");
+        pontos += (menor + maior);
+        
+        //Atualizar pi e pf
+        pi++;
+        pf++;
+    }
+    
+    printf("\n");
+    printf("\nPontos totais = %d.", pontos);
+}
+
+
+
+/*Avaliação II - 2024.2 (ADM)
+QUESTÃO I - Na usina de Angra dos Reis, os técnicos analisam a perda de massa de um material radioativo. Sabendo-se que este perde 10% de sua massa a cada 1 minuto. Criar um programa em C que leia o valor da massa inicial e da massa final desejada, calcule e imprima o tempo necessário em minutos para que o material radioativo alcance a massa final indicada.
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    float mi, mf;
+    int t = 0;
+    
+    printf("\nInforme a massa inicial: ");
+    scanf("%f", &mi);
+    
+    if (mi <= 0){
+        printf("\nInforme um valor maior que 0.");
+        return 1;
+    }
+    
+    printf("\nInforme a massa final: ");
+    scanf("%f", &mf);
+    
+    if (mf <= 0){
+        printf("\nInforme um valor maior que 0.");
+        return 1;
+    }
+    else if (mf >= mi){
+        printf("\nA massa final deve ser menor que a inicial.");
+        return 1;
+    }
+
+    while (mi > mf){
+        mi *= 0.90; //Reduz 10% a cada 1 minuto
+        t++;
+    }
+    
+    printf("\nTempo total: %d minutos.", t);
+}
