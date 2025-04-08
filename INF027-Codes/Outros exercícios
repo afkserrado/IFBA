@@ -1,0 +1,297 @@
+```c
+//Conversão de binário para octal
+
+#include <stdio.h>
+
+int main() {
+    
+    int octal, x1, x2, x3;
+    int binario;
+
+    printf("\nDigite um octal de até 3 dígitos: ");
+    scanf("%d", &octal);
+
+    // Separação do octal em centenas, dezenas e unidades
+    x1 = (octal / 100);       // Centena
+    x2 = (octal / 10) % 10;   // Dezena
+    x3 = octal % 10;          // Unidade
+
+    // Conversão do dígito x1 (centena) para binário (operações diretas)
+    //x1%2 = (x1%4)%2/1
+    int b1 = (x1 / 4) * 100 + ((x1 % 4) / 2) * 10 + (x1 % 2);
+
+    // Conversão do dígito x2 (dezena) para binário (operações diretas)
+    int b2 = (x2 / 4) * 100 + ((x2 % 4) / 2) * 10 + (x2 % 2);
+
+    // Conversão do dígito x3 (unidade) para binário (operações diretas)
+    int b3 = (x3 / 4) * 100 + ((x3 % 4) / 2) * 10 + (x3 % 2);
+
+    // Junta os valores binários correspondentes
+    binario = b1 * 1000000 + b2 * 1000 + b3;
+    
+    // Exibe o número binário
+    printf("O número binário correspondente é: %d\n", binario);
+
+}
+```
+
+```c
+//Conversão de binário para decimal
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h> 
+
+main() 
+{
+
+/*Ao declarar "binario" como char, cada caractere digitado é armazenado em uma
+posição diferente do vetor.*/
+
+char binario[64]; 
+
+/*
+"i" é o incremento da estrutura de repetição.
+"Comprimento" representa a quantidade de valores alocados no vetor.
+"Decimal é o resultado."
+*/
+
+int i, comprimento, decimal; 
+
+i = 0;
+decimal = 0;
+
+printf("\nDigite um numero em binario: ");
+scanf("%63s", binario); //Limita a 63 caracteres
+
+comprimento = strlen(binario);
+
+/*O loop deve ser condicionado a "i < comprimento", pois a primeira posição do
+vetor é a "0". Logo, a última posição seria 63, e não 64.*/
+
+/*A máquina armazena os valores da esquerda para direita. Portanto, o primeiro
+valor está na posição "0". Porém, o expoente da base 2 está ordenado em forma 
+decrescente. Ou seja, o maior valor do expoente "i" acontecerá na posição "0" 
+do vetor.*/
+
+while (i < comprimento)
+    {
+    decimal += (binario[comprimento-1-i] - '0') * pow(2,i);
+    i += 1;
+    }
+
+printf("\nO numero decimal equivalente e %d", decimal);
+
+getchar();
+} 
+```
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h> 
+
+//Conversão de binário para decimal
+
+main() 
+{
+
+char binario[64]; /*Ao declarar "binario" como char, cada caractere digitado é armazenado
+em uma posição diferente do vetor.*/
+
+/*
+"i" é o incremento.
+"Comprimento" representa a quantidade de valores alocados no vetor.
+*/
+
+int i, comprimento, decimal; 
+
+i = 0;
+decimal = 0;
+
+printf("\nDigite um numero em binario: ");
+scanf("%63s", binario); //Limita a 63 caracteres
+
+comprimento = strlen(binario);
+
+/*O loop deve ser condicionado a "i < comprimento", pois a primeira posição do vetor é a "0". Logo, a última posição
+seria 63, e não 64. Posição máxima = Quantidade de espaços - 1.*/
+for (i = 0; i < comprimento; i++)
+	{
+	/*A máquina armazena os valores da esquerda para direita. Portanto, o primeiro valor
+	está na posição "0".
+	Porém, o expoente da base 2 está ordenado em forma decrescente. Ou seja, o último valor
+	do vator, mais à direita, é que será multiplicado por 2^0.
+	*/
+
+	decimal += (binario[comprimento-1-i] - '0') * pow(2,i); /*O '0' sempre converte o caractere
+	armazenado no vetor para número inteiro.*/ 
+	}
+	
+/*Alternativa com o while:
+
+while (i < comprimento)
+    {
+        decimal += (binario[comprimento-1-i] - '0') * pow(2,i);
+        i += 1
+    }*/
+	
+printf("\nO numero decimal equivalente e %d", decimal);
+
+getchar();
+	
+} 
+```
+
+```c
+//O número é primo?
+
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração das variáveis
+    int numero, divisor, teste;
+    
+    //Inicializações
+    
+    /*'divisor' inicialmente recebe 2, porque todo número primo já é divísivel por 1*/
+    divisor = 2;
+    
+    /*teste = 1, então o número é primo
+      teste = 0, então o número não é primo
+      Inicializaremos o teste em 1
+    */
+    teste = 1;
+    
+    printf("\nInforme um numero inteiro positivo: ");
+    scanf("%d", &numero);
+    
+    //Tratamento de erros
+    if (numero < 0)
+        {printf("Numero invalido. Informe um numero inteiro positivo.");
+        return 1;} //Finaliza o programa em função do erro
+        
+    //Operações
+    if (numero <= 1) 
+        teste = 0; //'0' e '1' não são primos
+        
+    /*Um número só é primo se ele possuir dois divisores: 1 e ele mesmo. Verificaremos, portanto, se o número possui algo divisor entre 2 e numero/2.
+    
+    Não precisamos verificar os números maiores que numero/2, pois nesses casos, com exceção do próprio número, a divisão inteira sempre terá um resto diferente de 0.
+    */
+    while (teste == 1 && divisor <= numero/2)
+        {
+        /*Se o resto da divisão entre o número e o divisor for igual a 0, significa que existe um número entre 2 e numero/2 pelo qual o número analisado é divisível. Portanto, ele não teria apenas 2 divisores.*/
+        if (numero % divisor == 0)
+            {teste = 0;}
+            
+        divisor++; //Incremento
+        }
+        
+    if (teste == 0)
+        printf("\nO numero %d nao e primo.", numero);
+    else
+        printf("\nO numero %d e primo.", numero);
+        
+/*Embora numero % divisor = 0 se o número for 2 e o divisor for 2, o código não entra no loop, porque o while funciona de forma parecida ao if: a condição é verificada antes de entrar no conteúdo. Como divisor = 2 e numero/2 = 2/2 = 1, a condição não é atendida e código não entra no loop, mantendo teste = 1.*/
+}
+```
+
+```c
+//Exibir os 20 primeiros números primos.
+
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração das variáveis
+    int numero = 2, teste, divisor, contador = 1;
+    
+    //Operações
+
+    /*Um número só é primo se ele possuir dois divisores: 1 e ele mesmo. Verificaremos, portanto, se o número possui algo divisor entre 2 e numero/2.
+    
+    Não precisamos verificar os números maiores que numero/2, pois nesses casos, com exceção do próprio número, a divisão inteira sempre terá um resto diferente de 0.
+    */
+    while (contador <= 20)
+    {//Inicializações    
+    /*'divisor' inicialmente recebe 2, porque todo número primo já é divísivel por 1*/
+    divisor = 2;
+    
+    /*teste = 1, então o número é primo
+      teste = 0, então o número não é primo
+      Inicializaremos o teste em 1
+    */
+    teste = 1;
+    
+        while (teste == 1 && divisor <= numero/2)
+            {
+            /*Se o resto da divisão entre o número e o divisor for igual a 0, significa que existe um número entre 2 e numero/2 pelo qual o número analisado é divisível. Portanto, ele não teria apenas 2 divisores.*/
+            //Número não primo
+            if (numero % divisor == 0)
+                {teste = 0;}
+            
+            divisor++; //Incremento
+            }
+         
+        //Número primo   
+        if (teste == 1)
+            {printf(" %d", numero);
+            contador++; 
+            }
+        
+        numero++;
+    }
+}
+```
+
+```c
+#include <stdio.h>
+
+int main() 
+{
+    int numero, divisor, teste;
+    
+    // Solicitação de entrada
+    do 
+        {printf("\nInforme um numero inteiro, positivo e maior ou igual a 0: ");
+        scanf("%d", &numero);
+
+        if (numero < 0)
+            printf("\nNumero informado invalido.");}
+    while (numero < 0);
+
+    // Os números "0" e "1" não são primos
+    if (numero <= 1) 
+        {printf("\nO numero \"%d\" nao e um numero primo.", numero);
+        return 1;}
+     
+    //O número "2" é primo   
+    else if (numero == 2) 
+        {printf("\nO numero \"%d\" e um numero primo.", numero);
+        return 1;}
+        
+    // Inicialização
+    divisor = 2;
+    teste = 1; // Assume que o número é primo
+
+    do 
+        {if (numero%divisor == 0)
+            teste = 0; // Não é primo
+
+        divisor++;} 
+        
+    while (teste == 1 && divisor <= numero/2);
+
+    // Resultado
+    if (teste == 1)
+        printf("\nO numero \"%d\" e um numero primo.", numero);
+    else
+        printf("\nO numero \"%d\" nao e um numero primo.", numero);
+
+/*O "2" foi tratado como um caso especial, pois quando o número é 2, o código entra na estrutura do-while e faz teste = 0. Logo, ao chegar no controle, a condição não é atendida e a mensagem de que o "2" não é um número primo é exibida.*/
+}
+```
