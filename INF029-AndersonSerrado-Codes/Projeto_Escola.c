@@ -18,7 +18,7 @@
 
 //Cadastro dos alunos
 typedef struct {
-    char *matricula; //Alocação dinâmica
+    long long matricula;
     char nome[tamNome];
     char data[tamData];
     char CPF[tamCPF];
@@ -29,7 +29,7 @@ listaAlunos aluno[tamAlunos];
 
 //Cadastro dos professores
 typedef struct {
-    char *matricula; //Alocação dinâmica
+    long long matricula;
     char nome[tamNome];
     char data[tamData];
     char CPF[tamCPF];
@@ -40,7 +40,7 @@ listaProfessores professor[tamProfessores];
 
 //Cadastro das disciplinas
 typedef struct {
-    char *matricula; //Alocação dinâmica
+    long long matricula;
     char *codigo; //Alocação dinâmica
     int semestre;
 } listaDisciplinas;
@@ -48,12 +48,8 @@ typedef struct {
 listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
-//Variáveis globais
+//Subfunções
 
-int contAluno = 0, contProfessor = 0, contDisciplina = 0;
-
-/*------------------------------------------------------------------------------------------------------------*/
-//Subfunção
 //Limpa a tela
 void limparTela() {
     #ifdef _WIN32
@@ -72,38 +68,32 @@ int main (){
     //setlocale(LC_ALL, "pt_BR.UTF-8"); //Linux
 
     //Declarações
-    int n, opcao;
-    char nomeTemp[tamNome];
+    int opcao;
+    int tamCodigo;
+    long long matricula;
+    long long maxMatricula; //Maior número que a matrícula pode ter (Ex.: 99999999999)
+    int tamMatricula = 0; //Maior quantidade de dígitos que a matrícula pode ter (Ex.: 11)
+    int contAluno = 0, contProfessor = 0, contDisciplina = 0;
 
-    //Solicita ao usuário o tamanho da matrícula
-    //Considerando que a matrícula de aluno e professor tem o mesmo tamanho
-    printf("Quantos caracteres tem um número de matrícula?\n");
-    scanf("%d", &n);
+    //Solicita ao usuário a maior matrícula possível
+    printf("\nQual a maior matrícula possível para uma pessoa? (Ex.: 9999999)\n");
+    scanf("%lld", &maxMatricula);
 
-    //Alocando dinamicamente o tamanho do vetor matricula
-    //Alunos
-    for (int i = 0; i < tamAlunos; i++){
-        aluno[i].matricula = malloc(n * sizeof(char));
+    //Calcula a quantidade de dígitos da matrícula padrão
+    long long auxMatricula;
+    auxMatricula = maxMatricula;
+    while (auxMatricula > 0){
+        auxMatricula /= 10; //Remove o último dígito
+        tamMatricula++; //Qtd de dígitos da matrícula padrão
     }
-    //Professores
-    for (int i = 0; i < tamProfessores; i++){
-        professor[i].matricula = malloc(n * sizeof(char));
-    }
-    //Disciplinas
-    for (int i = 0; i < tamProfessores; i++){
-        disciplina[i].matricula = malloc(n * sizeof(char));
-    }
-
-    //Limpa n
-    n = 0;
 
     //Solicita ao usuário o tamanho padrão do código de uma disciplina
     printf("Quantos caracteres tem o código de uma disciplina?\n");
-    scanf("%d", &n);
+    scanf("%d", &tamCodigo);
 
     //Alocando dinamicamente o tamanho do vetor código
     for (int i = 0; i < tamDisciplinas; i++){
-        disciplina[i].codigo = malloc(n * sizeof(char));
+        disciplina[i].codigo = malloc(tamCodigo * sizeof(char));
     }
 
     limparTela();
@@ -131,9 +121,8 @@ int main (){
             //Alunos
             case 1: {
                 int opcaoAluno;
-                
                 //Menu de opções
-                printf("\n### Módulo Alunos ###\n");
+                printf("### Módulo Alunos ###\n");
                 printf("\nInforme o número da opção desejada: ");
                 printf("\n0 - Voltar ao menu anterior");
                 printf("\n1 - Cadastrar aluno");
@@ -141,58 +130,82 @@ int main (){
                 printf("\n3 - Atualizar aluno");
                 printf("\n4 - Excluir aluno");
                 printf("\n");
-
+                
                 //Entrada de dados: opcão do módulo de alunos
                 scanf("%d",&opcaoAluno);
-
-                limparTela();
-
-                printf("\n### Módulo Alunos - Inserir aluno ###");
-                printf("\nInforme o nome do aluno: ");
-
-                //Flags
-                int achou = 0;
                 
-                switch(opcao) {
+                limparTela();
+                printf("### Módulo Alunos - Inserir aluno ###");
 
-                    //Inserir
+                switch(opcaoAluno){
+                    
+                    //Flag
+                    int achou = 0;
+
+                    //Inserir aluno
                     case 1: {
-                        getchar(); //Limpar o buffer do teclado
                         //Entrada de dados: matrícula
-                        scanf("%s", &matricula);
+                        printf("\nInforme a matrícula do aluno: ");
+                        scanf("%lld", &matricula);
+
+                        //Calcula a quantidade de dígitos da matrícula informada
+                        int digMatricula = 0;
+                        auxMatricula = matricula;
+                        while (auxMatricula > 0){
+                            auxMatricula /= 10; //Remove o último dígito
+                            digMatricula++; //Qtd de dígitos da mátricula informada
+                        }
+
+                        //Validação 1: formato da matrícula
+                        if (!(matricula >= 0 && matricula <= maxMatricula && digMatricula == tamMatricula)){
+                            printf("\nMatrícula inválida.");
+                            printf("\n");
+                            break;
+                        }
                         
-                        //Verifica se a matrícula já está cadastrada
-                        for (int i = 0; i < qtd; i++){
-                            if (strcmp(pessoa[i].matricula, matricula) == 0){ //Matrícula já cadastrada
-                                printf("\nNome já cadastrado no sistema.");
-                                break;
+                        if (contAluno > tamAlunos){
+                            printf("\nCadastro de alunos cheio.");
+                        }
+                        else{
+                            //Verifica se a matrícula já está cadastrada
+                            //Não está funcionando ################################
+                            for (int i = 0; i < contAluno; i++){
+                                if (matricula == aluno[i].matricula){ //Matrícula já cadastrada
+                                    printf("\nAluno já cadastrado no sistema.");
+                                    achou = 1;
+                                    break; //Sai do for
+                                }
                             }
-                            else{
-
-
+    
+                            if (!achou){ //Se achou diferente de 1
+                                aluno[contAluno].matricula = matricula;
+                                contAluno++;
+                                printf("\nAluno cadastrado com sucesso!");
                             }
                         }
 
                         break;
-                    } //Fim do case 1
+                    } //Fim do case 1: Inserir aluno
+
+                    limparTela();
 
                     //Listar aluno
                     case 2: {
 
                         break;
-                    } //Fim do case 2
+                    } //Fim do case 2: Listar aluno
 
                     //Atualizar aluno
                     case 3: {
 
                         break;
-                    } //Fim do case 3
+                    } //Fim do case 3: Atualizar aluno
 
                     //Excluir aluno
                     case 4: {
 
                         break;
-                    } //Fim do case 3
+                    } //Fim do case 4: Excluir aluno
 
                     default: {
                         printf("\nOpcão inválida.");
