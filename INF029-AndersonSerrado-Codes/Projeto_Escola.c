@@ -1,25 +1,21 @@
-/* Observações e ideias:
-Obs. 1: validar todas as entradas (quantidade de caracteres e tipo de caractere);
-Obs. 2: No cadastro das disciplinas, listar todos professores já cadastrados com um número relacionado a ele (1, 2, 3 etc.). Solicitar que o usuário digite o número referente ao professor. Isso evita cadastrar na disciplina um professor que não exista.
-Obs. 3: uma alternativa à Obs. 2 é validar o nome no cadastro da disciplina. Se não existir, o cadastro de disciplina chama a função de cadastro de professor.
-*/
-
 //Bibliotecas
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
 
-//Tamanho dos vetores
+/*------------------------------------------------------------------------------------------------------------*/
+//Constantes
+
 #define tamNome 100
 #define tamData 10
 #define tamCPF 11
-#define qtdAlunos 1000
-#define qtdProfessores 1000
-#define qtdDisciplinas 1000
+#define tamAlunos 10000
+#define tamProfessores 100
+#define tamDisciplinas 1000
 
 /*------------------------------------------------------------------------------------------------------------*/
-
 //Structs
+
 //Cadastro dos alunos
 typedef struct {
     char *matricula; //Alocação dinâmica
@@ -27,9 +23,9 @@ typedef struct {
     char data[tamData];
     char CPF[tamCPF];
     char sexo;
-} cadastroAlunos;
+} listaAlunos;
 
-cadastroAlunos aluno[qtdAlunos];
+listaAlunos aluno[tamAlunos];
 
 //Cadastro dos professores
 typedef struct {
@@ -38,23 +34,27 @@ typedef struct {
     char data[tamData];
     char CPF[tamCPF];
     char sexo;
-} cadastroProfessores;
+} listaProfessores;
 
-cadastroProfessores professor[qtdProfessores];
+listaProfessores professor[tamProfessores];
 
 //Cadastro das disciplinas
 typedef struct {
+    char *matricula; //Alocação dinâmica
     char *codigo; //Alocação dinâmica
-    char nome[tamNome];
-    char professor[tamNome];
     int semestre;
-} cadastroDisciplinas;
+} listaDisciplinas;
 
-cadastroDisciplinas disciplina[qtdDisciplinas];
+listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
+//Variáveis globais
 
+int contAluno = 0, contProfessor = 0, contDisciplina = 0;
+
+/*------------------------------------------------------------------------------------------------------------*/
 //Subfunção
+//Limpa a tela
 void limparTela() {
     #ifdef _WIN32
         system("cls"); //Windows
@@ -64,7 +64,6 @@ void limparTela() {
 }
 
 /*------------------------------------------------------------------------------------------------------------*/
-
 //Função principal
 int main (){
 
@@ -78,16 +77,21 @@ int main (){
 
     //Solicita ao usuário o tamanho da matrícula
     //Considerando que a matrícula de aluno e professor tem o mesmo tamanho
-    printf("Quantos caracteres tem uma matrícula?\n");
+    printf("Quantos caracteres tem um número de matrícula?\n");
     scanf("%d", &n);
 
     //Alocando dinamicamente o tamanho do vetor matricula
-    for (int i = 0; i < qtdAlunos; i++){
+    //Alunos
+    for (int i = 0; i < tamAlunos; i++){
         aluno[i].matricula = malloc(n * sizeof(char));
     }
-
-    for (int i = 0; i < qtdProfessores; i++){
+    //Professores
+    for (int i = 0; i < tamProfessores; i++){
         professor[i].matricula = malloc(n * sizeof(char));
+    }
+    //Disciplinas
+    for (int i = 0; i < tamProfessores; i++){
+        disciplina[i].matricula = malloc(n * sizeof(char));
     }
 
     //Limpa n
@@ -98,7 +102,7 @@ int main (){
     scanf("%d", &n);
 
     //Alocando dinamicamente o tamanho do vetor código
-    for (int i = 0; i < qtdDisciplinas; i++){
+    for (int i = 0; i < tamDisciplinas; i++){
         disciplina[i].codigo = malloc(n * sizeof(char));
     }
 
@@ -117,71 +121,99 @@ int main (){
 
         limparTela();
 
-        switch (opcao) {
+        switch (opcao){
 
             case 0: {
                 printf("\nPrograma encerrado.");
                 return 1;
             }
             
+            //Alunos
             case 1: {
+                int opcaoAluno;
+                
                 //Menu de opções
                 printf("\n### Módulo Alunos ###\n");
                 printf("\nInforme o número da opção desejada: ");
-                printf("\n1 - Inserir aluno");
-                printf("\n2 - Atualizar aluno");
-                printf("\n3 - Excluir aluno");
-                printf("\n4 - Listar alunos");
-                printf("\n5 - Listar alunos por sexo (Masculino/Feminino)");
-                printf("\n6 - Listar alunos ordenados por Nome");
-                printf("\n7 - Listar alunos ordenados por data de nascimento");
-                printf("\n8 - Aniversariantes do mês");
-                printf("\n9 - Lista de alunos matriculados em menos de 3 disciplinas");
                 printf("\n0 - Voltar ao menu anterior");
+                printf("\n1 - Cadastrar aluno");
+                printf("\n2 - Listar aluno");
+                printf("\n3 - Atualizar aluno");
+                printf("\n4 - Excluir aluno");
                 printf("\n");
 
                 //Entrada de dados: opcão do módulo de alunos
-                scanf("%d",&opcao);
+                scanf("%d",&opcaoAluno);
 
                 limparTela();
 
+                printf("\n### Módulo Alunos - Inserir aluno ###");
+                printf("\nInforme o nome do aluno: ");
+
+                //Flags
+                int achou = 0;
+                
                 switch(opcao) {
 
+                    //Inserir
                     case 1: {
-                        printf("\n### Módulo Alunos - Inserir aluno ###");
-                        printf("\nInforme o nome do aluno: ");
                         getchar(); //Limpar o buffer do teclado
-                        fgets(nomeTemp, sizeof(nomeTemp), stdin);
-                        nomeTemp[strcspn(nomeTemp, "\n")] = '\0';
+                        //Entrada de dados: matrícula
+                        scanf("%s", &matricula);
                         
-                        //Verifica se o aluno já está cadastrado
-                        for (int i = 0; i < qtdAlunos; i++){
-                            if (strcmp(aluno[i].nome, nomeTemp) == 0){ //Nome já cadastrado
+                        //Verifica se a matrícula já está cadastrada
+                        for (int i = 0; i < qtd; i++){
+                            if (strcmp(pessoa[i].matricula, matricula) == 0){ //Matrícula já cadastrada
                                 printf("\nNome já cadastrado no sistema.");
-                                
-                            } 
+                                break;
+                            }
+                            else{
 
 
+                            }
                         }
-                        
-                        fgets(aluno.nome, sizeof(aluno.nome), stdin);
-                        aluno.nome[strcspn(aluno.nome, "\n")] = '\0';
 
                         break;
-                    }
-                }
-                break;
-            }
+                    } //Fim do case 1
 
+                    //Listar aluno
+                    case 2: {
+
+                        break;
+                    } //Fim do case 2
+
+                    //Atualizar aluno
+                    case 3: {
+
+                        break;
+                    } //Fim do case 3
+
+                    //Excluir aluno
+                    case 4: {
+
+                        break;
+                    } //Fim do case 3
+
+                    default: {
+                        printf("\nOpcão inválida.");
+                        break;
+                    }
+                } //Fim do switch
+
+                break;
+            } //Fim do case 1
+            
+            //Professores
             case 2: {
                 printf("\nModulo Professores:\n");
                 break;
-            }
+            } //Fim do case 2
 
+            //Disciplinas
             case 3: {
                 printf("\nModulo Disciplinas:\n");
                 break;
-            }
+            } //Fim do case 3
 
             default: {
                 printf("\nOpcão inválida.");
