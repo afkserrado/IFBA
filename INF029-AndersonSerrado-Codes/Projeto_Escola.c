@@ -52,14 +52,14 @@ listaProfessores professor[tamProfessores];
 //Cadastro das disciplinas
 typedef struct {
     long long int matricula;
-    char *codigo; //AlocaÁ„o din‚mica
+    char *codigo; //Aloca√ß√£o din√¢mica
     int semestre;
 } listaDisciplinas;
 
 listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
-//SubfunÁıes
+//Subfun√ß√µes
 
 //Limpa a tela
 void limparTela() {
@@ -70,18 +70,28 @@ void limparTela() {
     #endif
 }
 
-//Valida a matrÌcula
+//Pausa a tela
+void pausarTela() {
+    #ifdef _WIN32
+        pausarTela(); //Windows
+    #else
+        printf("Pressione Enter para continuar...");
+        getchar();
+    #endif
+}
+
+//Valida a matr√≠cula
 int validarMatricula (long long int matricula, long long int maxMatricula, int tamMatricula) {
     long long int auxMatricula = matricula;
     int digMatricula = 0, flagMatricula = 0;
 
-    //Calcula a quantidade de dÌgitos da matrÌcula informada
+    //Calcula a quantidade de d√≠gitos da matr√≠cula informada
     while (auxMatricula > 0){
-        auxMatricula /= 10; //Remove o ˙ltimo dÌgito
-        digMatricula++; //Qtd de dÌgitos da m·tricula informada
+        auxMatricula /= 10; //Remove o √∫ltimo d√≠gito
+        digMatricula++; //Qtd de d√≠gitos da matr√≠cula informada
     }
 
-    //ValidaÁ„o
+    //Valida√ß√£o
     if (!(matricula >= 0 && matricula <= maxMatricula && digMatricula == tamMatricula)){
         flagMatricula = 1;
     }
@@ -93,29 +103,29 @@ int validarNome(char nome[tamNome]) {
     int len = strlen(nome);
     int flagNome = 0;
 
-    // Verifica se o nome n„o est· vazio
+    // Verifica se o nome n√£o est√° vazio
     if (len == 0) {
-        printf("Nome n„o pode estar vazio.\n");
+        printf("Nome n√£o pode estar vazio.\n");
         return 1;  //Retorna 1 para indicar erro
     }
 
     for (int i = 0; i < len; i++){
-        //Permite letras, espaÁos e caracteres acentuados
+        //Permite letras, espa√ßos e caracteres acentuados
         if (!(isalpha(nome[i]) || nome[i] == ' ')) {
-            flagNome = 1; //Nome inv·lido
+            flagNome = 1; //Nome inv√°lido
             break;
         }
     }
     return flagNome;
 }
 
-//Verifica se o ano È bissexto
+//Verifica se o ano √© bissexto
 int bissexto(int ano) {
     if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)){
-        return 1; //… bissexto
+        return 1; //√© bissexto
     }
     else {
-        return 0; //N„o È bissexto
+        return 0; //N√£o √© bissexto
     }
 }
 
@@ -126,12 +136,12 @@ int validarData(int dia, int mes, int ano) {
     
     //Valida o ano
     if (ano < 1900 || ano > 2100) {
-        return 1; //Ano inv·lido
+        return 1; //Ano inv√°lido
     }
 
-    //Valida o mÍs
+    //Valida o m√™s
     if (mes < 1 || mes > 12) {
-        return 1; //MÍs inv·lido
+        return 1; //M√™s inv√°lido
     }
 
     //Atualiza a qtd de dias em fevereiro se o ano for bissexto
@@ -141,32 +151,33 @@ int validarData(int dia, int mes, int ano) {
 
     //Valida o dia
     if (dia < 1 || dia > diasMes[mes - 1]) {
-        return 1; //Dia inv·lido
+        return 1; //Dia inv√°lido
     }
 
-    return 0; //Data v·lida
+    return 0; //Data v√°lida
 }
 
 //Valida o CPF
+//#######################Rever, meu CPF est√° dando inv√°lido
 int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
     int digCPF = 0;
 
-    //Quantidade de dÌgitos do CPF
+    //Quantidade de d√≠gitos do CPF
     digCPF = strlen(CPF);
 
-    //Verifica se o CPF sÛ contÈm n˙meros
+    //Verifica se o CPF s√≥ cont√©m n√∫meros
     for (int i = 0; i < tamCPF; i++) {
         if (!(CPF[i] >= '0' && CPF[i] <= '9')) {
-            return 1; //CPF inv·lido (n„o contÈm apenas n˙meros)
+            return 1; //CPF inv√°lido (n√£o cont√©m apenas n√∫meros)
         }
     }
 
-    //Verifica se o CPF tem 11 dÌgitos
+    //Verifica se o CPF tem 11 d√≠gitos
     if (digCPF != 11) {
-        return 1; //CPF inv·lido
+        return 1; //CPF inv√°lido
     }  
     
-    //Verifica se todos os dÌgitos s„o iguais
+    //Verifica se todos os d√≠gitos s√£o iguais
     int todosIguais = 1;
     for (int i = 1; i < 11; i++) {
         if (CPF[i] != CPF[0]) {
@@ -176,69 +187,69 @@ int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
     }
     if (todosIguais == 1) return 1;
 
-    //Verifica o 10∫ dÌgito
+    //Verifica o 10o d√≠gito
     int soma1 = 0;
-    for (int i = 0; i < 9; i++) { //Percorre do 1∫ ao 9∫ dÌgito
+    for (int i = 0; i < 9; i++) { //Percorre do 1o ao 9o d√≠gito
         soma1 += (CPF[i] - '0') * (10 - i);
     }
     int resto1 = soma1 % 11;
 
     if (!((resto1 < 2 && CPF[9] == '0') || (CPF[9] == (11 - resto1))))
-        return 1; //CPF inv·lido
+        return 1; //CPF inv√°lido
 
-    //Verifica o 11∫ dÌgito
+    //Verifica o 11o d√≠gito
     int soma2 = 0;
-    for (int i = 0; i < 10; i++) { //Percorre do 1∫ ao 10∫ dÌgito
+    for (int i = 0; i < 10; i++) { //Percorre do 1o ao 10o d√≠gito
         soma2 += (CPF[i] - '0') * (11 - i);
     }
     int resto2 = soma2%11;
 
     if (!((resto2 < 2 && CPF[10] == '0') || (CPF[10] == (11 - resto2)))) {
-        return 1; //CPF inv·lido
+        return 1; //CPF inv√°lido
     }
         
-    return 0; //CPF v·lido
+    return 0; //CPF v√°lido
 }
 
-//Valida a identidade de gÍnero
+//Valida a identidade de g√™nero
 int validarGenero(char genero[tamGenero]) {
     if (!(strcmp(genero, "M") == 0 || strcmp(genero, "F") == 0 || strcmp(genero, "NB") == 0 || strcmp(genero, "ND") == 0)) {
-        return 1; //GÍnero inv·lido
+        return 1; //G√™nero inv√°lido
     }
-    return 0; //GÍnero v·lido
+    return 0; //G√™nero v√°lido
 }
 
 /*------------------------------------------------------------------------------------------------------------*/
-//FunÁ„o principal
+//Fun√ß√£o principal
 int main (){
 
-    //Configurando a codificaÁ„o de caracteres
+    //Configurando a codifica√ß√£o de caracteres
     setlocale(LC_ALL, "Portuguese"); //Windows
     //setlocale(LC_ALL, "pt_BR.UTF-8"); //Linux
 
-    //DeclaraÁıes
+    //Declara√ß√µes
     int opcao;
     int tamCodigo = 0;
-    long long int maxMatricula; //Maior n˙mero que a matrÌcula pode ter (Ex.: 99999999999)
+    long long int maxMatricula; //Maior n√∫mero que a matr√≠cula pode ter (Ex.: 99999999999)
     int contAluno = 0, contProfessor = 0, contDisciplina = 0;
 
-    //Solicita ao usu·rio a maior matrÌcula possÌvel
-    printf("\nQual a maior matrÌcula possÌvel para uma pessoa? (Ex.: 9999999)\n");
+    //Solicita ao usu√°rio a maior matr√≠cula poss√≠vel
+    printf("\nQual a maior matr√≠cula poss√≠vel para uma pessoa? (Ex.: 9999999)\n");
     scanf("%lld", &maxMatricula);
 
-    //Calcula a quantidade de dÌgitos da matrÌcula padr„o
+    //Calcula a quantidade de d√≠gitos da matr√≠cula padr√£o
     long long int auxMatricula = maxMatricula;
-    int tamMatricula = 0; //Qtd de dÌgitos
+    int tamMatricula = 0; //Qtd de d√≠gitos
     while (auxMatricula > 0){
-        auxMatricula /= 10; //Remove o ˙ltimo dÌgito
-        tamMatricula++; //Qtd de dÌgitos da matrÌcula padr„o
+        auxMatricula /= 10; //Remove o √∫ltimo d√≠gito
+        tamMatricula++; //Qtd de d√≠gitos da matr√≠cula padr√£o
     }
 
-    //Solicita ao usu·rio o tamanho padr„o do cÛdigo de uma disciplina
-    /*printf("Quantos caracteres tem o cÛdigo de uma disciplina?\n");
+    //Solicita ao usu√°rio o tamanho padr√£o do c√≥digo de uma disciplina
+    /*printf("Quantos caracteres tem o c√≥digo de uma disciplina?\n");
     scanf("%d", &tamCodigo);*/
 
-    //Alocando dinamicamente o tamanho do vetor cÛdigo
+    //Alocando dinamicamente o tamanho do vetor c√≥digo
     for (int i = 0; i < tamDisciplinas; i++){
         //"(char*)" converte o ponteiro do tipo void*, retornado por malloc, para um ponteiro tipo char, mesmo tipo do campo "codigo"
         disciplina[i].codigo = (char*)malloc(tamCodigo * sizeof(char));
@@ -247,15 +258,15 @@ int main (){
     limparTela();
 
     do {
-        //Menu de opÁıes
+        //Menu de op√ß√µes
         printf("### Menu principal ###");
-        printf("\nInforme o n˙mero da opÁ„o desejada: ");
+        printf("\nInforme o n√∫mero da op√ß√£o desejada: ");
         printf("\n0 - Sair");
         printf("\n1 - Alunos");
         printf("\n2 - Professores");
         printf("\n3 - Disciplinas\n");
     
-        //Entrada de dados: opc„o
+        //Entrada de dados: Op√ß√£o
         scanf("%d",&opcao);
 
         limparTela();
@@ -273,9 +284,9 @@ int main (){
                 int opcaoAluno;
                 
                 do{
-                    //Menu de opÁıes
-                    printf("### MÛdulo Alunos ###");
-                    printf("\nInforme o n˙mero da opÁ„o desejada: ");
+                    //Menu de op√ß√µes
+                    printf("### M√≥dulo Alunos ###");
+                    printf("\nInforme o n√∫mero da op√ß√£o desejada: ");
                     printf("\n0 - Voltar ao menu anterior");
                     printf("\n1 - Cadastrar aluno");
                     printf("\n2 - Listar aluno");
@@ -283,7 +294,7 @@ int main (){
                     printf("\n4 - Excluir aluno");
                     printf("\n");
                     
-                    //Entrada de dados: opc„o do mÛdulo de alunos
+                    //Entrada de dados: Op√ß√£o do M√≥dulo de alunos
                     scanf("%d",&opcaoAluno);
                     
                     limparTela();
@@ -302,44 +313,44 @@ int main (){
                             
                             int achou = 0; //Flag
                             
-                            printf("### MÛdulo Alunos - Inserir aluno ###\n");
+                            printf("### M√≥dulo Alunos - Inserir aluno ###\n");
 
                             int flagMatricula = 0;
                             long long int matricula;
-                            //Recebe e valida a matrÌcula
+                            //Recebe e valida a matr√≠cula
                             do {
-                                printf("Informe a matrÌcula do aluno: ");
+                                printf("Informe a matr√≠cula do aluno: ");
                                 scanf("%lld", &matricula);
                                 flagMatricula = validarMatricula(matricula, maxMatricula, tamMatricula);
                                 //printf("%d", flagMatricula);
 
                                 if (flagMatricula != 0)
-                                    printf("\nMatrÌcula inv·lida.\n");
+                                    printf("\nMatr√≠cula inv√°lida.\n");
                             } while (flagMatricula != 0);
                             
                             //Lista de alunos cheia
                             if (contAluno > tamAlunos){
                                 printf("\nCadastro de alunos cheio.\n");
-                                system("pause");
+                                pausarTela();
                                 limparTela();
                             }
                             
-                            //Lista de alunos n„o cheia
+                            //Lista de alunos N√£o cheia
                             else{
-                                //Verifica se a matrÌcula j· est· cadastrada
+                                //Verifica se a matr√≠cula j√° est√° cadastrada
                                 for (int i = 0; i < contAluno; i++){
-                                    if (matricula == aluno[i].matricula){ //MatrÌcula j· cadastrada
-                                        printf("\nAluno j· cadastrado no sistema.\n");
+                                    if (matricula == aluno[i].matricula){ //matr√≠cula j√° cadastrada
+                                        printf("\nAluno j√° cadastrado no sistema.\n");
                                         achou = 1;
-                                        system("pause");
+                                        pausarTela();
                                         limparTela();
                                         break; //Sai do for
                                     }
                                 }
                                 
-                                //MatrÌcula ainda n„o cadastrada
+                                //Matr√≠cula ainda n√£o cadastrada
                                 if (achou == 0){
-                                    //Armazena matrÌcula
+                                    //Armazena matr√≠cula
                                     aluno[contAluno].matricula = matricula;
                                                                     
                                     int flagNome = 0;
@@ -352,11 +363,11 @@ int main (){
                                         //printf("%d", flagNome);
 
                                         if (flagNome != 0)
-                                            printf("\nNome inv·lido. Apenas letras, com ou sem acento, e espaÁos s„o permitidas.\n");
+                                            printf("\nNome inv√°lido. Apenas letras, com ou sem acento, e espa√ßos s√£o permitidas.\n");
                                     } while (flagNome != 0);
                                     
                                     //Armazena o nome
-                                    if (flagNome == 0){ //if desnecess·rio. Apenas por precauÁ„o
+                                    if (flagNome == 0){ //if desnecess√°rio. Apenas por precau√ß√£o
                                         strcpy(aluno[contAluno].nome, nome);
                                     }
 
@@ -370,34 +381,34 @@ int main (){
                                         //printf("%d", flagData);
 
                                         if (flagData != 0)
-                                            printf("\nData inv·lida.\n");
+                                            printf("\nData inv√°lida.\n");
                                     } while (flagData != 0);
 
                                     int flagCPF = 0;
                                     char CPF[tamCPF + 1]; //+1 para o terminador nulo
                                     //Recebe e valida o CPF
                                     do {
-                                        printf("Informe o CPF (apenas n˙meros): ");
+                                        printf("Informe o CPF (apenas n√∫meros): ");
                                         scanf(" %s", CPF);
                                         flagCPF = validarCPF(CPF);
                                         //printf("%d", flagCPF);
 
                                         if (flagCPF != 0)
-                                            printf("\nData inv·lida.\n");
+                                            printf("\nCPF inv√°lido.\n");
                                     } while (flagCPF != 0);
 
                                     int flagGenero = 0;
                                     char genero[tamGenero];
-                                    //Recebe e valida a identidade de gÍnero
+                                    //Recebe e valida a identidade de g√™nero
                                     do {
-                                        printf("Informe a identidade de gÍnero: ");
+                                        printf("Informe a identidade de g√™nero: ");
                                         printf("\nM - Masculino");
                                         printf("\nF - Feminino");
-                                        printf("\nNB - N„o bin·rio");
-                                        printf("\nND - N„o declarado\n");
+                                        printf("\nNB - N√£o bin√°rio");
+                                        printf("\nND - N√£o declarado\n");
                                         scanf(" %s", genero);
 
-                                        //Converte os caracteres para mai˙sculo
+                                        //Converte os caracteres para mai√∫sculo
                                         for (int i = 0; i <= strlen(genero) - 1; i++) {
                                             genero[i] = toupper(genero[i]);
                                         }
@@ -406,13 +417,13 @@ int main (){
                                         //printf("%d", flagGenero);
 
                                         if (flagGenero != 0)
-                                            printf("\nIdentidade de gÍnero inv·lida.\n");
+                                            printf("\nIdentidade de g√™nero inv√°lida.\n");
                                     } while (flagGenero != 0);
                                     
                                     contAluno++; //Incrementa a quantidade de alunos
 
                                     printf("\nAluno cadastrado com sucesso!\n");
-                                    system("pause");
+                                    pausarTela();
                                     limparTela();
                                 }
                             } //Fim do else
@@ -421,29 +432,29 @@ int main (){
                         
                         //Listar aluno
                         case 2: {
-                            printf("### MÛdulo Alunos - Listar alunos ###");
+                            printf("### M√≥dulo Alunos - Listar alunos ###");
                             break; //Sai do case 2
                         } //Fim do switch 2, case 2: Listar aluno
         
                         //Atualizar aluno
                         case 3: {
-                            printf("### MÛdulo Alunos - Atualizar aluno ###");
+                            printf("### M√≥dulo Alunos - Atualizar aluno ###");
                             break; //Sai do case 3
                         } //Fim do switch 2, case 3: Atualizar aluno
         
                         //Excluir aluno
                         case 4: {
-                            printf("### MÛdulo Alunos - Excluir aluno ###");
+                            printf("### M√≥dulo Alunos - Excluir aluno ###");
                             break; //Sai do case 4 
                         } //Fim do switch 2, case 4: Excluir aluno
                                 
-                        //OpÁ„o inv·lida
+                        //op√ß√£o inv√°lida
                         default: {
-                            printf("\nOpc„o inv·lida.\n");
-                            system("pause");
+                            printf("\nOp√ß√£o inv√°lida.\n");
+                            pausarTela();
                             limparTela();
                             break; //Sai do default
-                        } //Fim do switch 2, default: OpÁ„o inv·lida
+                        } //Fim do switch 2, default: op√ß√£o inv√°lida
                     } //Fim do switch 2
 
                 } while(opcaoAluno != 0);
@@ -453,18 +464,18 @@ int main (){
 
             //Professores
             case 2: {
-                printf("\nMÛdulo Professores:\n");
+                printf("\nM√≥dulo Professores:\n");
                 break;
             } //Fim do case 2
 
             //Disciplinas
             case 3: {
-                printf("\nMÛdulo Disciplinas:\n");
+                printf("\nM√≥dulo Disciplinas:\n");
                 break;
             } //Fim do case 3
 
             default: {
-                printf("\nOpc„o inv·lida.");
+                printf("\nOp√ß√£o inv√°lida.");
                 break;
             }
         } //Fim do switch 1
