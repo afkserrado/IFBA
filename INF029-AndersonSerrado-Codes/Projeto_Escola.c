@@ -12,7 +12,7 @@
 #define tamNome 100
 #define tamData 10
 #define tamCPF 11
-#define tamGenero 3
+#define tamSexo 2
 #define tamAlunos 10000
 #define tamProfessores 100
 #define tamDisciplinas 1000
@@ -73,10 +73,13 @@ void limparTela() {
 //Pausa a tela
 void pausarTela() {
     #ifdef _WIN32
-        pausarTela(); //Windows
+        system("pause"); //Windows
     #else
-        printf("Pressione Enter para continuar...");
-        getchar();
+        // Limpa o buffer de entrada antes do getchar()
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);  // Limpa caracteres pendentes
+        printf("Presione qualquer tecla para continuar...");
+        getchar();  // Aguarda o Enter
     #endif
 }
 
@@ -119,13 +122,13 @@ int validarNome(char nome[tamNome]) {
     return flagNome;
 }
 
-//Verifica se o ano é bissexto
+// Verifica se o ano é bissexto
 int bissexto(int ano) {
     if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)){
-        return 1; //é bissexto
+        return 1; // é bissexto
     }
     else {
-        return 0; //Não é bissexto
+        return 0; // Não é bissexto
     }
 }
 
@@ -134,13 +137,15 @@ int validarData(int dia, int mes, int ano) {
     int flagBissexto = bissexto(ano);
     int diasMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     
-    //Valida o ano
+    // Valida o ano
     if (ano < 1900 || ano > 2100) {
-        return 1; //Ano inválido
+        printf("\nAno inválido. O ano deve estar entre 1900 e 2100.");
+        return 1;
     }
-
+    
     //Valida o mês
     if (mes < 1 || mes > 12) {
+        printf("\nMês inválido. O mês deve estar entre 1 e 12.");
         return 1; //Mês inválido
     }
 
@@ -151,10 +156,39 @@ int validarData(int dia, int mes, int ano) {
 
     //Valida o dia
     if (dia < 1 || dia > diasMes[mes - 1]) {
+        printf("\nDia inválido. O dia deve estar entre 1 e %d.", diasMes[mes - 1]);
         return 1; //Dia inválido
     }
+    
+    // Calcula a quantidade de segundos entre a data/horário atual e a data referencial (01/01/1970)
+    // e armazena na variável tipo time_z
+    time_t agora = time(NULL);
 
-    return 0; //Data válida
+    // Cria e zera a variável nascimento, do tipo tm, que contém campos para data e hora
+    struct tm nascimento = {0};
+
+    // Armazena a data de nascimento
+    nascimento.tm_mday = dia;
+    nascimento.tm_mon = mes - 1; //Janeiro = 0
+    nascimento.tm_year = ano - 1900; // Anos desde 1900
+    nascimento.tm_isdst = -1; // Auto-detecta horário de verão
+
+    // Converte a data de nascimento de tm (data/hora em campos separados) para time_t (segundos desde o referencial)
+    time_t nasc_seg = mktime(&nascimento);
+
+    // Verifica se a conversão foi bem-sucedida
+    if (nasc_seg == (time_t) - 1) {
+        printf("\nErro: Data inválida ou impossível.");
+        return 1;
+    }
+
+    // Verifica se a data é futura
+    if (difftime (agora, nasc_seg) < 0) {
+        printf("\nA data de nascimento é posterior à data atual.");
+        return 1;
+    }
+
+    return 0; // Data válida
 }
 
 //Valida o CPF
@@ -213,12 +247,12 @@ int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
     return 0; //CPF válido
 }
 
-//Valida a identidade de gênero
-int validarGenero(char genero[tamGenero]) {
-    if (!(strcmp(genero, "M") == 0 || strcmp(genero, "F") == 0 || strcmp(genero, "NB") == 0 || strcmp(genero, "ND") == 0)) {
-        return 1; //Gênero inválido
+//Valida o sexo
+int validarSexo(char sexo[tamSexo]) {
+    if (!(strcmp(sexo, "M") == 0 || strcmp(sexo, "F") == 0 || strcmp(sexo, "NB") == 0 || strcmp(sexo, "ND") == 0)) {
+        return 1; //Sexo inválido
     }
-    return 0; //Gênero válido
+    return 0; //Sexo válido
 }
 
 /*------------------------------------------------------------------------------------------------------------*/
@@ -387,7 +421,7 @@ int main (){
                                         //printf("%d", flagData);
 
                                         if (flagData != 0)
-                                            printf("\nData inválida.\n");
+                                            printf("\n");
                                     } while (flagData != 0);
 
                                     int flagCPF = 0;
@@ -403,28 +437,24 @@ int main (){
                                             printf("\nCPF inválido.\n");
                                     } while (flagCPF != 0);
 
-                                    int flagGenero = 0;
-                                    char genero[tamGenero];
-                                    //Recebe e valida a identidade de gênero
+                                    int flagSexo = 0;
+                                    char sexo[tamSexo];
+                                    //Recebe e valida o sexo
                                     do {
-                                        printf("Informe a identidade de gênero: ");
-                                        printf("\nM - Masculino");
-                                        printf("\nF - Feminino");
-                                        printf("\nNB - Não binário");
-                                        printf("\nND - Não declarado\n");
-                                        scanf(" %2s", genero);
+                                        printf("Informe o sexo (M ou F): ");
+                                        scanf(" %1s", sexo);
 
                                         //Converte os caracteres para maiúsculo
-                                        for (int i = 0; i <= strlen(genero) - 1; i++) {
-                                            genero[i] = toupper(genero[i]);
+                                        for (int i = 0; i <= strlen(sexo) - 1; i++) {
+                                            sexo[i] = toupper(sexo[i]);
                                         }
 
-                                        flagGenero = validarGenero(genero);
+                                        flagSexo = validarSexo(sexo);
                                         //printf("%d", flagGenero);
 
-                                        if (flagGenero != 0)
+                                        if (flagSexo != 0)
                                             printf("\nIdentidade de gênero inválida.\n");
-                                    } while (flagGenero != 0);
+                                    } while (flagSexo != 0);
                                     
                                     contAluno++; //Incrementa a quantidade de alunos
 
