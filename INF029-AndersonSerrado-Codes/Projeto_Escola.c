@@ -158,55 +158,57 @@ int validarData(int dia, int mes, int ano) {
 }
 
 //Valida o CPF
-//#######################Rever, meu CPF está dando inválido
 int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
-    int digCPF = 0;
 
-    //Quantidade de dígitos do CPF
-    digCPF = strlen(CPF);
+    //Verifica se o CPF tem 11 dígitos
+    if (strlen(CPF) != 11) {
+        return 1; //CPF inválido
+    }
 
     //Verifica se o CPF só contém números
     for (int i = 0; i < tamCPF; i++) {
-        if (!(CPF[i] >= '0' && CPF[i] <= '9')) {
+        if (!isdigit(CPF[i])) {
             return 1; //CPF inválido (não contém apenas números)
         }
     }
 
-    //Verifica se o CPF tem 11 dígitos
-    if (digCPF != 11) {
-        return 1; //CPF inválido
-    }  
-    
     //Verifica se todos os dígitos são iguais
     int todosIguais = 1;
-    for (int i = 1; i < 11; i++) {
+    for (int i = 1; i < tamCPF; i++) {
         if (CPF[i] != CPF[0]) {
             todosIguais = 0;
             break;
         }
     }
-    if (todosIguais == 1) return 1;
+    if (todosIguais == 1) return 1; //CPF inválido (todos os dígitos são iguais)
 
-    //Verifica o 10o dígito
-    int soma1 = 0;
-    for (int i = 0; i < 9; i++) { //Percorre do 1o ao 9o dígito
-        soma1 += (CPF[i] - '0') * (10 - i);
+    //Verifica o 10º dígito (1º verificador)
+    int soma = 0;
+    for (int i = 0; i < 9; i++) { //Percorre do 1º ao 9º dígito
+        soma += (CPF[i] - '0') * (10 - i);
     }
-    int resto1 = soma1 % 11;
+    int resto = soma % 11;
 
-    if (!((resto1 < 2 && CPF[9] == '0') || (CPF[9] == (11 - resto1))))
+    //Calcula o 1º dígito verificador
+    int digito1 = (resto < 2) ? 0 : (11 - resto);
+
+    //Verifica se o 10º dígito é igual ao dígito verificador
+    if (CPF[9] - '0' != digito1)
         return 1; //CPF inválido
 
-    //Verifica o 11o dígito
-    int soma2 = 0;
-    for (int i = 0; i < 10; i++) { //Percorre do 1o ao 10o dígito
-        soma2 += (CPF[i] - '0') * (11 - i);
+    //Verifica o 11º dígito (2º verificador)
+    soma = 0;
+    for (int i = 0; i < 10; i++) { //Percorre do 1º ao 10º dígito
+        soma += (CPF[i] - '0') * (11 - i);
     }
-    int resto2 = soma2%11;
+    resto = soma % 11;
 
-    if (!((resto2 < 2 && CPF[10] == '0') || (CPF[10] == (11 - resto2)))) {
+    //Calcula o 2º dígito verificador
+    int digito2 = (resto < 2) ? 0 : (11 - resto);
+
+    //Verifica se o 11º dígito é igual ao dígito verificador
+    if (CPF[10] - '0' != digito2)
         return 1; //CPF inválido
-    }
         
     return 0; //CPF válido
 }
@@ -335,7 +337,7 @@ int main (){
                                 limparTela();
                             }
                             
-                            //Lista de alunos Não cheia
+                            //Lista de alunos não cheia
                             else{
                                 //Verifica se a matrícula já está cadastrada
                                 for (int i = 0; i < contAluno; i++){
@@ -358,7 +360,11 @@ int main (){
                                     //Recebe e valida o nome
                                     do {
                                         printf("Informe o nome do aluno: ");
-                                        scanf(" %[^\n]", nome);
+                                        scanf(" %99[^\n]", nome);
+                                        /*' ' (espaço) antes do '%' para ignorar caracteres deixados no buffer de entrada anteriormente.
+                                        '99' para limitar a quantidade de caracteres, evitando buffer overflow.
+                                        '[^/n]' para ler qualquer caractere até encontrar uma quebra de linha (enter).*/
+
                                         flagNome = validarNome(nome);
                                         //printf("%d", flagNome);
 
@@ -389,7 +395,7 @@ int main (){
                                     //Recebe e valida o CPF
                                     do {
                                         printf("Informe o CPF (apenas números): ");
-                                        scanf(" %s", CPF);
+                                        scanf(" %11s", CPF);
                                         flagCPF = validarCPF(CPF);
                                         //printf("%d", flagCPF);
 
@@ -406,7 +412,7 @@ int main (){
                                         printf("\nF - Feminino");
                                         printf("\nNB - Não binário");
                                         printf("\nND - Não declarado\n");
-                                        scanf(" %s", genero);
+                                        scanf(" %2s", genero);
 
                                         //Converte os caracteres para maiúsculo
                                         for (int i = 0; i <= strlen(genero) - 1; i++) {
