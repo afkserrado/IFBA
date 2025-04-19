@@ -30,7 +30,7 @@ typedef struct {
 
 // Cadastro de pessoas
 typedef struct {
-    int *matricula; // Alocação dinâmica
+    char *matricula; // Alocação dinâmica
     char nome[tamNome];
     char CPF[tamCPF + 1]; //+1 para o terminador nulo
     char genero[3]; //+1 para o terminador nulo
@@ -42,7 +42,7 @@ pessoa professor[tamAlunos];
 
 // Cadastro das disciplinas
 typedef struct {
-    int *matricula; // Alocação dinâmica
+    char *matricula; // Alocação dinâmica
     char *codigo; // Alocação dinâmica
     int semestre;
 } listaDisciplinas;
@@ -56,7 +56,6 @@ listaDisciplinas disciplina[tamDisciplinas];
 void limparTela() {
     #if defined(_WIN32) || defined(_WIN64) // Windows
         system("cls");
-        system("pause");
 
     #elif defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__) // Linux e macOS
         system("clear");
@@ -70,14 +69,14 @@ void pausarTela() {
         system("pause");
 
     #elif defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__) // Linux e macOS
-        printf("Pressione qualquer tecla para continuar...");
-
-        // Limpa o buffer de entrada antes do getchar()
+        printf("Pressione Enter para continuar...");
+        fflush(stdout);  // Força a exibição imediata
+        
+        // Limpeza do buffer
         int c;
-        while ((c = getchar()) != '\n' && c != EOF);  // Limpa caracteres pendentes
-        getchar();  // Aguarda o Enter
-    
-        system("clear"); // Limpa a tela
+        do {
+            c = getchar();
+        } while (c != '\n' && c != EOF);
 
     #endif
 }
@@ -121,7 +120,7 @@ int validarInteiroPositivo(int *endereco) {
 // Alocando dinamicamente espaços de memória para cada aluno, professor ou disciplina
 void alocarMemoria(int tamMatricula) {
     for (int i = 0; i < tamAlunos; i++) {
-        aluno[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        aluno[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
         if (aluno[i].matricula == NULL) {
             printf("Erro ao alocar memória para aluno %d\n", i);
             exit(1);
@@ -129,7 +128,7 @@ void alocarMemoria(int tamMatricula) {
     }
 
     for (int i = 0; i < tamProfessores; i++) {
-        professor[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        professor[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
         if (professor[i].matricula == NULL) {
             printf("Erro ao alocar memória para professor %d\n", i);
             exit(1);
@@ -137,7 +136,7 @@ void alocarMemoria(int tamMatricula) {
     }
 
     for (int i = 0; i < tamDisciplinas; i++) {
-        disciplina[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        disciplina[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
         if (disciplina[i].matricula == NULL) {
             printf("Erro ao alocar memória para disciplina %d\n", i);
             exit(1);
@@ -145,42 +144,89 @@ void alocarMemoria(int tamMatricula) {
     }
 }
 
-// Valida a matrícula
-int validarMatricula (long long matricula, int tamMatricula) {
-    long long auxMatricula = matricula;
-    int digMatricula = 0;
+// Valida um número de matrícula ou CPF
+int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
+    
+    char entrada[tam + 2]; //+2 para o \n e o \0
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // Calcula a quantidade de dígitos da matrícula informada
-    while (auxMatricula > 0){
-        auxMatricula /= 10; //Remove o último dígito
-        digMatricula++; //Quant. de dígitos da matrícula informada
-    }
-
-    // Verifica se a matrícula é negativa
-    if (matricula < 0){
-        printf("\nErro: a matrícula não pode ser um número negativo.");
+    // Lê a entrada
+    if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
+        printf("\nErro ao ler %s.\n", texto);
         return 1;
     }
-
-    // Verifica se a matrícula tem a quantidade correta de dígitos
-    if (digMatricula == tamMatricula){
-        printf("\nErro: a matrícula deve conter %d dígitos.", tamMatricula);
+    
+    // Verifica se a entrada ultrapassou o buffer
+    if (strchr(entrada, '\n') == NULL) {
+        printf("Erro: %s contém mais de %d dígitos.\n", texto, tam);
+        while (getchar() != '\n'); // Limpa o buffer
         return 1;
     }
+    
+    // Substitui o \n pelo terminador nulo \0
+    entrada[strcspn(entrada, "\n")] = '\0';
 
-    return 0; // Matrícula válida
+    // Calcula o tamanho da matrícula
+    int len = strlen(entrada);
+    int tamEsperado = tam;
+    if (entrada[0] == '-') tamEsperado++;
+    
+    // Verificações de erros
+    int erro = 0;
+    
+    // Verifica o tamanho da matrícula
+    if (len != tamEsperado) {
+        printf("Erro: %s deve conter %d dígitos.\n", texto, tam);
+        erro = 1;
+    }
+    
+    // Verifica se é apenas "-"
+    if (len == 1 && entrada[0] == '-') {
+        printf("Erro: %s não pode conter caracteres não numéricos.\n", texto);
+        erro = 1;
+    }
+    
+    // Verifica se todos os dígitos são numéricos
+    int erroCaractere = 0; // Apenas números
+    int j = (entrada[0] == '-') ? 1 : 0; // Desconsidera o caractere '-'
+    for (int i = j; i < len; i++) {
+        if (!isdigit(entrada[i])) {
+            erroCaractere = 1; // Contém caracteres não numéricos
+            break;
+        }
+    }
+    
+    // Número negativo
+    if (entrada[0] == '-' && isdigit(entrada[1])) {
+        printf("Erro: %s não pode ser um número negativo.\n", texto);
+        
+        // Caracteres não numéricos
+        if (erroCaractere == 1) {
+            printf("Erro: %s não pode conter caracteres não numéricos.\n", texto);
+        }
+        erro = 1;
+    }
+    // Demais casos
+    else if (erroCaractere == 1){
+        printf("Erro: %s não pode conter caracteres não numéricos.\n", texto);
+        erro = 1;
+    }
+
+    if (erro) {
+        return 1;
+    }
+    
+    // Copia a entrada para o endereço de Mat_CPF
+    strcpy(Mat_CPF, entrada);
+
+    // Texto a ser exibido
+    /*char textoDisplay[strlen(texto) + 1];
+    strcpy(textoDisplay, texto);
+    textoDisplay[0] = toupper(textoDisplay[0]); // Capitaliza a primeira letra
+
+    // Exibe o resultado
+    printf("%s: %s\n", textoDisplay, Mat_CPF);*/
+
+    return 0; // Matrícula ou CPF válido
 }
 
 // Valida o nome
@@ -442,20 +488,29 @@ int main (){
 
                         // Inserir aluno
                         case 1: {
+                        
+                            // Limpa o buffer
+                            int c;
+                            while ((c = getchar()) != '\n' && c != EOF);  // Consome tudo até o próximo Enter
                             
                             int achou = 0; // Flag
                             
                             printf("### Módulo Alunos - Inserir aluno ###\n");
 
-                            int flagMatricula = 0;
-                            long long matricula;
+                            int flagMatricula = 0; 
+                            char matricula[tamMatricula + 1];
+                            char texto[10] = "matricula";
+
                             // Recebe e valida a matrícula
                             do {
                                 printf("Informe a matrícula do aluno: ");
-                                scanf("%lld", &matricula);                            
-
-                                flagMatricula = validarMatricula(matricula, tamMatricula);
+                                flagMatricula = validarMat_CPF(tamMatricula, matricula, texto);
                                 //printf("%d", flagMatricula);
+                                
+                                if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
+                                    printf("\nMódulo encerrado.\n");
+                                    break;
+                                }
 
                                 if (flagMatricula != 0)
                                     printf("\n");
@@ -472,7 +527,7 @@ int main (){
                             else{
                                 // Verifica se a matrícula já está cadastrada
                                 for (int i = 0; i < contAluno; i++){
-                                    if (matricula == aluno[i].matricula){ // Matrícula já cadastrada
+                                    if (strcmp(matricula, aluno[i].matricula) == 0){ // Matrícula já cadastrada
                                         printf("\nMatrícula já cadastrada no sistema.\n");
                                         achou = 1;
                                         pausarTela();
@@ -484,7 +539,7 @@ int main (){
                                 // Matrícula ainda não cadastrada
                                 if (achou == 0){
                                     // Armazena matrícula
-                                    aluno[contAluno].matricula = matricula;
+                                    strcpy(aluno[contAluno].matricula, matricula);
                                                                     
                                     int flagNome = 0;
                                     char nome[tamNome];
@@ -535,6 +590,7 @@ int main (){
                                     do {
                                         printf("Informe o CPF (apenas números): ");
                                         scanf(" %11s", CPF);
+                                        while ((c = getchar()) != '\n' && c != EOF);  // Limpeza adicional
                                         flagCPF = validarCPF(CPF);
                                         //printf("%d", flagCPF);
 
@@ -548,9 +604,10 @@ int main (){
                                     do {
                                         printf("Informe o sexo (M ou F): ");
                                         scanf(" %1s", sexo);
+                                        while ((c = getchar()) != '\n' && c != EOF);  // Limpeza adicional
 
                                         // Converte os caracteres para maiúsculo
-                                        for (int i = 0; i <= strlen(sexo) - 1; i++) {
+                                        for (int i = 0; i <= (int)strlen(sexo) - 1; i++) {
                                             sexo[i] = toupper(sexo[i]);
                                         }
 
