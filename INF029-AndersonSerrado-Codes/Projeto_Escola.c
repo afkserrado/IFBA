@@ -145,30 +145,34 @@ void alocarMemoria(int tamMatricula) {
 }
 
 // Valida um número de matrícula ou CPF
-int validarMat_CPF (int tamMat_CPF, char Mat_CPF[tamMat_CPF + 1], char texto[]) {
+int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[]) {
     
-    char entrada[tamMat_CPF + 2]; //+2 para o \n e o \0
+    // entrada_Mat_CPF: vetor que aponta para o endereço de memória do vetor "matricula" ou "CPF"
+    // "matricula" e "CPF" são vetores pertencentes à função que chamou validarNome
 
-    // Lê a entrada
-    if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
+    // Zerando a variável temporária
+    entrada_Mat_CPF[0] = '\0';
+
+    // Entrada de dados
+    if (fgets(entrada_Mat_CPF, sizeof(entrada_Mat_CPF), stdin) == NULL) {
         printf("\nErro ao ler %s.\n", texto);
         return 1;
     }
     
     // Verifica se a entrada ultrapassou o buffer
-    if (strchr(entrada, '\n') == NULL) {
+    if (strchr(entrada_Mat_CPF, '\n') == NULL) {
         printf("Erro: %s contém mais de %d dígitos.\n", texto, tamMat_CPF);
         while (getchar() != '\n'); // Limpa o buffer
         return 1;
     }
     
     // Substitui o \n pelo terminador nulo \0
-    entrada[strcspn(entrada, "\n")] = '\0';
+    entrada_Mat_CPF[strcspn(entrada_Mat_CPF, "\n")] = '\0';
 
     // Calcula o tamanho da matrícula
-    int len = strlen(entrada);
+    int len = strlen(entrada_Mat_CPF);
     int tamEsperado = tamMat_CPF;
-    if (entrada[0] == '-') tamEsperado++;
+    if (entrada_Mat_CPF[0] == '-') tamEsperado++;
     
     // Verificações de erros
     int erro = 0;
@@ -180,23 +184,23 @@ int validarMat_CPF (int tamMat_CPF, char Mat_CPF[tamMat_CPF + 1], char texto[]) 
     }
     
     // Verifica se é apenas "-"
-    if (len == 1 && entrada[0] == '-') {
+    if (len == 1 && entrada_Mat_CPF[0] == '-') {
         printf("Erro: %s não pode conter caracteres não numéricos.\n", texto);
         erro = 1;
     }
     
     // Verifica se todos os dígitos são numéricos
     int erroCaractere = 0; // Apenas números
-    int j = (entrada[0] == '-') ? 1 : 0; // Desconsidera o caractere '-'
+    int j = (entrada_Mat_CPF[0] == '-') ? 1 : 0; // Desconsidera o caractere '-'
     for (int i = j; i < len; i++) {
-        if (!isdigit(entrada[i])) {
+        if (!isdigit(entrada_Mat_CPF[i])) {
             erroCaractere = 1; // Contém caracteres não numéricos
             break;
         }
     }
     
     // Número negativo
-    if (entrada[0] == '-' && isdigit(entrada[1])) {
+    if (entrada_Mat_CPF[0] == '-' && isdigit(entrada_Mat_CPF[1])) {
         printf("Erro: %s não pode ser um número negativo.\n", texto);
         
         // Caracteres não numéricos
@@ -214,17 +218,6 @@ int validarMat_CPF (int tamMat_CPF, char Mat_CPF[tamMat_CPF + 1], char texto[]) 
     if (erro) {
         return 1;
     }
-    
-    // Copia a entrada para o endereço de Mat_CPF
-    strcpy(Mat_CPF, entrada);
-
-    // Texto a ser exibido
-    /*char textoDisplay[strlen(texto) + 1];
-    strcpy(textoDisplay, texto);
-    textoDisplay[0] = toupper(textoDisplay[0]); // Capitaliza a primeira letra
-
-    // Exibe o resultado
-    printf("%s: %s\n", textoDisplay, Mat_CPF);*/
 
     return 0; // Matrícula ou CPF válido
 }
@@ -516,15 +509,16 @@ int main (){
                             
                             printf("### Módulo Alunos - Inserir aluno ###\n");
 
+                            // ### INÍCIO - MATRÍCULA ###
+                            // Variáveis auxiliares
                             int flagMatricula = 0; 
                             char matricula[tamMatricula + 1]; // Variável temporária
                             char texto[] = "matricula";
 
                             // Recebe e valida a matrícula
                             do {
-                                printf("Informe a matrícula do aluno: ");
+                                printf("Informe a matrícula do %s: ", texto);
                                 flagMatricula = validarMat_CPF(tamMatricula, matricula, texto);
-                                //printf("%d", flagMatricula);
                                 
                                 if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
                                     printf("\nMódulo encerrado.\n");
@@ -534,6 +528,7 @@ int main (){
                                 if (flagMatricula != 0)
                                     printf("\n");
                             } while (flagMatricula != 0);
+                            // ### FIM - MATRÍCULA ###
                             
                             // Lista de alunos cheia
                             if (contAluno > tamAlunos){
@@ -559,7 +554,9 @@ int main (){
                                 if (achou == 0){
                                     // Armazena matrícula
                                     strcpy(aluno[contAluno].matricula, matricula);
-                                                                    
+                                            
+                                    
+                                    // ### INÍCIO - NOME ###
                                     // Variáveis auxiliares
                                     int flagNome = 0;
                                     char nome[tamNome]; // Variável temporária
@@ -569,12 +566,18 @@ int main (){
                                     do {
                                         flagNome = validarNome(nome, texto);
 
+                                        if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
+                                            printf("\nMódulo encerrado.\n");
+                                            break;
+                                        }
+
                                         if (flagNome != 0)
                                             printf("\n");
                                     } while (flagNome != 0);
                                     
                                     // Armazena o nome
                                     strcpy(aluno[contAluno].nome, nome);
+                                    // ### FIM - NOME ###
 
                                     int flagData = 0;
                                     int dia, mes, ano; // Variáveis temporárias
