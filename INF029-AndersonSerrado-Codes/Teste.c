@@ -1,48 +1,95 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <string.h>
+#include <ctype.h>
 
-// Calcula o tempo atual em segundos
-void tempoAtual() {
-
-    time_t agora = time(NULL);
-    struct tm data_inserida = {"0"};
-    data_inserida.tm_mday = 28;
-    data_inserida.tm_mon = 3;
-    data_inserida.tm_year = 1996;
-    time_t data_inserida_segundos = mktime (&data_inserida);
-
-    double diff = difftime(agora, data_inserida_segundos);
-
-    if (diff > 0)
-        printf("Data futura");
-    else if (diff < 0)
-        printf("Data passada");
-    else
-        printf("Mesma data");
+// Valida a matrícula
+int validarMatricula (int tamMatricula) {
     
+    char matricula[tamMatricula + 2]; //+2 para o \n e o \0
+
+    // Lê a entrada
+    if (fgets(matricula, sizeof(matricula), stdin) == NULL) {
+        printf("Erro ao ler a matrícula.\n");
+        return 1;
+    }
     
-    /*// Ponteiro para struct do tipo tm, que contém campos de data e hora
-    struct tm *data_atual;
-
-    // Calcuma o tempo atual em segundos e armazena na variável tipo time_t
-    time_t segundos = time(NULL);
-
-    // Converte de segundos para o tempo local e armazena
-    data_atual = localtime(&segundos);
+    // Verifica se a entrada ultrapassou o buffer
+    if (strchr(matricula, '\n') == NULL) {
+        printf("Erro: a matrícula contém mais de %d dígitos.\n", tamMatricula);
+        while (getchar() != '\n'); // Limpa o buffer
+        return 1;
+    }
     
-    printf("\nHora ........: %02d:",data_atual->tm_hour);//hora   
-    printf("%02d:",data_atual->tm_min);//minuto
-    printf("%02d\n",data_atual->tm_sec);//segundo  
+    // Substitui o \n pelo terminador nulo \0
+    matricula[strcspn(matricula, "\n")] = '\0';
 
-    printf("\nData ........: %0d/", data_atual->tm_mday);
-    printf("%02d/",data_atual->tm_mon+1); //mês
-    printf("%d\n\n",data_atual->tm_year+1900); //ano*/
+    // Calcula o tamanho da matrícula
+    int len = strlen(matricula);
+    int tamEsperado = tamMatricula;
+    if (!isdigit(matricula[0])) tamEsperado++;
+    
+    // Verificações de erros
+    int erro = 0;
+    
+    // Verifica o tamanho da matrícula
+    if (len != tamEsperado) {
+        printf("Erro: a matrícula deve conter %d dígitos.\n", tamMatricula);
+        erro = 1;
+    }
+    
+    // Verifica se todos os dígitos são numéricos
+    int erroCaractere = 0; // Apenas números
+    int j = 0;
+    if (matricula[0] == '-') j++; // Desconsidera o caractere '-'
+    for (int i = j; i < len; i++) {
+        if (!isdigit(matricula[i])) {
+            erroCaractere = 1; // Contém caracteres não numéricos
+            break;
+        }
+    }
+    
+    // Número negativo
+    if (matricula[0] == '-' && isdigit(matricula[1])) {
+        printf("Erro: a matrícula não pode ser um número negativo.\n");
+        
+        // Caracteres não numéricos
+        if (erroCaractere == 1) {
+            printf("Erro: a matrícula não pode conter caracteres não numéricos.\n");
+        }
+        erro = 1;
+    }
+    // Demais casos
+    else if (erroCaractere == 1){
+        printf("Erro: a matrícula não pode conter caracteres não numéricos.\n");
+        erro = 1;
+    }
 
+    if (erro) {
+        return 1;
+    }
+    
+    printf("Matrícula: %s", matricula);
+
+    return 0; // Matrícula válida
 }
 
-int main () {
+int main() {
     
-    tempoAtual();
-    
+    int flagMatricula = 0;
+    int tamMatricula = 11;
+    // Recebe e valida a matrícula
+    do {
+        printf("Informe a matrícula do aluno: ");
+        flagMatricula = validarMatricula(tamMatricula);
+        //printf("%d", flagMatricula);
+        
+        if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
+            printf("Entrada encerrada.\n");
+            break;
+        }
+
+        if (flagMatricula != 0)
+            printf("\n");
+    } while (flagMatricula != 0);
 }
