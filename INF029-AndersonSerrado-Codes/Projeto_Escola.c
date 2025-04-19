@@ -145,9 +145,9 @@ void alocarMemoria(int tamMatricula) {
 }
 
 // Valida um número de matrícula ou CPF
-int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
+int validarMat_CPF (int tamMat_CPF, char Mat_CPF[tamMat_CPF + 1], char texto[]) {
     
-    char entrada[tam + 2]; //+2 para o \n e o \0
+    char entrada[tamMat_CPF + 2]; //+2 para o \n e o \0
 
     // Lê a entrada
     if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
@@ -157,7 +157,7 @@ int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
     
     // Verifica se a entrada ultrapassou o buffer
     if (strchr(entrada, '\n') == NULL) {
-        printf("Erro: %s contém mais de %d dígitos.\n", texto, tam);
+        printf("Erro: %s contém mais de %d dígitos.\n", texto, tamMat_CPF);
         while (getchar() != '\n'); // Limpa o buffer
         return 1;
     }
@@ -167,7 +167,7 @@ int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
 
     // Calcula o tamanho da matrícula
     int len = strlen(entrada);
-    int tamEsperado = tam;
+    int tamEsperado = tamMat_CPF;
     if (entrada[0] == '-') tamEsperado++;
     
     // Verificações de erros
@@ -175,7 +175,7 @@ int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
     
     // Verifica o tamanho da matrícula
     if (len != tamEsperado) {
-        printf("Erro: %s deve conter %d dígitos.\n", texto, tam);
+        printf("Erro: %s deve conter %d dígitos.\n", texto, tamMat_CPF);
         erro = 1;
     }
     
@@ -230,19 +230,38 @@ int validarMat_CPF (int tam, char Mat_CPF[tam + 1], char texto[]) {
 }
 
 // Valida o nome
-int validarNome(char nome[tamNome]) {
-    int len = strlen(nome);
+int validarNome(char entrada_nome[], char texto[]) {
+    
+    // entrada_nome: vetor que aponta para o endereço de memória do vetor "nome"
+    // "nome" é o vetor pertencente à função que chamou validarNome
 
-    // Verifica se o nome não está vazio
-    if (len == 0) {
-        printf("\nNome inválido. O nome não pode estar vazio.");
-        return 1;  // Retorna 1 para indicar erro
+    // Zerando a variável temporária
+    entrada_nome[0] = '\0';
+
+    // Entrada de dados
+    printf("Informe o nome do %s: ", texto);
+    if (fgets(entrada_nome, tamNome, stdin) == NULL) {
+        printf("Erro na leitura do nome.\n");
+        return 1;
     }
 
+    // Remove a quebra de linha
+    entrada_nome[strcspn(entrada_nome, "\n")] = '\0';
+
+    // Comprimento
+    int len = strlen(entrada_nome);
+
+    // Verifica se o nome está vazio
+    if (len == 0) {
+        printf("Erro: o nome não pode estar vazio.\n");
+        return 1;
+    }
+
+    // Verifica se o nome contém caracteres inválidos
     for (int i = 0; i < len; i++){
         // Permite letras, espaços e caracteres acentuados
-        if (!(isalpha(nome[i]) || nome[i] == ' ')) {
-            printf("\nNome inválido. O nome contém caracteres inválidos.");
+        if (!(isalpha(entrada_nome[i]) || entrada_nome[i] == ' ')) {
+            printf("Erro: o nome contém caracteres inválidos.\n");
             return 1;
         }
     }
@@ -498,8 +517,8 @@ int main (){
                             printf("### Módulo Alunos - Inserir aluno ###\n");
 
                             int flagMatricula = 0; 
-                            char matricula[tamMatricula + 1];
-                            char texto[10] = "matricula";
+                            char matricula[tamMatricula + 1]; // Variável temporária
+                            char texto[] = "matricula";
 
                             // Recebe e valida a matrícula
                             do {
@@ -541,30 +560,24 @@ int main (){
                                     // Armazena matrícula
                                     strcpy(aluno[contAluno].matricula, matricula);
                                                                     
+                                    // Variáveis auxiliares
                                     int flagNome = 0;
-                                    char nome[tamNome];
+                                    char nome[tamNome]; // Variável temporária
+                                    char texto[] = "aluno";
+                                    
                                     // Recebe e valida o nome
                                     do {
-                                        printf("Informe o nome do aluno: ");
-                                        scanf(" %99[^\n]", nome);
-                                        /*' ' (espaço) antes do '%' para ignorar caracteres deixados no buffer de entrada anteriormente.
-                                        '99' para limitar a quantidade de caracteres, evitando buffer overflow.
-                                        '[^/n]' para ler qualquer caractere até encontrar uma quebra de linha (enter).*/
-
-                                        flagNome = validarNome(nome);
-                                        //printf("%d", flagNome);
+                                        flagNome = validarNome(nome, texto);
 
                                         if (flagNome != 0)
                                             printf("\n");
                                     } while (flagNome != 0);
                                     
                                     // Armazena o nome
-                                    if (flagNome == 0){ // if desnecessário. Apenas por precaução
-                                        strcpy(aluno[contAluno].nome, nome);
-                                    }
+                                    strcpy(aluno[contAluno].nome, nome);
 
                                     int flagData = 0;
-                                    int dia, mes, ano;
+                                    int dia, mes, ano; // Variáveis temporárias
                                     // Recebe e valida a data
                                     do {
                                         printf("Informe a de nascimento do aluno (DD/MM/AAAA): ");
@@ -585,7 +598,7 @@ int main (){
                                     } while (flagData != 0);
 
                                     int flagCPF = 0;
-                                    char CPF[tamCPF + 1]; //+1 para o terminador nulo
+                                    char CPF[tamCPF + 1]; // Variável temporária (+1 para o terminador nulo)
                                     // Recebe e valida o CPF
                                     do {
                                         printf("Informe o CPF (apenas números): ");
@@ -599,7 +612,7 @@ int main (){
                                     } while (flagCPF != 0);
 
                                     int flagSexo = 0;
-                                    char sexo[tamSexo];
+                                    char sexo[tamSexo]; // Variável temporária
                                     // Recebe e valida o sexo
                                     do {
                                         printf("Informe o sexo (M ou F): ");
