@@ -147,14 +147,14 @@ void alocarMemoria(int tamMatricula) {
 // Valida um número de matrícula ou CPF
 int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[]) {
     
-    // entrada_Mat_CPF: vetor que aponta para o endereço de memória do vetor "matricula" ou "CPF"
+    // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou validarNome
 
     // Zerando a variável temporária
     entrada_Mat_CPF[0] = '\0';
 
     // Entrada de dados
-    if (fgets(entrada_Mat_CPF, sizeof(entrada_Mat_CPF), stdin) == NULL) {
+    if (fgets(entrada_Mat_CPF, tamMat_CPF, stdin) == NULL) {
         printf("\nErro ao ler %s.\n", texto);
         return 1;
     }
@@ -225,7 +225,7 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 // Valida o nome
 int validarNome(char entrada_nome[], char texto[]) {
     
-    // entrada_nome: vetor que aponta para o endereço de memória do vetor "nome"
+    // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou validarNome
 
     // Zerando a variável temporária
@@ -273,19 +273,31 @@ int bissexto(int ano) {
 }
 
 // Valida a data de nascimento
-int validarData(int dia, int mes, int ano) {
-    int flagBissexto = bissexto(ano);
+int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto_pessoa[]) {
+    
+    // entrada_dia etc.: ponteiros que apontam para o endereço de memória dos vetors "dia" etc.
+    // "dia" etc. são vetores pertencentes à função que chamou validarData
+
+    int flagBissexto = bissexto(*entrada_ano);
     int diasMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     
+    printf("Informe a data de nascimento do %s (DD/MM/AAAA): ", texto_pessoa);
+    if(scanf("%d/%d/%d", entrada_dia, entrada_mes, entrada_ano) != 3) {
+        while (getchar() != '\n');  // Limpa o buffer até encontrar a quebra de linha
+
+        printf("Erro: a data deve estar no formato dd/mm/aaaa.\n");
+        return 1;
+    }
+
     // Valida o ano
-    if (ano < 1900 || ano > 2100) {
-        printf("\nAno inválido. O ano deve estar entre 1900 e 2100.");
+    if (*entrada_ano < 1900 || *entrada_ano > 2100) {
+        printf("Erro: o ano deve estar entre 1900 e 2100.\n");
         return 1;
     }
     
     // Valida o mês
-    if (mes < 1 || mes > 12) {
-        printf("\nMês inválido. O mês deve estar entre 1 e 12.");
+    if (*entrada_mes < 1 || *entrada_mes > 12) {
+        printf("Erro: o mês deve estar entre 1 e 12.\n");
         return 1; // Mês inválido
     }
 
@@ -295,8 +307,8 @@ int validarData(int dia, int mes, int ano) {
     }
 
     // Valida o dia
-    if (dia < 1 || dia > diasMes[mes - 1]) {
-        printf("\nDia inválido. O dia deve estar entre 1 e %d.", diasMes[mes - 1]);
+    if (*entrada_dia < 1 || *entrada_dia > diasMes[*entrada_mes - 1]) {
+        printf("Erro: o dia deve estar entre 1 e %d.\n", diasMes[*entrada_mes - 1]);
         return 1; // Dia inválido
     }
     
@@ -308,9 +320,9 @@ int validarData(int dia, int mes, int ano) {
     struct tm nascimento = {0};
 
     // Armazena a data de nascimento
-    nascimento.tm_mday = dia;
-    nascimento.tm_mon = mes - 1; // Janeiro = 0
-    nascimento.tm_year = ano - 1900; // Anos desde 1900
+    nascimento.tm_mday = *entrada_dia;
+    nascimento.tm_mon = *entrada_mes - 1; // O índice de Janeiro é 0
+    nascimento.tm_year = *entrada_ano - 1900; // Anos desde 1900
     nascimento.tm_isdst = -1; // Auto-detecta horário de verão
 
     // Converte a data de nascimento de tm (data/hora em campos separados) para time_t (segundos desde o referencial)
@@ -318,13 +330,13 @@ int validarData(int dia, int mes, int ano) {
 
     // Verifica se a conversão foi bem-sucedida
     if (nasc_seg == (time_t) - 1) {
-        printf("\nErro: Data inválida ou impossível.");
+        printf("Erro: data inválida ou impossível.\n");
         return 1;
     }
 
     // Verifica se a data é futura
     if (difftime (agora, nasc_seg) < 0) {
-        printf("\nA data de nascimento é posterior à data atual.");
+        printf("Erro: a data de nascimento é posterior à data atual.\n");
         return 1;
     }
 
@@ -472,6 +484,7 @@ int main (){
             //Alunos
             case 1: {
                 int opcaoAluno;
+                char texto_pessoa[] = "aluno";
                 
                 do{
                     //Menu de opções
@@ -560,11 +573,10 @@ int main (){
                                     // Variáveis auxiliares
                                     int flagNome = 0;
                                     char nome[tamNome]; // Variável temporária
-                                    char texto[] = "aluno";
                                     
                                     // Recebe e valida o nome
                                     do {
-                                        flagNome = validarNome(nome, texto);
+                                        flagNome = validarNome(nome, texto_pessoa);
 
                                         if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
                                             printf("\nMódulo encerrado.\n");
@@ -579,26 +591,19 @@ int main (){
                                     strcpy(aluno[contAluno].nome, nome);
                                     // ### FIM - NOME ###
 
+                                    // ### INÍCIO - DATA ###
+                                    // Variáveis auxiliares
                                     int flagData = 0;
                                     int dia, mes, ano; // Variáveis temporárias
-                                    // Recebe e valida a data
-                                    do {
-                                        printf("Informe a de nascimento do aluno (DD/MM/AAAA): ");
-                                        if(scanf("%d/%d/%d", &dia, &mes, &ano) != 3) {
-                                            // Limpa o buffer de entrada
-                                            while (getchar() != '\n');  // Limpa o buffer até encontrar a quebra de linha
 
-                                            printf("\nFormato inválido! A data deve ser no formato dd/mm/aaaa.\n");
-                                            flagData = 1;
-                                            continue; // Pula as próximas linhas do código e vai para o próximo loop
-                                        }
+                                        // Recebe e valida a data
+                                        do {
+                                            flagData = validarData(&dia, &mes, &ano, texto_pessoa);
 
-                                        flagData = validarData(dia, mes, ano);
-                                        //printf("%d", flagData);
-
-                                        if (flagData != 0)
-                                            printf("\n");
-                                    } while (flagData != 0);
+                                            if (flagData != 0)
+                                                printf("\n");
+                                        } while (flagData != 0);
+                                    // ### FIM - DATA ###
 
                                     int flagCPF = 0;
                                     char CPF[tamCPF + 1]; // Variável temporária (+1 para o terminador nulo)
