@@ -10,7 +10,7 @@ int validarMatricula (int tamMatricula) {
 
     // Lê a entrada
     if (fgets(matricula, sizeof(matricula), stdin) == NULL) {
-        printf("Erro ao ler a matrícula.\n");
+        printf("\nErro ao ler a matrícula.\n");
         return 1;
     }
     
@@ -27,7 +27,7 @@ int validarMatricula (int tamMatricula) {
     // Calcula o tamanho da matrícula
     int len = strlen(matricula);
     int tamEsperado = tamMatricula;
-    if (!isdigit(matricula[0])) tamEsperado++;
+    if (matricula[0] == '-') tamEsperado++;
     
     // Verificações de erros
     int erro = 0;
@@ -38,10 +38,15 @@ int validarMatricula (int tamMatricula) {
         erro = 1;
     }
     
+    // Verifica se é apenas "-"
+    if (len == 1 && matricula[0] == '-') {
+        printf("Erro: a matrícula não pode conter caracteres não numéricos.\n");
+        erro = 1;
+    }
+    
     // Verifica se todos os dígitos são numéricos
     int erroCaractere = 0; // Apenas números
-    int j = 0;
-    if (matricula[0] == '-') j++; // Desconsidera o caractere '-'
+    int j = (matricula[0] == '-') ? 1 : 0; // Desconsidera o caractere '-'
     for (int i = j; i < len; i++) {
         if (!isdigit(matricula[i])) {
             erroCaractere = 1; // Contém caracteres não numéricos
@@ -85,7 +90,7 @@ int main() {
         //printf("%d", flagMatricula);
         
         if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
-            printf("Entrada encerrada.\n");
+            printf("\nMódulo encerrado.\n");
             break;
         }
 
