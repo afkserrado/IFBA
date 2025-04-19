@@ -1,13 +1,14 @@
-//Bibliotecas
+// Bibliotecas
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
 #include <locale.h>
+#include <limits.h>
 
 /*------------------------------------------------------------------------------------------------------------*/
-//Constantes
+// Constantes globais
 
 #define tamNome 100
 #define tamData 10
@@ -18,50 +19,40 @@
 #define tamDisciplinas 1000
 
 /*------------------------------------------------------------------------------------------------------------*/
-//Structs
+// Structs globais
 
-//Data
+// Data
 typedef struct {
     int dia;
     int mes;
     int ano;
 } data;
 
-//Cadastro dos alunos
+// Cadastro de pessoas
 typedef struct {
-    long long int matricula;
+    int *matricula; // Alocação dinâmica
     char nome[tamNome];
     char CPF[tamCPF + 1]; //+1 para o terminador nulo
     char genero[3]; //+1 para o terminador nulo
     data nascimento;
-} listaAlunos;
+} pessoa;
 
-listaAlunos aluno[tamAlunos];
+pessoa aluno[tamAlunos];
+pessoa professor[tamAlunos];
 
-//Cadastro dos professores
+// Cadastro das disciplinas
 typedef struct {
-    long long int matricula;
-    char nome[tamNome];
-    char CPF[tamCPF + 1]; //+1 para o terminador nulo
-    char genero[3]; //+1 para o terminador nulo
-    data nascimento;
-} listaProfessores;
-
-listaProfessores professor[tamProfessores];
-
-//Cadastro das disciplinas
-typedef struct {
-    long long int matricula;
-    char *codigo; //Alocação dinâmica
+    int *matricula; // Alocação dinâmica
+    char *codigo; // Alocação dinâmica
     int semestre;
 } listaDisciplinas;
 
 listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
-//Subfunções
+// Subfunções
 
-//Limpa a tela
+// Limpa a tela
 void limparTela() {
     #if defined(_WIN32) || defined(_WIN64) // Windows
         system("cls");
@@ -91,22 +82,104 @@ void pausarTela() {
     #endif
 }
 
+// Valida números inteiros
+int validarInteiroPositivo(int *endereco) {
+    
+    long long n;
+    int retorno = -1;
+    int caractere;
+
+    // Retorna 1 se conseguiu coletar uma entrada válida e 0 caso contrário
+    retorno = scanf("%lld", &n); 
+
+    // Limpar o buffer e impede o loop infinito
+    while ((caractere = getchar()) != '\n' && caractere != EOF);
+    
+    // Verifica se caracteres não numéricos foram digitados
+    if (retorno == 0 || retorno == EOF) {
+        printf("Erro: caractere não numérico digitado.\n");
+        return 1;
+    }
+    
+    // Verifica se o número é maior que INT_MAX
+    if (n > INT_MAX) {
+        printf("Erro: o número excede o limite de %d.\n", INT_MAX);
+        return 1;
+    }
+    
+    // Verifica se o número é negativo
+    if (n <= 0) {
+        printf("Erro: o número deve ser positivo e maior que 0.\n");
+        return 1;
+    }
+    
+    // Converte n para inteiro e armazena no endereço guardado em "endereco"
+    *endereco = (int)n;  
+    return 0;
+}
+
+// Alocando dinamicamente espaços de memória para cada aluno, professor ou disciplina
+void alocarMemoria(int tamMatricula) {
+    for (int i = 0; i < tamAlunos; i++) {
+        aluno[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        if (aluno[i].matricula == NULL) {
+            printf("Erro ao alocar memória para aluno %d\n", i);
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < tamProfessores; i++) {
+        professor[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        if (professor[i].matricula == NULL) {
+            printf("Erro ao alocar memória para professor %d\n", i);
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < tamDisciplinas; i++) {
+        disciplina[i].matricula = (int*)malloc(tamMatricula * sizeof(int));
+        if (disciplina[i].matricula == NULL) {
+            printf("Erro ao alocar memória para disciplina %d\n", i);
+            exit(1);
+        }
+    }
+}
+
 // Valida a matrícula
-int validarMatricula (long long int matricula, long long int maxMatricula, int tamMatricula) {
-    long long int auxMatricula = matricula;
+int validarMatricula (long long matricula, int tamMatricula) {
+    long long auxMatricula = matricula;
     int digMatricula = 0;
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // Calcula a quantidade de dígitos da matrícula informada
     while (auxMatricula > 0){
         auxMatricula /= 10; //Remove o último dígito
-        digMatricula++; //Qtd de dígitos da matrícula informada
+        digMatricula++; //Quant. de dígitos da matrícula informada
     }
 
-    //Validação
-    if (!(matricula >= 0 && matricula <= maxMatricula && digMatricula == tamMatricula)){
-        printf("\nMatrícula inválida. A matrícula deve conter %d dígitos.", tamMatricula);
+    // Verifica se a matrícula é negativa
+    if (matricula < 0){
+        printf("\nErro: a matrícula não pode ser um número negativo.");
         return 1;
     }
+
+    // Verifica se a matrícula tem a quantidade correta de dígitos
+    if (digMatricula == tamMatricula){
+        printf("\nErro: a matrícula deve conter %d dígitos.", tamMatricula);
+        return 1;
+    }
+
     return 0; // Matrícula válida
 }
 
@@ -285,32 +358,35 @@ int main (){
 
     //Declarações
     int opcao;
-    int tamCodigo = 0;
-    long long int maxMatricula; //Maior número que a matrícula pode ter (Ex.: 99999999999)
     int contAluno = 0, contProfessor = 0, contDisciplina = 0;
 
-    //Solicita ao usuário a maior matrícula possível
-    printf("\nQual a maior matrícula possível para uma pessoa? (Ex.: 9999999)\n");
-    scanf("%lld", &maxMatricula);
+    int flagInteiro = 0;
+    int tamMatricula = 0;
+    // Recebe o tamanho da matrícula e valida
+    do {
+        printf("Quantos dígitos tem uma matrícula (apenas inteiros positivos)? ");
+        flagInteiro = validarInteiroPositivo(&tamMatricula);
+        printf("\n");
 
-    //Calcula a quantidade de dígitos da matrícula padrão
-    long long int auxMatricula = maxMatricula;
-    int tamMatricula = 0; //Qtd de dígitos
-    while (auxMatricula > 0){
-        auxMatricula /= 10; //Remove o último dígito
-        tamMatricula++; //Qtd de dígitos da matrícula padrão
-    }
-
+    } while (flagInteiro != 0);
+    
+    printf("Tamanho da matrícula: %d\n", tamMatricula);
+    
+    // Alocação dinâmica de espaços para cada aluno, professor e disciplina
+    alocarMemoria(tamMatricula);
+    
     //Solicita ao usuário o tamanho padrão do código de uma disciplina
-    /*printf("Quantos caracteres tem o código de uma disciplina?\n");
-    scanf("%d", &tamCodigo);*/
+    /*int tamCodigo = 0;
+    printf("Quantos caracteres tem o código de uma disciplina?\n");
+    scanf("%d", &tamCodigo);
 
     //Alocando dinamicamente o tamanho do vetor código
     for (int i = 0; i < tamDisciplinas; i++){
         //"(char*)" converte o ponteiro do tipo void*, retornado por malloc, para um ponteiro tipo char, mesmo tipo do campo "codigo"
         disciplina[i].codigo = (char*)malloc(tamCodigo * sizeof(char));
-    }
+    }*/
 
+    pausarTela();
     limparTela();
 
     do {
@@ -372,13 +448,13 @@ int main (){
                             printf("### Módulo Alunos - Inserir aluno ###\n");
 
                             int flagMatricula = 0;
-                            long long int matricula;
+                            long long matricula;
                             // Recebe e valida a matrícula
                             do {
                                 printf("Informe a matrícula do aluno: ");
                                 scanf("%lld", &matricula);                            
 
-                                flagMatricula = validarMatricula(matricula, maxMatricula, tamMatricula);
+                                flagMatricula = validarMatricula(matricula, tamMatricula);
                                 //printf("%d", flagMatricula);
 
                                 if (flagMatricula != 0)
@@ -550,5 +626,18 @@ int main (){
         } // Fim do switch 1
 
     } while (opcao != 0);
+
+    // Libera a memória alocada
+    for (int i = 0; i < tamAlunos; i++) {
+        free(aluno[i].matricula);
+    }
+
+    for (int i = 0; i < tamProfessores; i++) {
+        free(professor[i].matricula);
+    }
+
+    for (int i = 0; i < tamDisciplinas; i++) {
+        free(disciplina[i].matricula);
+    }
 
 } // Fim do programa
