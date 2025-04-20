@@ -11,9 +11,8 @@
 // Constantes globais
 
 #define tamNome 100
-#define tamData 10
 #define tamCPF 11
-#define tamSexo 3 // 1 (char) + 1 (\n) + 1 (\0)
+#define tamSexo 1
 #define tamAlunos 10000
 #define tamProfessores 100
 #define tamDisciplinas 1000
@@ -148,7 +147,7 @@ void alocarMemoria(int tamMatricula) {
 }
 
 // Valida condições exclusivas do CPF
-int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
+int validarCPF (char CPF[tamCPF]) {
 
     // Verifica se todos os dígitos são iguais
     int todosIguais = 1;
@@ -285,14 +284,15 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 }
 
 // Valida o nome
-int validarNome(char entrada_nome[], char texto[]) {
+int validarNome(char entrada_nome[tamNome + 2], char texto[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou validarNome
+    // tamNome + 2: tamNome caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamNome caracteres
 
     // Entrada de dados
     printf("Informe o nome do %s: ", texto);
-    if (fgets(entrada_nome, tamNome, stdin) == NULL) {
+    if (fgets(entrada_nome, tamNome + 2, stdin) == NULL) {
         printf("Erro ao ler o nome.\n");
         return 1;
     }
@@ -300,7 +300,7 @@ int validarNome(char entrada_nome[], char texto[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_nome, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -411,14 +411,15 @@ int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
 }
 
 // Valida o sexo
-int validarSexo(char entrada_sexo[], char texto_pessoa[]) {
+int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
     
     // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
     // "sexo" é um vetor pertencente à função que chamou validarNome
+    // tamSexo + 2: tamSexo caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamSexo caracteres
     
     // Entrada de dados
     printf("Informe o sexo (M ou F) do %s: ", texto_pessoa);
-    if (fgets(entrada_sexo, tamSexo, stdin) == NULL) {
+    if (fgets(entrada_sexo, tamSexo + 2, stdin) == NULL) {
         printf("Erro ao ler o sexo.\n");
         return 1; // Trata erro de leitura
     }
@@ -426,7 +427,7 @@ int validarSexo(char entrada_sexo[], char texto_pessoa[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_sexo, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0

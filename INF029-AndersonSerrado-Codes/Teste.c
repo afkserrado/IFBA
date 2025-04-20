@@ -1,46 +1,11 @@
-// Bibliotecas
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <time.h>
-#include <locale.h>
-#include <limits.h>
 
-/*------------------------------------------------------------------------------------------------------------*/
-// Constantes globais
 
-#define tamNome 100
-#define tamData 10
-#define tamCPF 11
-#define tamSexo 2
-#define tamAlunos 10000
-#define tamProfessores 100
-#define tamDisciplinas 1000
+// Regras gerais para trabalhar com strings
 
-/*------------------------------------------------------------------------------------------------------------*/
-
-// Structs globais
-
-// Data
-typedef struct {
-    int dia;
-    int mes;
-    int ano;
-} data;
-
-// Cadastro de pessoas
-typedef struct {
-    char *matricula; // Alocação dinâmica
-    char nome[tamNome];
-    char CPF[tamCPF + 1]; //+1 para o terminador nulo
-    char sexo[2]; //+1 para o terminador nulo
-    data nascimento;
-} pessoa;
-
-pessoa aluno[tamAlunos];
-
-/*------------------------------------------------------------------------------------------------------------*/
+#define tam_max 10
 
 // Limpa o buffer
 void limparBuffer() {
@@ -50,59 +15,35 @@ void limparBuffer() {
     }
 }
 
-// Valida o sexo
-int validarSexo(char entrada_sexo[], char texto_pessoa[]) {
-    
-    // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
-    // "sexo" é um vetor pertencente à função que chamou validarNome
-    
-    // Entrada de dados
-    printf("Informe o sexo (M ou F) do %s: ", texto_pessoa);
-    if (fgets(entrada_sexo, tamSexo, stdin) == NULL) {
+int main () {
+	
+	/* REGRAS:
+     1. O vetor deve ter tamanho n+1 para armazenar n caracteres + '\0'
+     2. fgets() sempre insere '\0' após os caracteres lidos
+     3. fgets() inclui o '\n' se houver espaço no buffer
+     4. Se a entrada for maior que o buffer, o '\n' pode ficar fora
+     5. O fgets remove o '\n', mas é importante removê-lo manualmente para consistência
+     6. Se houver a possibilidade do usuário inserir mais digítos do que o necessário, importante considerar a limpeza de buffer, evitando que os caracteres excedentes sejam consumidos em leituras futuras
+   */
+  
+	char string[tam_max + 1]; //n caracteres + '\0'
+	
+	printf("Digite um texto: ");
+	
+	// Leitura
+	if (fgets(string, tam_max + 1, stdin) == NULL) {
         return 1; // Trata erro de leitura
     }
-
-    // Remove a quebra de linha
-    entrada_sexo[strcspn(entrada_sexo, "\n")] = '\0';
     
-    // Converte os caracteres para maiúsculo
-    entrada_sexo[0] = toupper(entrada_sexo[0]);
-    
-    if (entrada_sexo[0] != 'M' && entrada_sexo[0] != 'F') {
-        printf("Erro: o sexo só pode ser m, M, f ou F.\n");
-        return 1;
+    // Verifica truncamento e remove \n
+    if (strchr(string, '\n') == NULL) {
+        limparBuffer(); // Limpa o excesso de caracteres
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tam_max);
+        return 1; // Input truncado = inválido
+    } else {
+        // Substitui a quebra de linha \n pelo terminador nulo \0
+        string[strcspn(string, "\n")] = '\0';
     }
-
-    return 0; // Sexo válido
-}
-
-/*------------------------------------------------------------------------------------------------------------*/
-
-int main() {
     
-    char texto_pessoa[] = "aluno";
-    int contAluno = 0; // Para fins de testes
-    
-
-    int flagSexo = 0;
-    char sexo[tamSexo]; // Variável temporária
-    
-    // Recebe e valida o sexo
-    do {
-    
-        flagSexo = validarSexo(sexo, texto_pessoa);
-
-        limparBuffer();
-    
-        if (flagSexo != 0)
-            printf("\n");
-    } while (flagSexo != 0);
-    
-    strcpy(aluno[contAluno].sexo, sexo);
-    
-    printf("\n");
-    printf("Sexo: %s\n", aluno[contAluno].sexo); // Para fins de testes
-    
-    contAluno++; // Para fins de testes
-
+    printf("Texto: %s\n", string);
 }
