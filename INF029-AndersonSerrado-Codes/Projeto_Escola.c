@@ -1,4 +1,14 @@
+/*
+Instituto Federal da Bahia (IFBA)
+Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)
+Semestre 2025.1
+INF029 - Laboratório de Programação
+Professor: Renato Novais
+Aluno: Anderson Serrado
+*/
+
 // Bibliotecas
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +16,8 @@
 #include <time.h>
 #include <locale.h>
 #include <limits.h>
+#include <wctype.h> // Funções para trabalhar com caracteres com múltiplos bytes, como letras acentuadas e outros do Unicode
+#include <wchar.h>  // Funções para manipular strings de caracteres com múltiplos bytes (wchar_t)
 
 /*------------------------------------------------------------------------------------------------------------*/
 // Constantes globais
@@ -50,6 +62,17 @@ listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
 // Subfunções
+
+//Configurando a codificação de caracteres
+void configurarLocale () {
+    #if defined(_WIN32) || defined(_WIN64) // Windows
+        setlocale(LC_ALL, "Portuguese");
+
+    #elif defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__) // Linux e macOS
+        setlocale(LC_ALL, "pt_BR.UTF-8");  
+        
+    #endif
+}
 
 // Limpa o buffer
 void limparBuffer() {
@@ -309,21 +332,60 @@ int validarNome(char entrada_nome[tamNome + 2], char texto[]) {
 
     // Comprimento
     int len = strlen(entrada_nome);
-
+    
     // Verifica se o nome está vazio
     if (len == 0) {
         printf("Erro: o nome não pode estar vazio.\n");
         return 1;
     }
 
+    // wchar_t: equivalente a char, mas para caracteres multibyte
+    wchar_t wentrada_nome[len + 1]; //Vetor de tamanho len + 1, pois strlen não conta o \0
+    mbstowcs(wentrada_nome, entrada_nome, len + 1); // Converte de char para wchar_t e guarda
+
     // Verifica se o nome contém caracteres inválidos
-    for (int i = 0; i < len; i++){
-        // Permite letras, espaços e caracteres acentuados
-        if (!(isalpha(entrada_nome[i]) || entrada_nome[i] == ' ')) {
+    for (int i = 0; wentrada_nome[i] != L'\0'; i++){
+        wchar_t c = wentrada_nome[i];
+        
+        // Permite letras, caracteres acentuados, ç, apóstrofo ('), hífen (-) e espaços
+        if (!(iswalpha(c) || c == L' ' || c == L'-' || c == L'\'')) {
             printf("Erro: o nome contém caracteres inválidos.\n");
             return 1;
         }
+
+        // Verifica se o nome contém espaços consecutivos
+        if (i < len - 1 && wentrada_nome[i] == L' ' && wentrada_nome[i + 1] == L' ') {
+            printf("Erro: o nome contém espaços consecutivos.\n");
+            return 1;
+        }
+
+        // Verifica se o nome começa ou termina com caracteres inválidos
+        if ((i == 0 || i == len - 1) && (c == L' ' || c == L'-' || c == L'\'')) {
+            printf("Erro: o nome não pode começar ou terminar com espaço, hífen ou apóstrofo.\n");
+            return 1;
+        }
     }
+
+    // Padronizando o formato do nome
+    for (int i = 0; wentrada_nome[i] != L'\0'; i++){
+        wchar_t c = wentrada_nome[i];
+        
+        // Capitaliza a primeira letra do nome
+        if (i == 0) {
+            wentrada_nome[i] = towupper(c);
+        }
+        // Capitaliza a primeira letra dos n nomes e sobrenomes
+        else if (iswalpha(c) && wentrada_nome[i - 1] == ' ') {
+            wentrada_nome[i] = towupper(c);
+        }
+        // Converte as demais letras para minúsculas
+        else {
+            wentrada_nome[i] = towlower(c);
+        }
+    }
+
+    wcstombs(entrada_nome, wentrada_nome, len + 1);
+    entrada_nome[len] = '\0';
     
     return 0; // Nome válido
 }
@@ -449,9 +511,7 @@ int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
 //Função principal
 int main (){
 
-    //Configurando a codificação de caracteres
-    setlocale(LC_ALL, "Portuguese"); //Windows
-    //setlocale(LC_ALL, "pt_BR.UTF-8"); //Linux
+    configurarLocale();
 
     //Declarações
     int opcao;
