@@ -33,7 +33,7 @@ typedef struct {
     char *matricula; // Alocação dinâmica
     char nome[tamNome];
     char CPF[tamCPF + 1]; //+1 para o terminador nulo
-    char genero[3]; //+1 para o terminador nulo
+    char sexo[2]; //+1 para o terminador nulo
     data nascimento;
 } pessoa;
 
@@ -51,6 +51,14 @@ listaDisciplinas disciplina[tamDisciplinas];
 
 /*------------------------------------------------------------------------------------------------------------*/
 // Subfunções
+
+// Limpa o buffer
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        // Loop intencionalmente vazio para consumir caracteres
+    }
+}
 
 // Limpa a tela
 void limparTela() {
@@ -72,11 +80,7 @@ void pausarTela() {
         printf("Pressione Enter para continuar...");
         fflush(stdout);  // Força a exibição imediata
         
-        // Limpeza do buffer
-        int c;
-        do {
-            c = getchar();
-        } while (c != '\n' && c != EOF);
+        limparBuffer();
 
     #endif
 }
@@ -144,17 +148,70 @@ void alocarMemoria(int tamMatricula) {
     }
 }
 
+// Valida condições exclusivas do CPF
+int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
+
+    // Verifica se todos os dígitos são iguais
+    int todosIguais = 1;
+    for (int i = 1; i < tamCPF; i++) {
+        if (CPF[i] != CPF[0]) {
+            todosIguais = 0;
+            break;
+        }
+    }
+    if (todosIguais == 1) {
+        printf("Erro: os dígitos do CPF não podem ser todos iguais.\n");
+        return 1;
+    }
+
+    // Verifica o 10º dígito (1º verificador)
+    int soma = 0;
+    for (int i = 0; i < 9; i++) { //Percorre do 1º ao 9º dígito
+        soma += (CPF[i] - '0') * (10 - i);
+    }
+    int resto = soma % 11;
+
+    // Calcula o 1º dígito verificador
+    int digito1 = (resto < 2) ? 0 : (11 - resto);
+
+    // Verifica se o 10º dígito é igual ao dígito verificador
+    if (CPF[9] - '0' != digito1) {
+        printf("Erro: o 10º dígito deveria ser %d.\n", digito1);
+        return 1;
+    }
+
+    // Verifica o 11º dígito (2º verificador)
+    soma = 0;
+    for (int i = 0; i < 10; i++) { // Percorre do 1º ao 10º dígito
+        soma += (CPF[i] - '0') * (11 - i);
+    }
+    resto = soma % 11;
+
+    // Calcula o 2º dígito verificador
+    int digito2 = (resto < 2) ? 0 : (11 - resto);
+
+    // Verifica se o 11º dígito é igual ao dígito verificador
+    if (CPF[10] - '0' != digito2) {
+        printf("Erro: o 11º dígito deveria ser %d.\n", digito2);
+        return 1;
+    }
+        
+    return 0; // CPF válido
+}
+
 // Valida um número de matrícula ou CPF
-int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[]) {
+int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[]) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou validarNome
+    // tamMat_CPF + 2 = +1 do \n e +1 do \0
 
     // Zerando a variável temporária
     entrada_Mat_CPF[0] = '\0';
 
     // Entrada de dados
-    if (fgets(entrada_Mat_CPF, tamMat_CPF, stdin) == NULL) {
+    printf("Informe o(a) %s do(a) %s(a): ", texto, texto_pessoa);
+    if (fgets(entrada_Mat_CPF, tamMat_CPF + 2, stdin) == NULL) {
         printf("\nErro ao ler %s.\n", texto);
         return 1;
     }
@@ -217,6 +274,12 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 
     if (erro) {
         return 1;
+    }
+
+    if (strcmp(texto, "CPF") == 0) { // Se o texto for CPF
+        if (validarCPF(entrada_Mat_CPF) != 0) { // Chama a função validarCPF
+            return 1; // CPF inválido 
+        }
     }
 
     return 0; // Matrícula ou CPF válido
@@ -343,75 +406,26 @@ int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
     return 0; // Data válida
 }
 
-// Valida o CPF
-int validarCPF (char CPF[tamCPF + 1]) { //+1 para o terminador nulo
-
-    // Verifica se o CPF tem 11 dígitos
-    if (strlen(CPF) != 11) {
-        printf("\nCPF inválido. O CPF deve conter %d dígitos.", tamCPF);
-        return 1;
-    }
-
-    // Verifica se o CPF só contém números
-    for (int i = 0; i < tamCPF; i++) {
-        if (!isdigit(CPF[i])) {
-            printf("\nCPF inválido. O CPF deve conter apenas números.");
-            return 1;
-        }
-    }
-
-    // Verifica se todos os dígitos são iguais
-    int todosIguais = 1;
-    for (int i = 1; i < tamCPF; i++) {
-        if (CPF[i] != CPF[0]) {
-            todosIguais = 0;
-            break;
-        }
-    }
-    if (todosIguais == 1) {
-        printf("\nCPF inválido. Os dígitos do CPF não podem ser todos iguais.");
-        return 1;
-    }
-
-    // Verifica o 10º dígito (1º verificador)
-    int soma = 0;
-    for (int i = 0; i < 9; i++) { //Percorre do 1º ao 9º dígito
-        soma += (CPF[i] - '0') * (10 - i);
-    }
-    int resto = soma % 11;
-
-    // Calcula o 1º dígito verificador
-    int digito1 = (resto < 2) ? 0 : (11 - resto);
-
-    // Verifica se o 10º dígito é igual ao dígito verificador
-    if (CPF[9] - '0' != digito1) {
-        printf("\nCPF inválido. O 10º dígito deveria ser %d.", digito1);
-        return 1;
-    }
-
-    // Verifica o 11º dígito (2º verificador)
-    soma = 0;
-    for (int i = 0; i < 10; i++) { // Percorre do 1º ao 10º dígito
-        soma += (CPF[i] - '0') * (11 - i);
-    }
-    resto = soma % 11;
-
-    // Calcula o 2º dígito verificador
-    int digito2 = (resto < 2) ? 0 : (11 - resto);
-
-    // Verifica se o 11º dígito é igual ao dígito verificador
-    if (CPF[10] - '0' != digito2) {
-        printf("\nCPF inválido. O 11º dígito deveria ser %d.", digito1);
-        return 1;
-    }
-        
-    return 0; // CPF válido
-}
-
 // Valida o sexo
-int validarSexo(char sexo[tamSexo]) {
-    if (!(strcmp(sexo, "M") == 0 || strcmp(sexo, "F") == 0)) {
-        printf("\nSexo inválido. O sexo só pode ser M ou F.");
+int validarSexo(char entrada_sexo[], char texto_pessoa[]) {
+    
+    // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
+    // "sexo" é um vetor pertencente à função que chamou validarNome
+    
+    // Entrada de dados
+    printf("Informe o sexo (M ou F) do %s: ", texto_pessoa);
+    if (fgets(entrada_sexo, tamSexo, stdin) == NULL) {
+        return 1; // Trata erro de leitura
+    }
+
+    // Remove a quebra de linha
+    entrada_sexo[strcspn(entrada_sexo, "\n")] = '\0';
+    
+    // Converte os caracteres para maiúsculo
+    entrada_sexo[0] = toupper(entrada_sexo[0]);
+    
+    if (entrada_sexo[0] != 'M' && entrada_sexo[0] != 'F') {
+        printf("Erro: o sexo só pode ser m, M, f ou F.\n");
         return 1;
     }
 
@@ -524,14 +538,14 @@ int main (){
 
                             // ### INÍCIO - MATRÍCULA ###
                             // Variáveis auxiliares
+                            // Variáveis auxiliares
                             int flagMatricula = 0; 
-                            char matricula[tamMatricula + 1]; // Variável temporária
-                            char texto[] = "matricula";
+                            char matricula[tamMatricula + 1]; // Variável temporária (+1 do \0)
+                            char textoMat[] = "matricula";
 
                             // Recebe e valida a matrícula
                             do {
-                                printf("Informe a matrícula do %s: ", texto);
-                                flagMatricula = validarMat_CPF(tamMatricula, matricula, texto);
+                                flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa);
                                 
                                 if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
                                     printf("\nMódulo encerrado.\n");
@@ -541,6 +555,7 @@ int main (){
                                 if (flagMatricula != 0)
                                     printf("\n");
                             } while (flagMatricula != 0);
+
                             // ### FIM - MATRÍCULA ###
                             
                             // Lista de alunos cheia
@@ -567,8 +582,7 @@ int main (){
                                 if (achou == 0){
                                     // Armazena matrícula
                                     strcpy(aluno[contAluno].matricula, matricula);
-                                            
-                                    
+                                                                        
                                     // ### INÍCIO - NOME ###
                                     // Variáveis auxiliares
                                     int flagNome = 0;
@@ -589,6 +603,7 @@ int main (){
                                     
                                     // Armazena o nome
                                     strcpy(aluno[contAluno].nome, nome);
+
                                     // ### FIM - NOME ###
 
                                     // ### INÍCIO - DATA ###
@@ -603,41 +618,57 @@ int main (){
                                             if (flagData != 0)
                                                 printf("\n");
                                         } while (flagData != 0);
-                                    // ### FIM - DATA ###
 
+                                        //Armazena a data
+                                        aluno[contAluno].nascimento.dia = dia;
+                                        aluno[contAluno].nascimento.mes = mes;
+                                        aluno[contAluno].nascimento.ano = ano;
+
+                                    // ### FIM - DATA ###
+                                    
+                                    // ### INÍCIO - CPF ###
+                                    // Variáveis auxiliares
                                     int flagCPF = 0;
-                                    char CPF[tamCPF + 1]; // Variável temporária (+1 para o terminador nulo)
+                                    char CPF[tamCPF + 1]; // Variável temporária (+1 do \0)
+                                    char textoCPF[] = "CPF";
+
                                     // Recebe e valida o CPF
                                     do {
-                                        printf("Informe o CPF (apenas números): ");
-                                        scanf(" %11s", CPF);
-                                        while ((c = getchar()) != '\n' && c != EOF);  // Limpeza adicional
-                                        flagCPF = validarCPF(CPF);
-                                        //printf("%d", flagCPF);
+                                        flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa);
+                                        
+                                        if (flagCPF == 1 && feof(stdin)) { // Detecta EOF
+                                            printf("\nMódulo encerrado.\n");
+                                            break;
+                                        }
 
                                         if (flagCPF != 0)
                                             printf("\n");
                                     } while (flagCPF != 0);
 
+                                    //Armazena o CPF
+                                    strcpy(aluno[contAluno].CPF, CPF);
+
+                                    // ### FIM - CPF ###                                    
+
+                                    //### INÍCIO - SEXO ###
                                     int flagSexo = 0;
                                     char sexo[tamSexo]; // Variável temporária
+                                    
                                     // Recebe e valida o sexo
                                     do {
-                                        printf("Informe o sexo (M ou F): ");
-                                        scanf(" %1s", sexo);
-                                        while ((c = getchar()) != '\n' && c != EOF);  // Limpeza adicional
+                                    
+                                        flagSexo = validarSexo(sexo, texto_pessoa);
 
-                                        // Converte os caracteres para maiúsculo
-                                        for (int i = 0; i <= (int)strlen(sexo) - 1; i++) {
-                                            sexo[i] = toupper(sexo[i]);
-                                        }
-
-                                        flagSexo = validarSexo(sexo);
-                                        //printf("%d", flagSexo);
-
+                                        limparBuffer();
+                                    
                                         if (flagSexo != 0)
                                             printf("\n");
                                     } while (flagSexo != 0);
+                                    
+                                    // Armazena o sexo
+                                    strcpy(aluno[contAluno].sexo, sexo);
+
+                                    //### FIM - SEXO ###
                                     
                                     contAluno++; // Incrementa a quantidade de alunos
 
