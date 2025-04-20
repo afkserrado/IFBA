@@ -13,7 +13,7 @@
 #define tamNome 100
 #define tamData 10
 #define tamCPF 11
-#define tamSexo 2
+#define tamSexo 3 // 1 (char) + 1 (\n) + 1 (\0)
 #define tamAlunos 10000
 #define tamProfessores 100
 #define tamDisciplinas 1000
@@ -90,13 +90,12 @@ int validarInteiroPositivo(int *endereco) {
     
     long long n;
     int retorno = -1;
-    int caractere;
 
     // Retorna 1 se conseguiu coletar uma entrada válida e 0 caso contrário
     retorno = scanf("%lld", &n); 
 
     // Limpar o buffer e impede o loop infinito
-    while ((caractere = getchar()) != '\n' && caractere != EOF);
+    limparBuffer();
     
     // Verifica se caracteres não numéricos foram digitados
     if (retorno == 0 || retorno == EOF) {
@@ -212,19 +211,19 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
     // Entrada de dados
     printf("Informe o(a) %s do(a) %s(a): ", texto, texto_pessoa);
     if (fgets(entrada_Mat_CPF, tamMat_CPF + 2, stdin) == NULL) {
-        printf("\nErro ao ler %s.\n", texto);
+        printf("Erro ao ler o(a) %s.\n", texto); // Trata erro de leitura
         return 1;
     }
-    
-    // Verifica se a entrada ultrapassou o buffer
+
+    // Verifica truncamento e remove \n
     if (strchr(entrada_Mat_CPF, '\n') == NULL) {
-        printf("Erro: %s contém mais de %d dígitos.\n", texto, tamMat_CPF);
-        while (getchar() != '\n'); // Limpa o buffer
-        return 1;
-    }
-    
-    // Substitui o \n pelo terminador nulo \0
-    entrada_Mat_CPF[strcspn(entrada_Mat_CPF, "\n")] = '\0';
+        limparBuffer(); // Limpa o excesso de caracteres
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamMat_CPF);
+        return 1; // Input truncado = inválido
+    } else {
+        // Substitui a quebra de linha \n pelo terminador nulo \0
+        entrada_Mat_CPF[strcspn(entrada_Mat_CPF, "\n")] = '\0';
+    }    
 
     // Calcula o tamanho da matrícula
     int len = strlen(entrada_Mat_CPF);
@@ -291,18 +290,22 @@ int validarNome(char entrada_nome[], char texto[]) {
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou validarNome
 
-    // Zerando a variável temporária
-    entrada_nome[0] = '\0';
-
     // Entrada de dados
     printf("Informe o nome do %s: ", texto);
     if (fgets(entrada_nome, tamNome, stdin) == NULL) {
-        printf("Erro na leitura do nome.\n");
+        printf("Erro ao ler o nome.\n");
         return 1;
     }
 
-    // Remove a quebra de linha
-    entrada_nome[strcspn(entrada_nome, "\n")] = '\0';
+    // Verifica truncamento e remove \n
+    if (strchr(entrada_nome, '\n') == NULL) {
+        limparBuffer(); // Limpa o excesso de caracteres
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome - 2);
+        return 1; // Input truncado = inválido
+    } else {
+        // Substitui a quebra de linha \n pelo terminador nulo \0
+        entrada_nome[strcspn(entrada_nome, "\n")] = '\0';
+    }    
 
     // Comprimento
     int len = strlen(entrada_nome);
@@ -346,7 +349,8 @@ int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
     
     printf("Informe a data de nascimento do %s (DD/MM/AAAA): ", texto_pessoa);
     if(scanf("%d/%d/%d", entrada_dia, entrada_mes, entrada_ano) != 3) {
-        while (getchar() != '\n');  // Limpa o buffer até encontrar a quebra de linha
+        limparBuffer();
+        //while (getchar() != '\n');  // Limpa o buffer até encontrar a quebra de linha
 
         printf("Erro: a data deve estar no formato dd/mm/aaaa.\n");
         return 1;
@@ -415,12 +419,20 @@ int validarSexo(char entrada_sexo[], char texto_pessoa[]) {
     // Entrada de dados
     printf("Informe o sexo (M ou F) do %s: ", texto_pessoa);
     if (fgets(entrada_sexo, tamSexo, stdin) == NULL) {
+        printf("Erro ao ler o sexo.\n");
         return 1; // Trata erro de leitura
     }
 
-    // Remove a quebra de linha
-    entrada_sexo[strcspn(entrada_sexo, "\n")] = '\0';
-    
+    // Verifica truncamento e remove \n
+    if (strchr(entrada_sexo, '\n') == NULL) {
+        limparBuffer(); // Limpa o excesso de caracteres
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo - 2);
+        return 1; // Input truncado = inválido
+    } else {
+        // Substitui a quebra de linha \n pelo terminador nulo \0
+        entrada_sexo[strcspn(entrada_sexo, "\n")] = '\0';
+    }
+        
     // Converte os caracteres para maiúsculo
     entrada_sexo[0] = toupper(entrada_sexo[0]);
     
@@ -546,11 +558,6 @@ int main (){
                             // Recebe e valida a matrícula
                             do {
                                 flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa);
-                                
-                                if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
-                                    printf("\nMódulo encerrado.\n");
-                                    break;
-                                }
 
                                 if (flagMatricula != 0)
                                     printf("\n");
@@ -592,11 +599,6 @@ int main (){
                                     do {
                                         flagNome = validarNome(nome, texto_pessoa);
 
-                                        if (flagMatricula == 1 && feof(stdin)) { // Detecta EOF
-                                            printf("\nMódulo encerrado.\n");
-                                            break;
-                                        }
-
                                         if (flagNome != 0)
                                             printf("\n");
                                     } while (flagNome != 0);
@@ -624,6 +626,8 @@ int main (){
                                         aluno[contAluno].nascimento.mes = mes;
                                         aluno[contAluno].nascimento.ano = ano;
 
+                                        limparBuffer(); // Evitar que o \n seja passado para o CPF
+
                                     // ### FIM - DATA ###
                                     
                                     // ### INÍCIO - CPF ###
@@ -635,11 +639,6 @@ int main (){
                                     // Recebe e valida o CPF
                                     do {
                                         flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa);
-                                        
-                                        if (flagCPF == 1 && feof(stdin)) { // Detecta EOF
-                                            printf("\nMódulo encerrado.\n");
-                                            break;
-                                        }
 
                                         if (flagCPF != 0)
                                             printf("\n");
@@ -658,8 +657,6 @@ int main (){
                                     do {
                                     
                                         flagSexo = validarSexo(sexo, texto_pessoa);
-
-                                        limparBuffer();
                                     
                                         if (flagSexo != 0)
                                             printf("\n");
