@@ -144,6 +144,33 @@ int validarInteiroPositivo(int *endereco) {
     return 0;
 }
 
+/*// Alocando dinamicamente espaços de memória para cada aluno, professor ou disciplina
+void alocarMemoria(int tamMatricula) {
+    for (int i = 0; i < tamAlunos; i++) {
+        alunos[i].matricula = (char*)malloc((tamMatricula + 2) * sizeof(char));
+        if (alunos[i].matricula == NULL) {
+            printf("Erro ao alocar memória para aluno %d\n", i);
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < tamProfessores; i++) {
+        professores[i].matricula = (char*)malloc((tamMatricula + 2) * sizeof(char));
+        if (professores[i].matricula == NULL) {
+            printf("Erro ao alocar memória para professor %d\n", i);
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < tamDisciplinas; i++) {
+        disciplina[i].matricula = (char*)malloc((tamMatricula + 2) * sizeof(char));
+        if (disciplina[i].matricula == NULL) {
+            printf("Erro ao alocar memória para disciplina %d\n", i);
+            exit(1);
+        }
+    }
+}*/
+
 // Valida a existência de um número de matrícula
 int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
     
