@@ -752,15 +752,19 @@ int main (){
                     // Transição de tela
                     limparTela();
     
-                    //Switch 2
                     switch(opcaoAluno){
 
-                        //Voltar ao menu anterior
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - VOLTAR AO MENU ANTERIOR
+
                         case 0: {
                             limparTela();
                             break;
-                        } // Fim do switch 2, case 0: voltar ao menu anteior
+                        }
 
+                        // FIM MÓDULO ALUNOS - VOLTAR AO MENU ANTERIOR
+                        // ##################################################################### //
+                        
 
                         // ##################################################################### //
                         // MÓDULO ALUNOS - INSERIR
@@ -824,7 +828,7 @@ int main (){
                         // FIM DO MÓDULO ALUNOS - OPÇÃO INVÁLIDA
                         // ##################################################################### //
 
-                    } // Fim do switch 2
+                    } // Fim do switch
 
                 } while(opcaoAluno != 0);
 
@@ -839,9 +843,108 @@ int main (){
             // MÓDULO PROFESSORES
 
             case 2: {
-                printf("\nMódulo Professores:\n");
+                int opcaoProfessor;
+                
+                do {
+                    //Menu de opções
+                    printf("### Módulo Professores ###");
+                    printf("\nInforme o número da opção desejada: ");
+                    printf("\n0 - Voltar ao menu anterior");
+                    printf("\n1 - Cadastrar professor");
+                    printf("\n2 - Listar professor");
+                    printf("\n3 - Atualizar professor");
+                    printf("\n4 - Excluir professor");
+                    printf("\n");
+                    
+                    //Entrada de dados: Opção do Módulo de professores
+                    scanf("%d",&opcaoProfessor);
+                    limparBuffer();
+                    
+                    // Transição de tela
+                    limparTela();
+    
+                    switch(opcaoProfessor){
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - VOLTAR AO MENU ANTERIOR
+                        
+                        case 0: {
+                            limparTela();
+                            break;
+                        }
+
+                        // FIM MÓDULO PROFESSORES - VOLTAR AO MENU ANTERIOR
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - INSERIR
+
+                        case 1: {
+                            inserirPessoa(tamMatricula, "professor", contProfessor, professores, tamProfessores);
+                            contProfessor++; // Incrementa a contagem de professores
+
+                            break; // Sai do case 1
+                        }
+
+                        // FIM DO MÓDULO PROFESSORES - INSERIR
+                        // ##################################################################### //
+                        
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - LISTAR
+
+                        case 2: {
+                            printf("### Módulo Professores - Listar professores ###");
+                            break; // Sai do case 2
+                        }
+
+                        // FIM DO MÓDULO PROFESSORES - LISTAR
+                        // ##################################################################### //
+        
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - ATUALIZAR
+
+                        case 3: {
+                            printf("### Módulo Professores - Atualizar professor ###");
+                            break; // Sai do case 3
+                        }
+
+                        // FIM DO MÓDULO PROFESSORES - ATUALIZAR
+                        // ##################################################################### //
+        
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - EXCLUIR
+                        case 4: {
+                            printf("### Módulo Professores - Excluir professor ###");
+                            break; // Sai do case 4 
+                        }
+
+                        // FIM DO MÓDULO PROFESSORES - EXCLUIR
+                        // ##################################################################### //
+
+                                
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - OPÇÃO INVÁLIDA
+
+                        default: {
+                            printf("Opção inválida.\n");
+                            pausarTela();
+                            limparTela();
+                            break; // Sai do default
+                        }
+
+                        // FIM DO MÓDULO PROFESSORES - OPÇÃO INVÁLIDA
+                        // ##################################################################### //
+
+                    } // Fim do switch 2
+
+                } while(opcaoProfessor != 0);
+
                 break;
-            } // Fim do case 2
+            } // Fim do case 1, Professores, do módulo geral
 
             // FIM DO MÓDULO PROFESSORES
             // ############################################################################## //
