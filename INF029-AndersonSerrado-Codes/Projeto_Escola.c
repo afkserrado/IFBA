@@ -164,7 +164,7 @@ int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, c
         contAluno = contPessoa2;
         contProfessor = contPessoa;
     }
-
+    
     // Verifica se a matrícula já está cadastrada na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_Matricula, alunos[i].matricula) == 0){ // Matrícula já cadastrada
@@ -359,12 +359,14 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
 
     // Verifica se a matrícula já existe
     if (strcmp(texto, "matrícula") == 0) { // Se o texto for matrícula
+        //printf("\nEntrou em matrícula.\n");
         if (existeMatricula(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeMatricula
             return 1; // Matrícula existente 
         }
     }
     // Verifica se o CPF já existe
     else {
+        //printf("\nEntrou em CPF.\n");
         if (existeCPF(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeCPF
             return 1; // CPF existente 
         }
@@ -604,7 +606,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
         // Variáveis auxiliares
         int flagMatricula = 0; 
         char matricula[tamMatricula];
-        char textoMat[] = "matricula";
+        char textoMat[] = "matrícula";
 
         // Recebe e valida a matrícula
         do {
