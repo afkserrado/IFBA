@@ -22,14 +22,14 @@ Aluno: Anderson Serrado
 /*--------------------------------------------------------------------------------------------------*/
 // Constantes globais
 
-#define tamNome 100
-#define tamMatricula 3
-#define tamCPF 11
-#define tamSexo 1
+#define tamNome 102 // n caracteres + \n + \0
+#define tamMatricula 5 // n caracteres + \n + \0
+#define tamCPF 13 // n caracteres + \n + \0
+#define tamSexo 3 // n caracteres + \n + \0
 #define tamAlunos 10000
 #define tamProfessores 100
 #define tamDisciplinas 1000
-#define tamCodigo 6
+#define tamCodigo 8 // n caracteres + \n + \0
 
 /*--------------------------------------------------------------------------------------------------*/
 // Structs globais
@@ -43,10 +43,10 @@ typedef struct {
 
 // Cadastro de pessoas
 typedef struct {
-    char matricula[tamMatricula + 1];
-    char nome[tamNome + 1];
-    char CPF[tamCPF + 1]; //+1 para o terminador nulo
-    char sexo[2]; //+1 para o terminador nulo
+    char matricula[tamMatricula];
+    char nome[tamNome];
+    char CPF[tamCPF];
+    char sexo[tamSexo];
     data nascimento;
 } pessoa;
 
@@ -55,8 +55,8 @@ pessoa professores[tamAlunos];
 
 // Cadastro das disciplinas
 typedef struct {
-    char matricula[tamMatricula + 1];
-    char codigo[tamCodigo + 1];
+    char matricula[tamMatricula];
+    char codigo[tamCodigo];
     int semestre;
 } listaDisciplinas;
 
@@ -109,7 +109,7 @@ void pausarTela() {
     #endif
 }
 
-// Valida números inteiros
+/*// Valida números inteiros
 int validarInteiroPositivo(int *endereco) {
     
     long long n;
@@ -142,7 +142,7 @@ int validarInteiroPositivo(int *endereco) {
     // Converte n para inteiro e armazena no endereço guardado em "endereco"
     *endereco = (int)n;  
     return 0;
-}
+}*/
 
 // Valida a existência de um número de matrícula
 int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
@@ -282,18 +282,17 @@ int validarCPF (char CPF[tamCPF]) {
 }
 
 // Recebe, valida e guarda a matrícula ou o CPF
-int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
+int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou receberNome
-    // tamMat_CPF + 2 = +1 do \n e +1 do \0
 
     // Zerando a variável temporária
     entrada_Mat_CPF[0] = '\0';
 
     // Entrada de dados
-    printf("Informe o(a) %s do(a) %s(a): ", texto, texto_pessoa);
-    if (fgets(entrada_Mat_CPF, tamMat_CPF + 2, stdin) == NULL) {
+    printf("Informe o(a) %s do(a) %s(a) (máx. %d dígitos): ", texto, texto_pessoa, tamMat_CPF - 2);
+    if (fgets(entrada_Mat_CPF, tamMat_CPF, stdin) == NULL) {
         printf("Erro ao ler o(a) %s.\n", texto); // Trata erro de leitura
         return 1;
     }
@@ -301,7 +300,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
     // Verifica truncamento e remove \n
     if (strchr(entrada_Mat_CPF, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamMat_CPF);
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamMat_CPF - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -310,7 +309,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 
     // Calcula o tamanho da matrícula
     int len = strlen(entrada_Mat_CPF);
-    int tamEsperado = tamMat_CPF;
+    int tamEsperado = tamMat_CPF - 2;
     if (entrada_Mat_CPF[0] == '-') tamEsperado++;
     
     // Verificações de erros
@@ -318,7 +317,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
     
     // Verifica o tamanho da matrícula
     if (len != tamEsperado) {
-        printf("Erro: %s deve conter %d dígitos.\n", texto, tamMat_CPF);
+        printf("Erro: %s deve conter %d dígitos.\n", texto, tamMat_CPF - 2);
         erro = 1;
     }
     
@@ -382,15 +381,14 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 }
 
 // Recebe, valida e guarda o nome
-int receberNome(char entrada_nome[tamNome + 2], char texto_pessoa[]) {
+int receberNome(char entrada_nome[], char texto_pessoa[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou receberNome
-    // tamNome + 2: tamNome caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamNome caracteres
 
     // Entrada de dados
     printf("Informe o nome do %s: ", texto_pessoa);
-    if (fgets(entrada_nome, tamNome + 2, stdin) == NULL) {
+    if (fgets(entrada_nome, tamNome, stdin) == NULL) {
         printf("Erro ao ler o nome.\n");
         return 1;
     }
@@ -398,7 +396,7 @@ int receberNome(char entrada_nome[tamNome + 2], char texto_pessoa[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_nome, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome);
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -548,15 +546,14 @@ int receberData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
 }
 
 // Recebe, valida e guarda o sexo
-int receberSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
+int receberSexo(char entrada_sexo[tamSexo], char texto_pessoa[]) {
     
     // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
     // "sexo" é um vetor pertencente à função que chamou receberNome
-    // tamSexo + 2: tamSexo caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamSexo caracteres
     
     // Entrada de dados
     printf("Informe o sexo (M ou F) do %s: ", texto_pessoa);
-    if (fgets(entrada_sexo, tamSexo + 2, stdin) == NULL) {
+    if (fgets(entrada_sexo, tamSexo, stdin) == NULL) {
         printf("Erro ao ler o sexo.\n");
         return 1; // Trata erro de leitura
     }
@@ -564,7 +561,7 @@ int receberSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_sexo, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo);
+        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -606,7 +603,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
     
         // Variáveis auxiliares
         int flagMatricula = 0; 
-        char matricula[tamMatricula + 2]; // Variável temporária (+1 do \n e +1 do \0)
+        char matricula[tamMatricula];
         char textoMat[] = "matricula";
 
         // Recebe e valida a matrícula
@@ -629,7 +626,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
         // Variáveis auxiliares
         int flagNome = 0;
-        char nome[tamNome + 2]; // Variável temporária (+1 do \n e +1 do \0)
+        char nome[tamNome];
         
         // Recebe e valida o nome
         do {
@@ -676,7 +673,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
         // Variáveis auxiliares
         int flagCPF = 0;
-        char CPF[tamCPF + 2]; // Variável temporária (+1 do \n e +1 do \0)
+        char CPF[tamCPF];
         char textoCPF[] = "CPF";
 
         // Recebe e valida o CPF
@@ -699,7 +696,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
         // Variáveis auxiliares
         int flagSexo = 0;
-        char sexo[tamSexo + 2]; // Variável temporária
+        char sexo[tamSexo];
         
         // Recebe e valida o sexo
         do {
@@ -752,32 +749,6 @@ int main (){
     //Declarações
     int opcao;
     int contAluno = 0, contProfessor = 0, contDisciplina = 0;
-
-    /*// ############################################################################## //
-    // DEFINE O PADRÃO PARA O NÚMERO DE MATRÍCULA
-
-    int flagInteiro = 0;
-    int tamMatricula = 0;
-    
-    // Recebe o tamanho da matrícula e valida
-    do {
-        printf("Quantos dígitos tem uma matrícula (apenas inteiros positivos)? ");
-        flagInteiro = validarInteiroPositivo(&tamMatricula);
-        printf("\n");
-    } while (flagInteiro != 0);
-    
-    printf("Tamanho da matrícula: %d\n", tamMatricula);
-    
-    // Alocação dinâmica de espaços para cada aluno, professor e disciplina
-    alocarMemoria(tamMatricula);
-    */
-
-    // FIM
-    // ############################################################################## //
-
-    // Transição de tela
-    //pausarTela();
-    //limparTela();
 
     do {
         // Menu de opções
@@ -1056,18 +1027,5 @@ int main (){
 
     // FIM DO MÓDULO GERAL
     // ############################################################################## //
-    
-    // Libera a memória alocada
-    for (int i = 0; i < tamAlunos; i++) {
-        free(alunos[i].matricula);
-    }
-
-    for (int i = 0; i < tamProfessores; i++) {
-        free(professores[i].matricula);
-    }
-
-    for (int i = 0; i < tamDisciplinas; i++) {
-        free(disciplina[i].matricula);
-    }
 
 } // Fim do programa
