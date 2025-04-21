@@ -144,6 +144,25 @@ int validarInteiroPositivo(int *endereco) {
     return 0;
 }*/
 
+// Lê uma entrada
+int lerEntrada (char entrada[], int tamEntrada) {
+
+    // Leitura
+    if (fgets(entrada, tamEntrada, stdin) == NULL) {
+        return 1; // Trata erro de leitura
+    }
+
+    // Verifica truncamento e remove \n
+    if (strchr(entrada, '\n') == NULL) {
+        limparBuffer(); // Limpa o excesso de caracteres
+        printf("Erro: excesso de caracteres. O limite é %d caracteres.\n", tamEntrada - 2);
+        return 1; // Input truncado = inválido
+    } else {
+        // Substitui a quebra de linha \n pelo terminador nulo \0
+        entrada[strcspn(entrada, "\n")] = '\0';
+    }
+}
+
 // Valida a existência de um número de matrícula
 int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
     
@@ -181,7 +200,7 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
             printf("\nMatrícula já cadastrada no sistema.\n");
             //pausarTela();
             //limparTela();
-            return 1;
+            return 2;
         }
     }
     return 0; // Matrícula não cadastrada
@@ -224,7 +243,7 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
             printf("\nCPF já cadastrado no sistema.\n");
             //pausarTela();
             //limparTela();
-            return 1;
+            return 2;
         }
     }
     return 0; // CPF não cadastrado
@@ -357,19 +376,11 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
         return 1;
     }
 
-    // Verifica se a matrícula já existe
-    if (strcmp(texto, "matrícula") == 0) { // Se o texto for matrícula
-        //printf("\nEntrou em matrícula.\n");
-        if (existeMatricula(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeMatricula
-            return 1; // Matrícula existente 
-        }
-    }
-    // Verifica se o CPF já existe
-    else {
-        //printf("\nEntrou em CPF.\n");
-        if (existeCPF(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeCPF
-            return 1; // CPF existente 
-        }
+    // Verifica se a matrícula ou o CPF já foram cadastrados
+    if (strcmp(texto, "matrícula") == 0) { // Retorna 0 se não existir, 1 se existir aluno e 2 se existir professor
+        return existeMatricula(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa);
+    } else {
+        return existeCPF(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa);
     }
 
     // Se for CPF, chama a função validarCPF para verificar outras condições
@@ -586,7 +597,6 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
     // Declarações
     char txtPessoa_FUP[12];
-    char txtPessoa_ALP[12];
     char txtPessoa_FUS[12];
 
     // Formatações
@@ -777,7 +787,7 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
 }
 
 // Atualiza o cadastro de um aluno ou professor
-void atualizarPessoa (char texto_pessoa[], pessoa pessoas[]) {
+void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, int contPessoa2) {
     
     /*
     - Pesquisar matrícula;
@@ -785,21 +795,114 @@ void atualizarPessoa (char texto_pessoa[], pessoa pessoas[]) {
     - Se achou, fazer tipo um procx para mostrar cada campo, 1 por 1, e, logo abaixo, perguntar se o usuário deseja alterar ou cancelar
 
     */
-    
-    
-    /*// Variáveis auxiliares
-    int flagMatricula = 0; 
+
+    //A = all; F = first; L = lowercase; U = all uppercase; S = singular; P = plural
+
+    // Declarações
+    char txtPessoa_FUP[12];
     char matricula[tamMatricula];
-    char textoMat[] = "matrícula";
+    int i;
 
-    // Recebe e valida a matrícula
-    do {
-        flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
-        if (flagMatricula != 0) {
-            printf("\n");
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_FUP, "Alunos");
+    }
+    else {
+        strcpy(txtPessoa_FUP, "Professores");
+    }
+                            
+    printf("### Módulo %s - Listar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
+    
+    while (1) {
+        printf("Informe a matrícula do %s (digite -1 para voltar): ", txtPessoa_ALS);
+        
+        // Leitura
+        lerEntrada(matricula, tamMatricula);
+
+        if (strcmp(matricula, "-1") == 0) { // Voltar para o menu anterior
+            break;
         }
-    } while (flagMatricula != 0);*/
 
+        // Variáveis auxiliares
+        int flagMatricula = 0; 
+        char textoMat[] = "matrícula";
+
+        // Recebe e valida a matrícula
+        do {
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
+            if (flagMatricula != 0) {
+                printf("\n");
+            }
+        } while (flagMatricula != 0);
+
+
+
+        
+        // O "i" para na posição da matrícula encontrada
+        int opcaoAtt = 0;
+
+        // Matrícula cadastrada
+        if (achou == 1) {
+            
+            int opcaoValida = 0;
+            do {
+                printf("\n");
+                printf("Matrícula atual: %s\n", pessoas[i].matricula);
+                printf("Deseja atualizar (1 - Sim; 2 - Não)? ");
+                scanf("%d", &opcaoAtt);
+                limparBuffer();
+    
+                switch (opcaoAtt) {
+                    
+                    case 1: // Sim
+
+                        // Variáveis auxiliares
+                        int flagMatricula = 0; 
+                        char textoMat[] = "matrícula";
+    
+                        // Recebe e valida a matrícula
+                        do {
+                            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
+                            if (flagMatricula != 0) {
+                                printf("\n");
+                            }
+                        } while (flagMatricula != 0);
+                        
+                        opcaoValida = 1;
+                        break;
+    
+                    case 2: // Não
+
+                        opcaoValida = 1;
+                        break;
+                    
+                    default:
+                        
+                        printf("Opção inválida. Tente novamente.\n");
+                        opcaoValida = 1;
+                        break;
+                }
+            } while (opcaoValida == 0);
+
+            /*printf("Nome: %s\n", pessoas[i].nome);
+            printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+            printf("CPF: %s\n", pessoas[i].CPF);
+            printf("Sexo: %s\n", pessoas[i].sexo);*/
+
+        }
+        // Matrícula não cadastrada
+        else {
+            printf("\nMatrícula não cadastrada.\n");
+            break; // Volta para o menu anterior
+        }
+
+    }
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
 }
 
 /*--------------------------------------------------------------------------------------------------*/
@@ -914,7 +1017,8 @@ int main (){
                         // MÓDULO ALUNOS - ATUALIZAR
 
                         case 3: {
-                            printf("### Módulo Alunos - Atualizar aluno ###");
+                            atualizarPessoa("aluno", alunos, contAluno, contProfessor);
+
                             break; // Sai do case 3
                         }
 
@@ -1026,7 +1130,6 @@ int main (){
                         // MÓDULO PROFESSORES - ATUALIZAR
 
                         case 3: {
-                            printf("### Módulo Professores - Atualizar professor ###");
                             break; // Sai do case 3
                         }
 
