@@ -859,8 +859,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // MATRÍCULA
         
-        printf("\nMatrícula atual: %s", pessoas[i].matricula);
-        printf("\nDeseja atualizar a matrícula (1 - Sim; 2 - Não)? ");
+        printf("Matrícula atual: %s\n", pessoas[i].matricula);
+        printf("\nDeseja atualizar a matrícula (1 - Sim; 2 - Não)? \n");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -906,6 +906,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // NOME
         
+        printf("Nome atual: %s\n", pessoas[i].nome);
         printf("\nDeseja atualizar o nome (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
@@ -950,6 +951,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // DATA DE NASCIMENTO
         
+        printf("Data de nascimento atual: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
         printf("\nDeseja atualizar a data de nascimento (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
@@ -979,12 +981,12 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
             }
 
             case 2: { // Não
-                printf("\nNome não atualizado.");
+                printf("\nData não atualizada.");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. Nome não atualizado.");
+                printf("\nOpção inválida. Data não atualizada.");
                 break;
             }
         }
@@ -996,6 +998,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // CPF
         
+        printf("CPF atual: %s\n", pessoas[i].CPF);
         printf("\nDeseja atualizar o CPF (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
@@ -1043,6 +1046,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // SEXO
         
+        printf("Sexo atual: %s\n", pessoas[i].CPF);
         printf("\nDeseja atualizar o sexo (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
@@ -1205,7 +1209,6 @@ int main (){
 
                         case 3: {
                             atualizarPessoa("aluno", alunos, contAluno, contProfessor);
-
                             break; // Sai do case 3
                         }
 
@@ -1317,6 +1320,7 @@ int main (){
                         // MÓDULO PROFESSORES - ATUALIZAR
 
                         case 3: {
+                            atualizarPessoa("professor", professores, contProfessor, contAluno);
                             break; // Sai do case 3
                         }
 
