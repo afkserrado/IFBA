@@ -306,11 +306,11 @@ int validarCPF (char CPF[tamCPF]) {
     return 0; // CPF válido
 }
 
-// Valida um número de matrícula ou CPF
-int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
+// Recebe, valida e guarda a matrícula ou o CPF
+int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
-    // "matricula" e "CPF" são vetores pertencentes à função que chamou validarNome
+    // "matricula" e "CPF" são vetores pertencentes à função que chamou receberNome
     // tamMat_CPF + 2 = +1 do \n e +1 do \0
 
     // Zerando a variável temporária
@@ -406,11 +406,11 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
     return 0; // Matrícula ou CPF válido
 }
 
-// Valida o nome
-int validarNome(char entrada_nome[tamNome + 2], char texto_pessoa[]) {
+// Recebe, valida e guarda o nome
+int receberNome(char entrada_nome[tamNome + 2], char texto_pessoa[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
-    // "nome" é o vetor pertencente à função que chamou validarNome
+    // "nome" é o vetor pertencente à função que chamou receberNome
     // tamNome + 2: tamNome caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamNome caracteres
 
     // Entrada de dados
@@ -500,11 +500,11 @@ int bissexto(int ano) {
     }
 }
 
-// Valida a data de nascimento
-int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto_pessoa[]) {
+// Recebe, valida e guarda a data de nascimento
+int receberData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto_pessoa[]) {
     
     // entrada_dia etc.: ponteiros que apontam para o endereço de memória dos vetors "dia" etc.
-    // "dia" etc. são vetores pertencentes à função que chamou validarData
+    // "dia" etc. são vetores pertencentes à função que chamou receberData
 
     int flagBissexto = bissexto(*entrada_ano);
     int diasMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -572,11 +572,11 @@ int validarData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
     return 0; // Data válida
 }
 
-// Valida o sexo
-int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
+// Recebe, valida e guarda o sexo
+int receberSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
     
     // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
-    // "sexo" é um vetor pertencente à função que chamou validarNome
+    // "sexo" é um vetor pertencente à função que chamou receberNome
     // tamSexo + 2: tamSexo caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamSexo caracteres
     
     // Entrada de dados
@@ -636,7 +636,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
             if (flagMatricula != 0) {
                 printf("\n");
             }
@@ -658,7 +658,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         
         // Recebe e valida o nome
         do {
-            flagNome = validarNome(nome, texto_pessoa);
+            flagNome = receberNome(nome, texto_pessoa);
             if (flagNome != 0) {
                 printf("\n");
             }                    
@@ -679,7 +679,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
 
             // Recebe e valida a data
             do {
-                flagData = validarData(&dia, &mes, &ano, texto_pessoa);
+                flagData = receberData(&dia, &mes, &ano, texto_pessoa);
                 if (flagData != 0) {
                     printf("\n");
                 }                        
@@ -706,7 +706,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
 
         // Recebe e valida o CPF
         do {
-            flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa, contPessoa, contPessoa2);
+            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa, contPessoa, contPessoa2);
             if (flagCPF != 0) {
                 printf("\n");
             }                    
@@ -728,7 +728,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         
         // Recebe e valida o sexo
         do {
-            flagSexo = validarSexo(sexo, texto_pessoa);
+            flagSexo = receberSexo(sexo, texto_pessoa);
             if (flagSexo != 0) {
                 printf("\n");
             }
@@ -777,7 +777,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         printf("Sexo: %s\n", alunos[contPessoa].sexo);
         printf("\n");
         */
-       
+
         pausarTela();
         limparTela();
 
