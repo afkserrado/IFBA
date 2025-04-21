@@ -741,42 +741,6 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         // ############################################################################## //
 
         printf("\n%s cadastrado com sucesso!\n", txtPessoa);
-        
-        /*
-        printf("\n");
-        printf("pessoas->\n");
-        printf("Matrícula: %s\n", pessoas->matricula);
-        printf("Nome: %s\n", pessoas->nome);
-        printf("CPF: %s\n", pessoas->CPF);
-        printf("Data: %02d/%02d/%02d\n", pessoas->nascimento.dia, pessoas->nascimento.mes, pessoas->nascimento.ano);
-        printf("Sexo: %s\n", pessoas->sexo);
-        printf("\n");
-
-        printf("pessoas[contPessoa].\n");
-        printf("Matrícula: %s\n", pessoas[contPessoa].matricula);
-        printf("Nome: %s\n", pessoas[contPessoa].nome);
-        printf("CPF: %s\n", pessoas[contPessoa].CPF);
-        printf("Data: %02d/%02d/%02d\n", pessoas[contPessoa].nascimento.dia, pessoas[contPessoa].nascimento.mes, pessoas[contPessoa].nascimento.ano);
-        printf("Sexo: %s\n", pessoas[contPessoa].sexo);
-        printf("\n");
-
-        printf("\n");
-        printf("alunos->\n");
-        printf("Matrícula: %s\n", alunos->matricula);
-        printf("Nome: %s\n", alunos->nome);
-        printf("CPF: %s\n", alunos->CPF);
-        printf("Data: %02d/%02d/%02d\n", alunos->nascimento.dia, alunos->nascimento.mes, alunos->nascimento.ano);
-        printf("Sexo: %s\n", alunos->sexo);
-        printf("\n");
-
-        printf("alunos[contPessoa].\n");
-        printf("Matrícula: %s\n", alunos[contPessoa].matricula);
-        printf("Nome: %s\n", alunos[contPessoa].nome);
-        printf("CPF: %s\n", alunos[contPessoa].CPF);
-        printf("Data: %02d/%02d/%02d\n", alunos[contPessoa].nascimento.dia, alunos[contPessoa].nascimento.mes, alunos[contPessoa].nascimento.ano);
-        printf("Sexo: %s\n", alunos[contPessoa].sexo);
-        printf("\n");
-        */
 
         pausarTela();
         limparTela();
@@ -784,6 +748,25 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
     } // Fim do else (lista de alunos não cheia)
 
 } // Fim da função
+
+// Listar alunos ou professores
+void listarPessoa(int contPessoa, pessoa pessoas[], char texto_pessoa[]) {
+    
+    printf("\n");
+    for (int i = 0; i < contPessoa; i++) {
+        printf("\n");
+        printf("--- %s %05d ---\n", texto_pessoa, contPessoa);
+        printf("Matrícula: %s\n", pessoas[i].matricula);
+        printf("Nome: %s\n", pessoas[i].nome);
+        printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+        printf("CPF: %s\n", pessoas[i].CPF);
+        printf("Sexo: %s\n", pessoas[i].sexo);
+    }
+    printf("\n");
+
+    pausarTela();
+    limparTela();
+}
 
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
@@ -902,17 +885,10 @@ int main (){
                         // MÓDULO ALUNOS - LISTAR
 
                         case 2: {
-                            /*printf("### Módulo Alunos - Listar alunos ###");
+                            printf("### Módulo Alunos - Lista de alunos ###");
+                            listarPessoa(contAluno, alunos, "Aluno");
 
-                            for (int i = 0; i < contAluno; i++) {
-                                printf("Matrícula: %s", alunos->matricula);
-                                printf("");
-                                printf("");
-                                printf("");
-                                printf("");
-                            }
-
-                            break; // Sai do case 2*/
+                            break; // Sai do case 2
                         }
 
                         // FIM DO MÓDULO ALUNOS - LISTAR
@@ -1022,7 +998,9 @@ int main (){
                         // MÓDULO PROFESSORES - LISTAR
 
                         case 2: {
-                            printf("### Módulo Professores - Listar professores ###");
+                            printf("### Módulo Professores - Lista de professores ###");
+                            listarPessoa(contProfessor, professores, "Professor");
+
                             break; // Sai do case 2
                         }
 
