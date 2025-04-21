@@ -66,7 +66,7 @@ listaDisciplinas disciplina[tamDisciplinas];
 // Subfunções
 
 //Configurando a codificação de caracteres
-void configurarLocale () {
+void configurarLocale() {
     #if defined(_WIN32) || defined(_WIN64) // Windows
         setlocale(LC_ALL, "Portuguese");
 
@@ -145,7 +145,7 @@ int validarInteiroPositivo(int *endereco) {
 }*/
 
 // Valida a existência de um número de matrícula
-int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
+int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
     
     /*
     contPessoa: é o índice do módulo iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa = contAluno.
@@ -188,7 +188,7 @@ int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, c
 }
 
 // Valida a existência de um CPF
-int existeCPF(char entrada_CPF[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
+int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
     
     /*
     contPessoa: é o índice do módulo iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa = contAluno.
@@ -383,7 +383,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
 }
 
 // Recebe, valida e guarda o nome
-int receberNome(char entrada_nome[], char texto_pessoa[]) {
+int receberNome (char entrada_nome[], char texto_pessoa[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou receberNome
@@ -466,7 +466,7 @@ int receberNome(char entrada_nome[], char texto_pessoa[]) {
 }
 
 // Verifica se o ano é bissexto
-int bissexto(int ano) {
+int bissexto (int ano) {
     if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)){
         return 1; // é bissexto
     }
@@ -476,7 +476,7 @@ int bissexto(int ano) {
 }
 
 // Recebe, valida e guarda a data de nascimento
-int receberData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto_pessoa[]) {
+int receberData (int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto_pessoa[]) {
     
     // entrada_dia etc.: ponteiros que apontam para o endereço de memória dos vetors "dia" etc.
     // "dia" etc. são vetores pertencentes à função que chamou receberData
@@ -548,7 +548,7 @@ int receberData(int* entrada_dia, int* entrada_mes, int* entrada_ano, char texto
 }
 
 // Recebe, valida e guarda o sexo
-int receberSexo(char entrada_sexo[tamSexo], char texto_pessoa[]) {
+int receberSexo (char entrada_sexo[tamSexo], char texto_pessoa[]) {
     
     // entrada_sexo: ponteiro que aponta para o endereço de memória do vetor sexo
     // "sexo" é um vetor pertencente à função que chamou receberNome
@@ -582,17 +582,28 @@ int receberSexo(char entrada_sexo[tamSexo], char texto_pessoa[]) {
 }
 
 // Cadastra um aluno ou professor
-void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
+void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
 
-    char txtPessoa[10];
-    strcpy(txtPessoa, texto_pessoa); // Copia "aluno" ou "professor"
-    txtPessoa[0] = toupper(txtPessoa[0]); // Capitaliza para "Aluno" ou "Professor"
+    // Declarações
+    char txtPessoa_FUP[12];
+    char txtPessoa_ALP[12];
+    char txtPessoa_FUS[12];
+
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_FUP, "Alunos");
+        strcpy(txtPessoa_FUS, "Aluno");
+    }
+    else {
+        strcpy(txtPessoa_FUP, "Professores");
+        strcpy(txtPessoa_FUS, "Professor");
+    }
                             
-    printf("### Módulo %s - Inserir %s ###\n", txtPessoa, texto_pessoa);
+    printf("### Módulo %s - Inserir %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
 
     // Verifica se a lista de alunos ou professores está cheia
     if (contPessoa >= tamPessoas) { // Lista cheia
-        printf("\nCadastro cheio. Não é possível inserir outro %s.\n", texto_pessoa);
+        printf("\nCadastro cheio. Não é possível inserir outro(a) %s(a).\n", txtPessoa_ALS);
         pausarTela();
         limparTela();
     }
@@ -610,7 +621,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
             if (flagMatricula != 0) {
                 printf("\n");
             }
@@ -632,7 +643,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
         
         // Recebe e valida o nome
         do {
-            flagNome = receberNome(nome, texto_pessoa);
+            flagNome = receberNome(nome, txtPessoa_ALS);
             if (flagNome != 0) {
                 printf("\n");
             }                    
@@ -653,7 +664,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
             // Recebe e valida a data
             do {
-                flagData = receberData(&dia, &mes, &ano, texto_pessoa);
+                flagData = receberData(&dia, &mes, &ano, txtPessoa_ALS);
                 if (flagData != 0) {
                     printf("\n");
                 }                        
@@ -680,7 +691,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
         // Recebe e valida o CPF
         do {
-            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa, contPessoa, contPessoa2);
+            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, contPessoa, contPessoa2);
             if (flagCPF != 0) {
                 printf("\n");
             }                    
@@ -702,7 +713,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
         
         // Recebe e valida o sexo
         do {
-            flagSexo = receberSexo(sexo, texto_pessoa);
+            flagSexo = receberSexo(sexo, txtPessoa_ALS);
             if (flagSexo != 0) {
                 printf("\n");
             }
@@ -714,8 +725,9 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
         // SEXO
         // ############################################################################## //
 
-        printf("\n%s cadastrado com sucesso!\n", txtPessoa);
+        printf("\n%s(a) cadastrado(a) com sucesso!\n", txtPessoa_FUS);
 
+        // Transição de tela
         pausarTela();
         limparTela();
 
@@ -723,23 +735,71 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
 
 } // Fim da função
 
-// Listar alunos ou professores
-void listarPessoa(int contPessoa, pessoa pessoas[], char texto_pessoa[]) {
+// Lista alunos ou professores
+void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     
-    printf("\n");
-    for (int i = 0; i < contPessoa; i++) {
-        printf("\n");
-        printf("--- %s %05d ---\n", texto_pessoa, contPessoa);
-        printf("Matrícula: %s\n", pessoas[i].matricula);
-        printf("Nome: %s\n", pessoas[i].nome);
-        printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
-        printf("CPF: %s\n", pessoas[i].CPF);
-        printf("Sexo: %s\n", pessoas[i].sexo);
-    }
-    printf("\n");
+    //A = all; F = first; L = lowercase; U = all uppercase; S = singular; P = plural
 
+    // Declarações
+    char txtPessoa_FUP[12];
+    char txtPessoa_ALP[12];
+
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_FUP, "Alunos");
+        strcpy(txtPessoa_ALP, "alunos");
+    }
+    else {
+        strcpy(txtPessoa_FUP, "Professores");
+        strcpy(txtPessoa_ALP, "professores");
+    }
+                            
+    printf("### Módulo %s - Listar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
+    
+    if (contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP); // ALP
+    }
+    else {
+        for (int i = 0; i < contPessoa; i++) {
+            printf("\n");
+            printf("--- %s %05d ---\n", txtPessoa_ALS, contPessoa);
+            printf("Matrícula: %s\n", pessoas[i].matricula);
+            printf("Nome: %s\n", pessoas[i].nome);
+            printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+            printf("CPF: %s\n", pessoas[i].CPF);
+            printf("Sexo: %s\n", pessoas[i].sexo);
+        }
+    }
+
+    // Transição de tela
     pausarTela();
     limparTela();
+}
+
+// Atualiza o cadastro de um aluno ou professor
+void atualizarPessoa (char texto_pessoa[], pessoa pessoas[]) {
+    
+    /*
+    - Pesquisar matrícula;
+    - Se não achou, pedir para informar outra matrícula ou digitar -1 para voltar para o menu anterior
+    - Se achou, fazer tipo um procx para mostrar cada campo, 1 por 1, e, logo abaixo, perguntar se o usuário deseja alterar ou cancelar
+
+    */
+    
+    
+    /*// Variáveis auxiliares
+    int flagMatricula = 0; 
+    char matricula[tamMatricula];
+    char textoMat[] = "matrícula";
+
+    // Recebe e valida a matrícula
+    do {
+        flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
+        if (flagMatricula != 0) {
+            printf("\n");
+        }
+    } while (flagMatricula != 0);*/
+
 }
 
 /*--------------------------------------------------------------------------------------------------*/
@@ -841,8 +901,7 @@ int main (){
                         // MÓDULO ALUNOS - LISTAR
 
                         case 2: {
-                            printf("### Módulo Alunos - Lista de alunos ###");
-                            listarPessoa(contAluno, alunos, "Aluno");
+                            listarPessoa(contAluno, alunos, "aluno");
 
                             break; // Sai do case 2
                         }
@@ -954,8 +1013,7 @@ int main (){
                         // MÓDULO PROFESSORES - LISTAR
 
                         case 2: {
-                            printf("### Módulo Professores - Lista de professores ###");
-                            listarPessoa(contProfessor, professores, "Professor");
+                            listarPessoa(contProfessor, professores, "professor");
 
                             break; // Sai do case 2
                         }
