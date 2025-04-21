@@ -169,90 +169,9 @@ void alocarMemoria(int tamMatricula) {
     }
 }
 
-// Valida a existência de um número de matrícula
-int existeMatricula(char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
-    
-    /*
-    contPessoa: é o índice do módulo iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa = contAluno.
+// Valida a existência de um número de matrícula ou CPF
+bolean () {
 
-    contPessoa2: é o índice do módulo que não foi iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa2 = contProfessor.
-    */    
-
-    int contAluno, contProfessor;
-
-    // Define contAluno e contProfessor em função do módulo iniciado
-    if (strcmp(texto_pessoa, "aluno")) { // Se texto_pessoa = "aluno"
-        contAluno = contPessoa;
-        contProfessor = contPessoa2;
-    }
-    else { // Se texto_pessoa = "professor"
-        contAluno = contPessoa2;
-        contProfessor = contPessoa;
-    }
-
-    // Verifica se a matrícula já está cadastrada na lista de alunos
-    for (int i = 0; i < contAluno; i++){
-        if (strcmp(entrada_Matricula, alunos[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nMatrícula já cadastrada no sistema.\n");
-            //pausarTela();
-            //limparTela();
-            return 1;
-        }
-    }
-
-    // Verifica se a matrícula já está cadastrada na lista de professores
-    for (int i = 0; i < contProfessor; i++){
-        if (strcmp(entrada_Matricula, professores[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nMatrícula já cadastrada no sistema.\n");
-            //pausarTela();
-            //limparTela();
-            return 1;
-        }
-    }
-    return 0; // Matrícula não cadastrada
-}
-
-// Valida a existência de um CPF
-int existeCPF(char entrada_CPF[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
-    
-    /*
-    contPessoa: é o índice do módulo iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa = contAluno.
-
-    contPessoa2: é o índice do módulo que não foi iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa2 = contProfessor.
-    */    
-
-    int contAluno, contProfessor;
-
-    // Define contAluno e contProfessor em função do módulo iniciado
-    if (strcmp(texto_pessoa, "aluno")) { // Se texto_pessoa = "aluno"
-        contAluno = contPessoa;
-        contProfessor = contPessoa2;
-    }
-    else {  // Se texto_pessoa = "professor"
-        contAluno = contPessoa2;
-        contProfessor = contPessoa;
-    }
-
-    // Verifica se o CPF já está cadastrado na lista de alunos
-    for (int i = 0; i < contAluno; i++){
-        if (strcmp(entrada_CPF, alunos[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nCPF já cadastrado no sistema.\n");
-            //pausarTela();
-            //limparTela();
-            return 1;
-        }
-    }
-
-    // Verifica se o CPF já está cadastrado na lista de professores
-    for (int i = 0; i < contProfessor; i++){
-        if (strcmp(entrada_CPF, professores[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nCPF já cadastrado no sistema.\n");
-            //pausarTela();
-            //limparTela();
-            return 1;
-        }
-    }
-    return 0; // CPF não cadastrado
 }
 
 // Valida condições exclusivas do CPF
@@ -307,7 +226,7 @@ int validarCPF (char CPF[tamCPF]) {
 }
 
 // Valida um número de matrícula ou CPF
-int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
+int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char texto[], char texto_pessoa[]) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou validarNome
@@ -383,20 +302,6 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
         return 1;
     }
 
-    // Verifica se a matrícula já existe
-    if (strcmp(texto, "matrícula") == 0) { // Se o texto for matrícula
-        if (existeMatricula(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeMatricula
-            return 1; // Matrícula existente 
-        }
-    }
-    // Verifica se o CPF já existe
-    else {
-        if (existeCPF(entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa) != 0) { // Chama a função existeCPF
-            return 1; // CPF existente 
-        }
-    }
-
-    // Se for CPF, chama a função validarCPF para verificar outras condições
     if (strcmp(texto, "CPF") == 0) { // Se o texto for CPF
         if (validarCPF(entrada_Mat_CPF) != 0) { // Chama a função validarCPF
             return 1; // CPF inválido 
@@ -608,7 +513,11 @@ int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
 }
 
 // Cadastra um aluno ou professor
-void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
+void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa pessoas[], int tamPessoas) {
+    
+    // Estrutura da função: (quant. de dígitos da matrícula, "aluno" ou "professor", índice do aluno ou professor, struct alunos ou professores, tamanho do vetor alunos ou professores)
+
+    int achou = 0; // Flag
 
     char txtPessoa[10];
     strcpy(txtPessoa, texto_pessoa); // Copia "aluno" ou "professor"
@@ -623,7 +532,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         limparTela();
     }
     
-    // Lista não cheia
+    // Lista de alunos não cheia
     else {
         
         // ############################################################################## //
@@ -636,7 +545,7 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa, contPessoa, contPessoa2);
+            flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa);
             if (flagMatricula != 0) {
                 printf("\n");
             }
@@ -645,104 +554,121 @@ void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa
         // Armazena matrícula
         strcpy(pessoas[contPessoa].matricula, matricula);
 
+        /*// Verifica se a matrícula já está cadastrada
+        for (int i = 0; i < contPessoa; i++){
+            if (strcmp(matricula, pessoas[i].matricula) == 0){ // Matrícula já cadastrada
+                printf("\nMatrícula já cadastrada no sistema.\n");
+                achou = 1;
+                pausarTela();
+                limparTela();
+                break; // Sai do for
+            }
+        }*/
+
         // FIM MATRÍCULA
         // ############################################################################## //
-           
-
-        // ############################################################################## //
-        // NOME
-
-        // Variáveis auxiliares
-        int flagNome = 0;
-        char nome[tamNome + 2]; // Variável temporária (+1 do \n e +1 do \0)
         
-        // Recebe e valida o nome
-        do {
-            flagNome = validarNome(nome, texto_pessoa);
-            if (flagNome != 0) {
-                printf("\n");
-            }                    
-        } while (flagNome != 0);
-        
-        // Armazena o nome
-        strcpy(pessoas[contPessoa].nome, nome);
+        // Matrícula ainda não cadastrada
+        if (achou == 0) {
 
-        // FIM NOME
-        // ############################################################################## //
-        
-        // ############################################################################## //
-        // DATA
+            
+                       
+            // ############################################################################## //
+            // NOME
 
-        // Variáveis auxiliares
-        int flagData = 0;
-        int dia, mes, ano; // Variáveis temporárias
-
-            // Recebe e valida a data
+            // Variáveis auxiliares
+            int flagNome = 0;
+            char nome[tamNome + 2]; // Variável temporária (+1 do \n e +1 do \0)
+            
+            // Recebe e valida o nome
             do {
-                flagData = validarData(&dia, &mes, &ano, texto_pessoa);
-                if (flagData != 0) {
+                flagNome = validarNome(nome, texto_pessoa);
+                if (flagNome != 0) {
                     printf("\n");
-                }                        
-            } while (flagData != 0);
+                }                    
+            } while (flagNome != 0);
+            
+            // Armazena o nome
+            strcpy(pessoas[contPessoa].nome, nome);
 
-            //Armazena a data
-            pessoas[contPessoa].nascimento.dia = dia;
-            pessoas[contPessoa].nascimento.mes = mes;
-            pessoas[contPessoa].nascimento.ano = ano;
+            // FIM NOME
+            // ############################################################################## //
+            
+            // ############################################################################## //
+            // DATA
 
-            limparBuffer(); // Evitar que o \n seja passado para o CPF
+            // Variáveis auxiliares
+            int flagData = 0;
+            int dia, mes, ano; // Variáveis temporárias
 
-        // FIM DATA
-        // ############################################################################## //
+                // Recebe e valida a data
+                do {
+                    flagData = validarData(&dia, &mes, &ano, texto_pessoa);
+                    if (flagData != 0) {
+                        printf("\n");
+                    }                        
+                } while (flagData != 0);
 
+                //Armazena a data
+                pessoas[contPessoa].nascimento.dia = dia;
+                pessoas[contPessoa].nascimento.mes = mes;
+                pessoas[contPessoa].nascimento.ano = ano;
 
-        // ############################################################################## //
-        // CPF
+                limparBuffer(); // Evitar que o \n seja passado para o CPF
 
-        // Variáveis auxiliares
-        int flagCPF = 0;
-        char CPF[tamCPF + 1]; // Variável temporária (+1 do \0)
-        char textoCPF[] = "CPF";
-
-        // Recebe e valida o CPF
-        do {
-            flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa, contPessoa, contPessoa2);
-            if (flagCPF != 0) {
-                printf("\n");
-            }                    
-        } while (flagCPF != 0);
-
-        //Armazena o CPF
-        strcpy(pessoas[contPessoa].CPF, CPF);
-
-        // FIM CPF
-        // ############################################################################## //
+            // FIM DATA
+            // ############################################################################## //
 
 
-        // ############################################################################## //
-        // SEXO
+            // ############################################################################## //
+            // CPF
 
-        // Variáveis auxiliares
-        int flagSexo = 0;
-        char sexo[tamSexo + 2]; // Variável temporária
-        
-        // Recebe e valida o sexo
-        do {
-            flagSexo = validarSexo(sexo, texto_pessoa);
-            if (flagSexo != 0) {
-                printf("\n");
-            }
-        } while (flagSexo != 0);
-        
-        // Armazena o sexo
-        strcpy(pessoas[contPessoa].sexo, sexo);
+            // Variáveis auxiliares
+            int flagCPF = 0;
+            char CPF[tamCPF + 1]; // Variável temporária (+1 do \0)
+            char textoCPF[] = "CPF";
 
-        // SEXO
-        // ############################################################################## //
+            // Recebe e valida o CPF
+            do {
+                flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa);
+                if (flagCPF != 0) {
+                    printf("\n");
+                }                    
+            } while (flagCPF != 0);
 
-        printf("\n%s cadastrado com sucesso!\n", txtPessoa);
-        pausarTela();
-        limparTela();
+            //Armazena o CPF
+            strcpy(pessoas[contPessoa].CPF, CPF);
+
+            // FIM CPF
+            // ############################################################################## //
+
+
+            // ############################################################################## //
+            // SEXO
+
+            // Variáveis auxiliares
+            int flagSexo = 0;
+            char sexo[tamSexo + 2]; // Variável temporária
+            
+            // Recebe e valida o sexo
+            do {
+                flagSexo = validarSexo(sexo, texto_pessoa);
+                if (flagSexo != 0) {
+                    printf("\n");
+                }
+            } while (flagSexo != 0);
+            
+            // Armazena o sexo
+            strcpy(pessoas[contPessoa].sexo, sexo);
+
+            // SEXO
+            // ############################################################################## //
+
+            printf("\n%s cadastrado com sucesso!\n", txtPessoa);
+            pausarTela();
+            limparTela();
+
+        } // Fim do if (achou == 0)
 
     } // Fim do else (lista de alunos não cheia)
 
@@ -851,7 +777,7 @@ int main (){
                         // MÓDULO ALUNOS - INSERIR
 
                         case 1: {
-                            inserirPessoa(tamMatricula, "aluno", contAluno, alunos, tamAlunos, contProfessor);
+                            inserirPessoa(tamMatricula, "aluno", contAluno, alunos, tamAlunos);
                             contAluno++; // Incrementa a contagem de alunos
 
                             break; // Sai do case 1
@@ -866,12 +792,6 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Alunos - Listar alunos ###");
-
-                            for () {
-
-                                
-                            }
-
                             break; // Sai do case 2
                         }
 
@@ -968,7 +888,7 @@ int main (){
                         // MÓDULO PROFESSORES - INSERIR
 
                         case 1: {
-                            inserirPessoa(tamMatricula, "professor", contProfessor, professores, tamProfessores, contAluno);
+                            inserirPessoa(tamMatricula, "professor", contProfessor, professores, tamProfessores);
                             contProfessor++; // Incrementa a contagem de professores
 
                             break; // Sai do case 1
