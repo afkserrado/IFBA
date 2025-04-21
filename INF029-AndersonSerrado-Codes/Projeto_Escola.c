@@ -161,10 +161,11 @@ int lerEntrada (char entrada[], int tamEntrada) {
         // Substitui a quebra de linha \n pelo terminador nulo \0
         entrada[strcspn(entrada, "\n")] = '\0';
     }
+    return 0;
 }
 
 // Verifica a existência de um número de matrícula
-int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[]) {
+int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, char texto_pessoa[], int *posicao) {
     
     /*
     contPessoa: é o índice do módulo iniciado. Por exemplo, se o usuário entrou no Módulo Alunos, então contPessoa = contAluno.
@@ -187,9 +188,8 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_Matricula, alunos[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nMatrícula já cadastrada no sistema.\n");
-            //pausarTela();
-            //limparTela();
+            printf("\nA matrícula está cadastrada na lista de alunos.\n");
+            if (posicao != NULL) *posicao = i;
             return 1;
         }
     }
@@ -197,9 +197,8 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_Matricula, professores[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nMatrícula já cadastrada no sistema.\n");
-            //pausarTela();
-            //limparTela();
+            printf("\nA matrícula está cadastrada na lista de professores.\n");
+            if (posicao != NULL) *posicao = i;
             return 2;
         }
     }
@@ -230,7 +229,7 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_CPF, alunos[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nCPF já cadastrado no sistema.\n");
+            printf("\nO CPF está cadastrado na lista de alunos.\n");
             //pausarTela();
             //limparTela();
             return 1;
@@ -240,7 +239,7 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_CPF, professores[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nCPF já cadastrado no sistema.\n");
+            printf("\nO CPF está cadastrado na lista de professores.\n");
             //pausarTela();
             //limparTela();
             return 2;
@@ -301,7 +300,7 @@ int validarCPF (char CPF[tamCPF]) {
 }
 
 // Recebe e valida matrícula ou o CPF
-int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
+int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto[], char texto_pessoa[]) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou receberNome
@@ -619,18 +618,18 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
     
         // Variáveis auxiliares
         int flagMatricula = 0;
-        int flagExiste = 0; 
+        int flagExisteMat = 0; 
         char matricula[tamMatricula];
         char textoMat[] = "matrícula";
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
-            flagExiste = existeMatricula (matricula, contPessoa, contPessoa2, txtPessoa_ALS);
-            if (flagMatricula != 0 || flagExiste != 0) {
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS);
+            flagExisteMat = existeMatricula (matricula, contPessoa, contPessoa2, txtPessoa_ALS, NULL);
+            if (flagMatricula != 0 || flagExisteMat != 0) {
                 printf("\n");
             }
-        } while (flagMatricula != 0 || flagExiste != 0);
+        } while (flagMatricula != 0 || flagExisteMat != 0);
 
         // Armazena matrícula
         strcpy(pessoas[contPessoa].matricula, matricula);
@@ -691,17 +690,18 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
         // Variáveis auxiliares
         int flagCPF = 0;
+        int flagExisteCPF = 0;
         char CPF[tamCPF];
         char textoCPF[] = "CPF";
 
         // Recebe e valida o CPF
         do {
-            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, contPessoa, contPessoa2);
-            flagExiste = existeCPF (CPF, contPessoa, contPessoa2, txtPessoa_ALS);
-            if (flagCPF != 0 || flagExiste != 0) {
+            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS);
+            flagExisteCPF = existeCPF (CPF, contPessoa, contPessoa2, txtPessoa_ALS);
+            if (flagCPF != 0 || flagExisteCPF != 0) {
                 printf("\n");
             }                    
-        } while (flagCPF != 0 || flagExiste != 0);
+        } while (flagCPF != 0 || flagExisteCPF != 0);
 
         //Armazena o CPF
         strcpy(pessoas[contPessoa].CPF, CPF);
@@ -784,117 +784,306 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
 
 // Atualiza o cadastro de um aluno ou professor
 void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, int contPessoa2) {
-    
-    /*
-    - Pesquisar matrícula;
-    - Se não achou, pedir para informar outra matrícula ou digitar -1 para voltar para o menu anterior
-    - Se achou, fazer tipo um procx para mostrar cada campo, 1 por 1, e, logo abaixo, perguntar se o usuário deseja alterar ou cancelar
-
-    */
 
     //A = all; F = first; L = lowercase; U = all uppercase; S = singular; P = plural
 
     // Declarações
     char txtPessoa_FUP[12];
-    char matricula[tamMatricula];
-    int i;
+    char txtPessoa_ALP[12];
 
     // Formatações
     if (strcmp(txtPessoa_ALS, "aluno") == 0) {
         strcpy(txtPessoa_FUP, "Alunos");
+        strcpy(txtPessoa_ALP, "alunos");
     }
     else {
         strcpy(txtPessoa_FUP, "Professores");
+        strcpy(txtPessoa_ALP, "professores");
     }
                             
-    printf("### Módulo %s - Listar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
-    
-    while (1) {
+    printf("### Módulo %s - Atualizar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
 
-        // Variáveis auxiliares
-        int flagMatricula = 0; 
-        char textoMat[] = "matrícula";
+    // Declarações e inicializações
+    int flagMatricula = 0;
+    int achou = 0;
+    char matricula[tamMatricula];
+    int i;
 
-        // Recebe, valida e busca a matrícula
-        do {
-            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
-            if (flagMatricula != 0) {
-                printf("\n");
-            }
-        } while (flagMatricula == 0);
+    if (contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP); // ALP
+        
+        // Transição de tela
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
 
-        // 0 não existe, sai do loop
-        // 1 existe aluno, continua no loop
-        // 2 existe professor, continua no loop, mas queremos que volte para o menu anterior
+    // Verifica se a matrícula está cadastrada
+    do {
+        
+        printf("\nInforme a matrícula do(a) %s(a) (digite -1 para voltar ao menu anterior): ", txtPessoa_ALS);
+        
+        // Lê a entrada
+        lerEntrada(matricula, tamMatricula);
+        //printf("\nMatrícula: %s\n", matricula);
 
-        // Matrícula encontrada
-        if (flagMatricula == 1 && strcmp(txtPessoa_ALS, "aluno") == 0) {
-
-
+        if (strcmp(matricula, "-1") == 0) {
+            // Transição de tela
+            limparTela();
+            return; // Volta ao menu anterior
         }
 
-        // Matrícula não encontrada
-        else {
-            printf("\nMatrícula não cadastrada.\n");
-            break; // Volta para o menu anterior
+        flagMatricula = existeMatricula(matricula, contPessoa, contPessoa2, txtPessoa_ALS, &i);
+
+        if (flagMatricula == 0) {
+            printf("A matrícula não está cadastrada. Por favor, tente novamente.\n");
         }
+        else if (strcmp(txtPessoa_ALS, "aluno") == 0 && flagMatricula == 2) { // flagMatricula = 2
+            printf("Por favor, insira a matrícula de um(a) aluno(a).\n");
+            flagMatricula = 0; // Reset
+        }
+        else if (strcmp(txtPessoa_ALS, "professor") == 0 && flagMatricula == 1) { // flagMatricula = 1
+            printf("Por favor, insira a matrícula de um(a) professor(a).\n");
+            flagMatricula = 0; // Reset
+        }
+        else { // "aluno" && flagMatricula = 1 || "professor" && flagMatricula = 2
+            achou = 1;
+        }
+    } while (flagMatricula == 0);
 
-
-        // O "i" para na posição da matrícula encontrada
+    // Matrícula encontrada no módulo em execução
+    if (achou == 1) {
+        
         int opcaoAtt = 0;
 
-        /* Matrícula cadastrada
-        if (achou == 1) {
+        // ############################################################################## //
+        // MATRÍCULA
+        
+        printf("\nMatrícula atual: %s", pessoas[i].matricula);
+        printf("\nDeseja atualizar a matrícula (1 - Sim; 2 - Não)? ");
+        scanf("%d", &opcaoAtt);
+        limparBuffer();
+
+        switch (opcaoAtt) {
             
-            int opcaoValida = 0;
-            do {
-                printf("\n");
-                printf("Matrícula atual: %s\n", pessoas[i].matricula);
-                printf("Deseja atualizar (1 - Sim; 2 - Não)? ");
-                scanf("%d", &opcaoAtt);
-                limparBuffer();
-    
-                switch (opcaoAtt) {
-                    
-                    case 1: // Sim
+            case 1: { // Sim
+            // Variáveis auxiliares
+            flagMatricula = 0; // Reset
+            int flagExiste = 0;
+            char textoMat[] = "matrícula";
 
-                        // Variáveis auxiliares
-                        int flagMatricula = 0; 
-                        char textoMat[] = "matrícula";
-    
-                        // Recebe e valida a matrícula
-                        do {
-                            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
-                            if (flagMatricula != 0) {
-                                printf("\n");
-                            }
-                        } while (flagMatricula != 0);
-                        
-                        opcaoValida = 1;
-                        break;
-    
-                    case 2: // Não
+                // Recebe e valida a matrícula
+                do {
+                    flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS);
+                    flagExiste = existeMatricula (matricula, contPessoa, contPessoa2, txtPessoa_ALS, NULL);
+                    if (flagMatricula != 0 || flagExiste != 0) {
+                        printf("\n");
+                    }
+                } while (flagMatricula != 0 || flagExiste != 0);
+                printf("\nMatrícula atualizada.");
 
-                        opcaoValida = 1;
-                        break;
-                    
-                    default:
-                        
-                        printf("Opção inválida. Tente novamente.\n");
-                        opcaoValida = 1;
-                        break;
-                }
-            } while (opcaoValida == 0);
+                // Armazena matrícula
+                strcpy(pessoas[i].matricula, matricula);
 
-            /*printf("Nome: %s\n", pessoas[i].nome);
-            printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
-            printf("CPF: %s\n", pessoas[i].CPF);
-            printf("Sexo: %s\n", pessoas[i].sexo);
+                break;
+            }
 
-        }*/
+            case 2: { // Não
+                printf("\nMatrícula não atualizada.");
+                break;
+            }
+            
+            default: {
+                printf("\nOpção inválida. Matrícula não atualizada."); // Passar para o próximo campo
+                break;
+            }
+        }
+
+        // FIM - MATRÍCULA
+        // ############################################################################## //
         
 
-    }
+        // ############################################################################## //
+        // NOME
+        
+        printf("\nDeseja atualizar o nome (1 - Sim; 2 - Não)? ");
+        scanf("%d", &opcaoAtt);
+        limparBuffer();
+
+        switch (opcaoAtt) {
+            
+            case 1: { // Sim
+                // Variáveis auxiliares
+                int flagNome = 0;
+                char nome[tamNome];
+                
+                // Recebe e valida o nome
+                do {
+                    flagNome = receberNome(nome, txtPessoa_ALS);
+                    if (flagNome != 0) {
+                        printf("\n");
+                    }                    
+                } while (flagNome != 0);
+
+                // Armazena o nome
+                strcpy(pessoas[i].nome, nome);
+
+                printf("\nNome atualizado.");
+                break;
+            }
+
+            case 2: { // Não
+                printf("\nNome não atualizado.");
+                break;
+            }
+            
+            default: {
+                printf("\nOpção inválida. Nome não atualizado.");
+                break;
+            }
+        }
+
+        // FIM - NOME
+        // ############################################################################## //
+
+
+        // ############################################################################## //
+        // DATA DE NASCIMENTO
+        
+        printf("\nDeseja atualizar a data de nascimento (1 - Sim; 2 - Não)? ");
+        scanf("%d", &opcaoAtt);
+        limparBuffer();
+
+        switch (opcaoAtt) {
+            
+            case 1: { // Sim
+                // Variáveis auxiliares
+                int flagData = 0;
+                int dia, mes, ano; // Variáveis temporárias
+
+                // Recebe e valida a data
+                do {
+                    flagData = receberData(&dia, &mes, &ano, txtPessoa_ALS);
+                    if (flagData != 0) {
+                        printf("\n");
+                    }                        
+                } while (flagData != 0);
+
+                //Armazena a data
+                pessoas[i].nascimento.dia = dia;
+                pessoas[i].nascimento.mes = mes;
+                pessoas[i].nascimento.ano = ano;
+
+                printf("\nData atualizada.");
+                break;
+            }
+
+            case 2: { // Não
+                printf("\nNome não atualizado.");
+                break;
+            }
+            
+            default: {
+                printf("\nOpção inválida. Nome não atualizado.");
+                break;
+            }
+        }
+
+        // FIM - DATA DE NASCIMENTO
+        // ############################################################################## //
+
+
+        // ############################################################################## //
+        // CPF
+        
+        printf("\nDeseja atualizar o CPF (1 - Sim; 2 - Não)? ");
+        scanf("%d", &opcaoAtt);
+        limparBuffer();
+
+        switch (opcaoAtt) {
+            
+            case 1: { // Sim
+                // Variáveis auxiliares
+                int flagCPF = 0;
+                int flagExisteCPF = 0;
+                char CPF[tamCPF];
+                char textoCPF[] = "CPF";
+
+                // Recebe e valida o CPF
+                do {
+                    flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS);
+                    flagExisteCPF = existeCPF (CPF, contPessoa, contPessoa2, txtPessoa_ALS);
+                    if (flagCPF != 0 || flagExisteCPF != 0) {
+                        printf("\n");
+                    }                    
+                } while (flagCPF != 0 || flagExisteCPF != 0);
+
+                //Armazena o CPF
+                strcpy(pessoas[i].CPF, CPF);
+
+                printf("\nCPF atualizado.");
+                break;
+            }
+
+            case 2: { // Não
+                printf("\nCPF não atualizado.");
+                break;
+            }
+            
+            default: {
+                printf("\nOpção inválida. CPF não atualizado.");
+                break;
+            }
+        }
+
+        // FIM - CPF
+        // ############################################################################## //
+
+
+        // ############################################################################## //
+        // SEXO
+        
+        printf("\nDeseja atualizar o sexo (1 - Sim; 2 - Não)? ");
+        scanf("%d", &opcaoAtt);
+        limparBuffer();
+
+        switch (opcaoAtt) {
+            
+            case 1: { // Sim
+                // Variáveis auxiliares
+                int flagSexo = 0;
+                char sexo[tamSexo];
+                
+                // Recebe e valida o sexo
+                do {
+                    flagSexo = receberSexo(sexo, txtPessoa_ALS);
+                    if (flagSexo != 0) {
+                        printf("\n");
+                    }
+                } while (flagSexo != 0);
+
+                // Armazena o sexo
+                strcpy(pessoas[i].sexo, sexo);
+
+                printf("\nSexo atualizado.");
+                break;
+            }
+
+            case 2: { // Não
+                printf("\nSexo não atualizado.");
+                break;
+            }
+            
+            default: {
+                printf("\nOpção inválida. Sexo não atualizado.");
+                break;
+            }
+        }
+
+        // FIM - SEXO
+        // ############################################################################## //
+
+    } // Fim do if (achou = 1)
 
     printf("\n");
 
