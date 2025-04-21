@@ -547,7 +547,7 @@ int main (){
     limparTela();
 
     do {
-        //Menu de opções
+        // Menu de opções
         printf("### Menu principal ###");
         printf("\nInforme o número da opção desejada: ");
         printf("\n0 - Sair");
@@ -555,12 +555,12 @@ int main (){
         printf("\n2 - Professores");
         printf("\n3 - Disciplinas\n");
     
-        //Entrada de dados: Opção
+        // Entrada de dados: Opção
         scanf("%d",&opcao);
 
         limparTela();
 
-        //Switch 1
+        // Switch 1
         switch (opcao){
 
             case 0: {
@@ -568,13 +568,13 @@ int main (){
                 return 1;
             }
             
-            //Alunos
+            // Módulo Alunos
             case 1: {
                 int opcaoAluno;
                 char texto_pessoa[] = "aluno";
                 
-                do{
-                    //Menu de opções
+                do {
+                    // Menu de opções do Módulo de Alunos
                     printf("### Módulo Alunos ###");
                     printf("\nInforme o número da opção desejada: ");
                     printf("\n0 - Voltar ao menu anterior");
@@ -584,15 +584,15 @@ int main (){
                     printf("\n4 - Excluir aluno");
                     printf("\n");
                     
-                    //Entrada de dados: Opção do Módulo de alunos
+                    // Entrada de dados: Opção do Módulo de Alunos
                     scanf("%d",&opcaoAluno);
                     
                     limparTela();
     
-                    //Switch 2
+                    // Switch 2
                     switch(opcaoAluno){
 
-                        //Voltar ao menu anterior
+                        // Voltar ao menu anterior
                         case 0: {
                             limparTela();
                             break;

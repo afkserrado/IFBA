@@ -19,7 +19,7 @@ Aluno: Anderson Serrado
 #include <wctype.h> // Funções para trabalhar com caracteres com múltiplos bytes, como letras acentuadas e outros do Unicode
 #include <wchar.h>  // Funções para manipular strings de caracteres com múltiplos bytes (wchar_t)
 
-/*------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
 // Constantes globais
 
 #define tamNome 100
@@ -29,7 +29,7 @@ Aluno: Anderson Serrado
 #define tamProfessores 100
 #define tamDisciplinas 1000
 
-/*------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
 // Structs globais
 
 // Data
@@ -48,8 +48,8 @@ typedef struct {
     data nascimento;
 } pessoa;
 
-pessoa aluno[tamAlunos];
-pessoa professor[tamAlunos];
+pessoa alunos[tamAlunos];
+pessoa professores[tamAlunos];
 
 // Cadastro das disciplinas
 typedef struct {
@@ -60,7 +60,7 @@ typedef struct {
 
 listaDisciplinas disciplina[tamDisciplinas];
 
-/*------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
 // Subfunções
 
 //Configurando a codificação de caracteres
@@ -145,16 +145,16 @@ int validarInteiroPositivo(int *endereco) {
 // Alocando dinamicamente espaços de memória para cada aluno, professor ou disciplina
 void alocarMemoria(int tamMatricula) {
     for (int i = 0; i < tamAlunos; i++) {
-        aluno[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
-        if (aluno[i].matricula == NULL) {
+        alunos[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
+        if (alunos[i].matricula == NULL) {
             printf("Erro ao alocar memória para aluno %d\n", i);
             exit(1);
         }
     }
 
     for (int i = 0; i < tamProfessores; i++) {
-        professor[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
-        if (professor[i].matricula == NULL) {
+        professores[i].matricula = (char*)malloc(tamMatricula * sizeof(char));
+        if (professores[i].matricula == NULL) {
             printf("Erro ao alocar memória para professor %d\n", i);
             exit(1);
         }
@@ -507,6 +507,168 @@ int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
     return 0; // Sexo válido
 }
 
+// Cadastra um aluno ou professor
+void inserirPessoa(int tamMatricula, const char *texto_pessoa, int contPessoa, pessoa *pessoas, int tamPessoas) {
+    
+    // Estrutura da função: (quant. de dígitos da matrícula, "aluno" ou "professor", índice do aluno ou professor, struct alunos ou professores, tamanho do vetor alunos ou professores)
+
+    //const char* texto_pessoa: garante que a string passada, "aluno" ou "professor", não seja modificada dentro da função
+
+    int achou = 0; // Flag
+
+    char txtPessoa[10];
+    strcpy(txtPessoa, texto_pessoa); // Copia "aluno" ou "professor"
+    txtPessoa[0] = toupper(txtPessoa[0]); // Capitaliza para "Aluno" ou "Professor"
+                            
+    printf("### Módulo %s - Inserir %s ###\n", txtPessoa, texto_pessoa);
+
+    // Verifica se a lista de alunos ou professores está cheia
+    if (contPessoa > tamPessoas) { // Lista cheia
+        printf("\nCadastro cheio. Não é possível inserir outro %s.\n", texto_pessoa);
+        pausarTela();
+        limparTela();
+    }
+    
+    // Lista de alunos não cheia
+    else {
+        
+        // ############################################################################## //
+        // MATRÍCULA
+    
+        // Variáveis auxiliares
+        int flagMatricula = 0; 
+        char matricula[tamMatricula + 1]; // Variável temporária (+1 do \0)
+        char textoMat[] = "matricula";
+
+        // Recebe e valida a matrícula
+        do {
+            flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa);
+            if (flagMatricula != 0) {
+                printf("\n");
+            }
+        } while (flagMatricula != 0);
+
+        // Verifica se a matrícula já está cadastrada
+        for (int i = 0; i < contPessoa; i++){
+            if (strcmp(matricula, pessoas[i].matricula) == 0){ // Matrícula já cadastrada
+                printf("\nMatrícula já cadastrada no sistema.\n");
+                achou = 1;
+                pausarTela();
+                limparTela();
+                break; // Sai do for
+            }
+        }
+
+        // FIM MATRÍCULA
+        // ############################################################################## //
+        
+        // Matrícula ainda não cadastrada
+        if (achou == 0) {
+
+            // Armazena matrícula
+            strcpy(pessoas[contPessoa].matricula, matricula);
+                       
+            // ############################################################################## //
+            // NOME
+
+            // Variáveis auxiliares
+            int flagNome = 0;
+            char nome[tamNome]; // Variável temporária
+            
+            // Recebe e valida o nome
+            do {
+                flagNome = validarNome(nome, texto_pessoa);
+                if (flagNome != 0) {
+                    printf("\n");
+                }                    
+            } while (flagNome != 0);
+            
+            // Armazena o nome
+            strcpy(pessoas[contPessoa].nome, nome);
+
+            // FIM NOME
+            // ############################################################################## //
+            
+            // ############################################################################## //
+            // DATA
+
+            // Variáveis auxiliares
+            int flagData = 0;
+            int dia, mes, ano; // Variáveis temporárias
+
+                // Recebe e valida a data
+                do {
+                    flagData = validarData(&dia, &mes, &ano, texto_pessoa);
+                    if (flagData != 0) {
+                        printf("\n");
+                    }                        
+                } while (flagData != 0);
+
+                //Armazena a data
+                pessoas[contPessoa].nascimento.dia = dia;
+                pessoas[contPessoa].nascimento.mes = mes;
+                pessoas[contPessoa].nascimento.ano = ano;
+
+                limparBuffer(); // Evitar que o \n seja passado para o CPF
+
+            // FIM DATA
+            // ############################################################################## //
+
+
+            // ############################################################################## //
+            // CPF
+
+            // Variáveis auxiliares
+            int flagCPF = 0;
+            char CPF[tamCPF + 1]; // Variável temporária (+1 do \0)
+            char textoCPF[] = "CPF";
+
+            // Recebe e valida o CPF
+            do {
+                flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa);
+                if (flagCPF != 0) {
+                    printf("\n");
+                }                    
+            } while (flagCPF != 0);
+
+            //Armazena o CPF
+            strcpy(pessoas[contPessoa].CPF, CPF);
+
+            // FIM CPF
+            // ############################################################################## //
+
+
+            // ############################################################################## //
+            // SEXO
+
+            // Variáveis auxiliares
+            int flagSexo = 0;
+            char sexo[tamSexo]; // Variável temporária
+            
+            // Recebe e valida o sexo
+            do {
+                flagSexo = validarSexo(sexo, texto_pessoa);
+                if (flagSexo != 0) {
+                    printf("\n");
+                }
+            } while (flagSexo != 0);
+            
+            // Armazena o sexo
+            strcpy(pessoas[contPessoa].sexo, sexo);
+
+            // SEXO
+            // ############################################################################## //
+
+            printf("\n%s cadastrado com sucesso!\n", txtPessoa);
+            pausarTela();
+            limparTela();
+
+        } // Fim do if (achou == 0)
+
+    } // Fim do else (lista de alunos não cheia)
+
+} // Fim da função
+
 /*------------------------------------------------------------------------------------------------------------*/
 //Função principal
 int main (){
@@ -517,37 +679,33 @@ int main (){
     int opcao;
     int contAluno = 0, contProfessor = 0, contDisciplina = 0;
 
+    // ############################################################################## //
+    // DEFINE O PADRÃO PARA O NÚMERO DE MATRÍCULA
+
     int flagInteiro = 0;
     int tamMatricula = 0;
+    
     // Recebe o tamanho da matrícula e valida
     do {
         printf("Quantos dígitos tem uma matrícula (apenas inteiros positivos)? ");
         flagInteiro = validarInteiroPositivo(&tamMatricula);
         printf("\n");
-
     } while (flagInteiro != 0);
     
     printf("Tamanho da matrícula: %d\n", tamMatricula);
     
     // Alocação dinâmica de espaços para cada aluno, professor e disciplina
     alocarMemoria(tamMatricula);
-    
-    //Solicita ao usuário o tamanho padrão do código de uma disciplina
-    /*int tamCodigo = 0;
-    printf("Quantos caracteres tem o código de uma disciplina?\n");
-    scanf("%d", &tamCodigo);
 
-    //Alocando dinamicamente o tamanho do vetor código
-    for (int i = 0; i < tamDisciplinas; i++){
-        //"(char*)" converte o ponteiro do tipo void*, retornado por malloc, para um ponteiro tipo char, mesmo tipo do campo "codigo"
-        disciplina[i].codigo = (char*)malloc(tamCodigo * sizeof(char));
-    }*/
+    // FIM
+    // ############################################################################## //
 
+    // Transição de tela
     pausarTela();
     limparTela();
 
     do {
-        //Menu de opções
+        // Menu de opções
         printf("### Menu principal ###");
         printf("\nInforme o número da opção desejada: ");
         printf("\n0 - Sair");
@@ -555,12 +713,16 @@ int main (){
         printf("\n2 - Professores");
         printf("\n3 - Disciplinas\n");
     
-        //Entrada de dados: Opção
+        // Entrada de dados: Opção
         scanf("%d",&opcao);
+        limparBuffer();
 
+        // Transição de tela
         limparTela();
 
-        //Switch 1
+        // ############################################################################## //
+        // MÓDULO GERAL
+
         switch (opcao){
 
             case 0: {
@@ -568,12 +730,13 @@ int main (){
                 return 1;
             }
             
-            //Alunos
+            // ############################################################################## //
+            // MÓDULO ALUNOS
+
             case 1: {
                 int opcaoAluno;
-                char texto_pessoa[] = "aluno";
                 
-                do{
+                do {
                     //Menu de opções
                     printf("### Módulo Alunos ###");
                     printf("\nInforme o número da opção desejada: ");
@@ -586,7 +749,9 @@ int main (){
                     
                     //Entrada de dados: Opção do Módulo de alunos
                     scanf("%d",&opcaoAluno);
+                    limparBuffer();
                     
+                    // Transição de tela
                     limparTela();
     
                     //Switch 2
@@ -598,190 +763,106 @@ int main (){
                             break;
                         } // Fim do switch 2, case 0: voltar ao menu anteior
 
-                        // Inserir aluno
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - INSERIR
+
                         case 1: {
-                        
-                            // Limpa o buffer
-                            int c;
-                            while ((c = getchar()) != '\n' && c != EOF);  // Consome tudo até o próximo Enter
-                            
-                            int achou = 0; // Flag
-                            
                             printf("### Módulo Alunos - Inserir aluno ###\n");
-
-                            // ### INÍCIO - MATRÍCULA ###
-                            // Variáveis auxiliares
-                            // Variáveis auxiliares
-                            int flagMatricula = 0; 
-                            char matricula[tamMatricula + 1]; // Variável temporária (+1 do \0)
-                            char textoMat[] = "matricula";
-
-                            // Recebe e valida a matrícula
-                            do {
-                                flagMatricula = validarMat_CPF(tamMatricula, matricula, textoMat, texto_pessoa);
-
-                                if (flagMatricula != 0)
-                                    printf("\n");
-                            } while (flagMatricula != 0);
-
-                            // ### FIM - MATRÍCULA ###
                             
-                            // Lista de alunos cheia
-                            if (contAluno > tamAlunos){
-                                printf("\nCadastro de alunos cheio.\n");
-                                pausarTela();
-                                limparTela();
-                            }
-                            
-                            // Lista de alunos não cheia
-                            else{
-                                // Verifica se a matrícula já está cadastrada
-                                for (int i = 0; i < contAluno; i++){
-                                    if (strcmp(matricula, aluno[i].matricula) == 0){ // Matrícula já cadastrada
-                                        printf("\nMatrícula já cadastrada no sistema.\n");
-                                        achou = 1;
-                                        pausarTela();
-                                        limparTela();
-                                        break; //Sai do for
-                                    }
-                                }
-                                
-                                // Matrícula ainda não cadastrada
-                                if (achou == 0){
-                                    // Armazena matrícula
-                                    strcpy(aluno[contAluno].matricula, matricula);
-                                                                        
-                                    // ### INÍCIO - NOME ###
-                                    // Variáveis auxiliares
-                                    int flagNome = 0;
-                                    char nome[tamNome]; // Variável temporária
-                                    
-                                    // Recebe e valida o nome
-                                    do {
-                                        flagNome = validarNome(nome, texto_pessoa);
+                            // Chamar função
+                            inserirPessoa(tamMatricula, "aluno", contAluno, &alunos, tamAlunos);
+                            contAluno++; // Incrementa a contagem de alunos
 
-                                        if (flagNome != 0)
-                                            printf("\n");
-                                    } while (flagNome != 0);
-                                    
-                                    // Armazena o nome
-                                    strcpy(aluno[contAluno].nome, nome);
-
-                                    // ### FIM - NOME ###
-
-                                    // ### INÍCIO - DATA ###
-                                    // Variáveis auxiliares
-                                    int flagData = 0;
-                                    int dia, mes, ano; // Variáveis temporárias
-
-                                        // Recebe e valida a data
-                                        do {
-                                            flagData = validarData(&dia, &mes, &ano, texto_pessoa);
-
-                                            if (flagData != 0)
-                                                printf("\n");
-                                        } while (flagData != 0);
-
-                                        //Armazena a data
-                                        aluno[contAluno].nascimento.dia = dia;
-                                        aluno[contAluno].nascimento.mes = mes;
-                                        aluno[contAluno].nascimento.ano = ano;
-
-                                        limparBuffer(); // Evitar que o \n seja passado para o CPF
-
-                                    // ### FIM - DATA ###
-                                    
-                                    // ### INÍCIO - CPF ###
-                                    // Variáveis auxiliares
-                                    int flagCPF = 0;
-                                    char CPF[tamCPF + 1]; // Variável temporária (+1 do \0)
-                                    char textoCPF[] = "CPF";
-
-                                    // Recebe e valida o CPF
-                                    do {
-                                        flagCPF = validarMat_CPF(tamCPF, CPF, textoCPF, texto_pessoa);
-
-                                        if (flagCPF != 0)
-                                            printf("\n");
-                                    } while (flagCPF != 0);
-
-                                    //Armazena o CPF
-                                    strcpy(aluno[contAluno].CPF, CPF);
-
-                                    // ### FIM - CPF ###                                    
-
-                                    //### INÍCIO - SEXO ###
-                                    int flagSexo = 0;
-                                    char sexo[tamSexo]; // Variável temporária
-                                    
-                                    // Recebe e valida o sexo
-                                    do {
-                                    
-                                        flagSexo = validarSexo(sexo, texto_pessoa);
-                                    
-                                        if (flagSexo != 0)
-                                            printf("\n");
-                                    } while (flagSexo != 0);
-                                    
-                                    // Armazena o sexo
-                                    strcpy(aluno[contAluno].sexo, sexo);
-
-                                    //### FIM - SEXO ###
-                                    
-                                    contAluno++; // Incrementa a quantidade de alunos
-
-                                    printf("\nAluno cadastrado com sucesso!\n");
-                                    pausarTela();
-                                    limparTela();
-                                }
-                            } // Fim do else
                             break; // Sai do case 1
-                        } // Fim do switch 2, case 1: Inserir aluno
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - INSERIR
+                        // ##################################################################### //
                         
-                        // Listar aluno
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - LISTAR
+
                         case 2: {
                             printf("### Módulo Alunos - Listar alunos ###");
                             break; // Sai do case 2
-                        } // Fim do switch 2, case 2: Listar aluno
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - LISTAR
+                        // ##################################################################### //
         
-                        // Atualizar aluno
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - ATUALIZAR
+
                         case 3: {
                             printf("### Módulo Alunos - Atualizar aluno ###");
                             break; // Sai do case 3
-                        } // Fim do switch 2, case 3: Atualizar aluno
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - ATUALIZAR
+                        // ##################################################################### //
         
-                        // Excluir aluno
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - EXCLUIR
                         case 4: {
                             printf("### Módulo Alunos - Excluir aluno ###");
                             break; // Sai do case 4 
-                        } // Fim do switch 2, case 4: Excluir aluno
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - EXCLUIR
+                        // ##################################################################### //
+
                                 
-                        // Opção inválida
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - OPÇÃO INVÁLIDA
+
                         default: {
                             printf("Opção inválida.\n");
                             pausarTela();
                             limparTela();
                             break; // Sai do default
-                        } // Fim do switch 2, default: opção inválida
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - OPÇÃO INVÁLIDA
+                        // ##################################################################### //
 
                     } // Fim do switch 2
 
                 } while(opcaoAluno != 0);
 
                 break;
-            } // Fim do case 1
+            } // Fim do case 1, Alunos, do módulo geral
 
-            // Professores
+            // FIM DO MÓDULO ALUNOS
+            // ############################################################################## //
+
+            
+            // ############################################################################## //
+            // MÓDULO PROFESSORES
+
             case 2: {
                 printf("\nMódulo Professores:\n");
                 break;
             } // Fim do case 2
 
-            // Disciplinas
+            // FIM DO MÓDULO PROFESSORES
+            // ############################################################################## //
+
+
+            // ############################################################################## //
+            // MÓDULO DISCIPLINAS
+
             case 3: {
                 printf("\nMódulo Disciplinas:\n");
                 break;
             } // Fim do case 3
+            
+            // FIM DO MÓDULO DISCIPLINAS
+            // ############################################################################## //
+
 
             default: {
                 printf("Opção inválida.");
@@ -794,13 +875,16 @@ int main (){
 
     } while (opcao != 0);
 
+    // FIM DO MÓDULO GERAL
+    // ############################################################################## //
+    
     // Libera a memória alocada
     for (int i = 0; i < tamAlunos; i++) {
-        free(aluno[i].matricula);
+        free(alunos[i].matricula);
     }
 
     for (int i = 0; i < tamProfessores; i++) {
-        free(professor[i].matricula);
+        free(professores[i].matricula);
     }
 
     for (int i = 0; i < tamDisciplinas; i++) {
