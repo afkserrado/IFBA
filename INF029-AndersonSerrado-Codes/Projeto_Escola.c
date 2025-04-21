@@ -23,12 +23,12 @@ Aluno: Anderson Serrado
 // Constantes globais
 
 #define tamNome 102 // n caracteres + \n + \0
-#define tamMatricula 5 // n caracteres + \n + \0
+#define tamMatricula 5 // n caracteres + \n + \0 // Mudar para 13
 #define tamCPF 13 // n caracteres + \n + \0
 #define tamSexo 3 // n caracteres + \n + \0
-#define tamAlunos 10000
-#define tamProfessores 100
-#define tamDisciplinas 1000
+#define tamAlunos 3 // Mudar para 10000
+#define tamProfessores 3 // Mudar para 100
+#define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
 
 /*--------------------------------------------------------------------------------------------------*/
@@ -51,7 +51,7 @@ typedef struct {
 } pessoa;
 
 pessoa alunos[tamAlunos];
-pessoa professores[tamAlunos];
+pessoa professores[tamProfessores];
 
 // Cadastro das disciplinas
 typedef struct {
@@ -300,7 +300,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
     // Verifica truncamento e remove \n
     if (strchr(entrada_Mat_CPF, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamMat_CPF - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres).\n", tamMat_CPF - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -396,7 +396,7 @@ int receberNome(char entrada_nome[], char texto_pessoa[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_nome, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamNome - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres).\n", tamNome - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -561,7 +561,7 @@ int receberSexo(char entrada_sexo[tamSexo], char texto_pessoa[]) {
     // Verifica truncamento e remove \n
     if (strchr(entrada_sexo, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres)\n", tamSexo - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres).\n", tamSexo - 2);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -589,7 +589,7 @@ void inserirPessoa(char texto_pessoa[], int contPessoa, pessoa pessoas[], int ta
     printf("### Módulo %s - Inserir %s ###\n", txtPessoa, texto_pessoa);
 
     // Verifica se a lista de alunos ou professores está cheia
-    if (contPessoa > tamPessoas) { // Lista cheia
+    if (contPessoa >= tamPessoas) { // Lista cheia
         printf("\nCadastro cheio. Não é possível inserir outro %s.\n", texto_pessoa);
         pausarTela();
         limparTela();
@@ -745,6 +745,13 @@ void listarPessoa(int contPessoa, pessoa pessoas[], char texto_pessoa[]) {
 int main (){
 
     configurarLocale();
+
+    limparTela();
+
+    printf("Bem-vindo(a) ao sistema CRUDX.\n\n"); 
+
+    pausarTela();
+    limparTela();
 
     //Declarações
     int opcao;
