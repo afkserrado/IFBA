@@ -307,14 +307,14 @@ int validarMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF + 2], char t
 }
 
 // Valida o nome
-int validarNome(char entrada_nome[tamNome + 2], char texto[]) {
+int validarNome(char entrada_nome[tamNome + 2], char texto_pessoa[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou validarNome
     // tamNome + 2: tamNome caracteres úteis + \n + \0. Garante que o usuário consiga digitar até tamNome caracteres
 
     // Entrada de dados
-    printf("Informe o nome do %s: ", texto);
+    printf("Informe o nome do %s: ", texto_pessoa);
     if (fgets(entrada_nome, tamNome + 2, stdin) == NULL) {
         printf("Erro ao ler o nome.\n");
         return 1;
@@ -508,11 +508,9 @@ int validarSexo(char entrada_sexo[tamSexo + 2], char texto_pessoa[]) {
 }
 
 // Cadastra um aluno ou professor
-void inserirPessoa(int tamMatricula, const char *texto_pessoa, int contPessoa, pessoa *pessoas, int tamPessoas) {
+void inserirPessoa(int tamMatricula, char texto_pessoa[], int contPessoa, pessoa pessoas[], int tamPessoas) {
     
     // Estrutura da função: (quant. de dígitos da matrícula, "aluno" ou "professor", índice do aluno ou professor, struct alunos ou professores, tamanho do vetor alunos ou professores)
-
-    //const char* texto_pessoa: garante que a string passada, "aluno" ou "professor", não seja modificada dentro da função
 
     int achou = 0; // Flag
 
@@ -573,7 +571,7 @@ void inserirPessoa(int tamMatricula, const char *texto_pessoa, int contPessoa, p
 
             // Variáveis auxiliares
             int flagNome = 0;
-            char nome[tamNome]; // Variável temporária
+            char nome[tamNome + 2]; // Variável temporária (+1 do \n e +1 do \0)
             
             // Recebe e valida o nome
             do {
@@ -643,7 +641,7 @@ void inserirPessoa(int tamMatricula, const char *texto_pessoa, int contPessoa, p
 
             // Variáveis auxiliares
             int flagSexo = 0;
-            char sexo[tamSexo]; // Variável temporária
+            char sexo[tamSexo + 2]; // Variável temporária
             
             // Recebe e valida o sexo
             do {
@@ -669,7 +667,7 @@ void inserirPessoa(int tamMatricula, const char *texto_pessoa, int contPessoa, p
 
 } // Fim da função
 
-/*------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
 //Função principal
 int main (){
 
@@ -768,10 +766,7 @@ int main (){
                         // MÓDULO ALUNOS - INSERIR
 
                         case 1: {
-                            printf("### Módulo Alunos - Inserir aluno ###\n");
-                            
-                            // Chamar função
-                            inserirPessoa(tamMatricula, "aluno", contAluno, &alunos, tamAlunos);
+                            inserirPessoa(tamMatricula, "aluno", contAluno, alunos, tamAlunos);
                             contAluno++; // Incrementa a contagem de alunos
 
                             break; // Sai do case 1
