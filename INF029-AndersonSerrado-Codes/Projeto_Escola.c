@@ -1091,10 +1091,14 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 
     printf("\n");
 
+    printf("\nAtualização concluída para o(a) %s(a) %s.\n", txtPessoa_ALS, pessoas[i].nome);
+
     // Transição de tela
     pausarTela();
     limparTela();
 }
+
+// Exclui o cadastro de um aluno ou professor
 
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
