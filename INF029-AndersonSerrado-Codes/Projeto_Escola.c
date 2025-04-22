@@ -859,8 +859,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // MATRÍCULA
         
-        printf("Matrícula atual: %s\n", pessoas[i].matricula);
-        printf("\nDeseja atualizar a matrícula (1 - Sim; 2 - Não)? \n");
+        printf("\nMatrícula atual: %s\n", pessoas[i].matricula);
+        printf("Deseja atualizar a matrícula (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -880,7 +880,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                         printf("\n");
                     }
                 } while (flagMatricula != 0 || flagExiste != 0);
-                printf("\nMatrícula atualizada.");
+                printf("Matrícula atualizada.\n");
 
                 // Armazena matrícula
                 strcpy(pessoas[i].matricula, matricula);
@@ -889,12 +889,12 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
             }
 
             case 2: { // Não
-                printf("\nMatrícula não atualizada.");
+                printf("Matrícula não atualizada.\n");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. Matrícula não atualizada."); // Passar para o próximo campo
+                printf("Opção inválida. Matrícula não atualizada.\n"); // Passar para o próximo campo
                 break;
             }
         }
@@ -906,8 +906,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // NOME
         
-        printf("Nome atual: %s\n", pessoas[i].nome);
-        printf("\nDeseja atualizar o nome (1 - Sim; 2 - Não)? ");
+        printf("\nNome atual: %s\n", pessoas[i].nome);
+        printf("Deseja atualizar o nome (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -929,17 +929,17 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                 // Armazena o nome
                 strcpy(pessoas[i].nome, nome);
 
-                printf("\nNome atualizado.");
+                printf("Nome atualizado.\n");
                 break;
             }
 
             case 2: { // Não
-                printf("\nNome não atualizado.");
+                printf("Nome não atualizado.\n");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. Nome não atualizado.");
+                printf("Opção inválida. Nome não atualizado.\n");
                 break;
             }
         }
@@ -951,8 +951,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // DATA DE NASCIMENTO
         
-        printf("Data de nascimento atual: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
-        printf("\nDeseja atualizar a data de nascimento (1 - Sim; 2 - Não)? ");
+        printf("\nData de nascimento atual: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+        printf("Deseja atualizar a data de nascimento (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -976,17 +976,17 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                 pessoas[i].nascimento.mes = mes;
                 pessoas[i].nascimento.ano = ano;
 
-                printf("\nData atualizada.");
+                printf("Data atualizada.\n");
                 break;
             }
 
             case 2: { // Não
-                printf("\nData não atualizada.");
+                printf("Data não atualizada.\n");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. Data não atualizada.");
+                printf("Opção inválida. Data não atualizada.\n");
                 break;
             }
         }
@@ -998,8 +998,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // CPF
         
-        printf("CPF atual: %s\n", pessoas[i].CPF);
-        printf("\nDeseja atualizar o CPF (1 - Sim; 2 - Não)? ");
+        printf("\nCPF atual: %s\n", pessoas[i].CPF);
+        printf("Deseja atualizar o CPF (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -1024,17 +1024,17 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                 //Armazena o CPF
                 strcpy(pessoas[i].CPF, CPF);
 
-                printf("\nCPF atualizado.");
+                printf("CPF atualizado.\n");
                 break;
             }
 
             case 2: { // Não
-                printf("\nCPF não atualizado.");
+                printf("CPF não atualizado.\n");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. CPF não atualizado.");
+                printf("Opção inválida. CPF não atualizado.\n");
                 break;
             }
         }
@@ -1046,8 +1046,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         // ############################################################################## //
         // SEXO
         
-        printf("Sexo atual: %s\n", pessoas[i].CPF);
-        printf("\nDeseja atualizar o sexo (1 - Sim; 2 - Não)? ");
+        printf("\nSexo atual: %s\n", pessoas[i].sexo);
+        printf("Deseja atualizar o sexo (1 - Sim; 2 - Não)? ");
         scanf("%d", &opcaoAtt);
         limparBuffer();
 
@@ -1069,17 +1069,17 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                 // Armazena o sexo
                 strcpy(pessoas[i].sexo, sexo);
 
-                printf("\nSexo atualizado.");
+                printf("Sexo atualizado.\n");
                 break;
             }
 
             case 2: { // Não
-                printf("\nSexo não atualizado.");
+                printf("Sexo não atualizado.\n");
                 break;
             }
             
             default: {
-                printf("\nOpção inválida. Sexo não atualizado.");
+                printf("Opção inválida. Sexo não atualizado.\n");
                 break;
             }
         }
@@ -1376,7 +1376,7 @@ int main (){
 
 
             default: {
-                printf("Opção inválida.");
+                printf("Opção inválida.\n");
                 pausarTela();
                 limparTela();
                 break;
