@@ -759,8 +759,6 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
         strcpy(txtPessoa_FUP, "Professores");
         strcpy(txtPessoa_ALP, "professores");
     }
-                            
-    printf("### Módulo %s - Listar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
     
     if (contPessoa == 0) {
         printf("\nNão há %s cadastrados.\n", txtPessoa_ALP); // ALP
@@ -768,7 +766,6 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     else {
         for (int i = 0; i < contPessoa; i++) {
             printf("\n");
-            printf("--- %s %05d ---\n", txtPessoa_ALS, contPessoa);
             printf("Matrícula: %s\n", pessoas[i].matricula);
             printf("Nome: %s\n", pessoas[i].nome);
             printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
@@ -776,6 +773,8 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
             printf("Sexo: %s\n", pessoas[i].sexo);
         }
     }
+
+    printf("\n");
 
     // Transição de tela
     pausarTela();
@@ -1099,6 +1098,18 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 }
 
 // Exclui o cadastro de um aluno ou professor
+/*void excluirPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
+
+    // Verifica se há pessoas cadastradas
+    if (contPessoa > 0) {
+        
+        // Lista os alunos ou professores cadastrados
+        listaPessoa(contPessoa, pessoas, txtPessoa_ALS);
+
+
+    }
+
+}*/
 
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
@@ -1199,6 +1210,7 @@ int main (){
                         // MÓDULO ALUNOS - LISTAR
 
                         case 2: {
+                            printf("### Módulo Alunos - Listar aluno ###\n");
                             listarPessoa(contAluno, alunos, "aluno");
 
                             break; // Sai do case 2
@@ -1311,6 +1323,7 @@ int main (){
                         // MÓDULO PROFESSORES - LISTAR
 
                         case 2: {
+                            printf("### Módulo Professores - Listar professor ###\n");
                             listarPessoa(contProfessor, professores, "professor");
 
                             break; // Sai do case 2
