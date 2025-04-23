@@ -31,7 +31,7 @@ Aluno: Anderson Serrado
 #define tamAlunos 3 // Mudar para 10000
 #define tamProfessores 3 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
-#define tamCodigo 6 // n caracteres + \n + \0
+#define tamCodigo 8 // n caracteres + \n + \0
 #define max_alunosMatriculados 50
 
 // Textos  
@@ -131,7 +131,7 @@ void pausarTela() {
     #endif
 }
 
-/*// Valida números inteiros
+/*// Valida números inteiros positivos
 int validarInteiroPositivo(int *endereco) {
     
     long long n;
@@ -173,6 +173,10 @@ int lerEntrada (char entrada[], int tamEntrada) {
     if (fgets(entrada, tamEntrada, stdin) == NULL) {
         return 1; // Trata erro de leitura
     }
+
+    /*if (strcmp(entrada, "-1")) {
+        return 1; // Retorna para o menu anterior.
+    }*/
 
     // Verifica truncamento e remove \n
     if (strchr(entrada, '\n') == NULL) {
@@ -270,6 +274,20 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     return 0; // CPF não cadastrado
 }
 
+// Verifica a existência de um código
+int existeCodigo (char entrada_codigo[], int contDisciplina) {
+
+    // Verifica se o código já está cadastrado na lista de disciplinas
+    for (int i = 0; i < contDisciplina; i++){
+        if (strcmp(entrada_codigo, listaDisciplinas[i].codigo) == 0){ // Código já cadastrado
+            printf("\nO código já está cadastrado.\n");
+            return 1;
+        }
+    }
+
+    return 0; // Código não cadastrado
+}
+
 // Valida condições exclusivas do CPF
 int validarCPF (char CPF[tamCPF]) {
 
@@ -330,8 +348,10 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
     // Zerando a variável temporária
     entrada_Mat_CPF[0] = '\0';
 
+    int tamEsperado = tamMat_CPF - 2;
+
     // Entrada de dados
-    printf("Informe o(a) %s do(a) %s(a) (máx. %d dígitos): ", texto, texto_pessoa, tamMat_CPF - 2);
+    printf("Informe o(a) %s do(a) %s(a) (máx. %d dígitos): ", texto, texto_pessoa, tamEsperado);
     if (fgets(entrada_Mat_CPF, tamMat_CPF, stdin) == NULL) {
         printf("Erro ao ler o(a) %s.\n", texto); // Trata erro de leitura
         return 1;
@@ -340,7 +360,7 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
     // Verifica truncamento e remove \n
     if (strchr(entrada_Mat_CPF, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
-        printf("Erro: excesso de caracteres (máx. %d caracteres).\n", tamMat_CPF - 2);
+        printf("Erro: excesso de caracteres (máx. %d caracteres).\n", tamEsperado);
         return 1; // Input truncado = inválido
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
@@ -349,15 +369,14 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
 
     // Calcula o tamanho da matrícula
     int len = strlen(entrada_Mat_CPF);
-    int tamEsperado = tamMat_CPF - 2;
-    if (entrada_Mat_CPF[0] == '-') tamEsperado++;
+    if (entrada_Mat_CPF[0] == '-') tamEsperado++; // Números negativos
     
     // Verificações de erros
     int erro = 0;
     
     // Verifica o tamanho da matrícula
     if (len != tamEsperado) {
-        printf("Erro: %s deve conter %d dígitos.\n", texto, tamMat_CPF - 2);
+        printf("Erro: %s deve conter %d dígitos.\n", texto, tamEsperado);
         erro = 1;
     }
     
@@ -408,13 +427,13 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
 }
 
 // Recebe e valida o nome
-int receberNome (char entrada_nome[], char texto_pessoa[]) {
+int receberNome (char entrada_nome[]) {
     
     // entrada_nome: ponteiro que aponta para o endereço de memória do vetor "nome"
     // "nome" é o vetor pertencente à função que chamou receberNome
 
     // Entrada de dados
-    printf("Informe o nome do %s: ", texto_pessoa);
+    printf("Digite um nome: ");
     if (fgets(entrada_nome, tamNome, stdin) == NULL) {
         printf("Erro ao ler o nome.\n");
         return 1;
@@ -468,26 +487,68 @@ int receberNome (char entrada_nome[], char texto_pessoa[]) {
 
     // Padronizando o formato do nome
     for (int i = 0; wentrada_nome[i] != L'\0'; i++){
-        wchar_t c = wentrada_nome[i];
-        
-        // Capitaliza a primeira letra do nome
-        if (i == 0) {
-            wentrada_nome[i] = towupper(c);
-        }
-        // Capitaliza a primeira letra dos n nomes e sobrenomes
-        else if (iswalpha(c) && wentrada_nome[i - 1] == ' ') {
-            wentrada_nome[i] = towupper(c);
-        }
-        // Converte as demais letras para minúsculas
-        else {
-            wentrada_nome[i] = towlower(c);
-        }
+        wentrada_nome[i] = towupper(wentrada_nome[i]);
     }
 
     wcstombs(entrada_nome, wentrada_nome, len + 1);
     entrada_nome[len] = '\0';
     
     return 0; // Nome válido
+}
+
+// Recebe e valida o código
+int receberCodigo (char entrada_codigo[]) {
+
+    // entrada_codigo: ponteiro que aponta para o endereço de memória do vetor "codigo"
+    // "codigo" é o vetor pertencente à função que chamou receberCodigo
+
+    // Padrão: XXX000 | Por exemplo: INF006
+
+    // Entrada de dados
+    printf("Informe um código: ");
+    if (lerEntrada(entrada_codigo, tamCodigo) != 0) {
+        return 1;
+    }
+
+    // Comprimento
+    int len = strlen(entrada_codigo);
+    int tamEsperado = tamCodigo - 2;
+    
+    // Verifica se o nome está vazio
+    if (len == 0) {
+        printf("Erro: o código não pode estar vazio.\n");
+        return 1;
+    }
+    
+    // Verifica o tamanho da matrícula
+    if (len != tamEsperado) {
+        printf("Erro: o código deve conter %d caracteres.\n", tamEsperado);
+        return 1;
+    }
+
+    // Verifica se o código contém caracteres inválidos
+    for (int i = 0; i < len; i++) {
+        if (i <= 2) { // Letras (A-Z ou a-z)
+            char c = tolower(entrada_codigo[i]);
+            if (c < 'a' || c > 'z') {
+                printf("Erro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                return 1;
+            }
+        }
+        else { // Números
+            if (entrada_codigo[i] < '0' || entrada_codigo[i] > '9') {
+                printf("OErro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                return 1;
+            }
+        }
+    }
+
+    // Padroniza o código, capitalizando as letras
+    for (int i = 0; i <= 2; i++) {
+        entrada_codigo[i] = toupper(entrada_codigo[i]);
+    }
+
+    return 0; // Código válido
 }
 
 // Verifica se o ano é bissexto
@@ -606,6 +667,9 @@ int receberSexo (char entrada_sexo[tamSexo], char texto_pessoa[]) {
     return 0; // Sexo válido
 }
 
+// ############################################################################## //
+// ALUNOS E PROFESSORES
+
 // Cadastra um aluno ou professor
 void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
 
@@ -669,7 +733,7 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
         
         // Recebe e valida o nome
         do {
-            flagNome = receberNome(nome, txtPessoa_ALS);
+            flagNome = receberNome(nome);
             if (flagNome != 0) {
                 printf("\n");
             }                    
@@ -935,7 +999,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
                 
                 // Recebe e valida o nome
                 do {
-                    flagNome = receberNome(nome, txtPessoa_ALS);
+                    flagNome = receberNome(nome);
                     if (flagNome != 0) {
                         printf("\n");
                     }                    
@@ -1168,6 +1232,106 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     limparTela();
 }
 
+// FIM ALUNOS E PROFESSORES
+// ############################################################################## //
+
+
+// ############################################################################## //
+// DISCIPLINAS
+
+// Cadastra uma disciplina
+void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
+
+    // Verifica se a lista de disciplinas está cheia
+    if (*contDisciplina >= tamDisciplinas) { // Lista cheia
+        printf("\nCadastro cheio. Não é possível inserir outra disciplina.\n");
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
+    
+    // Lista não cheia
+
+    // ############################################################################## //
+    // CÓDIGO
+
+    // Variáveis auxiliares
+    int flagCodigo = 0;
+    int flagExisteCod = 0; 
+    char codigo[tamCodigo];
+
+    // Recebe e valida o código
+    do {
+        flagCodigo = receberCodigo(codigo);
+        flagExisteCod = existeCodigo (codigo, *contDisciplina);
+        if (flagCodigo != 0 || flagExisteCod != 0) {
+            printf("\n");
+        }
+    } while (flagCodigo != 0 || flagExisteCod != 0);
+
+    // FIM CÓDIGO
+    // ############################################################################## //
+        
+
+    // ############################################################################## //
+    // NOME
+
+    // Variáveis auxiliares
+    int flagNome = 0;
+    char nome[tamNome];
+    
+    // Recebe e valida o nome
+    do {
+        flagNome = receberNome(nome);
+        if (flagNome != 0) {
+            printf("\n");
+        }                    
+    } while (flagNome != 0);
+
+    // FIM NOME*/
+    // ############################################################################## //
+    
+    // Guarda os dados na struct
+    strcpy(listaDisciplinas[*contDisciplina].codigo, codigo);
+    strcpy(listaDisciplinas[*contDisciplina].nome, nome);
+
+    // Incrementa a quantidade de disciplinas
+    (*contDisciplina)++; 
+
+    printf("\nDisciplina cadastrada com sucesso!\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+}
+
+// Lista as disciplinas
+void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[]) {
+        
+    if (contDisciplina == 0) {
+        printf("\nNão há disciplinas cadastrados.\n");
+    }
+    else {
+        for (int i = 0; i < contDisciplina; i++) {
+            printf("\n");
+            printf("Código: %s\n", listaDisciplinas[i].codigo);
+            printf("Nome: %s\n", listaDisciplinas[i].nome);
+            printf("Nome: %s\n", listaDisciplinas[i].semestre);
+            // Inserir professor
+        }
+    }
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+}
+
+// FIM DISCIPLINAS
+// ############################################################################## //
+
+
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
 int main (){
@@ -1222,7 +1386,7 @@ int main (){
                     printf("### Módulo Alunos ###");
                     printf("\nInforme o número da opção desejada: ");
                     printf("\n0 - Voltar ao menu anterior");
-                    printf("\n1 - Cadastrar aluno");
+                    printf("\n1 - Inserir aluno");
                     printf("\n2 - Listar aluno");
                     printf("\n3 - Atualizar aluno");
                     printf("\n4 - Excluir aluno");
@@ -1270,6 +1434,7 @@ int main (){
                             printf("### Módulo Alunos - Listar aluno ###\n");
                             listarPessoa(contAluno, alunos, txtAluno_ALS);
 
+                            // printf e transição na main, pois a função listarPessoa também é utilizada por excluirPessoa
                             printf("\n");
 
                             // Transição de tela
@@ -1347,7 +1512,7 @@ int main (){
                     printf("### Módulo Professores ###");
                     printf("\nInforme o número da opção desejada: ");
                     printf("\n0 - Voltar ao menu anterior");
-                    printf("\n1 - Cadastrar professor");
+                    printf("\n1 - Inserir professor");
                     printf("\n2 - Listar professor");
                     printf("\n3 - Atualizar professor");
                     printf("\n4 - Excluir professor");
@@ -1395,6 +1560,7 @@ int main (){
                             printf("### Módulo Professores - Listar professor ###\n");
                             listarPessoa(contProfessor, professores, txtProfessor_ALS);
 
+                            // printf e transição na main, pois a função listarPessoa também é utilizada por excluirPessoa
                             printf("\n");
 
                             // Transição de tela
@@ -1465,9 +1631,142 @@ int main (){
             // MÓDULO DISCIPLINAS
 
             case 3: {
-                printf("\nMódulo Disciplinas:\n");
+                int opDisci;
+                
+                do {
+                    //Menu de opções
+                    printf("### Módulo Disciplinas ###");
+                    printf("\nInforme o número da opção desejada: ");
+                    printf("\n0 - Voltar ao menu anterior");
+                    printf("\n1 - Inserir disciplina");
+                    printf("\n2 - Listar disciplina");
+                    printf("\n3 - Atualizar disciplina");
+                    printf("\n4 - Excluir disciplina");
+                    printf("\n5 - Matricular aluno em uma disciplina");
+                    printf("\n6 - Desmatricular aluno de uma disciplina");
+                    printf("\n");
+                    
+                    //Entrada de dados: Opção do Módulo de Disciplinas
+                    scanf("%d",&opDisci);
+                    limparBuffer();
+                    
+                    // Transição de tela
+                    limparTela();
+    
+                    switch(opDisci){
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - VOLTAR AO MENU ANTERIOR
+
+                        case 0: {
+                            limparTela();
+                            break;
+                        }
+
+                        // FIM MÓDULO DISCIPLINAS - VOLTAR AO MENU ANTERIOR
+                        // ##################################################################### //
+                        
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - INSERIR
+
+                        case 1: {
+                            printf("### Módulo Disciplinas - Inserir disciplinas ###\n");
+                            inserirDisciplina (&contDisciplina, listaDisciplinas);
+                            // contDisciplina incrementa na própria função
+
+                            break; // Sai do case 1
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - INSERIR
+                        // ##################################################################### //
+                        
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - LISTAR
+
+                        case 2: {
+                            printf("### Módulo Disciplinas - Listar disciplinas ###\n");
+                            listarDisciplinas (contDisciplina, listaDisciplinas);
+
+                            break; // Sai do case 2
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - LISTAR
+                        // ##################################################################### //
+        
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - ATUALIZAR
+
+                        case 3: {
+                            printf("### Módulo Disciplinas - Atualizar disciplina ###\n");
+
+                            break; // Sai do case 3
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - ATUALIZAR
+                        // ##################################################################### //
+        
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - EXCLUIR
+                        case 4: {
+                            printf("### Módulo Disciplinas - Excluir disciplina ###\n");
+                            
+                            break; // Sai do case 4 
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - EXCLUIR
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - MATRICULAR ALUNO
+                        case 5: {
+                            printf("### Módulo Disciplinas - Matricular aluno ###\n");
+                            
+                            break; // Sai do case 5
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - MATRICULAR ALUNO
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - DESMATRICULAR ALUNO
+                        case6: {
+                            printf("### Módulo Disciplinas - Desmatricular aluno ###\n");
+                            
+                            break; // Sai do case 6
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - DESMATRICULAR ALUNO
+                        // ##################################################################### //
+
+                                
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - OPÇÃO INVÁLIDA
+
+                        default: {
+                            printf("Opção inválida.\n");
+                            
+                            // Transição de tela
+                            pausarTela();
+                            limparTela();
+
+                            break; // Sai do default
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - OPÇÃO INVÁLIDA
+                        // ##################################################################### //
+
+                    } // Fim do switch
+
+                } while(opDisci != 0);
+
                 break;
-            } // Fim do case 3
+            }
             
             // FIM DO MÓDULO DISCIPLINAS
             // ############################################################################## //
