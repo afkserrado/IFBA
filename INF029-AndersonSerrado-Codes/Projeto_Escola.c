@@ -31,7 +31,8 @@ Aluno: Anderson Serrado
 #define tamAlunos 3 // Mudar para 10000
 #define tamProfessores 3 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
-#define tamCodigo 8 // n caracteres + \n + \0
+#define tamCodigo 6 // n caracteres + \n + \0
+#define max_alunosMatriculados 50
 
 // Textos  
 #define txtAluno_ALS "aluno"
@@ -53,6 +54,11 @@ typedef struct {
     int ano;
 } data;
 
+// Alunos matriculados em disciplinas
+typedef struct {
+    char matriculaAluno[tamMatricula];
+} disciplina_alunos;
+
 // Cadastro de pessoas
 typedef struct {
     char matricula[tamMatricula];
@@ -62,17 +68,21 @@ typedef struct {
     data nascimento;
 } pessoa;
 
-pessoa alunos[tamAlunos];
-pessoa professores[tamProfessores];
-
 // Cadastro das disciplinas
 typedef struct {
-    char matricula[tamMatricula];
     char codigo[tamCodigo];
+    char nome[tamNome];
     int semestre;
-} listaDisciplinas;
+    char matriculaProfessor[tamMatricula];
+    int qtd_alunosMatriculados;
+    disciplina_alunos alunosMatriculados[max_alunosMatriculados];
+} disciplina;
 
-listaDisciplinas disciplina[tamDisciplinas];
+// Variáveis do tipo array de structs
+
+pessoa alunos[tamAlunos];
+pessoa professores[tamProfessores];
+disciplina listaDisciplinas[tamDisciplinas];
 
 /*--------------------------------------------------------------------------------------------------*/
 // Subfunções
