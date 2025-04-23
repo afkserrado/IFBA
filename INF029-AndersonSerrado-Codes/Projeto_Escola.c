@@ -20,7 +20,9 @@ Aluno: Anderson Serrado
 #include <wchar.h>  // Funções para manipular strings de caracteres com múltiplos bytes (wchar_t)
 
 /*--------------------------------------------------------------------------------------------------*/
-// Constantes globais
+// Macros
+
+// Constantes
 
 #define tamNome 102 // n caracteres + \n + \0
 #define tamMatricula 5 // n caracteres + \n + \0 // Mudar para 13
@@ -30,6 +32,16 @@ Aluno: Anderson Serrado
 #define tamProfessores 3 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
+
+// Textos  
+#define txtAluno_ALS "aluno"
+#define txtAluno_ALP "alunos"
+#define txtAluno_FUS "Aluno"
+#define txtAluno_FUP "Alunos"
+#define txtProfessor_ALS "professor"
+#define txtProfessor_ALP "professores"
+#define txtProfessor_FUS "Professor"
+#define txtProfessor_FUP "Professores"
 
 /*--------------------------------------------------------------------------------------------------*/
 // Structs globais
@@ -773,12 +785,6 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
             printf("Sexo: %s\n", pessoas[i].sexo);
         }
     }
-
-    printf("\n");
-
-    // Transição de tela
-    pausarTela();
-    limparTela();
 }
 
 // Atualiza o cadastro de um aluno ou professor
@@ -1098,18 +1104,59 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 }
 
 // Exclui o cadastro de um aluno ou professor
-/*void excluirPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
+void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
 
+    char txtPessoa_ALP[12];
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_ALP, txtAluno_ALP); // "alunos"
+    }
+    else {
+        strcpy(txtPessoa_ALP, txtProfessor_ALP); // "professores"
+    }
+    
     // Verifica se há pessoas cadastradas
-    if (contPessoa > 0) {
-        
-        // Lista os alunos ou professores cadastrados
-        listaPessoa(contPessoa, pessoas, txtPessoa_ALS);
-
-
+    if (*contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP);
+        pausarTela();
+        limparTela();
+        return;
     }
 
-}*/
+    listarPessoa(*contPessoa, pessoas, txtPessoa_ALS); // Passando como cópia
+
+    // Lê entrada
+    printf("\nInforme a matrícula a ser excluída: ");
+    char matricula[tamMatricula];
+    lerEntrada(matricula, tamMatricula);
+
+    // Procurando a matrícula
+    for (int i = 0; i < *contPessoa; i++) {
+        
+        if (strcmp(matricula, pessoas[i].matricula) == 0) { // Achou
+
+            // Shift
+            for (int j = i; j < *contPessoa; j++) {
+                pessoas[j] = pessoas[j + 1];
+            }
+    
+            (*contPessoa)--; // O operador "--" tem prioridade. Portanto, os "()" são necessários
+            printf("\nExclusão realizada com sucesso!\n");
+            
+            // Transição de tela
+            pausarTela();
+            limparTela();
+            return;
+        }
+    }
+
+    printf("\nNão foi encontrado nenhum %s com essa matrícula.", txtPessoa_ALS);
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+}
 
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
@@ -1196,7 +1243,7 @@ int main (){
                         // MÓDULO ALUNOS - INSERIR
 
                         case 1: {
-                            inserirPessoa("aluno", contAluno, alunos, tamAlunos, contProfessor);
+                            inserirPessoa(txtAluno_ALS, contAluno, alunos, tamAlunos, contProfessor);
                             contAluno++; // Incrementa a contagem de alunos
 
                             break; // Sai do case 1
@@ -1211,7 +1258,13 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Alunos - Listar aluno ###\n");
-                            listarPessoa(contAluno, alunos, "aluno");
+                            listarPessoa(contAluno, alunos, txtAluno_ALS);
+
+                            printf("\n");
+
+                            // Transição de tela
+                            pausarTela();
+                            limparTela();
 
                             break; // Sai do case 2
                         }
@@ -1224,7 +1277,8 @@ int main (){
                         // MÓDULO ALUNOS - ATUALIZAR
 
                         case 3: {
-                            atualizarPessoa("aluno", alunos, contAluno, contProfessor);
+                            atualizarPessoa(txtAluno_ALS, alunos, contAluno, contProfessor);
+
                             break; // Sai do case 3
                         }
 
@@ -1235,7 +1289,9 @@ int main (){
                         // ##################################################################### //
                         // MÓDULO ALUNOS - EXCLUIR
                         case 4: {
-                            printf("### Módulo Alunos - Excluir aluno ###");
+                            printf("### Módulo Alunos - Excluir aluno ###\n");
+                            excluirPessoa(&contAluno, alunos, txtAluno_ALS);
+                            
                             break; // Sai do case 4 
                         }
 
@@ -1248,8 +1304,11 @@ int main (){
 
                         default: {
                             printf("Opção inválida.\n");
+                            
+                            // Transição de tela
                             pausarTela();
                             limparTela();
+
                             break; // Sai do default
                         }
 
@@ -1309,7 +1368,7 @@ int main (){
                         // MÓDULO PROFESSORES - INSERIR
 
                         case 1: {
-                            inserirPessoa("professor", contProfessor, professores, tamProfessores, contAluno);
+                            inserirPessoa(txtProfessor_ALS, contProfessor, professores, tamProfessores, contAluno);
                             contProfessor++; // Incrementa a contagem de professores
 
                             break; // Sai do case 1
@@ -1324,7 +1383,13 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Professores - Listar professor ###\n");
-                            listarPessoa(contProfessor, professores, "professor");
+                            listarPessoa(contProfessor, professores, txtProfessor_ALS);
+
+                            printf("\n");
+
+                            // Transição de tela
+                            pausarTela();
+                            limparTela();
 
                             break; // Sai do case 2
                         }
@@ -1337,7 +1402,8 @@ int main (){
                         // MÓDULO PROFESSORES - ATUALIZAR
 
                         case 3: {
-                            atualizarPessoa("professor", professores, contProfessor, contAluno);
+                            atualizarPessoa(txtProfessor_ALS, professores, contProfessor, contAluno);
+
                             break; // Sai do case 3
                         }
 
@@ -1348,7 +1414,9 @@ int main (){
                         // ##################################################################### //
                         // MÓDULO PROFESSORES - EXCLUIR
                         case 4: {
-                            printf("### Módulo Professores - Excluir professor ###");
+                            printf("### Módulo Professores - Excluir professor ###\n");
+                            excluirPessoa(&contProfessor, professores, txtProfessor_ALS);
+
                             break; // Sai do case 4 
                         }
 
@@ -1361,8 +1429,11 @@ int main (){
 
                         default: {
                             printf("Opção inválida.\n");
+                            
+                            // Transição de tela
                             pausarTela();
                             limparTela();
+
                             break; // Sai do default
                         }
 
