@@ -506,7 +506,11 @@ int receberCodigo (char entrada_codigo[]) {
 
     // Entrada de dados
     printf("Informe um código: ");
-    if (lerEntrada(entrada_codigo, tamCodigo) != 0) {
+    if (lerEntrada(entrada_codigo, tamCodigo) == -1) {
+        printf("\nOperação cancelada.");
+        return 1;
+    }
+    else (lerEntrada(entrada_codigo, tamCodigo) != 0) {
         return 1;
     }
 
