@@ -171,22 +171,27 @@ int lerEntrada (char entrada[], int tamEntrada) {
 
     // Leitura
     if (fgets(entrada, tamEntrada, stdin) == NULL) {
+        printf("Erro de leitura.\n");
         return 1; // Trata erro de leitura
     }
 
-    /*if (strcmp(entrada, "-1")) {
-        return 1; // Retorna para o menu anterior.
-    }*/
+    // Verifica se houve excesso de caracteres
+    if (strchr(entrada, '\n') == NULL) { // Excesso
 
-    // Verifica truncamento e remove \n
-    if (strchr(entrada, '\n') == NULL) {
         limparBuffer(); // Limpa o excesso de caracteres
         printf("Erro: excesso de caracteres. O limite é %d caracteres.\n", tamEntrada - 2);
         return 1; // Input truncado = inválido
+
     } else {
         // Substitui a quebra de linha \n pelo terminador nulo \0
         entrada[strcspn(entrada, "\n")] = '\0';
     }
+
+    // Cancela a operação
+    /*if (strcmp(entrada, "-1") == 0) {
+        return 2; 
+    }*/
+
     return 0;
 }
 
@@ -272,20 +277,6 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
         }
     }
     return 0; // CPF não cadastrado
-}
-
-// Verifica a existência de um código
-int existeCodigo (char entrada_codigo[], int contDisciplina) {
-
-    // Verifica se o código já está cadastrado na lista de disciplinas
-    for (int i = 0; i < contDisciplina; i++){
-        if (strcmp(entrada_codigo, listaDisciplinas[i].codigo) == 0){ // Código já cadastrado
-            printf("\nO código já está cadastrado.\n");
-            return 1;
-        }
-    }
-
-    return 0; // Código não cadastrado
 }
 
 // Valida condições exclusivas do CPF
@@ -494,65 +485,6 @@ int receberNome (char entrada_nome[]) {
     entrada_nome[len] = '\0';
     
     return 0; // Nome válido
-}
-
-// Recebe e valida o código
-int receberCodigo (char entrada_codigo[]) {
-
-    // entrada_codigo: ponteiro que aponta para o endereço de memória do vetor "codigo"
-    // "codigo" é o vetor pertencente à função que chamou receberCodigo
-
-    // Padrão: XXX000 | Por exemplo: INF006
-
-    // Entrada de dados
-    printf("Informe um código: ");
-    if (lerEntrada(entrada_codigo, tamCodigo) == -1) {
-        printf("\nOperação cancelada.");
-        return 1;
-    }
-    else (lerEntrada(entrada_codigo, tamCodigo) != 0) {
-        return 1;
-    }
-
-    // Comprimento
-    int len = strlen(entrada_codigo);
-    int tamEsperado = tamCodigo - 2;
-    
-    // Verifica se o nome está vazio
-    if (len == 0) {
-        printf("Erro: o código não pode estar vazio.\n");
-        return 1;
-    }
-    
-    // Verifica o tamanho da matrícula
-    if (len != tamEsperado) {
-        printf("Erro: o código deve conter %d caracteres.\n", tamEsperado);
-        return 1;
-    }
-
-    // Verifica se o código contém caracteres inválidos
-    for (int i = 0; i < len; i++) {
-        if (i <= 2) { // Letras (A-Z ou a-z)
-            char c = tolower(entrada_codigo[i]);
-            if (c < 'a' || c > 'z') {
-                printf("Erro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
-                return 1;
-            }
-        }
-        else { // Números
-            if (entrada_codigo[i] < '0' || entrada_codigo[i] > '9') {
-                printf("OErro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
-                return 1;
-            }
-        }
-    }
-
-    // Padroniza o código, capitalizando as letras
-    for (int i = 0; i <= 2; i++) {
-        entrada_codigo[i] = toupper(entrada_codigo[i]);
-    }
-
-    return 0; // Código válido
 }
 
 // Verifica se o ano é bissexto
@@ -907,8 +839,7 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
         printf("\nInforme a matrícula do(a) %s(a) (digite -1 para voltar ao menu anterior): ", txtPessoa_ALS);
         
         // Lê a entrada
-        lerEntrada(matricula, tamMatricula);
-        //printf("\nMatrícula: %s\n", matricula);
+        if (lerEntrada(matricula, tamMatricula) != 0) return; // Sai em caso de erro de leitura
 
         if (strcmp(matricula, "-1") == 0) {
             // Transição de tela
@@ -1205,7 +1136,7 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     // Lê entrada
     printf("\nInforme a matrícula a ser excluída: ");
     char matricula[tamMatricula];
-    lerEntrada(matricula, tamMatricula);
+    if (lerEntrada(matricula, tamMatricula) != 0) return; // Sai em caso de erro de leitura
 
     // Procurando a matrícula
     for (int i = 0; i < *contPessoa; i++) {
@@ -1243,6 +1174,110 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
 // ############################################################################## //
 // DISCIPLINAS
 
+// Verifica a existência de um código
+int existeCodigo (char entrada_codigo[], int contDisciplina) {
+
+    // Verifica se o código já está cadastrado na lista de disciplinas
+    for (int i = 0; i < contDisciplina; i++){
+        if (strcmp(entrada_codigo, listaDisciplinas[i].codigo) == 0){ // Código já cadastrado
+            printf("\nO código já está cadastrado.\n");
+            return 1;
+        }
+    }
+
+    return 0; // Código não cadastrado
+}
+
+// Recebe e valida o código
+int receberCodigo (char entrada_codigo[], int contDisciplina) {
+
+    // entrada_codigo: ponteiro que aponta para o endereço de memória do vetor "codigo"
+    // "codigo" é o vetor pertencente à função que chamou receberCodigo
+
+    // Padrão: XXX000 | Por exemplo: INF006
+
+    // Entrada de dados
+    printf("Informe um código: ");
+    if (lerEntrada(entrada_codigo, tamCodigo) != 0) return 1;
+    
+    /*
+    Para cancelar operação: 
+
+    printf("Informe um código (digite -1 para cancelar): ");
+    int retorno = lerEntrada(entrada_codigo, tamCodigo);
+
+    if (retorno == 2) {
+        printf("\nOperação cancelada.\n");
+        return 2; 
+    } else if (retorno != 0) {
+        printf("\nErro de leitura.\n");
+        return 1;
+    }*/
+
+    // Comprimento
+    int len = strlen(entrada_codigo);
+    int tamEsperado = tamCodigo - 2;
+    
+    // Verifica se o nome está vazio
+    if (len == 0) {
+        printf("Erro: o código não pode estar vazio.\n");
+        return 1;
+    }
+    
+    // Verifica o tamanho da matrícula
+    if (len != tamEsperado) {
+        printf("Erro: o código deve conter %d caracteres.\n", tamEsperado);
+        return 1;
+    }
+
+    // Verifica se o código contém caracteres inválidos
+    for (int i = 0; i < len; i++) {
+        if (i <= 2) { // Letras (A-Z ou a-z)
+            char c = tolower(entrada_codigo[i]);
+            if (c < 'a' || c > 'z') {
+                printf("Erro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                return 1;
+            }
+        }
+        else { // Números
+            if (entrada_codigo[i] < '0' || entrada_codigo[i] > '9') {
+                printf("OErro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                return 1;
+            }
+        }
+    }
+
+    // Verifica se o código já está cadastrado
+    if (existeCodigo (entrada_codigo, contDisciplina) != 0) return 1; 
+
+    // Padroniza o código, capitalizando as letras
+    for (int i = 0; i <= 2; i++) {
+        entrada_codigo[i] = toupper(entrada_codigo[i]);
+    }
+
+    return 0; // Código válido
+}
+
+// Recebe e valida o semestre
+int receberSemestre (int *entrada_semestre) {
+
+    // Entrada de dados
+    printf("Informe o semestre da disciplina: ");
+    if (scanf("%d", entrada_semestre) != 1) { // Verifica entradas inválidas
+        printf("Erro: entrada inválida. Por favor, insira um número inteiro.\n");
+        return 1;
+    }
+
+    if (*entrada_semestre <= 0 || *entrada_semestre > 20) {
+        printf("Erro: o semestre deve ser um número inteiro positivo entre 1 e 20.\n");
+        return 1;
+    }
+
+    limparBuffer();
+
+    return 0;
+}
+
 // Cadastra uma disciplina
 void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
 
@@ -1261,17 +1296,14 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
 
     // Variáveis auxiliares
     int flagCodigo = 0;
-    int flagExisteCod = 0; 
     char codigo[tamCodigo];
 
     // Recebe e valida o código
     do {
-        flagCodigo = receberCodigo(codigo);
-        flagExisteCod = existeCodigo (codigo, *contDisciplina);
-        if (flagCodigo != 0 || flagExisteCod != 0) {
-            printf("\n");
-        }
-    } while (flagCodigo != 0 || flagExisteCod != 0);
+        flagCodigo = receberCodigo(codigo, *contDisciplina);
+        if (flagCodigo != 0) printf("\n");
+
+    } while (flagCodigo != 0);
 
     // FIM CÓDIGO
     // ############################################################################## //
@@ -1287,17 +1319,53 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
     // Recebe e valida o nome
     do {
         flagNome = receberNome(nome);
-        if (flagNome != 0) {
-            printf("\n");
-        }                    
+        if (flagNome != 0) printf("\n");
+
     } while (flagNome != 0);
 
-    // FIM NOME*/
+    // FIM NOME
+    // ############################################################################## //
+
+
+    // ############################################################################## //
+    // SEMESTRE
+
+    // Variáveis auxiliares
+    int flagSemestre = 0;
+    int semestre;
+    
+    // Recebe e valida o nome
+    do {
+        flagSemestre = receberSemestre(&semestre);
+        if (flagSemestre != 0) printf("\n");
+
+    } while (flagSemestre != 0);
+
+    // FIM SEMESTRE
+    // ############################################################################## //
+
+
+    // ############################################################################## //
+    // MATRÍCULA PROFESSOR
+
+    // Variáveis auxiliares
+    /*int flagNome = 0;
+    char nome[tamNome];
+    
+    // Recebe e valida o nome
+    do {
+        flagNome = receberNome(nome);
+        if (flagNome != 0) printf("\n");
+
+    } while (flagNome != 0);*/
+
+    // MATRÍCULA PROFESSOR
     // ############################################################################## //
     
     // Guarda os dados na struct
     strcpy(listaDisciplinas[*contDisciplina].codigo, codigo);
     strcpy(listaDisciplinas[*contDisciplina].nome, nome);
+    listaDisciplinas[*contDisciplina].semestre = semestre;
 
     // Incrementa a quantidade de disciplinas
     (*contDisciplina)++; 
@@ -1320,7 +1388,7 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[]) {
             printf("\n");
             printf("Código: %s\n", listaDisciplinas[i].codigo);
             printf("Nome: %s\n", listaDisciplinas[i].nome);
-            printf("Nome: %s\n", listaDisciplinas[i].semestre);
+            printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
             // Inserir professor
         }
     }
@@ -1739,7 +1807,7 @@ int main (){
 
                         // ##################################################################### //
                         // MÓDULO DISCIPLINAS - DESMATRICULAR ALUNO
-                        case6: {
+                        case 6: {
                             printf("### Módulo Disciplinas - Desmatricular aluno ###\n");
                             
                             break; // Sai do case 6
