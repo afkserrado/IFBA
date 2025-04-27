@@ -825,7 +825,12 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
             printf("Matrícula: %s\n", pessoas[i].matricula);
             printf("Nome: %s\n", pessoas[i].nome);
             printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
-            printf("CPF: %s\n", pessoas[i].CPF);
+            printf("CPF: %.3s.%.3s.%.3s-%.2s\n", 
+                pessoas[i].CPF,       // Primeiros 3 dígitos
+                pessoas[i].CPF + 3,    // Aponta para o 4º dígito
+                pessoas[i].CPF + 6,    // Aponta para o 7º dígito
+                pessoas[i].CPF + 9);   // Aponta para o 10º dígito
+                
             printf("Sexo: %s\n", pessoas[i].sexo);
         }
     }
@@ -1439,20 +1444,30 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Lista as disciplinas
-void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[]) {
-        
+void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int contProfessor) {
+    
+    // Não existem disciplinas cadastradas
     if (contDisciplina == 0) {
         printf("\nNão há disciplinas cadastrados.\n");
+        return;
     }
-    else {
-        for (int i = 0; i < contDisciplina; i++) {
-            printf("\n");
-            printf("Código: %s\n", listaDisciplinas[i].codigo);
-            printf("Nome: %s\n", listaDisciplinas[i].nome);
-            printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
-            printf("Professor: ");
-            // Inserir professor
+
+    // Existem disciplinas cadastradas
+    for (int i = 0; i < contDisciplina; i++) {
+        printf("\n");
+        printf("Código: %s\n", listaDisciplinas[i].codigo);
+        printf("Nome: %s\n", listaDisciplinas[i].nome);
+        printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
+        
+        // Busca o nome do professor
+        int j;
+        for (j = 0; j < contProfessor; j++) {
+            if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
+                break; // Sai do laço e conserva o valor de 'j'
+            }
         }
+        
+        printf("Professor: %s\n", professores[j].nome);
     }
 
     printf("\n");
@@ -1823,7 +1838,7 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Disciplinas - Listar disciplinas ###\n");
-                            listarDisciplinas (contDisciplina, listaDisciplinas);
+                            listarDisciplinas (contDisciplina, listaDisciplinas, contProfessor);
 
                             break; // Sai do case 2
                         }
