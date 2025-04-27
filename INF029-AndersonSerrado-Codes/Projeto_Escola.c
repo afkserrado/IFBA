@@ -1173,7 +1173,12 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
     // Lê entrada
     printf("\nInforme a matrícula a ser excluída: ");
     char matricula[tamMatricula];
-    if (lerEntrada(matricula, tamMatricula) != 0) return; // Sai em caso de erro de leitura
+    if (lerEntrada(matricula, tamMatricula) != 0) {
+        printf("\n");
+        pausarTela();
+        limparTela();
+        return; // Sai em caso de erro de leitura
+    }
 
     // Exclui o professor da disciplina caso ele seja excluído do módulo de professores
     if (strcmp(txtPessoa_ALS, "professor") == 0) {
