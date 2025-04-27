@@ -96,6 +96,8 @@ void configurarLocale() {
         setlocale(LC_ALL, "pt_BR.UTF-8");  
         
     #endif
+
+    return;
 }
 
 // Limpa o buffer
@@ -104,6 +106,8 @@ void limparBuffer() {
     while ((c = getchar()) != '\n' && c != EOF) {
         // Loop intencionalmente vazio para consumir caracteres
     }
+
+    return;
 }
 
 // Limpa a tela
@@ -115,6 +119,8 @@ void limparTela() {
         system("clear");
         
     #endif
+
+    return;
 }
 
 //Pausa a tela
@@ -129,6 +135,8 @@ void pausarTela() {
         limparBuffer();
 
     #endif
+
+    return;
 }
 
 /*// Valida números inteiros positivos
@@ -219,8 +227,8 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_Matricula, alunos[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nA matrícula está cadastrada na lista de alunos.\n");
-            if (posicao != NULL) *posicao = i;
+            //printf("\nA matrícula está cadastrada na lista de alunos.\n");
+            if (posicao != NULL) *posicao = i; // Retorna a posição apenas na função de atualizar cadastro existente
             return 1;
         }
     }
@@ -228,8 +236,8 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_Matricula, professores[i].matricula) == 0){ // Matrícula já cadastrada
-            printf("\nA matrícula está cadastrada na lista de professores.\n");
-            if (posicao != NULL) *posicao = i;
+            //printf("\nA matrícula está cadastrada na lista de professores.\n");
+            if (posicao != NULL) *posicao = i; // Retorna a posição apenas na função de atualizar cadastro existente
             return 2;
         }
     }
@@ -260,7 +268,7 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_CPF, alunos[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nO CPF está cadastrado na lista de alunos.\n");
+            //printf("\nO CPF está cadastrado na lista de alunos.\n");
             //pausarTela();
             //limparTela();
             return 1;
@@ -270,7 +278,7 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_CPF, professores[i].CPF) == 0){ // CPF já cadastrado
-            printf("\nO CPF está cadastrado na lista de professores.\n");
+            //printf("\nO CPF está cadastrado na lista de professores.\n");
             //pausarTela();
             //limparTela();
             return 2;
@@ -331,7 +339,7 @@ int validarCPF (char CPF[tamCPF]) {
 }
 
 // Recebe e valida matrícula ou o CPF
-int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto[], char texto_pessoa[]) {
+int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto[], char texto_pessoa[], int contPessoa, int contPessoa2) {
     
     // entrada_Mat_CPF: ponteiro que aponta para o endereço de memória do vetor "matricula" ou "CPF"
     // "matricula" e "CPF" são vetores pertencentes à função que chamou receberNome
@@ -408,10 +416,38 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
     }
 
     // Se for CPF, chama a função validarCPF para verificar outras condições
-    if (strcmp(texto, "CPF") == 0) { // Se o texto for CPF
+    if (strcmp(texto, "CPF") == 0) {
         if (validarCPF(entrada_Mat_CPF) != 0) { // Chama a função validarCPF
             return 1; // CPF inválido 
         }
+    }
+
+    // Verifica se a matrícula existe
+    if (strcmp(texto, "matrícula") == 0) {
+        int flagExisteMat = existeMatricula (entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa, NULL);
+
+        if (flagExisteMat == 1) {
+            printf("Já existe um aluno cadastrado com essa matrícula.\n");
+            return 1;
+        }
+        else if (flagExisteMat == 2) {
+            printf("Já existe um professor cadastrado com essa matrícula.\n");
+            return 2;
+        }
+    }
+
+    // Verifica se o CPF existe
+    if (strcmp(texto, "CPF") == 0) {
+        int flagExisteCPF = existeCPF (entrada_Mat_CPF, contPessoa, contPessoa2, texto_pessoa);
+
+        if (flagExisteCPF == 1) {
+            printf("Já existe um aluno cadastrado com esse CPF.\n");
+            return 1;
+        }
+        else if (flagExisteCPF == 2) {
+            printf("Já existe um professor cadastrado com esse CPF.\n");
+            return 2;
+        } 
     }
 
     return 0; // Matrícula ou CPF válido
@@ -615,12 +651,12 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
     // Formatações
     if (strcmp(txtPessoa_ALS, "aluno") == 0) {
-        strcpy(txtPessoa_FUP, "Alunos");
-        strcpy(txtPessoa_FUS, "Aluno");
+        strcpy(txtPessoa_FUP, txtAluno_FUP);
+        strcpy(txtPessoa_FUS, txtAluno_FUS);
     }
     else {
-        strcpy(txtPessoa_FUP, "Professores");
-        strcpy(txtPessoa_FUS, "Professor");
+        strcpy(txtPessoa_FUP, txtProfessor_FUP);
+        strcpy(txtPessoa_FUS, txtProfessor_FUS);
     }
                             
     printf("### Módulo %s - Inserir %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
@@ -640,18 +676,16 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
     
         // Variáveis auxiliares
         int flagMatricula = 0;
-        int flagExisteMat = 0; 
         char matricula[tamMatricula];
         char textoMat[] = "matrícula";
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS);
-            flagExisteMat = existeMatricula (matricula, contPessoa, contPessoa2, txtPessoa_ALS, NULL);
-            if (flagMatricula != 0 || flagExisteMat != 0) {
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
+            if (flagMatricula != 0) {
                 printf("\n");
             }
-        } while (flagMatricula != 0 || flagExisteMat != 0);
+        } while (flagMatricula != 0);
 
         // Armazena matrícula
         strcpy(pessoas[contPessoa].matricula, matricula);
@@ -712,18 +746,16 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
         // Variáveis auxiliares
         int flagCPF = 0;
-        int flagExisteCPF = 0;
         char CPF[tamCPF];
         char textoCPF[] = "CPF";
 
         // Recebe e valida o CPF
         do {
-            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS);
-            flagExisteCPF = existeCPF (CPF, contPessoa, contPessoa2, txtPessoa_ALS);
-            if (flagCPF != 0 || flagExisteCPF != 0) {
+            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, contPessoa, contPessoa2);
+            if (flagCPF != 0) {
                 printf("\n");
             }                    
-        } while (flagCPF != 0 || flagExisteCPF != 0);
+        } while (flagCPF != 0);
 
         //Armazena o CPF
         strcpy(pessoas[contPessoa].CPF, CPF);
@@ -761,6 +793,8 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
     } // Fim do else (lista de alunos não cheia)
 
+    return;
+
 } // Fim da função
 
 // Lista alunos ou professores
@@ -795,6 +829,8 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
             printf("Sexo: %s\n", pessoas[i].sexo);
         }
     }
+
+    return;
 }
 
 // Atualiza o cadastro de um aluno ou professor
@@ -819,7 +855,6 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
     printf("### Módulo %s - Atualizar %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
 
     // Declarações e inicializações
-    int flagMatricula = 0;
     int achou = 0;
     char matricula[tamMatricula];
     int i;
@@ -834,6 +869,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
     }
 
     // Verifica se a matrícula está cadastrada
+    int flagExisteMat = 0;
+
     do {
         
         printf("\nInforme a matrícula do(a) %s(a) (digite -1 para voltar ao menu anterior): ", txtPessoa_ALS);
@@ -847,23 +884,23 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
             return; // Volta ao menu anterior
         }
 
-        flagMatricula = existeMatricula(matricula, contPessoa, contPessoa2, txtPessoa_ALS, &i);
+        flagExisteMat = existeMatricula(matricula, contPessoa, contPessoa2, txtPessoa_ALS, &i);
 
-        if (flagMatricula == 0) {
+        if (flagExisteMat == 0) {
             printf("A matrícula não está cadastrada. Por favor, tente novamente.\n");
         }
-        else if (strcmp(txtPessoa_ALS, "aluno") == 0 && flagMatricula == 2) { // flagMatricula = 2
-            printf("Por favor, insira a matrícula de um(a) aluno(a).\n");
-            flagMatricula = 0; // Reset
+        else if (strcmp(txtPessoa_ALS, "aluno") == 0 && flagExisteMat == 2) {
+            printf("Essa matrícula pertence a um(a) professor(a). Por favor, insira a matrícula de um(a) aluno(a).\n");
+            flagExisteMat = 0; // Reset
         }
-        else if (strcmp(txtPessoa_ALS, "professor") == 0 && flagMatricula == 1) { // flagMatricula = 1
-            printf("Por favor, insira a matrícula de um(a) professor(a).\n");
-            flagMatricula = 0; // Reset
+        else if (strcmp(txtPessoa_ALS, "professor") == 0 && flagExisteMat == 1) {
+            printf("Essa matrícula pertence a um(a) aluno(a). Por favor, insira a matrícula de um(a) professor(a).\n");
+            flagExisteMat = 0; // Reset
         }
         else { // "aluno" && flagMatricula = 1 || "professor" && flagMatricula = 2
             achou = 1;
         }
-    } while (flagMatricula == 0);
+    } while (flagExisteMat == 0);
 
     // Matrícula encontrada no módulo em execução
     if (achou == 1) {
@@ -882,18 +919,16 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
             
             case 1: { // Sim
             // Variáveis auxiliares
-            flagMatricula = 0; // Reset
-            int flagExiste = 0;
+            int flagMatricula = 0; // Reset
             char textoMat[] = "matrícula";
 
                 // Recebe e valida a matrícula
                 do {
-                    flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS);
-                    flagExiste = existeMatricula (matricula, contPessoa, contPessoa2, txtPessoa_ALS, NULL);
-                    if (flagMatricula != 0 || flagExiste != 0) {
+                    flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
+                    if (flagMatricula != 0) {
                         printf("\n");
                     }
-                } while (flagMatricula != 0 || flagExiste != 0);
+                } while (flagMatricula != 0);
                 printf("Matrícula atualizada.\n");
 
                 // Armazena matrícula
@@ -1022,18 +1057,16 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
             case 1: { // Sim
                 // Variáveis auxiliares
                 int flagCPF = 0;
-                int flagExisteCPF = 0;
                 char CPF[tamCPF];
                 char textoCPF[] = "CPF";
 
                 // Recebe e valida o CPF
                 do {
-                    flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS);
-                    flagExisteCPF = existeCPF (CPF, contPessoa, contPessoa2, txtPessoa_ALS);
-                    if (flagCPF != 0 || flagExisteCPF != 0) {
+                    flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, contPessoa, contPessoa2);
+                    if (flagCPF != 0) {
                         printf("\n");
                     }                    
-                } while (flagCPF != 0 || flagExisteCPF != 0);
+                } while (flagCPF != 0);
 
                 //Armazena o CPF
                 strcpy(pessoas[i].CPF, CPF);
@@ -1110,6 +1143,8 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
     // Transição de tela
     pausarTela();
     limparTela();
+
+    return;
 }
 
 // Exclui o cadastro de um aluno ou professor
@@ -1165,6 +1200,8 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     // Transição de tela
     pausarTela();
     limparTela();
+
+    return;
 }
 
 // FIM ALUNOS E PROFESSORES
@@ -1278,8 +1315,29 @@ int receberSemestre (int *entrada_semestre) {
     return 0;
 }
 
+// Recebe e verifica a existência da matrícula do professor
+int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno, char txtPessoa_ALS[]) {
+    
+    // Entrada de dados
+    printf("Informe a matrícula do professor: ");
+    if (lerEntrada(entrada_matricula, tamMatricula) != 0) return 1;
+
+    int flagExisteMat = existeMatricula(entrada_matricula, contProfessor, contAluno, txtPessoa_ALS, NULL);
+
+    if (flagExisteMat == 0) {
+        printf("A matrícula não existe. Por favor, informe uma matrícula válida.\n");
+        return 1;
+    }
+    else if ( flagExisteMat == 1) {
+        printf("Essa matrícula pertence a um aluno. Por favor, informe a matrícula de um professor.\n");
+        return 2;
+    }
+
+    return 0;
+}
+
 // Cadastra uma disciplina
-void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
+void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int contProfessor, int contAluno) {
 
     // Verifica se a lista de disciplinas está cheia
     if (*contDisciplina >= tamDisciplinas) { // Lista cheia
@@ -1334,7 +1392,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
     int flagSemestre = 0;
     int semestre;
     
-    // Recebe e valida o nome
+    // Recebe e valida o semestre
     do {
         flagSemestre = receberSemestre(&semestre);
         if (flagSemestre != 0) printf("\n");
@@ -1349,15 +1407,15 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
     // MATRÍCULA PROFESSOR
 
     // Variáveis auxiliares
-    /*int flagNome = 0;
-    char nome[tamNome];
+    int flagMatricula = 0;
+    char matricula[tamMatricula];
     
-    // Recebe e valida o nome
+    // Recebe e valida a matrícula
     do {
-        flagNome = receberNome(nome);
-        if (flagNome != 0) printf("\n");
+        flagMatricula = receberMatricula (matricula, contProfessor, contAluno, "professor");
+        if (flagMatricula != 0) printf("\n");
 
-    } while (flagNome != 0);*/
+    } while (flagMatricula != 0);
 
     // MATRÍCULA PROFESSOR
     // ############################################################################## //
@@ -1366,6 +1424,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
     strcpy(listaDisciplinas[*contDisciplina].codigo, codigo);
     strcpy(listaDisciplinas[*contDisciplina].nome, nome);
     listaDisciplinas[*contDisciplina].semestre = semestre;
+    strcpy(listaDisciplinas[*contDisciplina].matriculaProfessor, matricula);
 
     // Incrementa a quantidade de disciplinas
     (*contDisciplina)++; 
@@ -1375,6 +1434,8 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[]) {
     // Transição de tela
     pausarTela();
     limparTela();
+
+    return;
 }
 
 // Lista as disciplinas
@@ -1389,6 +1450,7 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[]) {
             printf("Código: %s\n", listaDisciplinas[i].codigo);
             printf("Nome: %s\n", listaDisciplinas[i].nome);
             printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
+            printf("Professor: ");
             // Inserir professor
         }
     }
@@ -1398,6 +1460,8 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[]) {
     // Transição de tela
     pausarTela();
     limparTela();
+
+    return;
 }
 
 // FIM DISCIPLINAS
@@ -1744,7 +1808,7 @@ int main (){
 
                         case 1: {
                             printf("### Módulo Disciplinas - Inserir disciplinas ###\n");
-                            inserirDisciplina (&contDisciplina, listaDisciplinas);
+                            inserirDisciplina (&contDisciplina, listaDisciplinas, contProfessor, contAluno);
                             // contDisciplina incrementa na própria função
 
                             break; // Sai do case 1
