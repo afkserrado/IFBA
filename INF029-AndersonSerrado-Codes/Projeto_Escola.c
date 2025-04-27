@@ -25,7 +25,7 @@ Aluno: Anderson Serrado
 // Constantes
 
 #define tamNome 102 // n caracteres + \n + \0
-#define tamMatricula 5 // n caracteres + \n + \0 // Mudar para 13
+#define tamMatricula 11 // n caracteres + \n + \0 // Mudar para 13
 #define tamCPF 13 // n caracteres + \n + \0
 #define tamSexo 3 // n caracteres + \n + \0
 #define tamAlunos 3 // Mudar para 10000
@@ -817,7 +817,7 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     }
     
     if (contPessoa == 0) {
-        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP); // ALP
+        printf("\nNão há %s cadastrados.", txtPessoa_ALP); // ALP
     }
     else {
         for (int i = 0; i < contPessoa; i++) {
@@ -1153,19 +1153,16 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 }
 
 // Exclui o cadastro de um aluno ou professor
-void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
-
-    char txtPessoa_ALP[12];
-    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
-        strcpy(txtPessoa_ALP, txtAluno_ALP); // "alunos"
-    }
-    else {
-        strcpy(txtPessoa_ALP, txtProfessor_ALP); // "professores"
-    }
+void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int contDisciplina) {
     
     // Verifica se há pessoas cadastradas
     if (*contPessoa == 0) {
-        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP);
+        if (strcmp(txtPessoa_ALS, "aluno") == 0){
+            printf("\nNão há alunos cadastrados.\n");
+        }
+        else {
+            printf("\nNão há professores cadastrados.\n");
+        }
         pausarTela();
         limparTela();
         return;
@@ -1178,10 +1175,23 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     char matricula[tamMatricula];
     if (lerEntrada(matricula, tamMatricula) != 0) return; // Sai em caso de erro de leitura
 
+    // Exclui o professor da disciplina caso ele seja excluído do módulo de professores
+    if (strcmp(txtPessoa_ALS, "professor") == 0) {
+        for (int i = 0; i < contDisciplina; i++) {
+            if (strcmp(matricula, listaDisciplinas[i].matriculaProfessor) == 0) {
+                strcpy(listaDisciplinas[i].matriculaProfessor, "SEM PROF");
+            }
+        }
+    }
+    /*else { // Aluno
+
+    }*/
+
     // Procurando a matrícula
     for (int i = 0; i < *contPessoa; i++) {
         
-        if (strcmp(matricula, pessoas[i].matricula) == 0) { // Achou
+        // Matrícula encontrada
+        if (strcmp(matricula, pessoas[i].matricula) == 0) {
 
             // Shift
             for (int j = i; j < *contPessoa; j++) {
@@ -1198,6 +1208,7 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
         }
     }
 
+    // Matrícula não encontrada
     printf("\nNão foi encontrado nenhum %s com essa matrícula.", txtPessoa_ALS);
 
     printf("\n");
@@ -1479,6 +1490,11 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
     return;
 }
 
+// Excluir disciplina
+void excluirDisciplina () {
+
+}
+
 // FIM DISCIPLINAS
 // ############################################################################## //
 
@@ -1616,7 +1632,7 @@ int main (){
                         // MÓDULO ALUNOS - EXCLUIR
                         case 4: {
                             printf("### Módulo Alunos - Excluir aluno ###\n");
-                            excluirPessoa(&contAluno, alunos, txtAluno_ALS);
+                            excluirPessoa(&contAluno, alunos, txtAluno_ALS, contDisciplina);
                             
                             break; // Sai do case 4 
                         }
@@ -1742,7 +1758,7 @@ int main (){
                         // MÓDULO PROFESSORES - EXCLUIR
                         case 4: {
                             printf("### Módulo Professores - Excluir professor ###\n");
-                            excluirPessoa(&contProfessor, professores, txtProfessor_ALS);
+                            excluirPessoa(&contProfessor, professores, txtProfessor_ALS, contDisciplina);
 
                             break; // Sai do case 4 
                         }
