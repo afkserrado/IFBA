@@ -1763,7 +1763,9 @@ int main (){
 
                         case 1: {
                             inserirPessoa(txtAluno_ALS, contAluno, alunos, tamAlunos, contProfessor);
-                            contAluno++; // Incrementa a contagem de alunos
+                            
+                            // Incrementa a contagem de alunos
+                            if (contAluno++ < tamProfessores) contAluno++; 
 
                             break; // Sai do case 1
                         }
@@ -1889,7 +1891,9 @@ int main (){
 
                         case 1: {
                             inserirPessoa(txtProfessor_ALS, contProfessor, professores, tamProfessores, contAluno);
-                            contProfessor++; // Incrementa a contagem de professores
+
+                            // Incrementa a contagem de professores
+                            if (contProfessor < tamProfessores) contProfessor++; 
 
                             break; // Sai do case 1
                         }
