@@ -1683,10 +1683,8 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int cont
         // Aluno não está matriculado
         if (achou == 0) {
             strcpy(listaDisciplinas[posicao].alunosMatriculados[qtd_final].matriculaAluno, matricula); // Matricula o aluno
+            (qtd_final)++; // Incrementa a quantidade de alunos matriculados
         }
-
-        // Incrementa a quantidade de alunos matriculados
-        (qtd_final)++;
 
     } while (qtd_final < max_alunosMatriculados);
 
