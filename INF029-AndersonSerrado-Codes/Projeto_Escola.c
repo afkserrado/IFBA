@@ -1293,13 +1293,13 @@ int receberCodigo (char entrada_codigo[], int contDisciplina) {
         if (i <= 2) { // Letras (A-Z ou a-z)
             char c = tolower(entrada_codigo[i]);
             if (c < 'a' || c > 'z') {
-                printf("Erro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                printf("Erro: o código deve conter 3 letras e 3 números (ex.: ADS001).\n");
                 return 1;
             }
         }
         else { // Números
             if (entrada_codigo[i] < '0' || entrada_codigo[i] > '9') {
-                printf("OErro: o código deve conter 3 letras e 3 números (ex.: ADS001).");
+                printf("OErro: o código deve conter 3 letras e 3 números (ex.: ADS001).\n");
                 return 1;
             }
         }
@@ -1366,6 +1366,14 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         pausarTela();
         limparTela();
         return; // Volta para o menu anterior
+    }
+
+    // Verifica se há professores cadastrados
+    if (contProfessor == 0) {
+        printf("\nNão é possível inserir uma disciplina, pois não há professores cadastrados.\n");
+        pausarTela();
+        limparTela();
+        return;
     }
     
     // Lista não cheia
@@ -1464,7 +1472,7 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
     
     // Não existem disciplinas cadastradas
     if (contDisciplina == 0) {
-        printf("\nNão há disciplinas cadastrados.\n");
+        printf("\nNão há disciplinas cadastrados.");
         return;
     }
 
@@ -1474,6 +1482,7 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
         printf("Código: %s\n", listaDisciplinas[i].codigo);
         printf("Nome: %s\n", listaDisciplinas[i].nome);
         printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
+        printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
         
         // Busca o nome do professor
         int j;
@@ -1486,6 +1495,79 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
         printf("Professor: %s\n", professores[j].nome);
     }
 
+    return;
+}
+
+// Excluir disciplina
+void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int contProfessor) {
+
+    // Verifica se há disciplinas cadastradas
+    if (*contDisciplina == 0) {
+        printf("\nNão há disciplinas cadastrados.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+        return;
+    }
+
+    listarDisciplinas(*contDisciplina, listaDisciplinas, contProfessor); // Passando como cópia
+
+    // Lê entrada
+    printf("\nInforme o código da disciplina a ser excluída: ");
+    char codigo[tamCodigo];
+    if (lerEntrada(codigo, tamCodigo) != 0) {
+        printf("\n");
+        pausarTela();
+        limparTela();
+        return; // Sai em caso de erro de leitura
+    }
+
+    // Capitaliza os caracteres
+    for (int i = 0; i <= 2; i++) {
+        codigo[i] = toupper(codigo[i]);
+    }
+
+    // Procurando o código
+    for (int i = 0; i < *contDisciplina; i++) {
+        
+        // Código encontrado
+        if (strcmp(codigo, listaDisciplinas[i].codigo) == 0) {
+            
+            char confirma;
+            printf("\nConfirma a exclusão da disciplina (S/N): ");
+            scanf("%c", &confirma);
+            limparBuffer();
+
+            if (confirma == 'N' || confirma == 'n') {
+                printf("\nOperação cancelada.\n");
+                
+                // Transição de tela
+                pausarTela();
+                limparTela();
+
+                return;
+            }
+
+            // Shift
+            for (int j = i; j < *contDisciplina; j++) {
+                listaDisciplinas[j] = listaDisciplinas[j + 1];
+            }
+    
+            (*contDisciplina)--; // O operador "--" tem prioridade. Portanto, os "()" são necessários
+            printf("\nExclusão realizada com sucesso!\n");
+            
+            // Transição de tela
+            pausarTela();
+            limparTela();
+
+            return;
+        }
+    }
+
+    // Código não encontrado
+    printf("\nNão foi encontrado nenhuma disciplina com esse código.");
+
     printf("\n");
 
     // Transição de tela
@@ -1493,11 +1575,6 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
     limparTela();
 
     return;
-}
-
-// Excluir disciplina
-void excluirDisciplina () {
-
 }
 
 // FIM DISCIPLINAS
@@ -1861,6 +1938,13 @@ int main (){
                             printf("### Módulo Disciplinas - Listar disciplinas ###\n");
                             listarDisciplinas (contDisciplina, listaDisciplinas, contProfessor);
 
+                            // printf e transição na main, pois a função listarDisciplina também é utilizada por excluirDisciplina
+                            printf("\n");
+
+                            // Transição de tela
+                            pausarTela();
+                            limparTela();
+
                             break; // Sai do case 2
                         }
 
@@ -1885,7 +1969,8 @@ int main (){
                         // MÓDULO DISCIPLINAS - EXCLUIR
                         case 4: {
                             printf("### Módulo Disciplinas - Excluir disciplina ###\n");
-                            
+                            excluirDisciplina (&contDisciplina, listaDisciplinas, contProfessor);
+
                             break; // Sai do case 4 
                         }
 
