@@ -25,14 +25,14 @@ Aluno: Anderson Serrado
 // Constantes
 
 #define tamNome 102 // n caracteres + \n + \0
-#define tamMatricula 11 // n caracteres + \n + \0 // Mudar para 13
+#define tamMatricula 5 // n caracteres + \n + \0 // Mudar para 13
 #define tamCPF 13 // n caracteres + \n + \0
 #define tamSexo 3 // n caracteres + \n + \0
 #define tamAlunos 3 // Mudar para 10000
 #define tamProfessores 3 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
-#define max_alunosMatriculados 2 // Mudar para 45
+#define max_alunosMatriculados 3 // Mudar para 45
 
 // Textos  
 #define txtAluno_ALS "aluno"
@@ -74,6 +74,7 @@ typedef struct {
     char nome[tamNome];
     int semestre;
     char matriculaProfessor[tamMatricula];
+    int qtd_alunosMatriculados;
     disciplina_alunos alunosMatriculados[max_alunosMatriculados];
 } disciplina;
 
@@ -1348,16 +1349,19 @@ int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno
 
     if (flagExisteMat == 0) {
         printf("A matrícula não existe. Por favor, informe uma matrícula válida.\n");
+        printf("\n");
         return 1;
     }
     // Aplica-se ao inserir/atualizar disciplina
     else if ( flagExisteMat == 1 && strcmp(txtPessoa_ALS, "professor") == 0) { 
         printf("Essa matrícula pertence a um aluno. Por favor, informe a matrícula de um professor.\n");
+        printf("\n");
         return 1;
     }
     // Aplica-se ao matricular aluno
     else if (flagExisteMat == 2 && strcmp(txtPessoa_ALS, "aluno") == 0) { //flagExisteMat == 2
         printf("Essa matrícula pertence a um professor. Por favor, informe a matrícula de um aluno.\n");
+        printf("\n");
         return 1;
     }
 
@@ -1375,13 +1379,13 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         return; // Volta para o menu anterior
     }
 
-    // Verifica se há professores cadastrados
+    /*// Verifica se há professores cadastrados
     if (contProfessor == 0) {
         printf("\nNão é possível inserir uma disciplina, pois não há professores cadastrados.\n");
         pausarTela();
         limparTela();
         return;
-    }
+    }*/
     
     // Lista não cheia
 
@@ -1442,7 +1446,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     // ############################################################################## //
     // MATRÍCULA PROFESSOR
 
-    // Variáveis auxiliares
+    /*// Variáveis auxiliares
     int flagMatricula = 0;
     char matricula[tamMatricula];
     
@@ -1451,7 +1455,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         flagMatricula = receberMatricula(matricula, contProfessor, contAluno, "professor");
         if (flagMatricula != 0) printf("\n");
 
-    } while (flagMatricula != 0);
+    } while (flagMatricula != 0);*/
 
     // MATRÍCULA PROFESSOR
     // ############################################################################## //
@@ -1460,7 +1464,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     strcpy(listaDisciplinas[*contDisciplina].codigo, codigo);
     strcpy(listaDisciplinas[*contDisciplina].nome, nome);
     listaDisciplinas[*contDisciplina].semestre = semestre;
-    strcpy(listaDisciplinas[*contDisciplina].matriculaProfessor, matricula);
+    //strcpy(listaDisciplinas[*contDisciplina].matriculaProfessor, matricula);
 
     // Incrementa a quantidade de disciplinas
     (*contDisciplina)++; 
@@ -1587,19 +1591,19 @@ void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Matricular aluno em disciplina
-void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd_alunosMatriculados, int contAluno, int contProfessor) {
+void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int contAluno, int contProfessor) {
     
-    // Verifica se a lista de alunos está cheia
-    if (*qtd_alunosMatriculados >= max_alunosMatriculados) { // Lista cheia
-        printf("\nCadastro cheio. Não é possível matricular outro aluno.\n");
+    // Verifica se há disciplinas cadastradas
+    if (contDisciplina == 0) {
+        printf("\nNão é possível matricular um aluno, pois não há disciplinas cadastradas.\n");
         pausarTela();
         limparTela();
         return; // Volta para o menu anterior
     }
 
     // Verifica se há disciplinas cadastradas
-    if (contDisciplina == 0) {
-        printf("\nNão é possível matricular um aluno, pois não há disciplinas cadastradas.\n");
+    if (contAluno == 0) {
+        printf("\nNão é possível matricular um(a) aluno(a), pois não há alunos cadastrados.\n");
         pausarTela();
         limparTela();
         return; // Volta para o menu anterior
@@ -1625,7 +1629,7 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd
         codigo[i] = toupper(codigo[i]);
     }
 
-    // Verifica se a disciplina já foi cadastrada
+    // Verifica se a disciplina existe
     int posicao = 0;
     if (existeCodigo (codigo, contDisciplina, &posicao) != 1) {
         printf("\nO código não está cadastrado.\n");
@@ -1640,26 +1644,53 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd
     // Matrícula dos alunos
     char matricula[tamMatricula];
     int flagMatricula = 0;
-    int qtd_inicial = *qtd_alunosMatriculados;
+    int qtd_inicial = listaDisciplinas[posicao].qtd_alunosMatriculados;
+    int qtd_final = listaDisciplinas[posicao].qtd_alunosMatriculados;
+
+    // Verifica se a lista de alunos está cheia
+    if (qtd_inicial >= max_alunosMatriculados) { // Lista cheia
+        printf("\nCadastro cheio. Não é possível matricular outro aluno.\n");
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
 
     do {
+        
         flagMatricula = receberMatricula(matricula, contAluno, contProfessor, "aluno");
+
+        if (flagMatricula == 1) { // Erro
+            break; // Finaliza o cadastro
+        }
 
         if (flagMatricula == -1) { // Operação cancelada
             break;
         }
 
-        if (*qtd_alunosMatriculados < max_alunosMatriculados) { // Segurança extra
-            strcpy(listaDisciplinas[posicao].alunosMatriculados[*qtd_alunosMatriculados].matriculaAluno, matricula);
+        int achou = 0;
+        // Verifica se o aluno já está matriculado
+        for (int i = 0; i < qtd_final; i++) {
+            if (strcmp(matricula, listaDisciplinas[posicao].alunosMatriculados[i].matriculaAluno) == 0) {
+                printf("O aluno já está matriculado nesta disciplina.\n");
+                achou = 1;
+                break;
+            }
         }
-        else break;
+
+        // Aluno não está matriculado
+        if (achou == 0) {
+            strcpy(listaDisciplinas[posicao].alunosMatriculados[qtd_final].matriculaAluno, matricula); // Matricula o aluno
+        }
 
         // Incrementa a quantidade de alunos matriculados
-        (*qtd_alunosMatriculados)++;
+        (qtd_final)++;
 
-    } while (*qtd_alunosMatriculados < max_alunosMatriculados);
+    } while (qtd_final < max_alunosMatriculados);
 
-    if (*qtd_alunosMatriculados == qtd_inicial) {
+    // Atualizando a qtd. de alunos matriculados no cadastro
+    listaDisciplinas[posicao].qtd_alunosMatriculados = qtd_final;
+
+    if (qtd_final == qtd_inicial) {
         printf("\nNenhum aluno foi matriculado.\n");    
     }
     else {
@@ -1690,9 +1721,13 @@ int main (){
     pausarTela();
     limparTela();
 
-    //Declarações
+    //Declarações e inicializações
     int opcao;
-    int contAluno = 0, contProfessor = 0, contDisciplina = 0, qtd_alunosMatriculados = 0;
+    int contAluno = 0, contProfessor = 0, contDisciplina = 0;
+
+    for (int i = 0; i < tamDisciplinas; i++) {
+        listaDisciplinas[i].qtd_alunosMatriculados = 0;
+    }   
 
     do {
         // Menu de opções
@@ -2082,8 +2117,8 @@ int main (){
                         // MÓDULO DISCIPLINAS - MATRICULAR ALUNO
                         case 5: {
                             printf("### Módulo Disciplinas - Matricular aluno ###\n");
-                            matricularAluno(contDisciplina, listaDisciplinas, &qtd_alunosMatriculados, contAluno, contProfessor);
-                            // qtd_alunosMatriculados incrementa na própria função
+                            printf("Digite -1 para cancelar a operação\n");
+                            matricularAluno(contDisciplina, listaDisciplinas, contAluno, contProfessor);
                             
                             break; // Sai do case 5
                         }
