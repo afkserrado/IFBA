@@ -635,7 +635,7 @@ int receberSexo (char entrada_sexo[tamSexo], char texto_pessoa[]) {
 // ALUNOS E PROFESSORES
 
 // Cadastra um aluno ou professor
-void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
+void inserirPessoa (char txtPessoa_ALS[], int *contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
 
     // Declarações
     char txtPessoa_FUP[12];
@@ -654,7 +654,7 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
     printf("### Módulo %s - Inserir %s ###\n", txtPessoa_FUP, txtPessoa_ALS); // FUP + ALS
 
     // Verifica se a lista de alunos ou professores está cheia
-    if (contPessoa >= tamPessoas) { // Lista cheia
+    if (*contPessoa >= tamPessoas) { // Lista cheia
         printf("\nCadastro cheio. Não é possível inserir outro(a) %s(a).\n", txtPessoa_ALS);
         pausarTela();
         limparTela();
@@ -673,14 +673,14 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
         // Recebe e valida a matrícula
         do {
-            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, contPessoa, contPessoa2);
+            flagMatricula = receberMat_CPF(tamMatricula, matricula, textoMat, txtPessoa_ALS, *contPessoa, contPessoa2);
             if (flagMatricula != 0) {
                 printf("\n");
             }
         } while (flagMatricula != 0);
 
         // Armazena matrícula
-        strcpy(pessoas[contPessoa].matricula, matricula);
+        strcpy(pessoas[*contPessoa].matricula, matricula);
 
         // FIM MATRÍCULA
         // ############################################################################## //
@@ -702,7 +702,7 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
         } while (flagNome != 0);
         
         // Armazena o nome
-        strcpy(pessoas[contPessoa].nome, nome);
+        strcpy(pessoas[*contPessoa].nome, nome);
 
         // FIM NOME
         // ############################################################################## //
@@ -723,9 +723,9 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
             } while (flagData != 0);
 
             //Armazena a data
-            pessoas[contPessoa].nascimento.dia = dia;
-            pessoas[contPessoa].nascimento.mes = mes;
-            pessoas[contPessoa].nascimento.ano = ano;
+            pessoas[*contPessoa].nascimento.dia = dia;
+            pessoas[*contPessoa].nascimento.mes = mes;
+            pessoas[*contPessoa].nascimento.ano = ano;
 
             limparBuffer(); // Evitar que o \n seja passado para o CPF
 
@@ -743,14 +743,14 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
 
         // Recebe e valida o CPF
         do {
-            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, contPessoa, contPessoa2);
+            flagCPF = receberMat_CPF(tamCPF, CPF, textoCPF, txtPessoa_ALS, *contPessoa, contPessoa2);
             if (flagCPF != 0) {
                 printf("\n");
             }                    
         } while (flagCPF != 0);
 
         //Armazena o CPF
-        strcpy(pessoas[contPessoa].CPF, CPF);
+        strcpy(pessoas[*contPessoa].CPF, CPF);
 
         // FIM CPF
         // ############################################################################## //
@@ -772,10 +772,13 @@ void inserirPessoa (char txtPessoa_ALS[], int contPessoa, pessoa pessoas[], int 
         } while (flagSexo != 0);
         
         // Armazena o sexo
-        strcpy(pessoas[contPessoa].sexo, sexo);
+        strcpy(pessoas[*contPessoa].sexo, sexo);
 
         // SEXO
         // ############################################################################## //
+
+        // Incrementa a quantidade de alunos ou professor
+        (*contPessoa)++;
 
         printf("\n%s(a) cadastrado(a) com sucesso!\n", txtPessoa_FUS);
 
@@ -1797,10 +1800,7 @@ int main (){
                         // MÓDULO ALUNOS - INSERIR
 
                         case 1: {
-                            inserirPessoa(txtAluno_ALS, contAluno, alunos, tamAlunos, contProfessor);
-                            
-                            // Incrementa a contagem de alunos
-                            if (contAluno++ < tamProfessores) contAluno++; 
+                            inserirPessoa(txtAluno_ALS, &contAluno, alunos, tamAlunos, contProfessor);
 
                             break; // Sai do case 1
                         }
@@ -1925,7 +1925,7 @@ int main (){
                         // MÓDULO PROFESSORES - INSERIR
 
                         case 1: {
-                            inserirPessoa(txtProfessor_ALS, contProfessor, professores, tamProfessores, contAluno);
+                            inserirPessoa(txtProfessor_ALS, &contProfessor, professores, tamProfessores, contAluno);
 
                             // Incrementa a contagem de professores
                             if (contProfessor < tamProfessores) contProfessor++; 
