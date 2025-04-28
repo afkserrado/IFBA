@@ -1824,7 +1824,7 @@ void desmatricularAluno (int contDisciplina, disciplina listaDisciplinas[], int 
 
 // Lista os dados de uma disciplina
 void listarDadosDisciplina () {
-
+    
 
 }
 
