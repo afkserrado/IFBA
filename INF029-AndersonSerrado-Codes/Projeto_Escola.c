@@ -32,7 +32,7 @@ Aluno: Anderson Serrado
 #define tamProfessores 3 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
-#define max_alunosMatriculados 50
+#define max_alunosMatriculados 2 // Mudar para 45
 
 // Textos  
 #define txtAluno_ALS "aluno"
@@ -74,7 +74,6 @@ typedef struct {
     char nome[tamNome];
     int semestre;
     char matriculaProfessor[tamMatricula];
-    int qtd_alunosMatriculados;
     disciplina_alunos alunosMatriculados[max_alunosMatriculados];
 } disciplina;
 
@@ -227,7 +226,6 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_Matricula, alunos[i].matricula) == 0){ // Matrícula já cadastrada
-            //printf("\nA matrícula está cadastrada na lista de alunos.\n");
             if (posicao != NULL) *posicao = i; // Retorna a posição apenas na função de atualizar cadastro existente
             return 1;
         }
@@ -236,7 +234,6 @@ int existeMatricula (char entrada_Matricula[], int contPessoa, int contPessoa2, 
     // Verifica se a matrícula já está cadastrada na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_Matricula, professores[i].matricula) == 0){ // Matrícula já cadastrada
-            //printf("\nA matrícula está cadastrada na lista de professores.\n");
             if (posicao != NULL) *posicao = i; // Retorna a posição apenas na função de atualizar cadastro existente
             return 2;
         }
@@ -268,9 +265,6 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de alunos
     for (int i = 0; i < contAluno; i++){
         if (strcmp(entrada_CPF, alunos[i].CPF) == 0){ // CPF já cadastrado
-            //printf("\nO CPF está cadastrado na lista de alunos.\n");
-            //pausarTela();
-            //limparTela();
             return 1;
         }
     }
@@ -278,9 +272,6 @@ int existeCPF (char entrada_CPF[], int contPessoa, int contPessoa2, char texto_p
     // Verifica se o CPF já está cadastrado na lista de professores
     for (int i = 0; i < contProfessor; i++){
         if (strcmp(entrada_CPF, professores[i].CPF) == 0){ // CPF já cadastrado
-            //printf("\nO CPF está cadastrado na lista de professores.\n");
-            //pausarTela();
-            //limparTela();
             return 2;
         }
     }
@@ -1233,12 +1224,12 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
 // DISCIPLINAS
 
 // Verifica a existência de um código
-int existeCodigo (char entrada_codigo[], int contDisciplina) {
+int existeCodigo (char entrada_codigo[], int contDisciplina, int *posicao) {
 
     // Verifica se o código já está cadastrado na lista de disciplinas
     for (int i = 0; i < contDisciplina; i++){
         if (strcmp(entrada_codigo, listaDisciplinas[i].codigo) == 0){ // Código já cadastrado
-            printf("\nO código já está cadastrado.\n");
+            if (posicao != NULL) *posicao = i; // Retorna a posição apenas se o ponteiro não for nulo
             return 1;
         }
     }
@@ -1305,12 +1296,15 @@ int receberCodigo (char entrada_codigo[], int contDisciplina) {
         }
     }
 
-    // Verifica se o código já está cadastrado
-    if (existeCodigo (entrada_codigo, contDisciplina) != 0) return 1; 
-
     // Padroniza o código, capitalizando as letras
     for (int i = 0; i <= 2; i++) {
         entrada_codigo[i] = toupper(entrada_codigo[i]);
+    }
+
+    // Verifica se o código já está cadastrado
+    if (existeCodigo (entrada_codigo, contDisciplina, NULL) != 0) {
+        printf("\nO código já está cadastrado.\n");
+        return 1; 
     }
 
     return 0; // Código válido
@@ -1340,7 +1334,7 @@ int receberSemestre (int *entrada_semestre) {
 int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno, char txtPessoa_ALS[]) {
     
     // Entrada de dados
-    printf("Informe a matrícula do professor: ");
+    printf("Informe a matrícula do %s: ", txtPessoa_ALS);
     if (lerEntrada(entrada_matricula, tamMatricula) != 0) return 1;
 
     int flagExisteMat = existeMatricula(entrada_matricula, contProfessor, contAluno, txtPessoa_ALS, NULL);
@@ -1349,9 +1343,15 @@ int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno
         printf("A matrícula não existe. Por favor, informe uma matrícula válida.\n");
         return 1;
     }
-    else if ( flagExisteMat == 1) {
+    // Aplica-se ao inserir/atualizar disciplina
+    else if ( flagExisteMat == 1 && strcmp(txtPessoa_ALS, "professor") == 0) { 
         printf("Essa matrícula pertence a um aluno. Por favor, informe a matrícula de um professor.\n");
-        return 2;
+        return 1;
+    }
+    // Aplica-se ao matricular aluno
+    else if (flagExisteMat == 2 && strcmp(txtPessoa_ALS, "aluno") == 0) { //flagExisteMat == 2
+        printf("Essa matrícula pertence a um professor. Por favor, informe a matrícula de um aluno.\n");
+        return 1;
     }
 
     return 0;
@@ -1441,7 +1441,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     
     // Recebe e valida a matrícula
     do {
-        flagMatricula = receberMatricula (matricula, contProfessor, contAluno, "professor");
+        flagMatricula = receberMatricula(matricula, contProfessor, contAluno, "professor");
         if (flagMatricula != 0) printf("\n");
 
     } while (flagMatricula != 0);
@@ -1498,7 +1498,9 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
     return;
 }
 
-// Excluir disciplina
+// Atualiza disciplina
+
+// Exclui disciplina
 void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int contProfessor) {
 
     // Verifica se há disciplinas cadastradas
@@ -1577,6 +1579,69 @@ void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     return;
 }
 
+// Matricular aluno em disciplina
+void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd_alunosMatriculados) {
+    
+    // Verifica se a lista de alunos está cheia
+    if (*qtd_alunosMatriculados >= max_alunosMatriculados) { // Lista cheia
+        printf("\nCadastro cheio. Não é possível matricular outro aluno.\n");
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
+
+    // Verifica se há disciplinas cadastradas
+    if (contDisciplina == 0) {
+        printf("\nNão é possível matricular um aluno, pois não há disciplinas cadastradas.\n");
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
+    
+    // Lista não cheia
+
+    // Lê entrada
+    printf("\nInforme o código da disciplina: ");
+    char codigo[tamCodigo];
+    if (lerEntrada(codigo, tamCodigo) != 0) {
+        printf("\n");
+        pausarTela();
+        limparTela();
+        return; // Sai em caso de erro de leitura
+    }
+
+    // Capitaliza os caracteres
+    for (int i = 0; i <= 2; i++) {
+        codigo[i] = toupper(codigo[i]);
+    }
+
+    // Verifica se a disciplina já foi cadastrada
+    int posicao = 0;
+    if (existeCodigo (codigo, contDisciplina, &posicao) != 1) {
+        printf("\nO código não está cadastrado.\n");
+        return 1; 
+    }
+
+    // Matrícula dos alunos
+    do {
+
+
+    // Incrementa a quantidade de alunos matriculados
+    (*qtd_alunosMatriculados)++;
+
+    } while (*qtd_alunosMatriculados >= max_alunosMatriculados /*colocar um ou para -1*/);
+
+     
+
+    printf("\nDisciplina cadastrada com sucesso!\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
 // FIM DISCIPLINAS
 // ############################################################################## //
 
@@ -1596,7 +1661,7 @@ int main (){
 
     //Declarações
     int opcao;
-    int contAluno = 0, contProfessor = 0, contDisciplina = 0;
+    int contAluno = 0, contProfessor = 0, contDisciplina = 0, qtd_alunosMatriculados = 0;
 
     do {
         // Menu de opções
