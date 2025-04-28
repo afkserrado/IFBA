@@ -195,9 +195,9 @@ int lerEntrada (char entrada[], int tamEntrada) {
     }
 
     // Cancela a operação
-    /*if (strcmp(entrada, "-1") == 0) {
-        return 2; 
-    }*/
+    if (strcmp(entrada, "-1") == 0) {
+        return -1; 
+    }
 
     return 0;
 }
@@ -1330,12 +1330,19 @@ int receberSemestre (int *entrada_semestre) {
     return 0;
 }
 
-// Recebe e verifica a existência da matrícula do professor
+// Recebe e verifica a existência da matrícula do professor ou do aluno
 int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno, char txtPessoa_ALS[]) {
     
     // Entrada de dados
     printf("Informe a matrícula do %s: ", txtPessoa_ALS);
-    if (lerEntrada(entrada_matricula, tamMatricula) != 0) return 1;
+    int entrada = lerEntrada(entrada_matricula, tamMatricula);
+
+    if (entrada == -1) {
+        printf("Operação cancelada.\n");
+        return -1;
+    }
+
+    if (entrada != 0) return 1; // Erro de leitura ou excesso de caracteres
 
     int flagExisteMat = existeMatricula(entrada_matricula, contProfessor, contAluno, txtPessoa_ALS, NULL);
 
@@ -1580,7 +1587,7 @@ void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Matricular aluno em disciplina
-void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd_alunosMatriculados) {
+void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd_alunosMatriculados, int contAluno, int contProfessor) {
     
     // Verifica se a lista de alunos está cheia
     if (*qtd_alunosMatriculados >= max_alunosMatriculados) { // Lista cheia
@@ -1605,9 +1612,12 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd
     char codigo[tamCodigo];
     if (lerEntrada(codigo, tamCodigo) != 0) {
         printf("\n");
+        
+        // Transição de tela
         pausarTela();
         limparTela();
-        return; // Sai em caso de erro de leitura
+        
+        return; // Erro de leitura ou excesso de caracteres
     }
 
     // Capitaliza os caracteres
@@ -1619,21 +1629,42 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int *qtd
     int posicao = 0;
     if (existeCodigo (codigo, contDisciplina, &posicao) != 1) {
         printf("\nO código não está cadastrado.\n");
-        return 1; 
+        
+        // Transição de tela
+        pausarTela();
+        limparTela();
+        
+        return; 
     }
 
     // Matrícula dos alunos
+    char matricula[tamMatricula];
+    int flagMatricula = 0;
+    int qtd_inicial = *qtd_alunosMatriculados;
+
     do {
+        flagMatricula = receberMatricula(matricula, contAluno, contProfessor, "aluno");
 
+        if (flagMatricula == -1) { // Operação cancelada
+            break;
+        }
 
-    // Incrementa a quantidade de alunos matriculados
-    (*qtd_alunosMatriculados)++;
+        if (*qtd_alunosMatriculados < max_alunosMatriculados) { // Segurança extra
+            strcpy(listaDisciplinas[posicao].alunosMatriculados[*qtd_alunosMatriculados].matriculaAluno, matricula);
+        }
+        else break;
 
-    } while (*qtd_alunosMatriculados >= max_alunosMatriculados /*colocar um ou para -1*/);
+        // Incrementa a quantidade de alunos matriculados
+        (*qtd_alunosMatriculados)++;
 
-     
+    } while (*qtd_alunosMatriculados < max_alunosMatriculados);
 
-    printf("\nDisciplina cadastrada com sucesso!\n");
+    if (*qtd_alunosMatriculados == qtd_inicial) {
+        printf("\nNenhum aluno foi matriculado.\n");    
+    }
+    else {
+        printf("\nAlunos(as) matriculados(as) com sucesso!\n");
+    }
 
     // Transição de tela
     pausarTela();
@@ -2047,6 +2078,8 @@ int main (){
                         // MÓDULO DISCIPLINAS - MATRICULAR ALUNO
                         case 5: {
                             printf("### Módulo Disciplinas - Matricular aluno ###\n");
+                            matricularAluno(contDisciplina, listaDisciplinas, &qtd_alunosMatriculados, contAluno, contProfessor);
+                            // qtd_alunosMatriculados incrementa na própria função
                             
                             break; // Sai do case 5
                         }
