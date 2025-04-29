@@ -1382,13 +1382,13 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         return; // Volta para o menu anterior
     }
 
-    /*// Verifica se há professores cadastrados
+    // Verifica se há professores cadastrados
     if (contProfessor == 0) {
         printf("\nNão é possível inserir uma disciplina, pois não há professores cadastrados.\n");
         pausarTela();
         limparTela();
         return;
-    }*/
+    }
     
     // Lista não cheia
 
@@ -1449,7 +1449,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     // ############################################################################## //
     // MATRÍCULA PROFESSOR
 
-    /*// Variáveis auxiliares
+    // Variáveis auxiliares
     int flagMatricula = 0;
     char matricula[tamMatricula];
     
@@ -1458,7 +1458,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         flagMatricula = receberMatricula(matricula, contProfessor, contAluno, "professor");
         if (flagMatricula != 0) printf("\n");
 
-    } while (flagMatricula != 0);*/
+    } while (flagMatricula != 0);
 
     // MATRÍCULA PROFESSOR
     // ############################################################################## //
@@ -1467,7 +1467,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
     strcpy(listaDisciplinas[*contDisciplina].codigo, codigo);
     strcpy(listaDisciplinas[*contDisciplina].nome, nome);
     listaDisciplinas[*contDisciplina].semestre = semestre;
-    //strcpy(listaDisciplinas[*contDisciplina].matriculaProfessor, matricula);
+    strcpy(listaDisciplinas[*contDisciplina].matriculaProfessor, matricula);
 
     // Incrementa a quantidade de disciplinas
     (*contDisciplina)++; 
@@ -2092,9 +2092,6 @@ int main (){
 
                         case 1: {
                             inserirPessoa(txtProfessor_ALS, &contProfessor, professores, tamProfessores, contAluno);
-
-                            // Incrementa a contagem de professores
-                            if (contProfessor < tamProfessores) contProfessor++; 
 
                             break; // Sai do case 1
                         }
