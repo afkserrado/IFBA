@@ -1179,13 +1179,15 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
     if (strcmp(txtPessoa_ALS, "professor") == 0) {
         for (int i = 0; i < contDisciplina; i++) {
             if (strcmp(matricula, listaDisciplinas[i].matriculaProfessor) == 0) {
-                strcpy(listaDisciplinas[i].matriculaProfessor, "SEM PROF");
+                strcpy(listaDisciplinas[i].matriculaProfessor, "-");
             }
         }
     }
-    /*else { // Aluno
+    // Desmatricula um(a) aluno(a) de uma disciplina caso ele seja excluído do módulo de alunos
+    //else {
 
-    }*/
+
+    //}
 
     // Procurando a matrícula
     for (int i = 0; i < *contPessoa; i++) {
@@ -1489,29 +1491,28 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
     }
 
     // Existem disciplinas cadastradas
-    for (int i = 0; i < contDisciplina; i++) {
+    for (int i = 0; i < contDisciplina; i++){
         printf("\n");
         printf("Código: %s\n", listaDisciplinas[i].codigo);
         printf("Nome: %s\n", listaDisciplinas[i].nome);
         printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
 
-        
-        // Busca o nome do professor
-        int j;
-        int achou = 0;
-        for (j = 0; j < contProfessor; j++) {
-            if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
-                achou = 1;
-                break; // Sai do laço e conserva o valor de 'j'
-            }
-        }
-        if (achou == 1) {
-            printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
-            printf("Professor: %s\n", professores[j].nome);
-        }
-        else {
+        // Professor excluído em excluirPessoa, no módulo de professores
+        if (strcmp(listaDisciplinas[i].matriculaProfessor, "-") == 0) { 
             printf("Matrícula do professor: SEM PROFESSOR\n");
             printf("Professor: SEM PROFESSOR\n");
+        }
+        
+        // Professor não excluído: busca o nome do professor
+        else {
+            int j;
+            for (j = 0; j < contProfessor; j++) {
+                if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
+                    printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
+                    printf("Professor: %s\n", professores[j].nome);
+                    break;
+                }
+            }
         }
     }
 
@@ -1917,28 +1918,28 @@ void listarDadosDisciplina (int contDisciplina, disciplina listaDisciplinas[], i
         return; 
     }
 
-    // Busca o nome do professor
-    int j;
-    int achou = 0;
-    for (j = 0; j < contProfessor; j++) {
-        if (strcmp(listaDisciplinas[posicao].matriculaProfessor, professores[j].matricula) == 0) {
-            achou = 1;
-            break; // Sai do laço e conserva o valor de 'j'
-        }
-    }
-
     // Lista dados da disciplina
     printf("\n");
     printf("Código: %s\n", listaDisciplinas[posicao].codigo);
     printf("Nome: %s\n", listaDisciplinas[posicao].nome);
     printf("Semestre: %dº\n", listaDisciplinas[posicao].semestre);    
-    if (achou == 1) {
-        printf("Matrícula do professor: %s\n", listaDisciplinas[posicao].matriculaProfessor);
-        printf("Professor: %s\n", professores[j].nome);
-    }
-    else {
+    
+    // Professor excluído em excluirPessoa, no módulo de professores
+    if (strcmp(listaDisciplinas[posicao].matriculaProfessor, "-") == 0) { 
         printf("Matrícula do professor: SEM PROFESSOR\n");
         printf("Professor: SEM PROFESSOR\n");
+    }
+    
+    // Professor não excluído: busca o nome do professor
+    else {
+        int j;
+        for (j = 0; j < contProfessor; j++) {
+            if (strcmp(listaDisciplinas[posicao].matriculaProfessor, professores[j].matricula) == 0) {
+                printf("Matrícula do professor: %s\n", listaDisciplinas[posicao].matriculaProfessor);
+                printf("Professor: %s\n", professores[j].nome);
+                break; // Sai do laço e conserva o valor de 'j'
+            }
+        }  
     }
 
     // Lista os alunos matriculados na disciplina
