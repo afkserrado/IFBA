@@ -1496,17 +1496,25 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
         printf("Código: %s\n", listaDisciplinas[i].codigo);
         printf("Nome: %s\n", listaDisciplinas[i].nome);
         printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
-        printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
+
         
         // Busca o nome do professor
         int j;
+        int achou = 0;
         for (j = 0; j < contProfessor; j++) {
             if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
+                achou = 1;
                 break; // Sai do laço e conserva o valor de 'j'
             }
         }
-        
-        printf("Professor: %s\n", professores[j].nome);
+        if (achou == 1) {
+            printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
+            printf("Professor: %s\n", professores[j].nome);
+        }
+        else {
+            printf("Matrícula do professor: SEM PROFESSOR\n");
+            printf("Professor: SEM PROFESSOR\n");
+        }
     }
 
     return;
@@ -1823,8 +1831,45 @@ void desmatricularAluno (int contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Lista os dados de uma disciplina
-void listarDadosDisciplina () {
+void listarDadosDisciplina (int contDisciplina, disciplina listaDisciplinas[]) {
     
+    // Verifica se há disciplinas cadastradas
+    if (contDisciplina == 0) {
+        printf("\nNão há disciplinas cadastradas.\n");
+        pausarTela();
+        limparTela();
+        return; // Volta para o menu anterior
+    }
+
+    // Lê entrada
+    printf("\nInforme o código da disciplina: ");
+    char codigo[tamCodigo];
+    if (lerEntrada(codigo, tamCodigo) != 0) {
+        printf("\n");
+        
+        // Transição de tela
+        pausarTela();
+        limparTela();
+        
+        return; // Erro de leitura ou excesso de caracteres
+    }
+
+    // Capitaliza os caracteres
+    for (int i = 0; i <= 2; i++) {
+        codigo[i] = toupper(codigo[i]);
+    }
+
+    // Verifica se a disciplina existe
+    int posicao = 0;
+    if (existeCodigo (codigo, contDisciplina, &posicao) != 1) {
+        printf("\nO código não está cadastrado.\n");
+        
+        // Transição de tela
+        pausarTela();
+        limparTela();
+        
+        return; 
+    }
 
 }
 
