@@ -1175,22 +1175,49 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
         return; // Sai em caso de erro de leitura
     }
 
+    int achou = 0;
+
     // Exclui o professor da disciplina caso ele seja excluído do módulo de professores
     if (strcmp(txtPessoa_ALS, "professor") == 0) {
         for (int i = 0; i < contDisciplina; i++) {
             if (strcmp(matricula, listaDisciplinas[i].matriculaProfessor) == 0) {
                 strcpy(listaDisciplinas[i].matriculaProfessor, "-");
+                achou = 1;
             }
         }
     }
-    // Desmatricula um(a) aluno(a) de uma disciplina caso ele seja excluído do módulo de alunos
-    //else {
+    // Desmatricula um(a) aluno(a) das disciplinas caso ele seja excluído do módulo de alunos
+    else {
+        // Acessa cada disciplina
+        for (int i = 0; i < contDisciplina; i++) {
+            int qtd_alunos = listaDisciplinas[i].qtd_alunosMatriculados;
 
+            // Procurando a matrícula do aluno na lista de alunos matriculados
+            for (int j = 0; j < qtd_alunos; j++) {
+                
+                // Matrícula encontrada
+                if (strcmp(matricula, listaDisciplinas[i].alunosMatriculados[j].matriculaAluno) == 0) {
 
-    //}
+                    // Shift
+                    for (int k = j; k < qtd_alunos - 1; k++) { // -1 evita acesso inválido
+                        listaDisciplinas[i].alunosMatriculados[k] = listaDisciplinas[i].alunosMatriculados[k + 1];
+                    }
+            
+                    achou = 1;
+                    listaDisciplinas[i].qtd_alunosMatriculados--;
+                
+                    break;
+ 
+                } // Fim do if
+            } // Fim do for dos alunos matriculados
+        } // Fim do for das disciplinas
+    } // Fim do else
 
+    // Excluindo aluno ou professor da sua respectiva struct
     // Procurando a matrícula
-    for (int i = 0; i < *contPessoa; i++) {
+    int achou2 = 0;
+
+    for (int i = 0; i < *contPessoa - 1; i++) { // O -1 evita que j + 1 acesse um index inválido
         
         // Matrícula encontrada
         if (strcmp(matricula, pessoas[i].matricula) == 0) {
@@ -1200,19 +1227,25 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
                 pessoas[j] = pessoas[j + 1];
             }
     
+            achou2 = 1;
             (*contPessoa)--; // O operador "--" tem prioridade. Portanto, os "()" são necessários
-            printf("\nExclusão realizada com sucesso!\n");
-            
-            // Transição de tela
-            pausarTela();
-            limparTela();
-            return;
         }
     }
 
-    // Matrícula não encontrada
-    printf("\nNão foi encontrado nenhum %s com essa matrícula.", txtPessoa_ALS);
+    if (achou2 == 1) {
+        printf("Exclusão realizada com sucesso!\n");
 
+        if (achou == 1) {
+            printf("O(A) %s(a) foi removido(a) de todas as disciplinas.\n", txtPessoa_ALS);
+        }
+        else {
+            printf("O(A) %s(a) não estava inscrito em nenhuma disciplina.\n", txtPessoa_ALS);
+        }
+    }
+    else {
+        printf("\nNão foi encontrado nenhum(a) %s(a) com essa matrícula.", txtPessoa_ALS);
+    }
+    
     printf("\n");
 
     // Transição de tela
@@ -1956,7 +1989,6 @@ void listarDadosDisciplina (int contDisciplina, int contProfessor, int contAluno
 
 // FIM DISCIPLINAS
 // ############################################################################## //
-
 
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
