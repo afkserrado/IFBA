@@ -1372,7 +1372,7 @@ int receberMatricula (char entrada_matricula[], int contProfessor, int contAluno
 }
 
 // Cadastra uma disciplina
-void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int contProfessor, int contAluno) {
+void inserirDisciplina (int *contDisciplina, int contProfessor, int contAluno) {
 
     // Verifica se a lista de disciplinas está cheia
     if (*contDisciplina >= tamDisciplinas) { // Lista cheia
@@ -1482,7 +1482,7 @@ void inserirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Lista as disciplinas
-void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int contProfessor) {
+void listarDisciplinas (int contDisciplina, int contProfessor) {
     
     // Não existem disciplinas cadastradas
     if (contDisciplina == 0) {
@@ -1522,7 +1522,7 @@ void listarDisciplinas (int contDisciplina, disciplina listaDisciplinas[], int c
 // Atualiza disciplina
 
 // Exclui disciplina
-void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int contProfessor) {
+void excluirDisciplina (int *contDisciplina, int contProfessor) {
 
     // Verifica se há disciplinas cadastradas
     if (*contDisciplina == 0) {
@@ -1534,7 +1534,7 @@ void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
         return;
     }
 
-    listarDisciplinas(*contDisciplina, listaDisciplinas, contProfessor); // Passando como cópia
+    listarDisciplinas(*contDisciplina, contProfessor); // Passando como cópia
 
     // Lê entrada
     printf("\nInforme o código da disciplina a ser excluída: ");
@@ -1601,7 +1601,7 @@ void excluirDisciplina (int *contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Matricular aluno em disciplina
-void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int contAluno, int contProfessor) {
+void matricularAluno(int contDisciplina, int contAluno, int contProfessor) {
     
     // Verifica se há disciplinas cadastradas
     if (contDisciplina == 0) {
@@ -1713,7 +1713,7 @@ void matricularAluno(int contDisciplina, disciplina listaDisciplinas[], int cont
 }
 
 // Listar alunos matriculados em uma disciplina
-void listarAlunosMatriculados (int posicao, disciplina listaDisciplinas[], int contAluno) {
+void listarAlunosMatriculados (int posicao, int contAluno) {
 
     printf("Alunos matriculados (matrícula | nome): \n");
     printf("\n");
@@ -1743,7 +1743,7 @@ void listarAlunosMatriculados (int posicao, disciplina listaDisciplinas[], int c
 }
 
 // Desmatricular aluno em disciplina
-void desmatricularAluno (int contDisciplina, disciplina listaDisciplinas[], int contAluno, int contProfessor) {
+void desmatricularAluno (int contDisciplina, int contAluno, int contProfessor) {
 
     // Verifica se há disciplinas cadastradas
     if (contDisciplina == 0) {
@@ -1803,7 +1803,7 @@ void desmatricularAluno (int contDisciplina, disciplina listaDisciplinas[], int 
     }
 
     // Lista os alunos matriculados na disciplina
-    listarAlunosMatriculados(posicao, listaDisciplinas, contAluno);
+    listarAlunosMatriculados(posicao, contAluno);
     printf("\n");
 
     // Declarações e inicializações
@@ -1878,7 +1878,7 @@ void desmatricularAluno (int contDisciplina, disciplina listaDisciplinas[], int 
 }
 
 // Lista os dados de uma disciplina
-void listarDadosDisciplina (int contDisciplina, disciplina listaDisciplinas[], int contProfessor, int contAluno) {
+void listarDadosDisciplina (int contDisciplina, int contProfessor, int contAluno) {
     
     // Verifica se há disciplinas cadastradas
     if (contDisciplina == 0) {
@@ -1943,7 +1943,7 @@ void listarDadosDisciplina (int contDisciplina, disciplina listaDisciplinas[], i
     }
 
     // Lista os alunos matriculados na disciplina
-    listarAlunosMatriculados(posicao, listaDisciplinas, contAluno);
+    listarAlunosMatriculados(posicao, contAluno);
 
     printf("\n");
 
@@ -2301,7 +2301,7 @@ int main (){
 
                         case 1: {
                             printf("### Módulo Disciplinas - Inserir disciplinas ###\n");
-                            inserirDisciplina (&contDisciplina, listaDisciplinas, contProfessor, contAluno);
+                            inserirDisciplina (&contDisciplina, contProfessor, contAluno);
                             // contDisciplina incrementa na própria função
 
                             break; // Sai do case 1
@@ -2316,7 +2316,7 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Disciplinas - Listar disciplinas ###\n");
-                            listarDisciplinas (contDisciplina, listaDisciplinas, contProfessor);
+                            listarDisciplinas (contDisciplina, contProfessor);
 
                             // printf e transição na main, pois a função listarDisciplina também é utilizada por excluirDisciplina
                             printf("\n");
@@ -2349,7 +2349,7 @@ int main (){
                         // MÓDULO DISCIPLINAS - EXCLUIR
                         case 4: {
                             printf("### Módulo Disciplinas - Excluir disciplina ###\n");
-                            excluirDisciplina (&contDisciplina, listaDisciplinas, contProfessor);
+                            excluirDisciplina (&contDisciplina, contProfessor);
 
                             break; // Sai do case 4 
                         }
@@ -2363,7 +2363,7 @@ int main (){
                         case 5: {
                             printf("### Módulo Disciplinas - Matricular aluno ###\n");
                             printf("Digite -1 para cancelar a operação\n");
-                            matricularAluno(contDisciplina, listaDisciplinas, contAluno, contProfessor);
+                            matricularAluno(contDisciplina, contAluno, contProfessor);
                             
                             break; // Sai do case 5
                         }
@@ -2377,7 +2377,7 @@ int main (){
                         case 6: {
                             printf("### Módulo Disciplinas - Desmatricular aluno ###\n");
                             printf("Digite -1 para cancelar a operação\n");
-                            desmatricularAluno (contDisciplina, listaDisciplinas, contAluno, contProfessor);
+                            desmatricularAluno (contDisciplina, contAluno, contProfessor);
                             
                             break; // Sai do case 6
                         }
@@ -2390,7 +2390,7 @@ int main (){
                         // MÓDULO DISCIPLINAS - LISTAR DISCIPLINA COM ALUNOS MATRICULADOS
                         case 7: {
                             printf("### Módulo Disciplinas - Dados da disciplina e alunos matriculados ###\n");
-                            listarDadosDisciplina (contDisciplina, listaDisciplinas, contProfessor, contAluno);
+                            listarDadosDisciplina (contDisciplina, contProfessor, contAluno);
                                             
                             break; // Sai do case 7
                         }
