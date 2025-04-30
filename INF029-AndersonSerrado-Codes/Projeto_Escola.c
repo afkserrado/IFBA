@@ -87,6 +87,9 @@ disciplina listaDisciplinas[tamDisciplinas];
 /*--------------------------------------------------------------------------------------------------*/
 // Subfunções
 
+// ############################################################################## //
+// CONFIGURAÇÕES
+
 //Configurando a codificação de caracteres
 void configurarLocale() {
     #if defined(_WIN32) || defined(_WIN64) // Windows
@@ -139,40 +142,12 @@ void pausarTela() {
     return;
 }
 
-/*// Valida números inteiros positivos
-int validarInteiroPositivo(int *endereco) {
-    
-    long long n;
-    int retorno = -1;
+// CONFIGURAÇÕES
+// ############################################################################## //
 
-    // Retorna 1 se conseguiu coletar uma entrada válida e 0 caso contrário
-    retorno = scanf("%lld", &n); 
 
-    // Limpar o buffer e impede o loop infinito
-    limparBuffer();
-    
-    // Verifica se caracteres não numéricos foram digitados
-    if (retorno == 0 || retorno == EOF) {
-        printf("Erro: caractere não numérico digitado.\n");
-        return 1;
-    }
-    
-    // Verifica se o número é maior que INT_MAX
-    if (n > INT_MAX) {
-        printf("Erro: o número excede o limite de %d.\n", INT_MAX);
-        return 1;
-    }
-    
-    // Verifica se o número é negativo
-    if (n <= 0) {
-        printf("Erro: o número deve ser positivo e maior que 0.\n");
-        return 1;
-    }
-    
-    // Converte n para inteiro e armazena no endereço guardado em "endereco"
-    *endereco = (int)n;  
-    return 0;
-}*/
+// ############################################################################## //
+// GERAIS
 
 // Lê uma entrada
 int lerEntrada (char entrada[], int tamEntrada) {
@@ -444,6 +419,13 @@ int receberMat_CPF (int tamMat_CPF, char entrada_Mat_CPF[tamMat_CPF], char texto
     return 0; // Matrícula ou CPF válido
 }
 
+// GERAIS
+// ############################################################################## //
+
+
+// ############################################################################## //
+// ALUNOS E PROFESSORES
+
 // Recebe e valida o nome
 int receberNome (char entrada_nome[]) {
     
@@ -630,9 +612,6 @@ int receberSexo (char entrada_sexo[tamSexo], char texto_pessoa[]) {
     return 0; // Sexo válido
 }
 
-// ############################################################################## //
-// ALUNOS E PROFESSORES
-
 // Cadastra um aluno ou professor
 void inserirPessoa (char txtPessoa_ALS[], int *contPessoa, pessoa pessoas[], int tamPessoas, int contPessoa2) {
 
@@ -797,16 +776,13 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     //A = all; F = first; L = lowercase; U = all uppercase; S = singular; P = plural
 
     // Declarações
-    char txtPessoa_FUP[12];
     char txtPessoa_ALP[12];
 
     // Formatações
     if (strcmp(txtPessoa_ALS, "aluno") == 0) {
-        strcpy(txtPessoa_FUP, "Alunos");
         strcpy(txtPessoa_ALP, "alunos");
     }
     else {
-        strcpy(txtPessoa_FUP, "Professores");
         strcpy(txtPessoa_ALP, "professores");
     }
     
@@ -1258,6 +1234,75 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
     else {
         printf("\nNão foi encontrado nenhum(a) %s(a) com essa matrícula.", txtPessoa_ALS);
     }
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
+// Listar alunos ou professores por sexo
+void listarPessoasSexo (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
+    
+    // Declarações
+    char txtPessoa_ALP[12];
+
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_ALP, "alunos");
+    }
+    else {
+        strcpy(txtPessoa_ALP, "professores");
+    }
+    
+    if (contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP);
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+
+    // Variáveis auxiliares
+    int flagSexo = 0;
+    char sexo[tamSexo];
+        
+    // Recebe e valida o sexo
+    do {
+        flagSexo = receberSexo(sexo, txtPessoa_ALS);
+        if (flagSexo != 0) {
+            printf("\n");
+        }
+    } while (flagSexo != 0);
+
+    // Formatação
+    char sexo_extenso[10];
+    if (strcmp(sexo, "M") == 0) strcpy(sexo_extenso, "masculino");
+    else strcpy(sexo_extenso, "feminino");
+
+    // Exibe a lista
+    int achou = 0;
+    printf("\nLista de %s do sexo %s: \n", txtPessoa_ALP, sexo_extenso);
+    for (int i = 0; i < contPessoa; i++) {
+        if (strcmp(pessoas[i].sexo, sexo) == 0) {
+            achou = 1;
+            printf("%d - Matrícula: %s | ", i + 1, pessoas[i].matricula);
+            printf("Nome: %s | ", pessoas[i].nome);
+            printf("Data de nascimento: %02d/%02d/%02d | ", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+            printf("CPF: %.3s.%.3s.%.3s-%.2s\n", 
+                pessoas[i].CPF,       // Primeiros 3 dígitos
+                pessoas[i].CPF + 3,    // Aponta para o 4º dígito
+                pessoas[i].CPF + 6,    // Aponta para o 7º dígito
+                pessoas[i].CPF + 9);   // Aponta para o 10º dígito
+        }    
+    }
+
+    if (achou == 0) printf("Não há %s do sexo %s.\n", txtPessoa_ALP, sexo_extenso);
+
+    printf("\n");
 
     // Transição de tela
     pausarTela();
@@ -2317,6 +2362,7 @@ int main (){
                     printf("\n2 - Listar aluno");
                     printf("\n3 - Atualizar aluno");
                     printf("\n4 - Excluir aluno");
+                    printf("\n5 - Listar alunos por sexo (M/F)");
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de alunos
@@ -2399,6 +2445,19 @@ int main (){
                         // FIM DO MÓDULO ALUNOS - EXCLUIR
                         // ##################################################################### //
 
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - LISTAR ALUNOS POR SEXO (M/F)
+                        case 5: {
+                            printf("### Módulo Alunos - Listar alunos por sexo (M/F) ###\n");
+                            listarPessoasSexo (contAluno, alunos, "aluno");
+                            
+                            break; // Sai do case 5
+                        }
+
+                        // FIM DO MÓDULO ALUNOS - LISTAR ALUNOS POR SEXO (M/F)
+                        // ##################################################################### //
+
                                 
                         // ##################################################################### //
                         // MÓDULO ALUNOS - OPÇÃO INVÁLIDA
@@ -2442,6 +2501,7 @@ int main (){
                     printf("\n2 - Listar professor");
                     printf("\n3 - Atualizar professor");
                     printf("\n4 - Excluir professor");
+                    printf("\n5 - Listar professores por sexo (M/F)");
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de professores
@@ -2522,6 +2582,19 @@ int main (){
                         }
 
                         // FIM DO MÓDULO PROFESSORES - EXCLUIR
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES POR SEXO (M/F)
+                        case 5: {
+                            printf("### Módulo Professores - Listar professores por sexo (M/F) ###\n");
+                            listarPessoasSexo (contProfessor, professores, "professor");
+                            
+                            break; // Sai do case 5
+                        }
+
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES POR SEXO (M/F)
                         // ##################################################################### //
 
                                 
