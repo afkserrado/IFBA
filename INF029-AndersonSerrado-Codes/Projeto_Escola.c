@@ -177,7 +177,6 @@ int validarInteiroPositivo(int *endereco) {
 // Lê uma entrada
 int lerEntrada (char entrada[], int tamEntrada) {
 
-    // Leitura
     if (fgets(entrada, tamEntrada, stdin) == NULL) {
         printf("Erro de leitura.\n");
         return 1; // Trata erro de leitura
@@ -856,7 +855,6 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 
     // Declarações e inicializações
     int achou = 0;
-    char matricula[tamMatricula];
     int i;
 
     if (contPessoa == 0) {
@@ -870,20 +868,32 @@ void atualizarPessoa (char txtPessoa_ALS[], pessoa pessoas[], int contPessoa, in
 
     // Verifica se a matrícula está cadastrada
     int flagExisteMat = 0;
+    char matricula[tamMatricula];
 
     do {
         
-        printf("\nInforme a matrícula do(a) %s(a) (digite -1 para voltar ao menu anterior): ", txtPessoa_ALS);
-        
         // Lê a entrada
-        if (lerEntrada(matricula, tamMatricula) != 0) return; // Sai em caso de erro de leitura
+        printf("\nInforme a matrícula do(a) %s(a) (digite -1 para voltar ao menu anterior): ", txtPessoa_ALS);
+        int status = lerEntrada(matricula, tamMatricula);
 
-        if (strcmp(matricula, "-1") == 0) {
+        // Erro de leitura ou excesso de caracteres
+        if (status == 1) {
+            printf("\n");
+
+            // Transição de tela
+            pausarTela();
+            limparTela();
+
+            return; 
+        }
+        // Operação cancelada
+        else if (status == -1) {
             printf("\nOperação cancelada.\n");
         
             // Transição de tela
             pausarTela();
             limparTela();
+
             return; // Volta para o menu anterior
         }
 
@@ -1234,7 +1244,7 @@ void excluirPessoa (int *contPessoa, pessoa pessoas[], char txtPessoa_ALS[], int
     }
 
     printf("\n");
-    
+
     if (achou2 == 1) {
         printf("Exclusão realizada com sucesso!\n");
 
@@ -1566,30 +1576,37 @@ void atualizarDisciplina (int contDisciplina, int contProfessor, int contAluno) 
         
         return; // Volta para o menu anterior
     }
-
-    printf("Digite -1 para cancelar a operação.\n");
     
     // Verifica se a disciplina buscada está cadastrada
     int flagExisteCod;
     int posicao; // Índice da disciplina buscada
+    char codigo[tamCodigo];
     
     do {
         
         // Lê a entrada
-        printf("\nInforme o código da disciplina: ");
-        char codigo[tamCodigo];
-        if (lerEntrada(codigo, tamCodigo) != 0) {
+        printf("\nInforme o código da disciplina (digite -1 para cancelar): ");
+        int status = lerEntrada(codigo, tamCodigo);
+
+        // Erro de leitura ou excesso de caracteres
+        if (status == 1) {
             printf("\n");
+
+            // Transição de tela
             pausarTela();
             limparTela();
-            return; // Erro de leitura ou excesso de caracteres
-        }
 
-        // Cancela a operação
-        if (strcmp(codigo, "-1") == 0) {
-            printf("\nOperação cancelada.");
+            return; 
+        }
+        // Operação cancelada
+        else if (status == -1) {
+            printf("\nOperação cancelada.\n");
+        
+            // Transição de tela
+            pausarTela();
             limparTela();
-            return; // Volta ao menu anterior
+
+            return; // Volta para o menu anterior
         }
         
         // Capitaliza os caracteres
