@@ -2698,7 +2698,7 @@ void listarPessoasCaracteres (int contAluno, int contProfessor) {
     int k = 0;
     for (int i = 0; i < contAluno; i++) {
         if (strstr(alunos[i].nome, seq) != NULL) {
-            if (strlen(alunos[i].nome) < len) continue;
+            if ((int)strlen(alunos[i].nome) < len) continue;
             
             k++;
             printf("%d - %s\n", k, alunos[i].nome);
@@ -2711,7 +2711,7 @@ void listarPessoasCaracteres (int contAluno, int contProfessor) {
     printf("\nProfessores com a sequência '%s': \n", seq);
     for (int i = 0; i < contProfessor; i++) {
         if (strstr(professores[i].nome, seq) != NULL) {
-            if (strlen(professores[i].nome) < len) continue;
+            if ((int)strlen(professores[i].nome) < len) continue;
             
             k++;
             printf("%d - %s\n", k, professores[i].nome);
@@ -2764,8 +2764,13 @@ int main (){
         printf("\n4 - Geral\n");
     
         // Entrada de dados: Opção
-        scanf("%d",&opcao);
-        limparBuffer();
+        // Verifica se a entrada é um número inteiro
+        if (scanf("%d",&opcao) != 1) {
+            printf("\nEntrada inválida. Por favor, insira um número.\n\n");
+            opcao = 10; // Atribui um valor inválido, entranto no default do switch
+        }
+
+        limparBuffer(); // Consome o enter deixado no buffer pelo scanf
 
         // Transição de tela
         limparTela();
@@ -3408,8 +3413,11 @@ int main (){
 
             default: {
                 printf("Opção inválida.\n");
+
+                // Transição de tela
                 pausarTela();
                 limparTela();
+
                 break;
             } // Fim do case default
 
