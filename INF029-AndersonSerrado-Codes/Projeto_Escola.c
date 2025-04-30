@@ -32,7 +32,8 @@ Aluno: Anderson Serrado
 #define tamProfessores 5 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
-#define max_alunosMatriculados 5 // Mudar para 45
+#define max_alunosMatriculados 50
+#define limite_alunosMatriculados 2 // Mudar para 40
 
 // Textos  
 #define txtAluno_ALS "aluno"
@@ -1743,13 +1744,13 @@ void listarDisciplinas (int contDisciplina, int contProfessor) {
     // Existem disciplinas cadastradas
     for (int i = 0; i < contDisciplina; i++){
         printf("\n");
-        printf("Código: %s\n", listaDisciplinas[i].codigo);
-        printf("Nome: %s\n", listaDisciplinas[i].nome);
-        printf("Semestre: %dº\n", listaDisciplinas[i].semestre);
+        printf("Código: %s | ", listaDisciplinas[i].codigo);
+        printf("Nome: %s | ", listaDisciplinas[i].nome);
+        printf("Semestre: %dº | ", listaDisciplinas[i].semestre);
 
         // Professor excluído em excluirPessoa, no módulo de professores
         if (strcmp(listaDisciplinas[i].matriculaProfessor, "-") == 0) { 
-            printf("Matrícula do professor: SEM PROFESSOR\n");
+            printf("Matrícula do professor: SEM PROFESSOR | ");
             printf("Professor: SEM PROFESSOR\n");
         }
         
@@ -1758,7 +1759,7 @@ void listarDisciplinas (int contDisciplina, int contProfessor) {
             int j;
             for (j = 0; j < contProfessor; j++) {
                 if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
-                    printf("Matrícula do professor: %s\n", listaDisciplinas[i].matriculaProfessor);
+                    printf("Matrícula do professor: %s | ", listaDisciplinas[i].matriculaProfessor);
                     printf("Professor: %s\n", professores[j].nome);
                     break;
                 }
@@ -2458,6 +2459,63 @@ void listarDadosDisciplina (int contDisciplina, int contProfessor, int contAluno
     return;
 }
 
+// Listar disciplinas com +40 alunos matriculados
+void listarDisciplinasMais40 (int contDisciplina, int contProfessor) {
+
+    // Não existem disciplinas cadastradas
+    if (contDisciplina == 0) {
+        printf("\nNão há disciplinas cadastradas.");
+        return;
+    }
+
+    // Contador de disciplinas com +40 alunos
+    int qtdMais40 = 0;
+
+    // Existem disciplinas cadastradas
+    for (int i = 0; i < contDisciplina; i++){
+        if (listaDisciplinas[i].qtd_alunosMatriculados > limite_alunosMatriculados) {
+            
+            qtdMais40++;
+
+            printf("\n");
+            printf("Código: %s | ", listaDisciplinas[i].codigo);
+            printf("Nome: %s | ", listaDisciplinas[i].nome);
+            printf("Semestre: %dº | ", listaDisciplinas[i].semestre);
+    
+            // Professor excluído em excluirPessoa, no módulo de professores
+            if (strcmp(listaDisciplinas[i].matriculaProfessor, "-") == 0) { 
+                printf("Matrícula do professor: SEM PROFESSOR | ");
+                printf("Professor: SEM PROFESSOR | ");
+            }
+            
+            // Professor não excluído: busca o nome do professor
+            else {
+                int j;
+                for (j = 0; j < contProfessor; j++) {
+                    if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
+                        printf("Matrícula do professor: %s | ", listaDisciplinas[i].matriculaProfessor);
+                        printf("Professor: %s | ", professores[j].nome);
+                        break;
+                    }
+                }
+            }
+
+            printf("Qtd. matriculados: %d\n", listaDisciplinas[i].qtd_alunosMatriculados);
+
+        } // Fim do if
+    } // Fim do for
+
+    if (qtdMais40 == 0) printf("\nNão há disciplinas com +40 alunos matriculados.");
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+        
+    return;
+}
+
 // FIM DISCIPLINAS
 // ############################################################################## //
 
@@ -2875,6 +2933,7 @@ int main (){
                     printf("\n5 - Matricular aluno em uma disciplina");
                     printf("\n6 - Desmatricular aluno de uma disciplina");
                     printf("\n7 - Dados da disciplina e alunos matriculados");
+                    printf("\n8 - Lista de disciplinas com +40 alunos matriculados");
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de Disciplinas
@@ -2998,7 +3057,20 @@ int main (){
                             break; // Sai do case 7
                         }
 
-                        // FIM DO MÓDULO DISCIPLINAS - DESMATRICULAR ALUNO
+                        // FIM DO MÓDULO DISCIPLINAS - LISTAR DISCIPLINA COM ALUNOS MATRICULADOS
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO DISCIPLINAS - LISTAR DISCIPLINAS COM MAIS DE 40 ALUNOS
+                        case 8: {
+                            printf("### Módulo Disciplinas - Lista de disciplinas com +40 alunos matriculados ###\n");
+                            listarDisciplinasMais40 (contDisciplina, contProfessor);
+                                            
+                            break; // Sai do case 7
+                        }
+
+                        // FIM DO MÓDULO DISCIPLINAS - LISTAR DISCIPLINAS COM MAIS DE 40 ALUNOS
                         // ##################################################################### //
 
                                 
