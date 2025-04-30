@@ -2649,6 +2649,86 @@ void aniversariantesMes (int contAluno, int contProfessor) {
     return;
 }
 
+// Lista de pessoas com os caracteres especificados
+void listarPessoasCaracteres (int contAluno, int contProfessor) {
+
+    if (contAluno == 0 && contProfessor == 0) {
+        printf("\nNão há alunos ou professores cadastrados.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+
+    // Declarações
+    int tamSeq = 12;
+
+    // Lê entrada
+    printf("\nInforme a sequência de caracteres buscada (mín 3 e máx 10): ");
+    char seq[tamSeq];
+    if (lerEntrada(seq, tamSeq) != 0) {
+        printf("\n");
+        pausarTela();
+        limparTela();
+        return; // Erro de leitura ou excesso de caracteres
+    }
+
+    // Comprimento da entrada
+    int len = strlen(seq);
+
+    // Verifica se atende à quantidade mín
+    if (len < 3) {
+        printf("\nA sequência deve possuir no mínimo 3 caracteres.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return; // Volta ao menu anterior
+    }
+
+    // Capitaliza
+    for (int i = 0; i < len; i++) {
+        seq[i] = toupper(seq[i]);
+    }
+
+    printf("\nAlunos com a sequência '%s': \n", seq);
+    int k = 0;
+    for (int i = 0; i < contAluno; i++) {
+        if (strstr(alunos[i].nome, seq) != NULL) {
+            if (strlen(alunos[i].nome) < len) continue;
+            
+            k++;
+            printf("%d - %s\n", k, alunos[i].nome);
+        }
+    }
+
+    if (k == 0) printf("Nenhum aluno foi encontrado com essa sequência.\n");
+
+    int j = k;
+    printf("\nProfessores com a sequência '%s': \n", seq);
+    for (int i = 0; i < contProfessor; i++) {
+        if (strstr(professores[i].nome, seq) != NULL) {
+            if (strlen(professores[i].nome) < len) continue;
+            
+            k++;
+            printf("%d - %s\n", k, professores[i].nome);
+        }
+    }
+
+    if (j == k) printf("Nenhum professor foi encontrado com essa sequência.\n");
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return; 
+}
+
 // FIM GERAL
 // ############################################################################## //
 
@@ -3290,7 +3370,7 @@ int main (){
 
                         case 2: {
                             printf("### Módulo Geral - Listar pessoas com caracteres especificados ###\n");
-                            //listarPessoasCaracteres (contAluno, contProfessor);
+                            listarPessoasCaracteres (contAluno, contProfessor);
 
                             break; // Sai do case 2
                         }
