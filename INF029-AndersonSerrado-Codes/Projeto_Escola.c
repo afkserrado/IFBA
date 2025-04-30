@@ -1394,7 +1394,7 @@ void listarPessoasOrdenadaNome (int contPessoa, pessoa pessoas[], char txtPessoa
 }
 
 //Insertion Sort para datas
-void insertionSortDatas (int contPessoa, pessoa pessoasOrdenadas[]) {
+void insertionSortDatas (int contPessoa, pessoa pessoasOrdenadas[], int tipo) {
     
     int i, j;
     pessoa temp;  // Variável temporária para realizar a troca
@@ -1403,20 +1403,31 @@ void insertionSortDatas (int contPessoa, pessoa pessoasOrdenadas[]) {
         temp = pessoasOrdenadas[j];  // Copia a struct a ser inserida
         i = j - 1;
 
-        // Ordena alfabeticamente por nome
-        while (i >= 0 && (pessoasOrdenadas[i].nascimento.ano > temp.nascimento.ano || 
-            
-            (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
-             pessoasOrdenadas[i].nascimento.mes > temp.nascimento.mes) ||
+        if (tipo == 1) {
+            // Ordena cronologicamente por data
+            while (i >= 0 && (pessoasOrdenadas[i].nascimento.ano > temp.nascimento.ano || 
+                
+                (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
+                pessoasOrdenadas[i].nascimento.mes > temp.nascimento.mes) ||
 
-            (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
-             pessoasOrdenadas[i].nascimento.mes == temp.nascimento.mes && 
-             pessoasOrdenadas[i].nascimento.dia > temp.nascimento.dia))
-            
-            ) {
-            
+                (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
+                pessoasOrdenadas[i].nascimento.mes == temp.nascimento.mes && 
+                pessoasOrdenadas[i].nascimento.dia > temp.nascimento.dia))
+                
+                ) {
+                
                 pessoasOrdenadas[i + 1] = pessoasOrdenadas[i];
-            i--;
+                i--;
+            }
+        }
+
+        if (tipo == 2) {
+            // Ordena cronologicamente por dia
+            while (i >= 0 && pessoasOrdenadas[i].nascimento.dia > temp.nascimento.dia) {
+                
+                pessoasOrdenadas[i + 1] = pessoasOrdenadas[i];
+                i--;
+            }
         }
         
         // Coloca a struct na posição correta
@@ -1461,7 +1472,7 @@ void listarPessoasOrdenadaData (int contPessoa, pessoa pessoas[], char txtPessoa
         pessoasOrdenadas[i] = pessoas[i]; // Cópia direta de cada struct
     }
 
-    insertionSortDatas(contPessoa, pessoasOrdenadas);
+    insertionSortDatas(contPessoa, pessoasOrdenadas, 1);
     exibirPessoas(contPessoa, pessoasOrdenadas);
 
     printf("\n");
@@ -2519,6 +2530,76 @@ void listarDisciplinasMais40 (int contDisciplina, int contProfessor) {
 // FIM DISCIPLINAS
 // ############################################################################## //
 
+
+// ############################################################################## //
+// GERAL
+
+// Lista aniversariantes do mês
+void aniversariantesMes (int contAluno, int contProfessor) {
+    
+    if (contAluno == 0 && contProfessor == 0) {
+        printf("\nNão há alunos ou professores cadastrados.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+    
+    // Declarações
+    int tam = tamAlunos + tamProfessores; // Tamanho suficiente para o pior caso
+    pessoa pessoasOrdenadas[tam]; // Struct auxiliar
+    int i;
+    int mes;
+
+    // Lê entrada (mês)
+    do {
+        // Verifica se a entrada é um número inteiro
+        printf("Informe um mês (1 a 12): ");
+        if (scanf("%d", &mes) != 1) {
+            printf("Entrada inválida. Por favor, insira um número.\n\n");
+            limparBuffer();
+            continue;
+        }
+
+        if (mes < 1 || mes > 12) printf("Mês inválido.\n\n");
+
+    } while (mes < 1 || mes > 12);
+    limparBuffer();
+        
+    // Copiando os alunos aniversariantes do mês para pessoasOrdenadas
+    int k = 0;
+    for (i = 0; i < contAluno; i++) {
+        if (alunos[i].nascimento.mes == mes) {
+            pessoasOrdenadas[k] = alunos[i]; // Cópia direta de cada struct
+            k++;
+        }
+    } // Conserva o valor de k ao sair    
+
+    // Copiando os professores aniversariantes do mês para pessoasOrdenadas
+    for (int j = 0; j < contProfessor; j++) {
+        if (professores[j].nascimento.mes == mes) {
+            pessoasOrdenadas[k] = professores[j]; // Cópia direta de cada struct
+            k++;
+        }
+    } // Ao final, k indica a qtd. de aniversariantes
+
+    insertionSortDatas(k, pessoasOrdenadas, 2);
+    exibirPessoas(k, pessoasOrdenadas);
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
+// FIM GERAL
+// ############################################################################## //
+
 /*--------------------------------------------------------------------------------------------------*/
 //Função principal
 int main (){
@@ -2547,7 +2628,8 @@ int main (){
         printf("\n0 - Sair");
         printf("\n1 - Alunos");
         printf("\n2 - Professores");
-        printf("\n3 - Disciplinas\n");
+        printf("\n3 - Disciplinas");
+        printf("\n4 - Geral\n");
     
         // Entrada de dados: Opção
         scanf("%d",&opcao);
@@ -2557,7 +2639,7 @@ int main (){
         limparTela();
 
         // ############################################################################## //
-        // MÓDULO GERAL
+        // MÓDULO INICIAL
 
         switch (opcao){
 
@@ -2741,7 +2823,7 @@ int main (){
                 } while(opcaoAluno != 0);
 
                 break;
-            } // Fim do case 1, Alunos, do módulo geral
+            } // Fim do case 1, Alunos, do módulo inicial
 
             // FIM DO MÓDULO ALUNOS
             // ############################################################################## //
@@ -2909,7 +2991,7 @@ int main (){
                 } while(opcaoProfessor != 0);
 
                 break;
-            } // Fim do case 1, Professores, do módulo geral
+            } // Fim do case 1, Professores, do módulo inicial
 
             // FIM DO MÓDULO PROFESSORES
             // ############################################################################## //
@@ -3101,6 +3183,97 @@ int main (){
             // ############################################################################## //
 
 
+            // ############################################################################## //
+            // MÓDULO GERAL
+
+            case 4: {
+                int opGeral;
+                
+                do {
+                    //Menu de opções
+                    printf("### Módulo Geral ###");
+                    printf("\nInforme o número da opção desejada: ");
+                    printf("\n0 - Voltar ao menu anterior");
+                    printf("\n1 - Aniversariantes do mês");
+                    printf("\n2 - Listar pessoas com caracteres especificados");
+                    printf("\n");
+                    
+                    //Entrada de dados: Opção do Módulo Geral
+                    scanf("%d",&opGeral);
+                    limparBuffer();
+                    
+                    // Transição de tela
+                    limparTela();
+    
+                    switch(opGeral){
+
+                        // ##################################################################### //
+                        // MÓDULO GERAL - VOLTAR AO MENU ANTERIOR
+
+                        case 0: {
+                            limparTela();
+                            break;
+                        }
+
+                        // FIM MÓDULO GERAL - VOLTAR AO MENU ANTERIOR
+                        // ##################################################################### //
+                        
+
+                        // ##################################################################### //
+                        // MÓDULO GERAL - ANIVERSARIANTES DO MÊS
+
+                        case 1: {
+                            printf("### Módulo Geral - Aniversariantes do mês ###\n");
+                            aniversariantesMes (contAluno, contProfessor);
+
+                            break; // Sai do case 1
+                        }
+
+                        // FIM DO MÓDULO GERAL - ANIVERSARIANTES DO MÊS
+                        // ##################################################################### //
+                        
+
+                        // ##################################################################### //
+                        // MÓDULO GERAL - LISTAR PESSOAS COM CARACTERES ESPECIFICADOS
+
+                        case 2: {
+                            printf("### Módulo Geral - Listar pessoas com caracteres especificados ###\n");
+                            //listarPessoasCaracteres (contAluno, contProfessor);
+
+                            break; // Sai do case 2
+                        }
+
+                        // MÓDULO GERAL - LISTAR PESSOAS COM CARACTERES ESPECIFICADOS
+                        // ##################################################################### //
+        
+                         
+                        // ##################################################################### //
+                        // MÓDULO GERAL - OPÇÃO INVÁLIDA
+
+                        default: {
+                            printf("Opção inválida.\n");
+                            
+                            // Transição de tela
+                            pausarTela();
+                            limparTela();
+
+                            break; // Sai do default
+                        }
+
+                        // FIM DO MÓDULO GERAL - OPÇÃO INVÁLIDA
+                        // ##################################################################### //
+
+                    } // Fim do switch
+
+                } while(opGeral != 0);
+
+                break;
+            }
+            
+            // FIM DO MÓDULO GERAL
+            // ############################################################################## //
+
+
             default: {
                 printf("Opção inválida.\n");
                 pausarTela();
@@ -3112,7 +3285,7 @@ int main (){
 
     } while (opcao != 0);
 
-    // FIM DO MÓDULO GERAL
+    // FIM DO MÓDULO INICIAL
     // ############################################################################## //
 
 } // Fim do programa
