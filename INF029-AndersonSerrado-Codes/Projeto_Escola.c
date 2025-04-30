@@ -1320,7 +1320,7 @@ void listarPessoasSexo (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) 
     return;
 }
 
-// Insertion sort para nomes
+// Insertion Sort para nomes
 void insertionSortNomes(int contPessoa, pessoa pessoasOrdenadas[]) {
     
     int i, j;
@@ -1343,7 +1343,7 @@ void insertionSortNomes(int contPessoa, pessoa pessoasOrdenadas[]) {
     return;
 }
 
-// Lista alunos ou professores ordenados
+// Lista alunos ou professores ordenados por nome
 void listarPessoasOrdenadaNome (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     
     // Declarações
@@ -1379,6 +1379,86 @@ void listarPessoasOrdenadaNome (int contPessoa, pessoa pessoas[], char txtPessoa
     }
 
     insertionSortNomes(contPessoa, pessoasOrdenadas);
+    exibirPessoas(contPessoa, pessoasOrdenadas);
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
+//Insertion Sort para datas
+void insertionSortDatas (int contPessoa, pessoa pessoasOrdenadas[]) {
+    
+    int i, j;
+    pessoa temp;  // Variável temporária para realizar a troca
+    
+    for (j = 1; j < contPessoa; j++) {
+        temp = pessoasOrdenadas[j];  // Copia a struct a ser inserida
+        i = j - 1;
+
+        // Ordena alfabeticamente por nome
+        while (i >= 0 && (pessoasOrdenadas[i].nascimento.ano > temp.nascimento.ano || 
+            
+            (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
+             pessoasOrdenadas[i].nascimento.mes > temp.nascimento.mes) ||
+
+            (pessoasOrdenadas[i].nascimento.ano == temp.nascimento.ano && 
+             pessoasOrdenadas[i].nascimento.mes == temp.nascimento.mes && 
+             pessoasOrdenadas[i].nascimento.dia > temp.nascimento.dia))
+            
+            ) {
+            
+                pessoasOrdenadas[i + 1] = pessoasOrdenadas[i];
+            i--;
+        }
+        
+        // Coloca a struct na posição correta
+        pessoasOrdenadas[i + 1] = temp;
+    }
+
+    return;
+}
+
+// Lista alunos ou professores ordenados por data
+void listarPessoasOrdenadaData (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
+
+    // Declarações
+    char txtPessoa_ALP[12];
+    int tam;
+
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_ALP, "alunos");
+        tam = tamAlunos;
+    }
+    else {
+        strcpy(txtPessoa_ALP, "professores");
+        tam = tamProfessores;
+    }
+    
+    if (contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP);
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+    
+    // Struct auxiliar
+    pessoa pessoasOrdenadas[tam];
+
+    // Copiando todos os elementos de pessoas para pessoasOrdenadas
+    for (int i = 0; i < contPessoa; i++) {
+        pessoasOrdenadas[i] = pessoas[i]; // Cópia direta de cada struct
+    }
+
+    insertionSortDatas(contPessoa, pessoasOrdenadas);
     exibirPessoas(contPessoa, pessoasOrdenadas);
 
     printf("\n");
@@ -2443,6 +2523,8 @@ int main (){
                     printf("\n4 - Excluir aluno");
                     printf("\n5 - Listar alunos por sexo (M/F)");
                     printf("\n6 - Listar alunos em ordem alfabética");
+                    printf("\n7 - Listar alunos em ordem de nascimento");
+                    printf("\n8 - Listar alunos matriculados em menos de 3 disciplinas");
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de alunos
@@ -2551,6 +2633,32 @@ int main (){
                         // MÓDULO ALUNOS - LISTAR ALUNOS EM ORDEM ALFABÉTICA
                         // ##################################################################### //
 
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - LISTAR ALUNOS EM ORDEM DE NASCIMENTO
+                        case 7: {
+                            printf("### Módulo Alunos - Listar alunos em ordem de nascimento ###\n");
+                            listarPessoasOrdenadaData (contAluno, alunos, "aluno");
+                            
+                            break; // Sai do case 7
+                        }
+
+                        // MÓDULO ALUNOS - LISTAR ALUNOS EM ORDEM DE NASCIMENTO
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - LISTAR ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS
+                        case 8: {
+                            printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
+                            listarAlunosMat3 (contAluno, alunos);
+                            
+                            break; // Sai do case 8
+                        }
+
+                        // MÓDULO ALUNOS - LISTAR ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS
+                        // ##################################################################### //
+
                                 
                         // ##################################################################### //
                         // MÓDULO ALUNOS - OPÇÃO INVÁLIDA
@@ -2596,6 +2704,7 @@ int main (){
                     printf("\n4 - Excluir professor");
                     printf("\n5 - Listar professores por sexo (M/F)");
                     printf("\n6 - Listar professores em ordem alfabética");
+                    printf("\n7 - Listar professores em ordem de nascimento");
 
                     printf("\n");
                     
@@ -2703,6 +2812,19 @@ int main (){
                         }
 
                         // MÓDULO PROFESSORES - LISTAR PROFESSORES EM ORDEM ALFABÉTICA
+                        // ##################################################################### //
+
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES EM ORDEM DE NASCIMENTO
+                        case 7: {
+                            printf("### Módulo Professores - Listar professores em ordem de nascimento ###\n");
+                            listarPessoasOrdenadaData (contProfessor, professores, "professor");
+                            
+                            break; // Sai do case 7
+                        }
+
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES EM ORDEM DE NASCIMENTO
                         // ##################################################################### //
                         
                                 
