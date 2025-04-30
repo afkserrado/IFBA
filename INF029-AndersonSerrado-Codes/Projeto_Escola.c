@@ -29,7 +29,7 @@ Aluno: Anderson Serrado
 #define tamCPF 13 // n caracteres + \n + \0
 #define tamSexo 3 // n caracteres + \n + \0
 #define tamAlunos 5 // Mudar para 10000
-#define tamProfessores 3 // Mudar para 100
+#define tamProfessores 5 // Mudar para 100
 #define tamDisciplinas 3 // Mudar para 1000
 #define tamCodigo 8 // n caracteres + \n + \0
 #define max_alunosMatriculados 5 // Mudar para 45
@@ -1294,11 +1294,13 @@ void listarPessoasSexo (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) 
 
     // Exibe a lista
     int achou = 0;
+    int j = 0;
     printf("\nLista de %s do sexo %s: \n", txtPessoa_ALP, sexo_extenso);
     for (int i = 0; i < contPessoa; i++) {
         if (strcmp(pessoas[i].sexo, sexo) == 0) {
             achou = 1;
-            printf("%d - Matrícula: %s | ", i + 1, pessoas[i].matricula);
+            j++;
+            printf("%d - Matrícula: %s | ", j, pessoas[i].matricula);
             printf("Nome: %s | ", pessoas[i].nome);
             printf("Data de nascimento: %02d/%02d/%02d | ", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
             printf("CPF: %.3s.%.3s.%.3s-%.2s\n", 
@@ -2650,8 +2652,8 @@ int main (){
                         // ##################################################################### //
                         // MÓDULO ALUNOS - LISTAR ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS
                         case 8: {
-                            printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
-                            listarAlunosMat3 (contAluno, alunos);
+                            //printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
+                            //listarAlunosMat3 (contAluno, alunos);
                             
                             break; // Sai do case 8
                         }
