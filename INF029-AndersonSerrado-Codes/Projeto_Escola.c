@@ -25,15 +25,15 @@ Aluno: Anderson Serrado
 // Constantes
 
 #define tamNome 102 // n caracteres + \n + \0
-#define tamMatricula 5 // n caracteres + \n + \0 // Mudar para 13
+#define tamMatricula 13 // n caracteres + \n + \0
 #define tamCPF 13 // n caracteres + \n + \0
 #define tamSexo 3 // n caracteres + \n + \0
-#define tamAlunos 5 // Mudar para 10000
-#define tamProfessores 5 // Mudar para 100
-#define tamDisciplinas 3 // Mudar para 1000
+#define tamAlunos 10000
+#define tamProfessores 100
+#define tamDisciplinas 1000
 #define tamCodigo 8 // n caracteres + \n + \0
 #define max_alunosMatriculados 50
-#define limite_alunosMatriculados 2 // Mudar para 40
+#define limite_alunosMatriculados 40
 
 // Textos  
 #define txtAluno_ALS "aluno"
