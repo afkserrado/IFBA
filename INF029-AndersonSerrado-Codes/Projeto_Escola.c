@@ -777,9 +777,7 @@ void exibirPessoas (int contPessoa, pessoa pessoas[]) {
     // Exibe a lista de pessoas
     for (int i = 0; i < contPessoa; i++) {
         printf("\n");
-        printf("Matrícula: %s | ", pessoas[i].matricula);
-        printf("Nome: %s | ", pessoas[i].nome);
-        printf("Data de nascimento: %02d/%02d/%02d | ", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+        printf("Matrícula: %s | Nome: %s | Data de nascimento: %02d/%02d/%02d | ", pessoas[i].matricula, pessoas[i].nome, pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
         printf("CPF: %.3s.%.3s.%.3s-%.2s | ", 
             pessoas[i].CPF,       // Primeiros 3 dígitos
             pessoas[i].CPF + 3,    // Aponta para o 4º dígito
@@ -1301,9 +1299,7 @@ void listarPessoasSexo (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) 
         if (strcmp(pessoas[i].sexo, sexo) == 0) {
             achou = 1;
             j++;
-            printf("%d - Matrícula: %s | ", j, pessoas[i].matricula);
-            printf("Nome: %s | ", pessoas[i].nome);
-            printf("Data de nascimento: %02d/%02d/%02d | ", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+            printf("%d - Matrícula: %s | Nome: %s | Data de nascimento: %02d/%02d/%02d | ", j, pessoas[i].matricula, pessoas[i].nome, pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
             printf("CPF: %.3s.%.3s.%.3s-%.2s\n", 
                 pessoas[i].CPF,       // Primeiros 3 dígitos
                 pessoas[i].CPF + 3,    // Aponta para o 4º dígito
@@ -1536,7 +1532,7 @@ void listarAlunosMat3 (int contAluno, int contDisciplina) {
         if (achou < 3) {
             // Exibe o aluno
             m++; // Conta os alunos matriculados em -3 disciplinas
-            printf("%d - Matrícula: %s | Nome: %s | Disciplinas: %d", m, alunos[i].matricula, alunos[i].nome, achou);
+            printf("%d - Matrícula: %s | Nome: %s | Disciplinas: %d\n", m, alunos[i].matricula, alunos[i].nome, achou);
         }
 
     } // Fim do for de i
@@ -1823,14 +1819,11 @@ void listarDisciplinas (int contDisciplina, int contProfessor) {
     // Existem disciplinas cadastradas
     for (int i = 0; i < contDisciplina; i++){
         printf("\n");
-        printf("Código: %s | ", listaDisciplinas[i].codigo);
-        printf("Nome: %s | ", listaDisciplinas[i].nome);
-        printf("Semestre: %dº | ", listaDisciplinas[i].semestre);
+        printf("Código: %s | Nome: %s | Semestre: %dº | ", listaDisciplinas[i].codigo, listaDisciplinas[i].nome, listaDisciplinas[i].semestre);
 
         // Professor excluído em excluirPessoa, no módulo de professores
         if (strcmp(listaDisciplinas[i].matriculaProfessor, "-") == 0) { 
-            printf("Matrícula do professor: SEM PROFESSOR | ");
-            printf("Professor: SEM PROFESSOR\n");
+            printf("Matrícula do professor: SEM PROFESSOR | Professor: SEM PROFESSOR\n");
         }
         
         // Professor não excluído: busca o nome do professor
@@ -1838,8 +1831,7 @@ void listarDisciplinas (int contDisciplina, int contProfessor) {
             int j;
             for (j = 0; j < contProfessor; j++) {
                 if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
-                    printf("Matrícula do professor: %s | ", listaDisciplinas[i].matriculaProfessor);
-                    printf("Professor: %s\n", professores[j].nome);
+                    printf("Matrícula do professor: %s | Professor: %s\n", listaDisciplinas[i].matriculaProfessor, professores[j].nome);
                     break;
                 }
             }
@@ -2504,14 +2496,11 @@ void listarDadosDisciplina (int contDisciplina, int contProfessor, int contAluno
 
     // Lista dados da disciplina
     printf("\n");
-    printf("Código: %s\n", listaDisciplinas[posicao].codigo);
-    printf("Nome: %s\n", listaDisciplinas[posicao].nome);
-    printf("Semestre: %dº\n", listaDisciplinas[posicao].semestre);    
+    printf("Código: %s | Nome: %s | Semestre: %dº | ", listaDisciplinas[posicao].codigo, listaDisciplinas[posicao].nome, listaDisciplinas[posicao].semestre);
     
     // Professor excluído em excluirPessoa, no módulo de professores
     if (strcmp(listaDisciplinas[posicao].matriculaProfessor, "-") == 0) { 
-        printf("Matrícula do professor: SEM PROFESSOR\n");
-        printf("Professor: SEM PROFESSOR\n");
+        printf("Matrícula do professor: SEM PROFESSOR | Professor: SEM PROFESSOR\n");
     }
     
     // Professor não excluído: busca o nome do professor
@@ -2519,8 +2508,7 @@ void listarDadosDisciplina (int contDisciplina, int contProfessor, int contAluno
         int j;
         for (j = 0; j < contProfessor; j++) {
             if (strcmp(listaDisciplinas[posicao].matriculaProfessor, professores[j].matricula) == 0) {
-                printf("Matrícula do professor: %s\n", listaDisciplinas[posicao].matriculaProfessor);
-                printf("Professor: %s\n", professores[j].nome);
+                printf("Matrícula do professor: %s | Professor: %s\n", listaDisciplinas[posicao].matriculaProfessor, professores[j].nome);
                 break; // Sai do laço e conserva o valor de 'j'
             }
         }  
@@ -2557,14 +2545,11 @@ void listarDisciplinasMais40 (int contDisciplina, int contProfessor) {
             qtdMais40++;
 
             printf("\n");
-            printf("Código: %s | ", listaDisciplinas[i].codigo);
-            printf("Nome: %s | ", listaDisciplinas[i].nome);
-            printf("Semestre: %dº | ", listaDisciplinas[i].semestre);
+            printf("Código: %s | Nome: %s | Semestre: %dº | ", listaDisciplinas[i].codigo, listaDisciplinas[i].nome, listaDisciplinas[i].semestre);
     
             // Professor excluído em excluirPessoa, no módulo de professores
             if (strcmp(listaDisciplinas[i].matriculaProfessor, "-") == 0) { 
-                printf("Matrícula do professor: SEM PROFESSOR | ");
-                printf("Professor: SEM PROFESSOR | ");
+                printf("Matrícula do professor: SEM PROFESSOR | Professor: SEM PROFESSOR | ");
             }
             
             // Professor não excluído: busca o nome do professor
@@ -2572,8 +2557,7 @@ void listarDisciplinasMais40 (int contDisciplina, int contProfessor) {
                 int j;
                 for (j = 0; j < contProfessor; j++) {
                     if (strcmp(listaDisciplinas[i].matriculaProfessor, professores[j].matricula) == 0) {
-                        printf("Matrícula do professor: %s | ", listaDisciplinas[i].matriculaProfessor);
-                        printf("Professor: %s | ", professores[j].nome);
+                        printf("Matrícula do professor: %s | Professor: %s | ", listaDisciplinas[i].matriculaProfessor, professores[j].nome);
                         break;
                     }
                 }
@@ -2860,8 +2844,8 @@ int main (){
                         // ##################################################################### //
                         // MÓDULO ALUNOS - LISTAR ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS
                         case 8: {
-                            //printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
-                            listarAlunosMat3 (contAluno);
+                            printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
+                            listarAlunosMat3 (contAluno, contDisciplina);
                             
                             break; // Sai do case 8
                         }
