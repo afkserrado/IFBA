@@ -2559,14 +2559,14 @@ void aniversariantesMes (int contAluno, int contProfessor) {
         printf("Informe um mês (1 a 12): ");
         if (scanf("%d", &mes) != 1) {
             printf("Entrada inválida. Por favor, insira um número.\n\n");
-            limparBuffer();
+            limparBuffer(); // Consome o enter deixado no buffer pelo scanf
             continue;
         }
 
         if (mes < 1 || mes > 12) printf("Mês inválido.\n\n");
 
     } while (mes < 1 || mes > 12);
-    limparBuffer();
+    limparBuffer(); // Consome o enter deixado no buffer pelo scanf
         
     // Copiando os alunos aniversariantes do mês para pessoasOrdenadas
     int k = 0;
