@@ -770,6 +770,27 @@ void inserirPessoa (char txtPessoa_ALS[], int *contPessoa, pessoa pessoas[], int
 
 } // Fim da função
 
+// Exibe a lista de alunos ou professores
+void exibirPessoas (int contPessoa, pessoa pessoas[]) {
+    
+    // Exibe a lista de pessoas
+    for (int i = 0; i < contPessoa; i++) {
+        printf("\n");
+        printf("Matrícula: %s | ", pessoas[i].matricula);
+        printf("Nome: %s | ", pessoas[i].nome);
+        printf("Data de nascimento: %02d/%02d/%02d | ", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
+        printf("CPF: %.3s.%.3s.%.3s-%.2s | ", 
+            pessoas[i].CPF,       // Primeiros 3 dígitos
+            pessoas[i].CPF + 3,    // Aponta para o 4º dígito
+            pessoas[i].CPF + 6,    // Aponta para o 7º dígito
+            pessoas[i].CPF + 9);   // Aponta para o 10º dígito
+        
+        printf("Sexo: %s\n", pessoas[i].sexo);
+    }
+
+    return;
+}
+
 // Lista alunos ou professores
 void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
     
@@ -790,19 +811,7 @@ void listarPessoa (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
         printf("\nNão há %s cadastrados.", txtPessoa_ALP); // ALP
     }
     else {
-        for (int i = 0; i < contPessoa; i++) {
-            printf("\n");
-            printf("Matrícula: %s\n", pessoas[i].matricula);
-            printf("Nome: %s\n", pessoas[i].nome);
-            printf("Data de nascimento: %02d/%02d/%02d\n", pessoas[i].nascimento.dia, pessoas[i].nascimento.mes, pessoas[i].nascimento.ano);
-            printf("CPF: %.3s.%.3s.%.3s-%.2s\n", 
-                pessoas[i].CPF,       // Primeiros 3 dígitos
-                pessoas[i].CPF + 3,    // Aponta para o 4º dígito
-                pessoas[i].CPF + 6,    // Aponta para o 7º dígito
-                pessoas[i].CPF + 9);   // Aponta para o 10º dígito
-                
-            printf("Sexo: %s\n", pessoas[i].sexo);
-        }
+        exibirPessoas(contPessoa, pessoas);
     }
 
     return;
@@ -1301,6 +1310,76 @@ void listarPessoasSexo (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) 
     }
 
     if (achou == 0) printf("Não há %s do sexo %s.\n", txtPessoa_ALP, sexo_extenso);
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
+// Insertion sort para nomes
+void insertionSortNomes(int contPessoa, pessoa pessoasOrdenadas[]) {
+    
+    int i, j;
+    pessoa temp;  // Variável temporária para realizar a troca
+    
+    for (j = 1; j < contPessoa; j++) {
+        temp = pessoasOrdenadas[j];  // Copia a struct a ser inserida
+        i = j - 1;
+
+        // Ordena alfabeticamente por nome
+        while (i >= 0 && strcmp(pessoasOrdenadas[i].nome, temp.nome) > 0) {
+            pessoasOrdenadas[i + 1] = pessoasOrdenadas[i];
+            i--;
+        }
+        
+        // Coloca a struct na posição correta
+        pessoasOrdenadas[i + 1] = temp;
+    }
+
+    return;
+}
+
+// Lista alunos ou professores ordenados
+void listarPessoasOrdenadaNome (int contPessoa, pessoa pessoas[], char txtPessoa_ALS[]) {
+    
+    // Declarações
+    char txtPessoa_ALP[12];
+    int tam;
+
+    // Formatações
+    if (strcmp(txtPessoa_ALS, "aluno") == 0) {
+        strcpy(txtPessoa_ALP, "alunos");
+        tam = tamAlunos;
+    }
+    else {
+        strcpy(txtPessoa_ALP, "professores");
+        tam = tamProfessores;
+    }
+    
+    if (contPessoa == 0) {
+        printf("\nNão há %s cadastrados.\n", txtPessoa_ALP);
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+    
+    // Struct auxiliar
+    pessoa pessoasOrdenadas[tam];
+
+    // Copiando todos os elementos de pessoas para pessoasOrdenadas
+    for (int i = 0; i < contPessoa; i++) {
+        pessoasOrdenadas[i] = pessoas[i]; // Cópia direta de cada struct
+    }
+
+    insertionSortNomes(contPessoa, pessoasOrdenadas);
+    exibirPessoas(contPessoa, pessoasOrdenadas);
 
     printf("\n");
 
@@ -2363,6 +2442,7 @@ int main (){
                     printf("\n3 - Atualizar aluno");
                     printf("\n4 - Excluir aluno");
                     printf("\n5 - Listar alunos por sexo (M/F)");
+                    printf("\n6 - Listar alunos em ordem alfabética");
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de alunos
@@ -2458,6 +2538,19 @@ int main (){
                         // FIM DO MÓDULO ALUNOS - LISTAR ALUNOS POR SEXO (M/F)
                         // ##################################################################### //
 
+
+                        // ##################################################################### //
+                        // MÓDULO ALUNOS - LISTAR ALUNOS EM ORDEM ALFABÉTICA
+                        case 6: {
+                            printf("### Módulo Alunos - Listar alunos em ordem alfabética ###\n");
+                            listarPessoasOrdenadaNome (contAluno, alunos, "aluno");
+                            
+                            break; // Sai do case 6
+                        }
+
+                        // MÓDULO ALUNOS - LISTAR ALUNOS EM ORDEM ALFABÉTICA
+                        // ##################################################################### //
+
                                 
                         // ##################################################################### //
                         // MÓDULO ALUNOS - OPÇÃO INVÁLIDA
@@ -2502,6 +2595,8 @@ int main (){
                     printf("\n3 - Atualizar professor");
                     printf("\n4 - Excluir professor");
                     printf("\n5 - Listar professores por sexo (M/F)");
+                    printf("\n6 - Listar professores em ordem alfabética");
+
                     printf("\n");
                     
                     //Entrada de dados: Opção do Módulo de professores
@@ -2597,6 +2692,19 @@ int main (){
                         // MÓDULO PROFESSORES - LISTAR PROFESSORES POR SEXO (M/F)
                         // ##################################################################### //
 
+
+                        // ##################################################################### //
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES EM ORDEM ALFABÉTICA
+                        case 6: {
+                            printf("### Módulo Professores - Listar professores em ordem alfabética ###\n");
+                            listarPessoasOrdenadaNome (contProfessor, professores, "professor");
+                            
+                            break; // Sai do case 6
+                        }
+
+                        // MÓDULO PROFESSORES - LISTAR PROFESSORES EM ORDEM ALFABÉTICA
+                        // ##################################################################### //
+                        
                                 
                         // ##################################################################### //
                         // MÓDULO PROFESSORES - OPÇÃO INVÁLIDA
