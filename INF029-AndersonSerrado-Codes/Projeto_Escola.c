@@ -1484,6 +1484,74 @@ void listarPessoasOrdenadaData (int contPessoa, pessoa pessoas[], char txtPessoa
     return;
 }
 
+// Lista alunos matriculados em menos de 3 disciplinas
+void listarAlunosMat3 (int contAluno, int contDisciplina) {
+
+    if (contAluno == 0) {
+        printf("\nNão há alunos cadastrados.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+
+    if (contDisciplina == 0) {
+        printf("\nNão há disciplinas cadastradas.\n");
+
+        // Transição de tela
+        pausarTela();
+        limparTela();
+
+        return;
+    }
+
+    // Declarações e inicializações
+    int m = 0;
+    int achou;
+    int qtd_alunos;
+
+    // Exibe a lista
+    printf("\nLista de alunos matriculados em menos de 3 disciplinas: \n");
+    for (int i = 0; i < contAluno; i++) { // Acessa a lista de alunos
+        achou = 0; // Conta quantas disciplinas o aluno está matriculado
+
+        for (int j = 0; j < contDisciplina; j++) { // Acessa a disciplina
+            // Armazena temporariamente a quantidade de alunos matriculados na disciplina j
+            qtd_alunos = listaDisciplinas[j].qtd_alunosMatriculados; 
+            
+            for (int k = 0; k < qtd_alunos; k++) { // Acessa os alunos matriculados na disciplina
+                
+                if (strcmp(alunos[i].matricula, listaDisciplinas[j].alunosMatriculados[k].matriculaAluno) == 0) {
+                    achou++; // Compara e incrementa  
+                    break; // Sai do for de k e vai para a próxima disciplina
+                }                             
+            } // Fim do for de k
+
+            if (achou >= 3) break; // Sai do for de j e vai para o próximo aluno se já tem +3 disciplinas
+
+        } // Fim do for de j
+
+        if (achou < 3) {
+            // Exibe o aluno
+            m++; // Conta os alunos matriculados em -3 disciplinas
+            printf("%d - Matrícula: %s | Nome: %s | Disciplinas: %d", m, alunos[i].matricula, alunos[i].nome, achou);
+        }
+
+    } // Fim do for de i
+
+    if (m == 0) printf("Não há alunos matriculados em menos de 3 disciplinas.\n");
+
+    printf("\n");
+
+    // Transição de tela
+    pausarTela();
+    limparTela();
+
+    return;
+}
+
 // FIM ALUNOS E PROFESSORES
 // ############################################################################## //
 
@@ -2793,7 +2861,7 @@ int main (){
                         // MÓDULO ALUNOS - LISTAR ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS
                         case 8: {
                             //printf("### Módulo Alunos - Listar alunos matriculados em menos de 3 disciplinas ###\n");
-                            //listarAlunosMat3 (contAluno, alunos);
+                            listarAlunosMat3 (contAluno);
                             
                             break; // Sai do case 8
                         }
