@@ -5,7 +5,7 @@ Semestre 2025.1
 INF006 - Estrutura de Dados e Algoritmos
 Professor: José Dihego
 Aluno: Anderson Serrado
-T1Q1
+T1Q2
 */
 
 // ##################################################### //
