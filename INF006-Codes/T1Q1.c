@@ -14,6 +14,7 @@ Aluno: Anderson Serrado
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 // ##################################################### //
 // CONSTANTES
@@ -46,9 +47,11 @@ void limparLinha(char linha[tamEntrada]) {
     linha[j] = '\0'; // Insere o terminador nulo
 }
 
-// Calcula as distâncias entre os pontos
-
-
+// Calcula as distâncias dos pontos até a origem
+float calculaDistancia (int x, int y) {
+    float distancia = sqrt(x*x + y*y);
+    return distancia;
+}
 
 int main () {
 
@@ -85,6 +88,9 @@ int main () {
             token = strtok(NULL, delimitador);
             pontos[cont].y = atoi(token); // Coordenada y do par atual
 
+            // Guarda a distância do ponto até a origem
+            pontos[cont].distancia = calculaDistancia(pontos[cont].x, pontos[cont].y);            
+            
             cont++;
 
             token = strtok(NULL, delimitador); // Busca os próximos pares
@@ -93,7 +99,7 @@ int main () {
          // Escreve as coordenadas no arquivo de saída
          fprintf(arqSaida, "Coordenadas:\n");
          for (int i = 0; i < cont; i++) {
-             fprintf(arqSaida, "Ponto %d: (%d,%d)\n", i + 1, pontos[i].x, pontos[i].y);
+             fprintf(arqSaida, "Ponto %d: (%d,%d) | Distância: %.2f\n", i + 1, pontos[i].x, pontos[i].y, pontos[i].distancia);
          }
          fprintf(arqSaida, "\n");  // Adiciona uma linha em branco para separar as entradas
     }
