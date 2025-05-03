@@ -71,8 +71,6 @@ void insertionSort (ponto A[], int cont){
 
 int main () {
 
-    system("clear");
-
     //Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L0Q1.in", "r"); // Ponteiro para o tipo FILE
     FILE *arqSaida = fopen("L0Q1.out", "w");
@@ -87,9 +85,6 @@ int main () {
     char linha[tamEntrada];
     char *token;
     char delimitador[] = ", ";
-    int cont; // Marca a posição do ponto no vetor de pontos
-    float distance; // Distância total entre os pontos
-    float shortcut; // Distância entre o primeiro e último pontos
     ponto pontos[100]; // Supondo um máximo de 100 pontos
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
@@ -99,16 +94,25 @@ int main () {
         limparLinha(linha);
 
         // Resets
-        cont = 0;
-        distance = 0;
+        int cont = 0; // Marca a posição do ponto no vetor de pontos
+        float distance = 0; // Distância total entre os pontos
+        float shortcut = 0; // Distância entre o primeiro e último pontos
+        int erro = 0;
 
         token = strtok(linha, delimitador); // Pega o primeiro par
 
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
-        while (token != NULL) { 
+        while (token != NULL && cont < 100) { 
+                        
             pontos[cont].x = atoi(token); // Coordenada x do par atual
             token = strtok(NULL, delimitador);
+
+            if (token == NULL) {
+                erro = 1; // Número ímpar de valores
+                break;
+            }
+
             pontos[cont].y = atoi(token); // Coordenada y do par atual
 
             // Guarda a distância do ponto até a origem
@@ -118,6 +122,8 @@ int main () {
 
             token = strtok(NULL, delimitador); // Busca os próximos pares
         }
+
+        if (erro || cont == 0) continue; // Linha não lida. Passa para a próxima
 
         // Linha só tem 1 ponto
         if (cont <= 1) { 
