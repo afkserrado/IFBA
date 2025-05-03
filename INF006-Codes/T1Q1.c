@@ -48,17 +48,16 @@ void limparLinha(char linha[tamEntrada]) {
 }
 
 // Calcula as distâncias dos pontos até a origem
-float calculaDistancia (int x, int y) {
-    float distancia = sqrt(x*x + y*y);
+float calculaDistancia (int x1, int y1, int x2, int y2) {
+    float distancia = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
     return distancia;
 }
 
 //Insertion sort
-void insertionSort (ponto A[], int len){
-
+void insertionSort (ponto A[], int cont){
     int i, j;
     ponto temp;
-    for (j = 1; j < len; j++){
+    for (j = 1; j < cont; j++){
         temp = A[j];
         i = j - 1;
         
@@ -89,6 +88,8 @@ int main () {
     char *token;
     char delimitador[] = ", ";
     int cont; // Marca a posição do ponto no vetor de pontos
+    float distance; // Distância total entre os pontos
+    float shortcut; // Distância entre o primeiro e último pontos
     ponto pontos[100]; // Supondo um máximo de 100 pontos
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
@@ -97,7 +98,10 @@ int main () {
 
         limparLinha(linha);
 
-        cont = 0; // Reseta o contador para cada linha
+        // Resets
+        cont = 0;
+        distance = 0;
+
         token = strtok(linha, delimitador); // Pega o primeiro par
 
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
@@ -108,23 +112,40 @@ int main () {
             pontos[cont].y = atoi(token); // Coordenada y do par atual
 
             // Guarda a distância do ponto até a origem
-            pontos[cont].distancia = calculaDistancia(pontos[cont].x, pontos[cont].y);            
+            pontos[cont].distancia = calculaDistancia(0, 0, pontos[cont].x, pontos[cont].y);
             
-            cont++;
+            cont++; // Passa para o próximo par
 
             token = strtok(NULL, delimitador); // Busca os próximos pares
         }
 
+        // Linha só tem 1 ponto
+        if (cont <= 1) { 
+            distance = 0;
+            shortcut = 0;
+        }
+        // Calcula a distância entre o primeiro e último pontos
+        else {
+            shortcut = calculaDistancia(pontos[0].x, pontos[0].y, pontos[cont - 1].x, pontos[cont - 1].y);
+
+            distance = 0;
+            for (int i = 1; i < cont; i++) {
+                distance += calculaDistancia(pontos[i - 1].x, pontos[i - 1].y, pontos[i].x, pontos[i].y);
+            }
+        }
+
         insertionSort(pontos, cont);
 
-        // Escreve as coordenadas no arquivo de saída
-        fprintf(arqSaida, "Coordenadas:\n");
+        // Escreve os resultados no arquivo de saída
+        fprintf(arqSaida, "points ");
         for (int i = 0; i < cont; i++) {
-            fprintf(arqSaida, "Ponto %d: (%d,%d) | Distância: %.2f\n", i + 1, pontos[i].x, pontos[i].y, pontos[i].distancia);
+            fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
         }
-        fprintf(arqSaida, "\n");  // Adiciona uma linha em branco para separar as entradas
+        fprintf(arqSaida, "distance %.2f shortcut %.2f", distance, shortcut);
+        fprintf(arqSaida, "\n");
     }
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
+    fclose(arqSaida); // Fecha o arquivo e libera a memória
     return EXIT_SUCCESS;
 }
