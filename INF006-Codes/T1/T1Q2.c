@@ -20,33 +20,38 @@ T1Q2
 // ##################################################### //
 // CONSTANTES
 
-#define tamEntrada 501
+// Tamanho máximo da linha
+#define tamEntrada 501 // +1 do \0
+
+// Tamanho dos vetores que guardarão os tokens
+// +1 por precaução
+#define tamTexto 251 // Pior caso: linha com 250 letras e 249 espaços
+#define tamInt 251 // Pior caso: linha com 250 números de 1 dígito e 249 espaços
+#define tamFloat 126 // Pior caso: 0.0, i.e., 125 números com 1 casa decimal e 124 espaços
+#define tamPonto 84 // Pior caso: (0,0), i.e., 83 coordenadas e 82 espaços 
 
 // ##################################################### //
 // STRCUTS
 
 typedef struct {
-    int x;
-    int y;
+    char txt[tamEntrada]; // Pior caso: uma linha com 1 texto de 500 letras
+} texto;
+
+typedef struct {
+    float x;
+    float y;
     float distancia;
+    int casasDecX;
+    int casasDecY;
 } ponto;
+
+typedef struct {
+    float num;
+    int casasDecimais;    
+} decimal;
 
 // ##################################################### //
 // FUNÇÕES
-
-// Elimina letras e parênteses da linha
-void limparLinha(char linha[tamEntrada]) {
-    int i, j = 0;  
-    int len = strlen(linha); // Calcula o comprimento da linha
-    for (i = 0; i < len; i++) {
-        if (isdigit(linha[i]) || linha[i] == ',' || linha[i] == ' ' || linha[i] == '-') {
-            // Shift
-            linha[j] = linha[i];
-            j++;
-        }
-    }
-    linha[j] = '\0'; // Insere o terminador nulo
-}
 
 // Calcula a distância entre dois pontos
 float calculaDistancia (int x1, int y1, int x2, int y2) {
@@ -54,8 +59,71 @@ float calculaDistancia (int x1, int y1, int x2, int y2) {
     return distancia;
 }
 
-//Insertion sort
-void insertionSort (ponto A[], int cont){
+int contaCasasDecimais (char string[]) {
+
+    // Aponta para o separador decimal
+    char *separador = strchr(string, '.');
+
+    int casasDecimais = 0;
+
+    // Conta as casas decimais
+    if (separador != NULL) {
+        casasDecimais = strlen(separador + 1);
+    }
+
+    return casasDecimais;
+}
+
+//Insertion sort: strings
+void insertionSortTexto (texto A[], int cont){
+    int i, j;
+    texto temp;
+    for (j = 1; j < cont; j++){
+        temp = A[j];
+        i = j - 1;
+        
+        while (i >= 0 && strcmp(A[i].txt, temp.txt) > 0){
+            A[i + 1] = A[i];
+            i--;
+        }
+        A[i + 1] = temp;
+    }
+}
+
+//Insertion sort: inteiros
+void insertionSortInt (int A[], int cont){
+    int i, j;
+    int temp;
+    for (j = 1; j < cont; j++){
+        temp = A[j];
+        i = j - 1;
+        
+        while (i >= 0 && A[i] > temp){
+            A[i + 1] = A[i];
+            i--;
+        }
+        A[i + 1] = temp;
+    }
+}
+
+//Insertion sort: decimais
+void insertionSortDec (decimal A[], int cont){
+    int i, j;
+    decimal temp;
+    for (j = 1; j < cont; j++){
+        temp = A[j];
+        i = j - 1;
+        
+        while (i >= 0 && A[i].num > temp.num){
+            A[i + 1] = A[i];
+            i--;
+        }
+        A[i + 1] = temp;
+    }
+}
+
+//Insertion sort: pontos
+void insertionSortPonto (ponto A[], int cont){
     int i, j;
     ponto temp;
     for (j = 1; j < cont; j++){
@@ -72,10 +140,18 @@ void insertionSort (ponto A[], int cont){
 
 int main () {
 
-    //Abre o arquivo e retorna um endereço de memória
-    FILE *arqEntrada = fopen("L0Q1.in", "r"); // Ponteiro para o tipo FILE
-    FILE *arqSaida = fopen("L0Q1.out", "w");
+    // Declarações: vetores para armazenar os tokens da entrada
+    texto textos[tamTexto];
+    int inteiros[tamInt];
+    decimal decimais[tamFloat];
+    ponto pontos[tamPonto];
 
+    // Abre o arquivo e retorna um endereço de memória
+    // Ponteiros para o tipo FILE
+    FILE *arqEntrada = fopen("L0Q2.in", "r");
+    FILE *arqSaida = fopen("L0Q2.out", "w");
+
+    // Tratamento de erros
     // Se o arquivo não puder ser aberto, fopen retorna NULL
     if (arqEntrada == NULL || arqSaida == NULL) {
         printf("Os arquivos não podem ser abertos. Verifique se os arquivos e o executável estão na mesma pasta.\n");
@@ -85,74 +161,144 @@ int main () {
     // Declarações
     char linha[tamEntrada];
     char *token;
-    char delimitador[] = ", ";
-    ponto pontos[100]; // Supondo um máximo de 100 pontos
+    char delimitador[] = " ";
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
 
-        limparLinha(linha);
-
-        // Resets
-        int cont = 0; // Marca a posição do ponto no vetor de pontos
-        float distance = 0; // Distância total entre os pontos
-        float shortcut = 0; // Distância entre o primeiro e último pontos
+        // Contadores: resets
+        int contTexto = 0;
+        int contInt = 0;
+        int contDec = 0;
+        int contPonto = 0;        
+        
         int erro = 0;
 
-        token = strtok(linha, delimitador); // Pega o primeiro par
+        // Extrai o primeiro token
+        token = strtok(linha, delimitador); // strtok já insere o \0
 
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
-        while (token != NULL && cont < 100) { 
-                        
-            pontos[cont].x = atoi(token); // Coordenada x do par atual
-            token = strtok(NULL, delimitador);
+        while (token != NULL) {
+            
+            // String
+            if (isalpha(token[0])) { 
+                strcpy(textos[contTexto].txt, token);
+                contTexto++; // Atualiza o contador
+            }
 
-            if (token == NULL) {
+            // Float
+            else if (strchr(token, '.') != NULL && 
+                    strchr(token, '(') == NULL && 
+                    strchr(token, ',') == NULL && 
+                    strchr(token, ')') == NULL) 
+            { 
+                decimais[contDec].num = atof(token);
+
+                decimais[contDec].casasDecimais = contaCasasDecimais(token);
+                contDec++; // Atualiza o contador
+            }
+
+            // Inteiro
+            else if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) { 
+                inteiros[contInt] = atoi(token);
+                contInt++; // Atualiza o contador
+            }
+
+            // Ponto
+            else if (token[0] == '(' && 
+                    strchr(token, ',') != NULL && 
+                    token[strlen(token) - 1] == ')') 
+            { 
+                int len = strlen(token);
+                char tokenCopia[len + 1]; // +1 para \0
+                strcpy(tokenCopia, token);
+
+                // Elimina o ')'
+                tokenCopia[len - 1] = '\0';
+
+                // Pega a coordenada x
+                char *token2 = strtok(tokenCopia + 1, ","); // Ignora o '('
+
+                // Tratamento de erros
+                if (token2 == NULL) {
+                    erro = 1;
+                    break;
+                }
+
+                pontos[contPonto].x = atof(token2);
+                pontos[contPonto].casasDecX = contaCasasDecimais(token2);  
+
+                // Pega a coordenada y
+                token2 = strtok(NULL, ",");
+                
+                // Tratamento de erros
+                if (token2 == NULL) {
+                    erro = 1;
+                    break;
+                }
+                
+                pontos[contPonto].y = atof(token2);
+                pontos[contPonto].casasDecY = contaCasasDecimais(token2);
+
+                // Guarda a distância do ponto até a origem
+                pontos[contPonto].distancia = calculaDistancia(0, 0, pontos[contPonto].x, pontos[contPonto].y);
+
+                contPonto++; // Atualiza o contador
+            }
+            
+            if (token == NULL || erro == 1) {
                 erro = 1; // Número ímpar de valores
                 break;
             }
 
-            pontos[cont].y = atoi(token); // Coordenada y do par atual
+            // Pega o próximo token
+            token = strtok(NULL, delimitador);
 
-            // Guarda a distância do ponto até a origem
-            pontos[cont].distancia = calculaDistancia(0, 0, pontos[cont].x, pontos[cont].y);
-            
-            cont++; // Passa para o próximo par
+        } // Fim do 2º while (linha)
 
-            token = strtok(NULL, delimitador); // Busca os próximos pares
-        }
+        if (erro) continue; // Linha não lida. Passa para a próxima
 
-        if (erro || cont == 0) continue; // Linha não lida. Passa para a próxima
-
-        // Linha só tem 1 ponto
-        if (cont <= 1) { 
-            distance = 0;
-            shortcut = 0;
-        }
-        // Calcula a distância entre o primeiro e último pontos
-        else {
-            shortcut = calculaDistancia(pontos[0].x, pontos[0].y, pontos[cont - 1].x, pontos[cont - 1].y);
-
-            distance = 0;
-            for (int i = 1; i < cont; i++) {
-                distance += calculaDistancia(pontos[i - 1].x, pontos[i - 1].y, pontos[i].x, pontos[i].y);
-            }
-        }
-
-        insertionSort(pontos, cont);
+        // Ordenação
+        insertionSortTexto(textos, contTexto);
+        insertionSortInt(inteiros, contInt);
+        insertionSortDec(decimais, contDec);
+        insertionSortPonto(pontos, contPonto);
 
         // Escreve os resultados no arquivo de saída
-        fprintf(arqSaida, "points ");
-        for (int i = 0; i < cont; i++) {
-            fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
+        fprintf(arqSaida, "str:");
+        for (int i = 0; i < contTexto; i++) {
+            fprintf(arqSaida, "%s", textos[i].txt);
+            if (i < contTexto - 1) fprintf(arqSaida, " ");
         }
-        fprintf(arqSaida, "distance %.2f shortcut %.2f", distance, shortcut);
-        fprintf(arqSaida, "\n");
-    }
 
-    fclose(arqEntrada); // Fecha o arquivo e libera a memória
-    fclose(arqSaida); // Fecha o arquivo e libera a memória
-    return EXIT_SUCCESS;
-}
+        fprintf(arqSaida, " int:");
+        for (int i = 0; i < contInt; i++) {
+            fprintf(arqSaida, "%d", inteiros[i]);
+            if (i < contInt - 1) fprintf(arqSaida, " ");
+        }
+
+        fprintf(arqSaida, " float:");
+        for (int i = 0; i < contDec; i++) {
+            fprintf(arqSaida, "%.*f", decimais[i].casasDecimais, decimais[i].num);
+            if (i < contDec - 1) fprintf(arqSaida, " ");
+        }           
+        
+        fprintf(arqSaida, " p:");
+        for (int i = 0; i < contPonto; i++) {
+            // Inteiro
+            if (pontos[i].casasDecX == 0 && pontos[i].casasDecY == 0) {
+                fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
+            }
+            // Float
+            else {
+                fprintf(arqSaida, "(%.*f,%.*f)", pontos[i].casasDecX, pontos[i].x, pontos[i].casasDecY, pontos[i].y);
+            }
+            if (i < contPonto - 1) fprintf(arqSaida, " ");
+        }
+
+        fprintf(arqSaida, "\n"); // Próxima linha
+
+    } // Fim do 1º while (arquivo)
+} // Fim da main

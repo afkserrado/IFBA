@@ -72,7 +72,7 @@ void insertionSort (ponto A[], int cont){
 
 int main () {
 
-    //Abre o arquivo e retorna um endereço de memória
+    // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L0Q1.in", "r"); // Ponteiro para o tipo FILE
     FILE *arqSaida = fopen("L0Q1.out", "w");
 
