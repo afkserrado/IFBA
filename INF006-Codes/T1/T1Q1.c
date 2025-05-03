@@ -47,7 +47,7 @@ void limparLinha(char linha[tamEntrada]) {
     linha[j] = '\0'; // Insere o terminador nulo
 }
 
-// Calcula as distâncias dos pontos até a origem
+// Calcula a distância entre dois pontos
 float calculaDistancia (int x1, int y1, int x2, int y2) {
     float distancia = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
     return distancia;
