@@ -43,9 +43,12 @@ void limparLinha(char linha[tamEntrada]) {
             j++;
         }
     }
-
     linha[j] = '\0'; // Insere o terminador nulo
 }
+
+// Calcula as distâncias entre os pontos
+
+
 
 int main () {
 
@@ -64,32 +67,37 @@ int main () {
     // Declarações
     char linha[tamEntrada];
     char *token;
-    ponto pontos[100]; // Supondo um máximo de 100 pontos
+    char delimitador[] = ", ";
     int cont; // Marca a posição do ponto no vetor de pontos
+    ponto pontos[100]; // Supondo um máximo de 100 pontos
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
-        
+
         limparLinha(linha);
 
         cont = 0; // Reseta o contador para cada linha
-        token = strtok(linha, ", "); // Pega o primeiro par
+        token = strtok(linha, delimitador); // Pega o primeiro par
 
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         while (token != NULL) { 
-            
             pontos[cont].x = atoi(token); // Coordenada x do par atual
-            token = strtok(NULL, ", ");
+            token = strtok(NULL, delimitador);
             pontos[cont].y = atoi(token); // Coordenada y do par atual
 
             cont++;
 
-            token = strtok(NULL, ", "); // Busca os próximos pares
-            
+            token = strtok(NULL, delimitador); // Busca os próximos pares
         }
+
+         // Escreve as coordenadas no arquivo de saída
+         fprintf(arqSaida, "Coordenadas:\n");
+         for (int i = 0; i < cont; i++) {
+             fprintf(arqSaida, "Ponto %d: (%d,%d)\n", i + 1, pontos[i].x, pontos[i].y);
+         }
+         fprintf(arqSaida, "\n");  // Adiciona uma linha em branco para separar as entradas
     }
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
     return EXIT_SUCCESS;
-
 }
