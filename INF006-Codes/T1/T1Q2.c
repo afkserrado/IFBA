@@ -54,11 +54,12 @@ typedef struct {
 // FUNÇÕES
 
 // Calcula a distância entre dois pontos
-float calculaDistancia (int x1, int y1, int x2, int y2) {
+float calculaDistancia (const float x1, const float y1, const float x2, const float y2) {
     float distancia = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
     return distancia;
 }
 
+// Conta quantas casas decimais tem o número
 int contaCasasDecimais (char string[]) {
 
     // Aponta para o separador decimal
@@ -181,10 +182,15 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) {
-            
+
             // String
             if (isalpha(token[0])) { 
-                strcpy(textos[contTexto].txt, token);
+                // Tratamento de erros
+                if (contTexto >= tamTexto) {
+                    erro = 1;
+                    break;
+                }
+                strcpy(textos[contTexto].txt, token);              
                 contTexto++; // Atualiza o contador
             }
 
@@ -194,14 +200,22 @@ int main () {
                     strchr(token, ',') == NULL && 
                     strchr(token, ')') == NULL) 
             { 
+                if (contDec >= tamFloat) {
+                    erro = 1;
+                    break;
+                }
                 decimais[contDec].num = atof(token);
-
                 decimais[contDec].casasDecimais = contaCasasDecimais(token);
                 contDec++; // Atualiza o contador
             }
 
             // Inteiro
             else if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) { 
+                // Tratamento de erros
+                if (contInt >= tamInt) {
+                    erro = 1;
+                    break;
+                }
                 inteiros[contInt] = atoi(token);
                 contInt++; // Atualiza o contador
             }
@@ -211,6 +225,11 @@ int main () {
                     strchr(token, ',') != NULL && 
                     token[strlen(token) - 1] == ')') 
             { 
+                // Tratamento de erros
+                if (contPonto >= tamPonto) {
+                    erro = 1;
+                    break;
+                }
                 int len = strlen(token);
                 char tokenCopia[len + 1]; // +1 para \0
                 strcpy(tokenCopia, token);
@@ -247,12 +266,6 @@ int main () {
 
                 contPonto++; // Atualiza o contador
             }
-            
-            if (token == NULL || erro == 1) {
-                erro = 1; // Número ímpar de valores
-                break;
-            }
-
             // Pega o próximo token
             token = strtok(NULL, delimitador);
 
@@ -287,18 +300,16 @@ int main () {
         
         fprintf(arqSaida, " p:");
         for (int i = 0; i < contPonto; i++) {
-            // Inteiro
-            if (pontos[i].casasDecX == 0 && pontos[i].casasDecY == 0) {
-                fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
-            }
-            // Float
-            else {
-                fprintf(arqSaida, "(%.*f,%.*f)", pontos[i].casasDecX, pontos[i].x, pontos[i].casasDecY, pontos[i].y);
-            }
+            fprintf(arqSaida, "(%.*f,%.*f)", pontos[i].casasDecX, pontos[i].x, pontos[i].casasDecY, pontos[i].y);
+            
             if (i < contPonto - 1) fprintf(arqSaida, " ");
         }
 
         fprintf(arqSaida, "\n"); // Próxima linha
 
     } // Fim do 1º while (arquivo)
+
+    fclose(arqEntrada); // Fecha o arquivo e libera a memória
+    fclose(arqSaida); // Fecha o arquivo e libera a memória
+    return EXIT_SUCCESS;
 } // Fim da main
