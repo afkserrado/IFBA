@@ -86,12 +86,17 @@ int main () {
     char linha[tamEntrada];
     char *token;
     char delimitador[] = ", ";
+    int flag = 0;
     ponto pontos[100]; // Supondo um máximo de 100 pontos
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
 
+        if (flag == 1) {
+            fprintf(arqSaida, "\n"); // Próxima linha
+        }
+        
         limparLinha(linha);
 
         // Resets
@@ -149,7 +154,8 @@ int main () {
             fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
         }
         fprintf(arqSaida, "distance %.2f shortcut %.2f", distance, shortcut);
-        fprintf(arqSaida, "\n");
+        
+        flag = 1;
     }
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
