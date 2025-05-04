@@ -182,6 +182,7 @@ int main () {
     // Percorre o arquivo
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
 
+        // Pula a linha após o primeiro loop e evita pular após o último
         if (flag == 1) {
             fprintf(arqSaida, "\n"); // Próxima linha
         }

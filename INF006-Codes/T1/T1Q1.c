@@ -93,10 +93,14 @@ int main () {
     // Percorre o arquivo
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
 
+        // Pula a linha após o primeiro loop e evita pular após o último
         if (flag == 1) {
             fprintf(arqSaida, "\n"); // Próxima linha
         }
         
+        // Remove o caractere de nova linha (caso exista)
+        linha[strcspn(linha, "\n")] = '\0';  // Remove o '\n' se presente
+
         limparLinha(linha);
 
         // Resets
