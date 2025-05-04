@@ -186,6 +186,9 @@ int main () {
             fprintf(arqSaida, "\n"); // Próxima linha
         }
 
+        // Remove o caractere de nova linha (caso exista)
+        linha[strcspn(linha, "\n")] = '\0';  // Remove o '\n' se presente
+
         limparLinha(linha); // Elimina parênteses
 
         // Contadores: resets
@@ -201,7 +204,6 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) {
-               
             // String
             if (isalpha(token[0])) { 
                 // Tratamento de erros
@@ -229,7 +231,7 @@ int main () {
             }
 
             // Inteiro
-            else if (strchr(token, '.') == NULL && strchr(token, ',') == NULL && strchr(token, '(') == NULL && strchr(token, ')') == NULL && (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1])))) { 
+            else if (strchr(token, '.') == NULL && strchr(token, ',') == NULL && (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1])))) { 
                 // Tratamento de erros
                 if (contInt >= tamInt) {
                     erro = 1;
