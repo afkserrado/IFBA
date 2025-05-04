@@ -64,7 +64,7 @@ void limparLinha(char linha[tamEntrada]) {
             j++;
         }
     }
-    linha[j-1] = '\0'; // Insere o terminador nulo no lugar do último caractere, que fica repetido na penúltima e última posições
+    linha[j] = '\0'; // Insere o terminador nulo
 }
 
 // Calcula a distância entre dois pontos
@@ -176,10 +176,15 @@ int main () {
     char linha[tamEntrada];
     char *token;
     char delimitador[] = " ";
+    int flag = 0;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
     while (fgets(linha, tamEntrada, arqEntrada) != NULL) { 
+
+        if (flag == 1) {
+            fprintf(arqSaida, "\n"); // Próxima linha
+        }
 
         limparLinha(linha); // Elimina parênteses
 
@@ -324,7 +329,7 @@ int main () {
             }
         }
         
-        fprintf(arqSaida, "\n"); // Próxima linha
+        flag = 1;
 
     } // Fim do 1º while (arquivo)
 
