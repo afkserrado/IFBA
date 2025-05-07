@@ -124,7 +124,7 @@ int q1(char data[]) {
         return 0; // Inválido 
     }
 
-    printf("%s\n", data);
+    printf("Data válida: %s\n", data);
 
     return 1; // Válido
 }
