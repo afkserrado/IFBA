@@ -106,7 +106,7 @@ int q1(char data[]) {
     }
 
     // Verifica se o ano é bissexto
-    if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)) {
+    if(((dataEntrada.iAno % 4 == 0) && (dataEntrada.iAno % 100 != 0)) || (dataEntrada.iAno % 400 == 0)) {
         diasMes[1] = 29; // Atualiza fevereiro
     }
 
