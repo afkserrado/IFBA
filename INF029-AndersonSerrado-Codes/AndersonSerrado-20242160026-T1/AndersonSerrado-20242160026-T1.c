@@ -90,19 +90,44 @@ int teste(int a)
     Não utilizar funções próprias de string (ex: strtok)   
     pode utilizar strlen para pegar o tamanho da string
  */
-int q1(char data[])
-{
-  int datavalida = 1;
+int q1(char data[]) {
 
-  //quebrar a string data em strings sDia, sMes, sAno
+    // Declarações
+    int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    DataQuebrada dataEntrada;
 
+    // Chama a função quebraData
+    // quebraData divide a string data em strings sDia, sMes, sAno
+    dataEntrada = quebraData(data); // recebe dq, do escopo de quebraData
 
-  //printf("%s\n", data);
+    // Verifica se o formato de entrada está correto
+    if (dataEntrada.valido == 0) {
+        return 0; // Inválido
+    }
 
-  if (datavalida)
-      return 1;
-  else
-      return 0;
+    // Verifica se o ano é bissexto
+    if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)) {
+        diasMes[1] = 29; // Atualiza fevereiro
+    }
+
+    // Valida o dia
+    if (dataEntrada.iDia <= 0 || dataEntrada.iDia > diasMes[dataEntrada.iMes - 1]) {
+        return 0; // Inválido
+    }
+
+    // Valida o mês
+    if (dataEntrada.iMes <= 0 || dataEntrada.iMes >= 13) {
+        return 0; // Inválido 
+    }
+
+    // Valida o ano
+    if (dataEntrada.iAno <= 0) {
+        return 0; // Inválido 
+    }
+
+    printf("%s\n", data);
+
+    return 1; // Válido
 }
 
 
@@ -234,61 +259,61 @@ int q6(int numerobase, int numerobusca)
      return achou;
  }
 
-
-
 DataQuebrada quebraData(char data[]){
-  DataQuebrada dq;
-  char sDia[3];
+    DataQuebrada dq;
+    char sDia[3]; //+1 para o \0
 	char sMes[3];
 	char sAno[5];
 	int i; 
 
-	for (i = 0; data[i] != '/'; i++){
+    // Guarda o dia
+	for (i = 0; data[i] != '/'; i++) {
 		sDia[i] = data[i];	
 	}
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
+	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
 		sDia[i] = '\0';  // coloca o barra zero no final
-	}else {
+	}
+    else {
 		dq.valido = 0;
-    return dq;
-  }  
+        return dq;
+    }  
 	
-
 	int j = i + 1; //anda 1 cada para pular a barra
 	i = 0;
 
-	for (; data[j] != '/'; j++){
+    // Guarda o mês
+	for (; data[j] != '/'; j++) {
 		sMes[i] = data[j];
 		i++;
 	}
-
-	if(i == 1 || i == 2){ // testa se tem 1 ou dois digitos
+	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
 		sMes[i] = '\0';  // coloca o barra zero no final
-	}else {
+	}
+    else {
 		dq.valido = 0;
-    return dq;
-  }
+        return dq;
+    }
 	
-
 	j = j + 1; //anda 1 cada para pular a barra
 	i = 0;
 	
-	for(; data[j] != '\0'; j++){
+    // Guarda o ano
+	for (; data[j] != '\0'; j++){
 	 	sAno[i] = data[j];
 	 	i++;
 	}
-
-	if(i == 2 || i == 4){ // testa se tem 2 ou 4 digitos
+	if (i == 2 || i == 4) { // testa se tem 2 ou 4 digitos
 		sAno[i] = '\0';  // coloca o barra zero no final
-	}else {
+	}
+    else {
 		dq.valido = 0;
-    return dq;
-  }
+        return dq;
+    }
 
-  dq.iDia = atoi(sDia);
-  dq.iMes = atoi(sMes);
-  dq.iAno = atoi(sAno); 
-
+    // Se a data for válida, guarda em dq
+    dq.iDia = atoi(sDia);
+    dq.iMes = atoi(sMes);
+    dq.iAno = atoi(sAno); 
 	dq.valido = 1;
     
   return dq;
