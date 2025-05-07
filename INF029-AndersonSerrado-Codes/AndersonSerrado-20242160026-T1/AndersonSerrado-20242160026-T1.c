@@ -94,11 +94,10 @@ int q1(char data[]) {
 
     // Declarações
     int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    DataQuebrada dataEntrada;
-
+    
     // Chama a função quebraData
     // quebraData divide a string data em strings sDia, sMes, sAno
-    dataEntrada = quebraData(data); // recebe dq, do escopo de quebraData
+    DataQuebrada dataEntrada = quebraData(data); // recebe dq, do escopo de quebraData
 
     // Verifica se o formato de entrada está correto
     if (dataEntrada.valido == 0) {
@@ -117,7 +116,7 @@ int q1(char data[]) {
 
     // Valida o mês
     if (dataEntrada.iMes <= 0 || dataEntrada.iMes >= 13) {
-        return 0; // Inválido 
+        return 0; // Inválido
     }
 
     // Valida o ano
@@ -129,8 +128,6 @@ int q1(char data[]) {
 
     return 1; // Válido
 }
-
-
 
 /*
  Q2 = diferença entre duas datas
