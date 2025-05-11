@@ -209,9 +209,11 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 
         // 1. Dias desde o início do ano inicial até a data inicial
         int iqtdDias = diasPassados(dtqInicial);
+        printf("\niqtdDias = %d", iqtdDias); // OK
 
         // 2. Dias desde o início do ano final até a data final
         int fqtdDias = diasPassados(dtqFinal);
+        printf("\nfqtdDias = %d", fqtdDias); // OK
 
         // 3. Anos completos, em dias, desde o início do ano inicial até a data final
         int diasAnosCompletos = 0;
@@ -224,6 +226,8 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 
         // 4. Calcula os dias entre a data inicial e a data final
         int diasTotais = (fqtdDias + diasAnosCompletos) - iqtdDias;
+        printf("\ndiasAnosCompletos = %d", diasAnosCompletos);
+        printf("\ndiasTotais = %d", diasTotais);
 
         // 5. Calcula a quantidade de anos (não importa se o ano é bissexto)
         dma.qtdAnos = diasTotais / 365;
@@ -242,7 +246,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
         dma.qtdMeses = 0; // Inicialização
 
         for (int mes = dtqInicial.iMes - 1;; mes++) {
-            if (diasResto > diasMes[mes]) {
+            if (diasResto >= diasMes[mes]) {
                 dma.qtdMeses++;
                 diasResto -= diasMes[mes];
             }
@@ -265,10 +269,10 @@ int main () {
     char datainicial[11], datafinal[11];
     DiasMesesAnos dma;
 
-    strcpy(datainicial, "01/06/2015");
-    strcpy(datafinal, "01/06/2016");
+    strcpy(datainicial, "29/02/2016");
+    strcpy(datafinal, "28/02/2020");
     dma = q2(datainicial, datafinal);
-    printf("Retorno: %d\n", dma.retorno);
+    printf("\nRetorno: %d\n", dma.retorno);
     printf("Dias: %d\n", dma.qtdDias);
     printf("Meses: %d\n", dma.qtdMeses);
     printf("Anos: %d\n", dma.qtdAnos);

@@ -169,8 +169,9 @@ int q1(char data[]) {
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
-DiasMesesAnos q2(char datainicial[], char datafinal[])
-{
+
+ // Refazer utilizando o método de unidades completas ou método de aniversário
+DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     //calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
