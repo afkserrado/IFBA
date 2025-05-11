@@ -177,13 +177,19 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
 
     // ### Data inicial inválida ###
     if (q1(datainicial) == 0) {
-      dma.retorno = 2;
-      return dma;
+        dma.retorno = 2;
+        dma.qtdAnos = 0;
+        dma.qtdMeses = 0;
+        dma.qtdDias = 0;
+        return dma;
     }
     // ### Data final inválida ###
     else if (q1(datafinal) == 0) { // Inválida
-      dma.retorno = 3;
-      return dma;
+        dma.retorno = 3;
+        dma.qtdAnos = 0;
+        dma.qtdMeses = 0;
+        dma.qtdDias = 0;
+        return dma;
     }
     // ### Datas válidas ###
     else {
@@ -196,16 +202,25 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         // Ano inicial maior
         if (dtqInicial.iAno > dtqFinal.iAno) {
             dma.retorno = 4;
+            dma.qtdAnos = 0;
+            dma.qtdMeses = 0;
+            dma.qtdDias = 0;
             return dma;
         }
         // Anos iguais, mês inicial maior
         else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes > dtqFinal.iMes) {
             dma.retorno = 4;
+            dma.qtdAnos = 0;
+            dma.qtdMeses = 0;
+            dma.qtdDias = 0;
             return dma;
         }
         // Anos iguais, meses iguais, dia inicial maior
         else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes == dtqFinal.iMes && dtqInicial.iDia > dtqFinal.iDia) {
             dma.retorno = 4;
+            dma.qtdAnos = 0;
+            dma.qtdMeses = 0;
+            dma.qtdDias = 0;
             return dma;
         }
 
