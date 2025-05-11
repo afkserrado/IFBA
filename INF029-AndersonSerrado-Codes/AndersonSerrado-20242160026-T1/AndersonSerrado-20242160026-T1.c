@@ -78,7 +78,7 @@ int teste(int a)
 }
 
 // Verifica se o ano é bissexto
-int bissexto (ano) {
+int bissexto (int ano) {
     // Ano é bissexto
     if(((ano % 4 == 0) && (ano % 100 != 0)) || (ano % 400 == 0)) {
         return 1; 
@@ -150,7 +150,7 @@ int q1(char data[]) {
         return 0; // Inválido 
     }
 
-    printf("Data válida: %s\n", data);
+    //printf("Data válida: %s\n", data);
 
     return 1; // Válido
 }
@@ -223,7 +223,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
         // 2. Dias desde o início do ano final até a data final
         int fqtdDias = diasPassados(dtqFinal);
 
-        // 3. Anos completos, em dias, desde o início do ano incicial até a data final
+        // 3. Anos completos, em dias, desde o início do ano inicial até a data final
         int diasAnosCompletos = 0;
         if (dtqFinal.iAno > dtqInicial.iAno) {
             for (int ano = dtqInicial.iAno; ano < dtqFinal.iAno; ano++) {
@@ -236,27 +236,32 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
         int diasTotais = (fqtdDias + diasAnosCompletos) - iqtdDias;
 
         // 5. Calcula a quantidade de anos (não importa se o ano é bissexto)
-        int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-        if (bissexto(dtqInicial.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
-
-        // Divisões
         dma.qtdAnos = diasTotais / 365;
         int diasResto = diasTotais % 365;
 
-        dma.qtdMeses = 0; // Inicialização
-        int mesAtual = dtqInicial.iMes - 1;
-
-        for (int i = dtqInicial.iMes - 1;; i++) {
-            if (i == 12) {i = 0;} //Reset
-
-            if (diasResto / diasMes[i] > 0) {
-                dma.qtdMeses++;
-                diasResto -= diasMes[i];
+        // Correção do diasResto para anos bissextos
+        if (dtqFinal.iAno > dtqInicial.iAno && dma.qtdAnos >= 1) {
+            for (int ano = dtqInicial.iAno; ano < dtqFinal.iAno; ano++) {
+                if (bissexto(ano) == 1 && diasResto > 0) {diasResto--;}
             }
-            else { // diasResto / diasMes[i] == 0
+        }
+
+        // 6. Calcula a quantidade de meses
+        int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+        if (bissexto(dtqFinal.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
+        dma.qtdMeses = 0; // Inicialização
+
+        for (int mes = dtqInicial.iMes - 1;; mes++) {
+            if (diasResto > diasMes[mes]) {
+                dma.qtdMeses++;
+                diasResto -= diasMes[mes];
+            }
+            else {
                 dma.qtdDias = diasResto;
                 break;
             }
+
+            if (mes == 11) {mes = -1;} // Reseta após chegar em dezembro
         }
 
         //se tudo der certo
