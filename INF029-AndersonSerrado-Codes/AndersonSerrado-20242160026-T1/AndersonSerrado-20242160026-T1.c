@@ -87,25 +87,6 @@ int bissexto (int ano) {
     return 0; // Não é bissexto
 }
 
-// Calcula a quantidade de dias passados até uma data
-int diasPassados (DataQuebrada data) {
-
-    int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    if (bissexto(data.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
-    int qtdDias = 0;
-
-    for (int i = 0; i < data.iMes; i++) {
-        // Soma os dias do mês inicial
-        if (i == data.iMes - 1) {
-            qtdDias += data.iDia - 1; // Não conta o 1º dia
-            break;
-        }
-        // Soma os dias dos meses anteriores ao mês inicial
-        qtdDias += diasMes[i]; 
-    }
-    return qtdDias;
-}
-
 /*
  Q1 = validar data
 @objetivo
@@ -171,7 +152,26 @@ int q1(char data[]) {
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
- // Refazer utilizando o método de unidades completas ou método de aniversário
+// Calcula a quantidade de dias passados até uma data
+int diasPassados (DataQuebrada data) {
+
+    int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    if (bissexto(data.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
+    int qtdDias = 0;
+
+    for (int i = 0; i < data.iMes; i++) {
+        // Soma os dias do mês inicial
+        if (i == data.iMes - 1) {
+            qtdDias += data.iDia - 1; // Não conta o 1º dia
+            break;
+        }
+        // Soma os dias dos meses anteriores ao mês inicial
+        qtdDias += diasMes[i]; 
+    }
+    return qtdDias;
+}
+
+// Refazer utilizando o método de unidades completas ou método de aniversário
 DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     //calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
