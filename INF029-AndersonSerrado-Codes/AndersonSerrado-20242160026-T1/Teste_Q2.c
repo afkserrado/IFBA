@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 // Structs
 typedef struct DQ
@@ -31,7 +32,11 @@ DataQuebrada quebraData(char data[]){
 
     // Guarda o dia
 	for (i = 0; data[i] != '/'; i++) {
-		sDia[i] = data[i];	
+		if (!(isdigit(data[i]) || data[i] == '/')) { 
+            dq.valido = 0;
+            return dq;
+        }
+        sDia[i] = data[i];	
 	}
 	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
 		sDia[i] = '\0';  // coloca o barra zero no final
@@ -46,7 +51,11 @@ DataQuebrada quebraData(char data[]){
 
     // Guarda o mês
 	for (; data[j] != '/'; j++) {
-		sMes[i] = data[j];
+		if (!(isdigit(data[j]) || data[j] == '/')) { 
+            dq.valido = 0;
+            return dq;
+        }
+        sMes[i] = data[j];
 		i++;
 	}
 	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
@@ -62,7 +71,11 @@ DataQuebrada quebraData(char data[]){
 	
     // Guarda o ano
 	for (; data[j] != '\0'; j++){
-	 	sAno[i] = data[j];
+        if (!(isdigit(data[j]) || data[j] == '/')) { 
+            dq.valido = 0;
+            return dq;
+        }
+        sAno[i] = data[j];
 	 	i++;
 	}
 	if (i == 2 || i == 4) { // testa se tem 2 ou 4 digitos
@@ -284,7 +297,7 @@ int main () {
     char datainicial[11], datafinal[11];
     DiasMesesAnos dma;
 
-    strcpy(datainicial, "q/02/2016");
+    strcpy(datainicial, "01/2/2016");
     strcpy(datafinal, "28/02/2020");
     dma = q2(datainicial, datafinal);
     printf("\nRetorno: %d\n", dma.retorno);
