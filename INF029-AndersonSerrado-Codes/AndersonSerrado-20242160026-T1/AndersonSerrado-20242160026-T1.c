@@ -373,7 +373,6 @@ int q3(char *texto, char c, int isCaseSensitive) {
         posicoes[1] = 16;
         Observe que o índice da posição no texto deve começar ser contado a partir de 1.
         O retorno da função, n, nesse caso seria 1;
-
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
