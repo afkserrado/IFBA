@@ -142,8 +142,8 @@ void testQ3()
     printf("%d\n", q3(str, 'L', 0) == 1);
 }
 
-void testQ4()
-{
+void testQ4() {
+
     char strTexto[250];
     char strBusca[50];
     int posicoes[30];
@@ -175,8 +175,7 @@ void testQ4()
     printf("%d\n", posicoes[5] == 54);
 }
 
-void testQ5()
-{
+void testQ5() {
     printf("%d\n", q5(345) == 543);
     printf("%d\n", q5(78) == 87);
     printf("%d\n", q5(3) == 3);
