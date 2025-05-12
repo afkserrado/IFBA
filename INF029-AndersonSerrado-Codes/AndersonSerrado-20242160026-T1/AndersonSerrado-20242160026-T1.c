@@ -442,27 +442,32 @@ int q4(char *strTexto, char *strBusca, int posicoes[30]) {
     Número invertido
  */
 
+ int separaNumero(int num, int vetor[]) {
+    int i;
+    for (i = 0; num != 0; i++) {
+        vetor[i] = num % 10;
+        num = num / 10;
+    }
+    return i;
+}
+
 int q5(int num) {
-    
-    #define tam 10
+
+    #define tam 10 // Qtd. máxima de dígitos de um int
     int vetor[tam] = {0};
-    int cnum = num;
     int flag = 1;
     
     // Converte para inteiro positivo
     if (num < 0) { 
-        cnum = num * -1;
+        num *= -1;
         flag = 0;
     }
 
-    int i;
-    for (i = 0; cnum != 0; i++) {
-        vetor[i] = cnum % 10;
-        cnum = cnum / 10;
-    }
+    int i = separaNumero(num, vetor);
 
     num = 0; // Reset
     
+    // Junta os algarismos e transforma em um número
     // Solução 1
     for (int j = 0; j < i; j++) {
         num = num * 10 + vetor[j];

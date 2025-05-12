@@ -1,50 +1,47 @@
-#include <stdio.h>
-#include <math.h>
+/*
+ Q6 = ocorrência de um número em outro
+ @objetivo
+    Verificar quantidade de vezes da ocorrência de um número em outro
+ @entrada
+    Um número base (numerobase) e um número de busca (numerobusca).
+ @saida
+    Quantidade de vezes que número de busca ocorre em número base
+ */
 
-int q5(int num) {
+#include <stdio.h>
+
+int separaNumero(int num, int vetor[]) {
+    int i;
+    for (i = 0; num != 0; i++) {
+        vetor[i] = num % 10;
+        num = num / 10;
+    }
+    return i;
+}
+
+int q6(int numerobase, int numerobusca) {
     
     #define tam 10
+    int qtdOcorrencias = 0;
     int vetor[tam] = {0};
-    int cnum = num;
-    int flag = 1;
-    
-    // Converte para inteiro positivo
-    if (num < 0) { 
-        cnum = num * -1;
-        flag = 0;
-    }
 
-    int i;
-    for (i = 0; cnum != 0; i++) {
-        vetor[i] = cnum % 10;
-        cnum = cnum / 10;
-    }
-
-    num = 0; // Reset
+    int i = separaNumero(numerobase, vetor);
     
-    // Solução 1
+
+    // Conta as ocorrências
     for (int j = 0; j < i; j++) {
-        num = num * 10 + vetor[j];
+        if (numerobusca == vetor[j]) {
+            qtdOcorrencias++;
+        }
     }
-    
-    /* Solução 2
-    int k = 0;
-    for (int j = i - 1; j >= 0; j--) {
-        num += vetor[k] * pow(10, j);
-        k++;
-    }*/
-    
-    if (flag == 0) {num = num * -1;}
 
-    return num;
+    return qtdOcorrencias;
 }
 
 int main () {
 
-    printf("%d\n", q5(-345));
-    printf("%d\n", q5(78));
-    printf("%d\n", q5(3));
-    printf("%d\n", q5(456));
-    printf("%d\n", q5(430));
-    printf("%d\n", q5(100));
+    printf("%d\n", q6(34567368, 3));
+    printf("%d\n", q6(34567368, 4576));
+    printf("%d\n", q6(3539343, 3));
+    printf("%d\n", q6(3539343, 39));
 }
