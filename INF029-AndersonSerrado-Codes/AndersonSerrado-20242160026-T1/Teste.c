@@ -118,7 +118,7 @@ int main () {
         posicoes[i] = -1;
     }
 
-    strcpy(strTexto, "Olá, o mundo é muito grande. Tem muitas pessoas, e muitos problemas");
+    strcpy(strTexto, "Ola, o mundo e muito grande. Tem muitas pessoas, e muitos problemas");
     strcpy(strBusca, "mui");
     printf("texto: %s\n", strTexto);
     printf("palavra: %s\n", strBusca);
