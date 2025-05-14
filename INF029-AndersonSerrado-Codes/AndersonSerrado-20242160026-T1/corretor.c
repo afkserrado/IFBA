@@ -20,30 +20,29 @@
 //renomeie o arquivo do include abaixo para PrimeiroUltimoNomeMATRICULA.h
 #include "AndersonSerrado-20242160026-T1.h"
 
-void testSomar();    //função utilizada para testes
+/*void testSomar();    //função utilizada para testes
 void testFatorial(); //função utilizada para testes
 void testQ1();
 void testQ2();
 void testQ3();
 void testQ4();
-void testQ5();
+void testQ5();*/
 void testQ6();
-void testQ7();
+/*void testQ7();*/
 
-int main()
-{
-    //testSomar();
-    //testFatorial();
-    //testQ1();
+int main() {
+    /*testSomar();
+    testFatorial();
+    testQ1();
     testQ2();
-    //testQ3();
-    //testQ4();
-    //testQ5();
-    //testQ6();
+    testQ3();
+    testQ4();
+    testQ5();*/
+    testQ6();
     //testQ7();
     
 }
-
+/*
 void testSomar()
 {
     printf("%d\n", somar(3, 4) == 7);
@@ -181,15 +180,14 @@ void testQ5() {
     printf("%d\n", q5(3) == 3);
     printf("%d\n", q5(5430) == 345);
 }
-
-void testQ6()
-{
+*/
+void testQ6() {
     printf("%d\n", q6(34567368, 3) == 2);
     printf("%d\n", q6(34567368, 4576) == 0);
     printf("%d\n", q6(3539343, 3) == 4);
     printf("%d\n", q6(3539343, 39) == 1);
 }
-
+/*
 void testQ7()
 {
     char matrix[8][10] = {
@@ -212,3 +210,4 @@ void testQ7()
     printf("%d\n", q7(matrix, stringBusca) == 1);
 
 }
+*/
