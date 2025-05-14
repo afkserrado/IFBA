@@ -376,13 +376,14 @@ int q3(char *texto, char c, int isCaseSensitive) {
  */
 
 int q4(char *strTexto, char *strBusca, int posicoes[30]) {
+    
     // Aloca memória
     char *texto = (char *)malloc(strlen(strTexto) + 1);  // +1 para o '\0' 
     char *palavra = (char *)malloc(strlen(strBusca) + 1);
 
     if (texto == NULL || palavra == NULL) {
         // Verificação de falha de alocação
-        printf("Erro ao alocar memória..\n");
+        printf("Erro ao alocar memória...\n");
         return -1;
     }
 
@@ -408,7 +409,7 @@ int q4(char *strTexto, char *strBusca, int posicoes[30]) {
         if (resultado != NULL) {
             ocorrencias++;
             index = resultado - textoOriginal; // Índice baseado em 0
-            printf("index: %d\n", index);
+            //printf("index: %d\n", index);
 
             posicoes[i++] = index + 1; // Início da substring (baseado 1)
             posicoes[i++] = index + pLen; // Final da substring (baseado em 1)
