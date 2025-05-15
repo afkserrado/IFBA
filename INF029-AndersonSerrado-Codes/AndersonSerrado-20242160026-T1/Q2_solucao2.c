@@ -202,6 +202,50 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             return dma;
         }
 
+        // ### Calcula o tempo passado entre as duas datas ###
+        int difDia = dtqFinal.iDia - dtqInicial.iDia;
+        int difMes = dtqFinal.iMes - dtqInicial.iMes;
+        int difAno = dtqFinal.iAno - dtqInicial.iAno;
+        int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+        // Se difMes > 0 -> virou o ano
+        // Se difMes < 0 -> não virou o ano
+        // Se difMes = 0 -> só vira o ano se difDia >= 0
+        if (difMes < 0 || (difMes == 0 && difDia < 0)) {
+            difAno--;
+            difMes += 12;
+        }
+
+        if (difDia < 0) {
+            difMes--; // Corrige o mês
+
+            int mesAnterior = dtqFinal.iMes - 1; // Passa para o mês anterior
+            int anoParaBissexto = dtqFinal.iAno;
+
+            // Se o mês anterior for dezembro
+            if (mesAnterior == 0) {
+                mesAnterior = 12;
+                anoParaBissexto--;
+            }
+
+            // Ajusta fevereiro em ano bissexto
+            if (mesAnterior == 2) {
+                if (bissexto(anoParaBissexto)) {
+                    diasMes[1] = 29;
+                } else {
+                    diasMes[1] = 28;
+                }
+            }
+            
+            difDia = diasMes[mesAnterior - 1] - dtqInicial.iDia + dtqFinal.iDia;
+        }
+
+        // Corrigir a questão dos 365 / 366
+
+        dma.qtdAnos = difAno;
+        dma.qtdMeses = difMes;
+        dma.qtdDias = difDia;
+
         // Se tudo der certo
         dma.retorno = 1;
         return dma;
@@ -213,11 +257,35 @@ int main () {
     char datainicial[11], datafinal[11];
     DiasMesesAnos dma;
 
-    strcpy(datainicial, "01/2/2016");
+    strcpy(datainicial, "28/02/2016");
+    strcpy(datafinal, "28/02/2017");
+    dma = q2(datainicial, datafinal);
+    printf("\nRetorno: %d\n", dma.retorno);
+    printf("Anos: %d\n", dma.qtdAnos); 
+    printf("Meses: %d\n", dma.qtdMeses);
+    printf("Dias: %d\n", dma.qtdDias); 
+
+    strcpy(datainicial, "29/02/2016");
+    strcpy(datafinal, "28/02/2017");
+    dma = q2(datainicial, datafinal);
+    printf("\nRetorno: %d\n", dma.retorno);
+    printf("Anos: %d\n", dma.qtdAnos); 
+    printf("Meses: %d\n", dma.qtdMeses);
+    printf("Dias: %d\n", dma.qtdDias); 
+
+    strcpy(datainicial, "29/02/2016");
     strcpy(datafinal, "28/02/2020");
     dma = q2(datainicial, datafinal);
     printf("\nRetorno: %d\n", dma.retorno);
-    printf("Dias: %d\n", dma.qtdDias);
+    printf("Anos: %d\n", dma.qtdAnos); 
     printf("Meses: %d\n", dma.qtdMeses);
-    printf("Anos: %d\n", dma.qtdAnos);
+    printf("Dias: %d\n", dma.qtdDias); 
+
+    strcpy(datainicial, "29/02/2016");
+    strcpy(datafinal, "29/02/2020");
+    dma = q2(datainicial, datafinal);
+    printf("\nRetorno: %d\n", dma.retorno);
+    printf("Anos: %d\n", dma.qtdAnos); 
+    printf("Meses: %d\n", dma.qtdMeses);
+    printf("Dias: %d\n", dma.qtdDias); 
 }
