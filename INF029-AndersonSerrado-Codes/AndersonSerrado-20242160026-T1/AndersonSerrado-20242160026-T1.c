@@ -174,7 +174,8 @@ int diasPassados (DataQuebrada data) {
 
 // Refazer utilizando o método de unidades completas ou método de aniversário
 DiasMesesAnos q2(char datainicial[], char datafinal[]) {
-    //calcule os dados e armazene nas três variáveis a seguir
+    
+    // Calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
     // ### Data inicial inválida ###
@@ -199,6 +200,11 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         // Divide as strings datainicial e datafinal em strings sDia, sMes, sAno
         DataQuebrada dtqInicial = quebraData(datainicial);
         DataQuebrada dtqFinal = quebraData(datafinal);
+
+        // Caso o ano tenha apenas 2 dígitos, corrige para 4
+        // Neste trabalho, estabeleceu-se que anos com 2 dígitos são 2000+
+        if (dtqInicial.iAno < 100) {dtqInicial.iAno += 2000;}
+        if (dtqFinal.iAno < 100) {dtqFinal.iAno += 2000;}
 
         // ### Verifica se a data inicial é posterior à final ###
         // Ano inicial maior
@@ -558,7 +564,8 @@ int q6(int numerobase, int numerobusca) {
      return achou;
  }
 
-DataQuebrada quebraData(char data[]){
+DataQuebrada quebraData(char data[]) {
+    
     DataQuebrada dq;
     char sDia[3]; //+1 para o \0
 	char sMes[3];

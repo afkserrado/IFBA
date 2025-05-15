@@ -1,3 +1,5 @@
+// Não funciona completamente
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -172,33 +174,39 @@ int q1(char data[]) {
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
-DiasMesesAnos q2(char datainicial[], char datafinal[])
-{
+DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     //calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
     // ### Data inicial inválida ###
     if (q1(datainicial) == 0) {
-      dma.retorno = 2;
-      dma.qtdAnos = 0;
-      dma.qtdMeses = 0;
-      dma.qtdDias = 0;
-      return dma;
+        dma.retorno = 2;
+        dma.qtdAnos = 0;
+        dma.qtdMeses = 0;
+        dma.qtdDias = 0;
+        return dma;
     }
+
     // ### Data final inválida ###
     else if (q1(datafinal) == 0) { // Inválida
-      dma.retorno = 3;
-      dma.qtdAnos = 0;
-      dma.qtdMeses = 0;
-      dma.qtdDias = 0;
-      return dma;
+        dma.retorno = 3;
+        dma.qtdAnos = 0;
+        dma.qtdMeses = 0;
+        dma.qtdDias = 0;
+        return dma;
     }
+    
     // ### Datas válidas ###
     else {
         
         // Divide as strings datainicial e datafinal em strings sDia, sMes, sAno
         DataQuebrada dtqInicial = quebraData(datainicial);
         DataQuebrada dtqFinal = quebraData(datafinal);
+
+        // Caso o ano tenha apenas 2 dígitos, corrige para 4
+        // Neste trabalho, estabeleceu-se que anos com 2 dígitos são 2000+
+        if (dtqInicial.iAno < 100) {dtqInicial.iAno += 2000;}
+        if (dtqFinal.iAno < 100) {dtqFinal.iAno += 2000;}
 
         // ### Verifica se a data inicial é posterior à final ###
         // Ano inicial maior
@@ -209,6 +217,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
             dma.qtdDias = 0;
             return dma;
         }
+
         // Anos iguais, mês inicial maior
         else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes > dtqFinal.iMes) {
             dma.retorno = 4;
@@ -217,6 +226,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
             dma.qtdDias = 0;
             return dma;
         }
+
         // Anos iguais, meses iguais, dia inicial maior
         else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes == dtqFinal.iMes && dtqInicial.iDia > dtqFinal.iDia) {
             dma.retorno = 4;
