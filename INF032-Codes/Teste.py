@@ -1,0 +1,1 @@
+print("Testando o python com vscode OK")
