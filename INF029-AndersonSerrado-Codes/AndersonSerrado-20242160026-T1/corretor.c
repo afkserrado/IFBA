@@ -82,7 +82,7 @@ void testQ2()
     char datainicial[11], datafinal[11];
     int qtdDias, qtdMeses, qtdAnos;
     DiasMesesAnos dma;
-
+    
     //teste 1
     qtdDias = -1;
     qtdMeses = -1;

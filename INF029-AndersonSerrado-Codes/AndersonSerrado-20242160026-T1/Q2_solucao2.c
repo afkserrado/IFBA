@@ -219,10 +219,10 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         if (difDia < 0) {
             difMes--; // Corrige o mês
 
-            int mesAnterior = dtqFinal.iMes - 1; // Passa para o mês anterior
-            int anoParaBissexto = dtqFinal.iAno;
+            int mesAnterior = dtqFinal.iMes - 1; // Guarda o mês anterior ao mês final
+            int anoParaBissexto = dtqFinal.iAno; // Se o mês final for março em diantes, anoParaBissexto é o ano final
 
-            // Se o mês anterior for dezembro
+            // Mês anterior ao mês final é dezembro
             if (mesAnterior == 0) {
                 mesAnterior = 12;
                 anoParaBissexto--;
@@ -240,8 +240,6 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             difDia = diasMes[mesAnterior - 1] - dtqInicial.iDia + dtqFinal.iDia;
         }
 
-        // Corrigir a questão dos 365 / 366
-
         dma.qtdAnos = difAno;
         dma.qtdMeses = difMes;
         dma.qtdDias = difDia;
@@ -256,6 +254,14 @@ int main () {
 
     char datainicial[11], datafinal[11];
     DiasMesesAnos dma;
+
+    strcpy(datainicial, "10/06/2015");
+    strcpy(datafinal, "06/03/2020");
+    dma = q2(datainicial, datafinal);
+    printf("\nRetorno: %d\n", dma.retorno);
+    printf("Anos: %d\n", dma.qtdAnos); 
+    printf("Meses: %d\n", dma.qtdMeses);
+    printf("Dias: %d\n", dma.qtdDias); 
 
     strcpy(datainicial, "28/02/2016");
     strcpy(datafinal, "28/02/2017");
