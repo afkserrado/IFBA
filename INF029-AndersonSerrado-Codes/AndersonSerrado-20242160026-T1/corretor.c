@@ -22,24 +22,24 @@
 
 /*void testSomar();    //função utilizada para testes
 void testFatorial(); //função utilizada para testes
-void testQ1();
+void testQ1();*/
 void testQ2();
-void testQ3();
+/*void testQ3();
 void testQ4();
-void testQ5();*/
+void testQ5();
 void testQ6();
-/*void testQ7();*/
+void testQ7();*/
 
 int main() {
     /*testSomar();
     testFatorial();
-    testQ1();
+    testQ1();*/
     testQ2();
-    testQ3();
+    /*testQ3();
     testQ4();
-    testQ5();*/
+    testQ5();
     testQ6();
-    //testQ7();
+    testQ7();*/
     
 }
 /*
@@ -76,13 +76,15 @@ void testQ1()
     strcpy(str, "/9/2014");
     printf("%d\n", q1(str) == 0);
 }
-
+*/
 void testQ2()
 {
     char datainicial[11], datafinal[11];
     int qtdDias, qtdMeses, qtdAnos;
     DiasMesesAnos dma;
     
+    printf("\nQuestão 2\n");
+
     //teste 1
     qtdDias = -1;
     qtdMeses = -1;
@@ -129,7 +131,7 @@ void testQ2()
     printf("%d\n", dma.qtdMeses == 1);
     printf("%d\n", dma.qtdAnos == 0);
 }
-
+/*
 void testQ3()
 {
     char str[250];
@@ -180,14 +182,14 @@ void testQ5() {
     printf("%d\n", q5(3) == 3);
     printf("%d\n", q5(5430) == 345);
 }
-*/
+
 void testQ6() {
     printf("%d\n", q6(34567368, 3) == 2);
     printf("%d\n", q6(34567368, 4576) == 0);
     printf("%d\n", q6(3539343, 3) == 4);
     printf("%d\n", q6(3539343, 39) == 1);
 }
-/*
+
 void testQ7()
 {
     char matrix[8][10] = {
