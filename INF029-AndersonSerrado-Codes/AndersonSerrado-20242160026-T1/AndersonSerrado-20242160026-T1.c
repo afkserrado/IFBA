@@ -153,26 +153,6 @@ int q1(char data[]) {
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
-// Calcula a quantidade de dias passados até uma data
-int diasPassados (DataQuebrada data) {
-
-    int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    if (bissexto(data.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
-    int qtdDias = 0;
-
-    for (int i = 0; i < data.iMes; i++) {
-        // Soma os dias do mês inicial
-        if (i == data.iMes - 1) {
-            qtdDias += data.iDia - 1; // Não conta o 1º dia
-            break;
-        }
-        // Soma os dias dos meses anteriores ao mês inicial
-        qtdDias += diasMes[i]; 
-    }
-    return qtdDias;
-}
-
-// Refazer utilizando o método de unidades completas ou método de aniversário
 DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     
     // Calcule os dados e armazene nas três variáveis a seguir
@@ -186,6 +166,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         dma.qtdDias = 0;
         return dma;
     }
+
     // ### Data final inválida ###
     else if (q1(datafinal) == 0) { // Inválida
         dma.retorno = 3;
@@ -194,6 +175,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         dma.qtdDias = 0;
         return dma;
     }
+    
     // ### Datas válidas ###
     else {
         
@@ -202,29 +184,18 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         DataQuebrada dtqFinal = quebraData(datafinal);
 
         // Caso o ano tenha apenas 2 dígitos, corrige para 4
-        // Neste trabalho, estabeleceu-se que anos com 2 dígitos são 2000+
+        // Neste trabalho, convecionou-se que anos com 2 dígitos são 2000+
         if (dtqInicial.iAno < 100) {dtqInicial.iAno += 2000;}
         if (dtqFinal.iAno < 100) {dtqFinal.iAno += 2000;}
 
         // ### Verifica se a data inicial é posterior à final ###
-        // Ano inicial maior
-        if (dtqInicial.iAno > dtqFinal.iAno) {
-            dma.retorno = 4;
-            dma.qtdAnos = 0;
-            dma.qtdMeses = 0;
-            dma.qtdDias = 0;
-            return dma;
-        }
-        // Anos iguais, mês inicial maior
-        else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes > dtqFinal.iMes) {
-            dma.retorno = 4;
-            dma.qtdAnos = 0;
-            dma.qtdMeses = 0;
-            dma.qtdDias = 0;
-            return dma;
-        }
-        // Anos iguais, meses iguais, dia inicial maior
-        else if (dtqInicial.iAno == dtqFinal.iAno && dtqInicial.iMes == dtqFinal.iMes && dtqInicial.iDia > dtqFinal.iDia) {
+        // Converte a data em um único número no formato: aaaammdd
+        // Este trabalho só considera datas entre 1000 e 9999
+        int idataConcat = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
+        int fdataConcat = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
+
+        // Compara as datas
+        if (idataConcat > fdataConcat) {
             dma.retorno = 4;
             dma.qtdAnos = 0;
             dma.qtdMeses = 0;
@@ -232,63 +203,62 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             return dma;
         }
 
-        // ### Calcula a distância entre as datas ###
-
-        /* O método consiste em considerar como data referencial o 1º dia do ano inicial, isto é, 01/01/dtqInicial.iAno.
-        
-        Após, calcula-se a quantidade de dias passados entre a data inicial e o ano referencial e entre a data final e o ano referencial.
-
-        Por fim, calcula-se a diferença entre esses resultados para encontrar a quantidade de anos, meses e dias passados entre as datas final e inicial.
-        */ 
-
-        // 1. Dias desde o início do ano inicial até a data inicial
-        int iqtdDias = diasPassados(dtqInicial);
-
-        // 2. Dias desde o início do ano final até a data final
-        int fqtdDias = diasPassados(dtqFinal);
-
-        // 3. Anos completos, em dias, desde o início do ano inicial até a data final
-        int diasAnosCompletos = 0;
-        if (dtqFinal.iAno > dtqInicial.iAno) {
-            for (int ano = dtqInicial.iAno; ano < dtqFinal.iAno; ano++) {
-                if (bissexto(ano) == 1) {diasAnosCompletos += 366;}
-                else {diasAnosCompletos += 365;}
-            }
-        }
-
-        // 4. Calcula os dias entre a data inicial e a data final
-        int diasTotais = (fqtdDias + diasAnosCompletos) - iqtdDias;
-
-        // 5. Calcula a quantidade de anos (não importa se o ano é bissexto)
-        dma.qtdAnos = diasTotais / 365;
-        int diasResto = diasTotais % 365;
-
-        // Correção do diasResto para anos bissextos
-        if (dtqFinal.iAno > dtqInicial.iAno && dma.qtdAnos >= 1) {
-            for (int ano = dtqInicial.iAno; ano < dtqFinal.iAno; ano++) {
-                if (bissexto(ano) == 1 && diasResto > 0) {diasResto--;}
-            }
-        }
-
-        // 6. Calcula a quantidade de meses
+        // ### Calcula o tempo passado entre as duas datas ###
+        int difDia = dtqFinal.iDia - dtqInicial.iDia;
+        int difMes = dtqFinal.iMes - dtqInicial.iMes;
+        int difAno = dtqFinal.iAno - dtqInicial.iAno;
         int diasMes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-        if (bissexto(dtqFinal.iAno) == 1) {diasMes[1] = 29;} // Atualiza fevereiro
-        dma.qtdMeses = 0; // Inicialização
+        int anoParaBissexto;
 
-        for (int mes = dtqInicial.iMes - 1;; mes++) {
-            if (diasResto > diasMes[mes]) {
-                dma.qtdMeses++;
-                diasResto -= diasMes[mes];
-            }
-            else {
-                dma.qtdDias = diasResto;
-                break;
-            }
-
-            if (mes == 11) {mes = -1;} // Reseta após chegar em dezembro
+        // Se difMes > 0 -> virou o ano
+        // Se difMes < 0 -> não virou o ano
+        // Se difMes = 0 -> só vira o ano se difDia >= 0
+        if (difMes < 0 || (difMes == 0 && difDia < 0)) {
+            difAno--;
+            difMes += 12;
         }
 
-        //se tudo der certo
+        if (difDia < 0) {
+            difMes--; // Corrige o mês
+
+            // Guarda o mês anterior ao mês final
+            int mesAnterior = dtqFinal.iMes - 1; 
+            
+            if (dtqFinal.iMes >= 3) {anoParaBissexto = dtqFinal.iAno;} // Ano final
+            else {anoParaBissexto = dtqFinal.iAno - 1;} // Ano anterior ao ano final
+            
+            // Se o mês final for janeiro, corrige o mês anterior para dezembro
+            if (mesAnterior == 0) {
+                mesAnterior = 12; // Corrige o mês anterior
+            }
+
+            // Ajusta fevereiro em ano bissexto
+            if (mesAnterior == 2) {
+                if (bissexto(anoParaBissexto)) {
+                    diasMes[1] = 29;
+                } else {
+                    diasMes[1] = 28;
+                }
+            }
+            
+            difDia = diasMes[mesAnterior - 1] - dtqInicial.iDia + dtqFinal.iDia;
+        }
+
+        // Ajuste para bissextos com 365 dias
+        // Caso o ano seja bissexto e tenha 365 dias, contabiliza como 1 ano completo
+        int anoAnterior = dtqFinal.iAno - 1;
+        if (bissexto(anoAnterior) && difMes == 11 && difDia == 30) {
+            printf("\nEntrou");
+            difAno += 1;
+            difMes = 0;
+            difDia = 0;
+        }
+
+        dma.qtdAnos = difAno;
+        dma.qtdMeses = difMes;
+        dma.qtdDias = difDia;
+
+        // Se tudo der certo
         dma.retorno = 1;
         return dma;
     }
