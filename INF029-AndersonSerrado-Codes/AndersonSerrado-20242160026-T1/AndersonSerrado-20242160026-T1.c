@@ -415,6 +415,7 @@ int q4(char *strTexto, char *strBusca, int posicoes[30]) {
     Número invertido
  */
 
+ // Guarda os algarismos de um número inteiro em um vetor
  int separaNumero(int num, int vetor[]) {
     int i;
     for (i = 0; num != 0; i++) {
@@ -468,6 +469,27 @@ int q5(int num) {
     Quantidade de vezes que número de busca ocorre em número base
  */
 
+// Inverte os algarismos separados de um número inteiro em um vetor
+void inverteNumero (int iVetor[], int i) {
+    int temp;
+    for (int j = 0; j < i/2; j++) {
+        temp = iVetor[j];
+        iVetor[j] = iVetor[i - j - 1];
+        iVetor[i - j - 1] = temp;
+    }
+    return;
+}
+
+// Converte os algarismos inteiros de um vetor em caracteres
+void itoaArray (char cVetor[], int iVetor[], int i) {
+    int j;
+    for (j = 0; j < i; j++) {
+        cVetor[j] = iVetor[j] + '0';
+    }
+    cVetor[j] = '\0';
+    return;
+}
+
 // Conta as ocorrências do número
 int contaOcorrencias(char *numerobase, char *numerobusca) {
     
@@ -498,11 +520,22 @@ int q6(int numerobase, int numerobusca) {
     
     #define tam 10
     int qtdOcorrencias = 0;
+    int iVetor_base[tam] = {0};
+    int iVetor_busca[tam] = {0};
     char cVetor_base[tam];
     char cVetor_busca[tam];
 
-    sprintf(cVetor_base, "%d", numerobase);
-    sprintf(cVetor_busca, "%d", numerobusca);
+    // Separa o número e guarda em um vetor
+    int tamBase = separaNumero(numerobase, iVetor_base);
+    int tamBusca = separaNumero(numerobusca, iVetor_busca);
+
+    // Coloca na ordem original os algarimos do número separado
+    inverteNumero(iVetor_base, tamBase);
+    inverteNumero(iVetor_busca, tamBusca);
+
+    // Converte de int para char
+    itoaArray(cVetor_base, iVetor_base, tamBase);
+    itoaArray(cVetor_busca, iVetor_busca, tamBusca);
     
     // Cria ponteiros para "andar" dentro do vetor
     char *pnumerobase = cVetor_base;

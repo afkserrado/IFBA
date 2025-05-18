@@ -135,8 +135,8 @@ int q6(int numerobase, int numerobusca) {
 
 int main () {
 
-    printf("%d\n", q6(34567368, 3));
-    printf("%d\n", q6(34567368, 4576));
-    printf("%d\n", q6(3539343, 3));
-    printf("%d\n", q6(3539343, 39));
+    printf("%d\n", q6(34567368, 3) == 2);
+    printf("%d\n", q6(34567368, 4576) == 0);
+    printf("%d\n", q6(3539343, 3) == 4);
+    printf("%d\n", q6(3539343, 39) == 1);
 }
