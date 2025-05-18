@@ -162,7 +162,7 @@ int q7(char matriz[8][10], char palavra[6]) {
     // Procura a palavra na direção paralela à diagonal secundária ↙️↗️
     procis(len, palavra, matriz, &achou);
 
-    // Se palavra = palavraInvertida (ex.: ANA), não precisa procurar a palavraInvertida
+    // Procura a "palavraInvertida" somente se "palavra" não for palíndromo
     if (strcmp(palavra, palavraInvertida) != 0) {
         proch(len, palavraInvertida, matriz, &achou); // ↔️
         procv(len, palavraInvertida, matriz, &achou); // ↕️
