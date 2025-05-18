@@ -158,6 +158,14 @@ int q7(char matriz[8][10], char palavra[6]) {
     procv(len, palavra, matriz, &achou);
     procv(len, palavraInvertida, matriz, &achou);
 
+    // Procura a palavra na direção paralela à diagonal principal
+    procip(len, palavra, matriz, &achou);
+    procip(len, palavraInvertida, matriz, &achou);
+
+    // Procura a palavra na direção paralela à diagonal secundária
+    procis(len, palavra, matriz, &achou);
+    procis(len, palavraInvertida, matriz, &achou);
+
     // Não achou
     return achou;
 }
