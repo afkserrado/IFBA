@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <locale.h> // Contém o setlocale
+#include <wchar.h> // Contém funções para trabalhar com caracteres multibytes
 
 /*
  Q4 = encontrar palavra em texto
@@ -20,9 +22,15 @@
 
 int q4(char *strTexto, char *strBusca, int posicoes[30]) {
 
-    // Aloca memória
-    char *texto = (char *)malloc(strlen(strTexto) + 1);  // +1 para o '\0' 
-    char *palavra = (char *)malloc(strlen(strBusca) + 1);
+    setlocale(LC_ALL, ""); // Garante que as funções da biblioteca <wchar.h> reconheçam corretamente não somente os caracteres ASCII, mas também caracteres Unicode
+
+    // Comprimento das strings multibytes
+    int slenTexto = strlen(strTexto);
+    int slenBusca = strlen(strBusca);
+
+    // Aloca memória para as strings wide char
+    wchar_t *texto = (wchar_t *)malloc((slenTexto + 1) * sizeof(wchar_t));  // +1 para o '\0' 
+    wchar_t *palavra = (wchar_t *)malloc((slenBusca + 1) * sizeof(wchar_t));
 
     if (texto == NULL || palavra == NULL) {
         // Verificação de falha de alocação
@@ -30,44 +38,46 @@ int q4(char *strTexto, char *strBusca, int posicoes[30]) {
         return -1;
     }
 
-    // Cópias
-    strcpy(texto, strTexto);
-    strcpy(palavra, strBusca);
+    // Converte as strings multibytes para strings wide char
+    mbstowcs(texto, strTexto, slenTexto + 1); // +1 para copiar o '\0'
+    mbstowcs(palavra, strBusca, slenBusca + 1);
 
     // Salva o endereço original do bloco de memória alocado para texto, permitindo a sua liberação posteriormente
-    char *textoOriginal = texto;
+    wchar_t *textoOriginal = texto;
     
-    // Comprimentos
-    int tLen = strlen(texto);
-    int pLen = strlen(palavra);
+    // Comprimentos das strings wide char
+    int wlenTexto = wcslen(texto);
+    int wlenPalavra = wcslen(palavra);
 
     // Percorre o texto
     int i = 0;
     int ocorrencias = 0, index = 0;
-    char *resultado;
+    wchar_t *resultado;
     do {
         // Aponta para o ínicio da palavra no texto ou retorna NULL
-        resultado = strstr(texto, palavra);
+        resultado = wcsstr(texto, palavra);
         
         if (resultado != NULL) {
             ocorrencias++;
-            index = resultado - textoOriginal; // Índice baseado em 0
-            printf("index: %d\n", index);
 
-            posicoes[i++] = index + 1; // Início da substring (baseado 1)
-            posicoes[i++] = index + pLen; // Final da substring (baseado em 1)
+            // Operação aritmética de endereços
+            index = resultado - textoOriginal; // Retorna um índice baseado em 0
+
+            posicoes[i++] = index + 1; // Início da substring (baseado em 1)
+            posicoes[i++] = index + wlenPalavra; // Final da substring (baseado em 1)
             
             // Move o ponteiro texto para o novo índice
-            texto = resultado + 1;
-            tLen = strlen(texto);   
+            texto = resultado + 1; 
+            wlenTexto = wcslen(texto);   
 
             // Obs.:
             // posicoes[i++] usa "i" e depois incrementa;
             // index + 1 porque desejamos o índice baseado em 1;
-            // index + plen porque desejamos o índice baseado em 1. Se quiséssemos o índice baseado em 0, teríamos que subtrair 1.
+            // index + wlenPalavra porque desejamos o índice baseado em 1. Se quiséssemos o índice baseado em 0, teríamos que subtrair 1.
+            // texto = resultado + 1 permite encontrar ocorrências sobrepostas. Por exemplo, "ara" ocorre 2x em "arara"
         }
 
-    } while (resultado != NULL && tLen >= pLen);
+    } while (resultado != NULL && wlenTexto >= wlenPalavra);
     
     // Libera a memória alocada
     free(textoOriginal);
@@ -82,51 +92,50 @@ int main () {
     char strBusca[50];
     int posicoes[30];
     int i;
-
-    /*// Inicializando o vetor posições
-    for (i = 0; i < 30; i++) {
-        posicoes[i] = -1;
-    }
-
-    strcpy(strTexto, "Laboratorio de ratos");
-    strcpy(strBusca, "rato");
-    printf("texto: %s\n", strTexto);
-    printf("palavra: %s\n", strBusca);
-    printf("Ocorrencias: %d\n", q4(strTexto, strBusca, posicoes));
-    printf("Ocorrencia 1, i: %d\n", posicoes[0]);
-    printf("Ocorrencia 1, f: %d\n", posicoes[1]);
-    printf("Ocorrencia 2, i: %d\n", posicoes[2]);
-    printf("Ocorrencia 2, f: %d\n", posicoes[3]);*/
     
-    /*// Inicializando o vetor posições
+    // Inicializando o vetor posições
     for (i = 0; i < 30; i++) {
         posicoes[i] = -1;
     }
 
-    strcpy(strTexto, "Laboratorio de programacao: para ratos de programação");
-    strcpy(strBusca, "rato");
-    printf("texto: %s\n", strTexto);
-    printf("palavra: %s\n", strBusca);
-    printf("Ocorrencias: %d\n", q4(strTexto, strBusca, posicoes));
-    printf("Ocorrencia 1, i: %d\n", posicoes[0]);
-    printf("Ocorrencia 1, f: %d\n", posicoes[1]);
-    printf("Ocorrencia 2, i: %d\n", posicoes[2]);
-    printf("Ocorrencia 2, f: %d\n", posicoes[3]);*/
+    strcpy(strTexto, "araras são azuis");
+    strcpy(strBusca, "ara");
+    printf("Texto: %s | Busca: %s\n", strTexto, strBusca);
+    printf("%d\n", q4(strTexto, strBusca, posicoes) == 2);
+    printf("%d\n", posicoes[0] == 1);
+    printf("%d\n", posicoes[1] == 3);
+    printf("%d\n", posicoes[2] == 3);
+    printf("%d\n", posicoes[3] == 5);
+    printf("\n");
 
     // Inicializando o vetor posições
     for (i = 0; i < 30; i++) {
         posicoes[i] = -1;
     }
 
-    strcpy(strTexto, "Ola, o mundo e muito grande. Tem muitas pessoas, e muitos problemas");
+    strcpy(strTexto, "Laboratorio de programacao: para ratos de programação");
+    strcpy(strBusca, "rato");
+    printf("Texto: %s | Busca: %s\n", strTexto, strBusca);
+    printf("%d\n", q4(strTexto, strBusca, posicoes) == 2);
+    printf("%d\n", posicoes[0] == 5);
+    printf("%d\n", posicoes[1] == 8);
+    printf("%d\n", posicoes[2] == 34);
+    printf("%d\n", posicoes[3] == 37);
+    printf("\n");
+
+    // Inicializando o vetor posições
+    for (i = 0; i < 30; i++) {
+        posicoes[i] = -1;
+    }
+
+    strcpy(strTexto, "Olá, o mundo é muito grande. Tem muitas pessoas, e muitos problemas");
     strcpy(strBusca, "mui");
-    printf("texto: %s\n", strTexto);
-    printf("palavra: %s\n", strBusca);
-    printf("Ocorrencias: %d\n", q4(strTexto, strBusca, posicoes));
-    printf("%d\n", posicoes[0]);
-    printf("%d\n", posicoes[1]);
-    printf("%d\n", posicoes[2]);
-    printf("%d\n", posicoes[3]);
-    printf("%d\n", posicoes[4]);
-    printf("%d\n", posicoes[5]);
+    printf("Texto: %s | Busca: %s\n", strTexto, strBusca);
+    printf("%d\n", q4(strTexto, strBusca, posicoes) == 3);
+    printf("%d\n", posicoes[0] == 16);
+    printf("%d\n", posicoes[1] == 18);
+    printf("%d\n", posicoes[2] == 34);
+    printf("%d\n", posicoes[3] == 36);
+    printf("%d\n", posicoes[4] == 52);
+    printf("%d\n", posicoes[5] == 54);
 }
