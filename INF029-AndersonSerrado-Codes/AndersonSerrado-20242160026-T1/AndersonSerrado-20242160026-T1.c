@@ -155,7 +155,7 @@ int q1(char data[]) {
 
 DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     
-    // Calcule os dados e armazene nas três variáveis a seguir
+     // Calcule os dados e armazene nas três variáveis a seguir
     DiasMesesAnos dma;
 
     // ### Data inicial inválida ###
@@ -246,8 +246,19 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
 
         // Ajuste para bissextos com 365 dias
         // Caso o ano seja bissexto e tenha 365 dias, contabiliza como 1 ano completo
-        int anoAnterior = dtqFinal.iAno - 1;
-        if (bissexto(anoAnterior) && difMes == 11 && difDia == 30) {
+        /*if (bissexto(dtqInicial.iAno) && difMes == 11 && difDia == 30 && dtqFinal.iDia == dtqInicial.iDia - 1) {
+            printf("\nEntrou");
+            difAno += 1;
+            difMes = 0;
+            difDia = 0;
+        }*/
+
+        // Anos bissextos
+        // Caso 1: 28/02/2016 a 28/02/2017 (366d) ou 29/02/2016 a 01/03/2017 (366d) -> 1a0m0d (regra geral)
+        // Caso 2: 29/02/2016 a 28/02/2020 -> 3a11m30d (regral geral)
+        // Caso 3: 29/02/2016 a 29/02/2020 -> 4a0m0d (regral geral)
+        // Caso 4: DD/MM (01 OU 02)/AAAA bissexto a DD-1/MM (01 OU 02)/AAAA não bissexto -> 1a0m0d
+        if (bissexto(dtqInicial.iAno) && bissexto(dtqFinal.iAno) != 1 && difMes == 11 && difDia == 30) {
             printf("\nEntrou");
             difAno += 1;
             difMes = 0;
