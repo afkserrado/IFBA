@@ -150,28 +150,31 @@ int q7(char matriz[8][10], char palavra[6]) {
     char palavraInvertida[6];
     invertePalavra(palavra, palavraInvertida, len);
 
-    // Procura a palavra na horizontal
+    // Procura a palavra na horizontal ↔️
     proch(len, palavra, matriz, &achou);
-    proch(len, palavraInvertida, matriz, &achou);
 
-    // Procura a palavra na vertical
+    // Procura a palavra na vertical ↕️
     procv(len, palavra, matriz, &achou);
-    procv(len, palavraInvertida, matriz, &achou);
 
-    // Procura a palavra na direção paralela à diagonal principal
+    // Procura a palavra na direção paralela à diagonal principal ↘️↖️
     procip(len, palavra, matriz, &achou);
-    procip(len, palavraInvertida, matriz, &achou);
 
-    // Procura a palavra na direção paralela à diagonal secundária
+    // Procura a palavra na direção paralela à diagonal secundária ↙️↗️
     procis(len, palavra, matriz, &achou);
-    procis(len, palavraInvertida, matriz, &achou);
+
+    // Se palavra = palavraInvertida (ex.: ANA), não precisa procurar a palavraInvertida
+    if (strcmp(palavra, palavraInvertida) != 0) {
+        proch(len, palavraInvertida, matriz, &achou); // ↔️
+        procv(len, palavraInvertida, matriz, &achou); // ↕️
+        procip(len, palavraInvertida, matriz, &achou); // ↘️↖️
+        procis(len, palavraInvertida, matriz, &achou); // ↙️↗️
+    }
 
     // Não achou
     return achou;
 }
 
 int main () {
-
     char matrix[8][10] = {
         { 'Q', 'M', 'J', 'D', 'L', 'A', 'Z', 'F', 'C', 'R' },
         { 'N', 'B', 'Y', 'G', 'P', 'S', 'K', 'H', 'E', 'X' },
@@ -192,4 +195,12 @@ int main () {
     strcpy(stringBusca, "LTBON");
     printf("%d\n", q7(matrix, stringBusca) == 1);
 
+    // Meus testes
+    printf("------------\n");
+    strcpy(stringBusca, "AZ");
+    printf("%d\n", q7(matrix, stringBusca) == 1);
+    strcpy(stringBusca, "EYBTL");
+    printf("%d\n", q7(matrix, stringBusca) == 1);
+    strcpy(stringBusca, "PNML");
+    printf("%d\n", q7(matrix, stringBusca) == 1);
 }
