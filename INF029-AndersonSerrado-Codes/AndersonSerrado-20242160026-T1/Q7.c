@@ -47,6 +47,32 @@ void proch(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
     } // Fim do loop i
 }
 
+// Direção vertical
+void procv(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
+    
+    for (int i = 0; i < 10; i++) { // Percorre as colunas da matriz
+        int k = 0; // Percorre a palavra
+        int restoLinhas = 8; // Qtd de linhas restantes da matriz
+        
+        for (int j = 0; j < 8; j++) { // Percorre as linhas da matriz      
+            restoLinhas = 8 - j;
+            if (k == 0 && len > restoLinhas) {break;} // Sai do loop j
+            
+            if (matriz[j][i] == palavra[k]) { // Achou o caractere
+                k++;
+                if (k == len) { // Achou a palavra
+                    *achou = 1;
+                    return; // Interrompe a função
+                }
+            }
+            else if (k > 0) { // Achou a palavra parcialmente
+                k = 0; // Reinicialização
+                j--; // Decrementa o j para continuar a nova busca do mesmo ponto
+            }
+        } // Fim do loop j
+    } // Fim do loop i
+}
+
 int q7(char matriz[8][10], char palavra[6]) {
 
     int achou = 0;
@@ -59,6 +85,10 @@ int q7(char matriz[8][10], char palavra[6]) {
     // Procura a palavra na horizontal
     proch(len, palavra, matriz, &achou);
     proch(len, palavraInvertida, matriz, &achou);
+
+    // Procura a palavra na vertical
+    procv(len, palavra, matriz, &achou);
+    procv(len, palavraInvertida, matriz, &achou);
 
     // Não achou
     return achou;
