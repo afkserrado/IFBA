@@ -21,7 +21,7 @@ void invertePalavra(char palavra[6], char palavraInvertida[6], int len) {
     palavraInvertida[len] = '\0';
 }
 
-// Direção horizontal
+// Direção horizontal ↔️
 void proch(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
     
     for (int i = 0; i < 8; i++) { // Percorre as linhas da matriz
@@ -47,7 +47,7 @@ void proch(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
     } // Fim do loop i
 }
 
-// Direção vertical
+// Direção vertical ↕️
 void procv(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
     
     for (int i = 0; i < 10; i++) { // Percorre as colunas da matriz
@@ -68,6 +68,74 @@ void procv(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
             else if (k > 0) { // Achou a palavra parcialmente
                 k = 0; // Reinicialização
                 j--; // Decrementa o j para continuar a nova busca do mesmo ponto
+            }
+        } // Fim do loop j
+    } // Fim do loop i
+}
+
+// Direção inclinação principal ↘️↖️
+void procip(int len, char palavra[len + 1], char matriz[8][10], int *achou) {
+    
+    for (int i = 0; i < 8; i++) { // Percorre as linhas da matriz
+        int restoLinhas = 8 - i; // Qtd de linhas restantes da matriz
+        int restoColunas = 10; // Qtd de colunas restantes da matriz
+        
+        for (int j = 0; j < 10; j++) { // Percorre as colunas da matriz      
+            restoColunas = 10 - j;
+            
+            if (restoColunas < len) {break;} // Sai do loop j
+            if (restoLinhas < len) {return;} // Interrompe o programa, pois não há mais como achar a palavra
+
+            int k = 0; // Percorre a palavra
+            int l = i;
+            int c = j;
+            // Percorre a diagonal de inclinação principal
+            while (l <= i + len - 1 && c <= j + len - 1) { 
+                if (matriz[l][c] == palavra[k]) {
+                    k++;
+                    if (k == len) { // Achou a palavra
+                        *achou = 1;
+                        return; // Interrompe a função
+                    }
+                }
+                else {break;} // Sai do while
+                // Incrementa
+                l++;
+                c++;
+            }
+        } // Fim do loop j
+    } // Fim do loop i
+}
+
+// Direção inclinação secundária ↙️↗️
+void procis (int len, char palavra[len + 1], char matriz[8][10], int *achou) {
+    
+    for (int i = 0; i < 8; i++) { // Percorre as linhas da matriz
+        int restoLinhas = 8 - i; // Qtd de linhas restantes da matriz
+        int restoColunas = 10; // Qtd de colunas restantes da matriz
+        
+        for (int j = 9; j >= 0; j--) { // Percorre as colunas da matriz      
+            restoColunas--;
+            
+            if (restoColunas < len) {break;} // Sai do loop j
+            if (restoLinhas < len) {return;} // Interrompe o programa, pois não há mais como achar a palavra
+
+            int k = 0; // Percorre a palavra
+            int l = i;
+            int c = j;
+            // Percorre a diagonal de inclinação secundária
+            while (l <= i + len - 1 && c >= j - len + 1) { 
+                if (matriz[l][c] == palavra[k]) {
+                    k++;
+                    if (k == len) { // Achou a palavra
+                        *achou = 1;
+                        return; // Interrompe a função
+                    }
+                }
+                else {break;} // Sai do while
+                // Incrementa
+                l++;
+                c--;
             }
         } // Fim do loop j
     } // Fim do loop i
