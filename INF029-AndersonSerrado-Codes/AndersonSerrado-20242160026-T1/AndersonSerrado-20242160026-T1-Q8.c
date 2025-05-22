@@ -111,6 +111,7 @@ int main () {
     printf("\nX ou O para definir um valor.\n");
 
     int jogador = 1;
+    int jogadas = 0;
     while (1) {
         
         exibeMatriz();
@@ -131,17 +132,20 @@ int main () {
         // Limpa o buffer
         while (getchar() != '\n');
         
-        // Preenche a matriz
-        if (testes(celula, &idLin, &idCol, valor) == 1) { // return = 1
+        // Jogadas válidas
+        if (testes(celula, &idLin, &idCol, valor) == 1) { // Valida a célula e o valor
             matriz[idLin][idCol] = valor;
+
+            jogadas++; // Contabiliza a quantidade de jogadas
 
             // Muda o jogador
             if (jogador == 1) {jogador++;}
             else {jogador--;}
         }
+        // Jogadas inválidas
         else {
             printf("\n");
         }
-
-    }
-}
+        
+    } // Fim do while
+} // Fim da main
