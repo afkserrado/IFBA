@@ -5,6 +5,7 @@
 #define tam 3
 char matriz[tam][tam];
 
+// Preenche a matriz com espaços (' ')
 void iniciaMatriz () {
     for (int i = 0; i < tam; i++){
         for (int j = 0; j < tam; j++){
@@ -13,6 +14,7 @@ void iniciaMatriz () {
     }
 }
 
+// Exibe o jogo da velha
 void exibeMatriz () {
     
     char idLin = 'A';
@@ -51,7 +53,7 @@ void exibeMatriz () {
     }
 }
 
-// Direção horizontal
+// Busca uma trinca na direção horizontal
 int proch() {
 
     int flag;
@@ -75,7 +77,7 @@ int proch() {
     return -1;
 }
 
-// Direção vertical
+// Busca uma trinca na vertical
 int procv() {
 
     int flag;
@@ -99,7 +101,7 @@ int procv() {
     return -1;
 }
 
-// Direção da diagonal principal
+// Busca uma trinca na direção da diagonal principal
 int procdp() {
 
     int flag = 1;
@@ -117,7 +119,7 @@ int procdp() {
     return flag; // Fez a trinca
 }
 
-// Direção da diagonal secundária
+// Busca uma trinca na direção diagonal secundária
 int procds() {
 
     int flag = 1;
@@ -135,8 +137,30 @@ int procds() {
     return flag; // Fez a trinca
 }
 
+// Lê e valida o símbolo do jogador
+void validaSimbolo(char idJogador[]) {
+    char simbolo;
+    int flagSimbolo = 1;
+    while (flagSimbolo == 1) {
+        printf("\nO jogador 1 será X ou O? ");
+        simbolo = getchar();
+        while(getchar() != '\n'); // Limpa o buffer
+        
+        if (simbolo != 'X' && simbolo != 'O') {
+                printf("Símbolo inválido. O símbolo deve ser uma letra (X ou O). Tente novamente...\n");
+            }
+        else {flagSimbolo = 0;}
+    }
+
+    // Guardando o id dos jogadores
+    if (simbolo == 'O') {
+        idJogador[0] = 'O';
+        idJogador[1] = 'X';
+    }
+}
+
 // Converte de char para int e verifica se os valores são válidos
-int testes (char celula[], int *idLin, int *idCol) {
+int validaCelula (char celula[], int *idLin, int *idCol) {
 
     int flag = 0;
 
@@ -178,7 +202,7 @@ int main () {
     // Declarações
     char celula[3]; // +1 para o \0
     int idLin, idCol;
-    char simbolo;
+    char idJogador[2] = {'X', 'O'};
 
     // Preenche a matriz com espaços em branco
     iniciaMatriz();
@@ -186,25 +210,8 @@ int main () {
     printf("Para jogar, utilize apenas letras capitalizadas:");
     printf("\nA, B ou C para definir as linhas.");
 
-    // Lê e valida o símbolo do jogador
-    int flagSimbolo = 1;
-    while (flagSimbolo == 1) {
-        printf("\nO jogador 1 será X ou O? ");
-        simbolo = getchar();
-        while(getchar() != '\n'); // Limpa o buffer
-        
-        if (simbolo != 'X' && simbolo != 'O') {
-                printf("Símbolo inválido. O símbolo deve ser uma letra (X ou O). Tente novamente...\n");
-            }
-        else {flagSimbolo = 0;}
-    }
-
-    // Guardando o id dos jogadores
-    char idJogador[2] = {'X', 'O'};
-    if (simbolo == 'O') {
-        idJogador[0] = 'O';
-        idJogador[1] = 'X';
-    }
+    // Lê, valida e guarda os símbolos dos jogadores
+    validaSimbolo(idJogador);
 
     // Declarações
     int jogador = 1;
@@ -255,7 +262,7 @@ int main () {
         celula[strcspn(celula, "\n")] = '\0';
         
         // Jogadas válidas
-        if (testes(celula, &idLin, &idCol) == 1) { // Valida a célula e o valor
+        if (validaCelula(celula, &idLin, &idCol) == 1) { // Valida a célula e o valor
             
             if (jogador == 1) {matriz[idLin][idCol] = idJogador[0];}
             else {matriz[idLin][idCol] = idJogador[1];}
@@ -276,6 +283,6 @@ int main () {
 
     exibeMatriz();
     if (venceu == 0) {printf("\nDeu velha!\n");}
-    else {printf("\n")};
+    else {printf("\n");}
 
 } // Fim da main
