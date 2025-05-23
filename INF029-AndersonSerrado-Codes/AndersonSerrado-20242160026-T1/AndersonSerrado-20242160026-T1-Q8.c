@@ -54,23 +54,27 @@ void exibeMatriz () {
 }
 
 // Busca uma trinca na direção horizontal
-int proch() {
+int proch(int linhas[]) {
 
     int flag;
 
     for (int i = 0; i < tam; i++) {
-        flag = 1; // Inicialização
-    
+        
+        //if (linhas[i] == 1) {continue;} // Linha descartada
         if (matriz[i][0] == ' ') {continue;}
-        else {
-            int temp = matriz[i][0];
-            for (int j = 1; j < tam; j++) {
-                if (temp == matriz[i][j]) {
-                    flag++;
-                }
-                else {break;} // Sai do loop j
+
+        flag = 1; // Inicialização
+        char temp = matriz[i][0];
+        for (int j = 1; j < tam; j++) {
+            if (temp == matriz[i][j]) {
+                flag++;
             }
+            else { // Sai do loop j
+                //linhas[i] = 1; // Descarta a linha, pois não há mais possibilidade de trinca
+                break;
+            } 
         }
+
         // Vitória
         if (flag == 3) {return flag;} // Encerra a função antecipadamente
     }
@@ -78,23 +82,27 @@ int proch() {
 }
 
 // Busca uma trinca na vertical
-int procv() {
+int procv(int colunas[]) {
 
     int flag;
 
     for (int j = 0; j < tam; j++) {
-        flag = 1; // Inicialização
-    
+        
+        //if (colunas[j] == 1) {continue;} // Coluna descartada
         if (matriz[0][j] == ' ') {continue;}
-        else {
-            int temp = matriz[0][j];
-            for (int i = 1; i < tam; i++) {
-                if (temp == matriz[i][j]) {
-                    flag++;
-                }
-                else {break;} // Sai do loop j
+
+        flag = 1; // Inicialização
+        char temp = matriz[0][j];
+        for (int i = 1; i < tam; i++) {
+            if (temp == matriz[i][j]) {
+                flag++;
             }
+            else { // Sai do loop i
+                //colunas[j] = 1; // Descarta a coluna, pois não há mais possibilidade de trinca
+                break;
+            } 
         }
+
         // Vitória
         if (flag == 3) {return flag;} // Encerra a função antecipadamente
     }
@@ -102,37 +110,45 @@ int procv() {
 }
 
 // Busca uma trinca na direção da diagonal principal
-int procdp() {
+int procdp(int *diagPrin) {
+
+    //if (*diagPrin == 1) {return -1;} // Diagonal principal descartada
+    
+    char temp = matriz[0][0];
+    if (temp == ' ') {return 0;} // Célula em branco
 
     int flag = 1;
-    int temp = matriz[0][0];
-
-    if (temp == ' ') {return -1;}
-
     for (int k = 1; k < tam; k++) {
-        if (matriz[k][k] == ' ') {return -1;} // Célula em branco
+        if (matriz[k][k] == ' ') {return 0;} // Célula em branco
         if (temp == matriz[k][k]) {
                 flag++;
             }
-        else {return -1;} // Não fez a trinca
+        else {
+            //*diagPrin = 1; // Descarta a diagonal principal, pois não há mais possibilidade de trinca
+            return -1; // Não fez a trinca
+        }
     }
     return flag; // Fez a trinca
 }
 
 // Busca uma trinca na direção diagonal secundária
-int procds() {
+int procds(int *diagSecn) {
+
+    //if (*diagSecn == 1) {return -1;} // Diagonal secundária descartada
+
+    char temp = matriz[0][2];
+    if (temp == ' ') {return 0;} // Célula em branco
 
     int flag = 1;
-    int temp = matriz[0][2];
-
-    if (temp == ' ') {return -1;}
-
     for (int k = 1; k < tam; k++) {
-        if (matriz[k][tam - 1 - k] == ' ') {return -1;} // Célula em branco
+        if (matriz[k][tam - 1 - k] == ' ') {return 0;} // Célula em branco
         if (temp == matriz[k][tam - 1 - k]) {
                 flag++;
             }
-        else {return -1;} // Não fez a trinca
+        else {
+            //*diagSecn = 1; // Descarta a diagonal secundária, pois não há mais possibilidade de trinca
+            return -1; // Não fez a trinca
+        } 
     }
     return flag; // Fez a trinca
 }
@@ -196,13 +212,21 @@ int validaCelula (char celula[], int *idLin, int *idCol) {
 
 int main () {
 
-    // Limpa o terminal
-    system("clear");
+    // Limpa a tela
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 
     // Declarações
     char celula[3]; // +1 para o \0
     int idLin, idCol;
     char idJogador[2] = {'X', 'O'};
+    int linhas[] = {0, 0, 0};
+    int colunas[] = {0, 0, 0};
+    int diagPrin = 0;
+    int diagSecn = 0;
 
     // Preenche a matriz com espaços em branco
     iniciaMatriz();
@@ -219,37 +243,18 @@ int main () {
     int jogadas = 0;
     int venceu = 0;
 
-    while (jogadas < 9) {
+    while (jogadas <= 9) {
         
         exibeMatriz();
 
-        // Verifica se alguém já venceu apenas a partir da 3a jogada
-        if (jogadas > 2) {
-            
-            // Vitória horizontal
-            if (proch() == 3) {
-                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
-                venceu = 1;
-                break;
-            }
-            
-            // Vitória vertical
-            if (procv() == 3) {
-                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
-                venceu = 1;
-                break;
-            }
+        for (int i = 0; i < tam; i++) {
+            printf("| %d |", linhas[i]);
+        }
 
-            // Vitória diagonal principal
-            if (procdp() == 3) {
-                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
-                venceu = 1;
-                break;
-            }
-
-            // Vitória diagonal secundária
-            if (procds() == 3) {
-                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
+        // Verificação da vitória
+        if (jogadas >= 3) {
+            if (proch(linhas) == 3 || procv(colunas) == 3 || 
+                procdp(&diagPrin) == 3 || procds(&diagSecn) == 3) {
                 venceu = 1;
                 break;
             }
@@ -260,6 +265,9 @@ int main () {
         printf("\nInforme a célula (ex.: A1): ");
         fgets(celula, sizeof(celula), stdin);
         celula[strcspn(celula, "\n")] = '\0';
+
+        // LImpeza do buffer
+        while(getchar() != '\n');
         
         // Jogadas válidas
         if (validaCelula(celula, &idLin, &idCol) == 1) { // Valida a célula e o valor
@@ -283,6 +291,9 @@ int main () {
 
     exibeMatriz();
     if (venceu == 0) {printf("\nDeu velha!\n");}
-    else {printf("\n");}
+    else {
+        printf("\nFim de jogo. O jogador %d (%c) venceu. Parabéns!\n", jogadorAnterior, idJogador[jogadorAnterior - 1]);
+        printf("\n");
+    }
 
 } // Fim da main
