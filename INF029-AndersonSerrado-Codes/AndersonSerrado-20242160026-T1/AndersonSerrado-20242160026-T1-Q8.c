@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define lin 3
-#define col 3
-char matriz[lin][col];
+#define tam 3
+char matriz[tam][tam];
 
 void iniciaMatriz () {
-    for (int i = 0; i < lin; i++){
-        for (int j = 0; j < col; j++){
+    for (int i = 0; i < tam; i++){
+        for (int j = 0; j < tam; j++){
             matriz[i][j] = ' ';
         }
     }
@@ -22,38 +21,122 @@ void exibeMatriz () {
 
     // Identificador das colunas
     printf("   ");  // Espaço para alinhar com os identificadores das linhas
-    for (int j = 0; j < col; j++) {
+    for (int j = 0; j < tam; j++) {
         printf("  %d", j + 1);
-        if (j < col - 1) {printf(" ");}
+        if (j < tam - 1) {printf(" ");}
     }
     printf("\n");
 
-    for (int i = 0; i < lin; i++) {
+    for (int i = 0; i < tam; i++) {
         // Identificador da linha
         printf(" %c  ", idLin);
         idLin += 1;
 
         // Elementos da matriz com separadores verticais
-        for (int j = 0; j < col; j++) {
+        for (int j = 0; j < tam; j++) {
             printf(" %c ", matriz[i][j]);
-            if (j < col - 1) printf("|");
+            if (j < tam - 1) printf("|");
         }
         printf("\n");
 
         // Separadores horizontais (exceto na última linha)
-        if (i < lin - 1) {
+        if (i < tam - 1) {
             printf("    ");  // Alinhar com identificador da linha
-            for (int k = 0; k < col; k++) {
+            for (int k = 0; k < tam; k++) {
                 printf("---");
-                if (k < col - 1) printf("|");
+                if (k < tam - 1) printf("|");
             }
             printf("\n");
         }
     }
 }
 
+// Direção horizontal
+int proch() {
+
+    int flag;
+
+    for (int i = 0; i < tam; i++) {
+        flag = 1; // Inicialização
+    
+        if (matriz[i][0] == ' ') {continue;}
+        else {
+            int temp = matriz[i][0];
+            for (int j = 1; j < tam; j++) {
+                if (temp == matriz[i][j]) {
+                    flag++;
+                }
+                else {break;} // Sai do loop j
+            }
+        }
+        // Vitória
+        if (flag == 3) {return flag;} // Encerra a função antecipadamente
+    }
+    return -1;
+}
+
+// Direção vertical
+int procv() {
+
+    int flag;
+
+    for (int j = 0; j < tam; j++) {
+        flag = 1; // Inicialização
+    
+        if (matriz[0][j] == ' ') {continue;}
+        else {
+            int temp = matriz[0][j];
+            for (int i = 1; i < tam; i++) {
+                if (temp == matriz[i][j]) {
+                    flag++;
+                }
+                else {break;} // Sai do loop j
+            }
+        }
+        // Vitória
+        if (flag == 3) {return flag;} // Encerra a função antecipadamente
+    }
+    return -1;
+}
+
+// Direção da diagonal principal
+int procdp() {
+
+    int flag = 1;
+    int temp = matriz[0][0];
+
+    if (temp == ' ') {return -1;}
+
+    for (int k = 1; k < tam; k++) {
+        if (matriz[k][k] == ' ') {return -1;} // Célula em branco
+        if (temp == matriz[k][k]) {
+                flag++;
+            }
+        else {return -1;} // Não fez a trinca
+    }
+    return flag; // Fez a trinca
+}
+
+// Direção da diagonal secundária
+int procds() {
+
+    int flag = 1;
+    int temp = matriz[0][2];
+
+    if (temp == ' ') {return -1;}
+
+    for (int k = 1; k < tam; k++) {
+        if (matriz[k][tam - 1 - k] == ' ') {return -1;} // Célula em branco
+        if (temp == matriz[k][tam - 1 - k]) {
+                flag++;
+            }
+        else {return -1;} // Não fez a trinca
+    }
+    return flag; // Fez a trinca
+}
+
 // Converte de char para int e verifica se os valores são válidos
-int testes (char celula[], int *idLin, int *idCol, char valor) {
+int testes (char celula[], int *idLin, int *idCol) {
 
     int flag = 0;
 
@@ -73,12 +156,6 @@ int testes (char celula[], int *idLin, int *idCol, char valor) {
         flag = 1; 
     }
     if (flag == 1) {return -1;}
-
-    // Valida o valor
-    if (valor != 'X' && valor != 'O') {
-        printf("\nValor inválido. O valor deve ser uma letra (X ou O). Tente novamente...");
-        return -1;
-    }
     
     // Converte a célula de char para int e retorna um índice na base 0
     *idLin = celula[0] - 'A';
@@ -100,43 +177,91 @@ int main () {
 
     // Declarações
     char celula[3]; // +1 para o \0
-    char valor;
     int idLin, idCol;
+    char simbolo;
 
     // Preenche a matriz com espaços em branco
     iniciaMatriz();
 
     printf("Para jogar, utilize apenas letras capitalizadas:");
     printf("\nA, B ou C para definir as linhas.");
-    printf("\nX ou O para definir um valor.\n");
 
+    // Lê e valida o símbolo do jogador
+    int flagSimbolo = 1;
+    while (flagSimbolo == 1) {
+        printf("\nO jogador 1 será X ou O? ");
+        simbolo = getchar();
+        while(getchar() != '\n'); // Limpa o buffer
+        
+        if (simbolo != 'X' && simbolo != 'O') {
+                printf("Símbolo inválido. O símbolo deve ser uma letra (X ou O). Tente novamente...\n");
+            }
+        else {flagSimbolo = 0;}
+    }
+
+    // Guardando o id dos jogadores
+    char idJogador[2] = {'X', 'O'};
+    if (simbolo == 'O') {
+        idJogador[0] = 'O';
+        idJogador[1] = 'X';
+    }
+
+    // Declarações
     int jogador = 1;
+    int jogadorAnterior;
     int jogadas = 0;
-    while (1) {
+    int venceu = 0;
+
+    while (jogadas < 9) {
         
         exibeMatriz();
+
+        // Verifica se alguém já venceu apenas a partir da 3a jogada
+        if (jogadas > 2) {
+            
+            // Vitória horizontal
+            if (proch() == 3) {
+                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
+                venceu = 1;
+                break;
+            }
+            
+            // Vitória vertical
+            if (procv() == 3) {
+                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
+                venceu = 1;
+                break;
+            }
+
+            // Vitória diagonal principal
+            if (procdp() == 3) {
+                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
+                venceu = 1;
+                break;
+            }
+
+            // Vitória diagonal secundária
+            if (procds() == 3) {
+                printf("\nFim de jogo. O jogador %d venceu. Parabéns!\n", jogadorAnterior);
+                venceu = 1;
+                break;
+            }
+        }
         
         // Entrada de dados: célula
-        printf("\nVez do jogador %d", jogador);
+        printf("\nVez do jogador %d (%c)", jogador, idJogador[jogador - 1]);
         printf("\nInforme a célula (ex.: A1): ");
         fgets(celula, sizeof(celula), stdin);
         celula[strcspn(celula, "\n")] = '\0';
         
-        // Limpa o buffer
-        while (getchar() != '\n');
-
-        // Entrada de dados: valor
-        printf("Informe o valor (X ou O): ");
-        valor = getchar();
-
-        // Limpa o buffer
-        while (getchar() != '\n');
-        
         // Jogadas válidas
-        if (testes(celula, &idLin, &idCol, valor) == 1) { // Valida a célula e o valor
-            matriz[idLin][idCol] = valor;
+        if (testes(celula, &idLin, &idCol) == 1) { // Valida a célula e o valor
+            
+            if (jogador == 1) {matriz[idLin][idCol] = idJogador[0];}
+            else {matriz[idLin][idCol] = idJogador[1];}
 
-            jogadas++; // Contabiliza a quantidade de jogadas
+            jogadorAnterior = jogador;
+            jogadas++;
 
             // Muda o jogador
             if (jogador == 1) {jogador++;}
@@ -146,6 +271,11 @@ int main () {
         else {
             printf("\n");
         }
-        
+
     } // Fim do while
+
+    exibeMatriz();
+    if (venceu == 0) {printf("\nDeu velha!\n");}
+    else {printf("\n")};
+
 } // Fim da main
