@@ -12,7 +12,7 @@
 void iniciaMatriz (char matriz[tam][tam]) {
     for (int i = 0; i < tam; i++){
         for (int j = 0; j < tam; j++){
-            matriz[i][j] = '~';
+            matriz[i][j] = ' ';
         }
     }
 }
@@ -25,44 +25,52 @@ void exibeMatriz (char matriz[tam][tam]) {
     // Identificador das colunas
     printf("    ");  // Desloca espaços da borda esquerda
     for (int j = 0; j < tam; j++) {
-        if (j < tam - 1) {printf("|%3d  ", j + 1);} // Desloca espaços entre as colunas
-        else {printf("|%3d", j + 1);}
+        if (j < tam - 1) {printf(" %3d  ", j + 1);} // Desloca espaços entre as colunas
+        else {printf(" %3d", j + 1);}
     }
     printf("\n");
 
-    printf("----");
+    // Primeira linha de separadores horizontais
+    printf("    ");
     // Separadores horizontais
     for (int k = 0; k < tam; k++) {
         printf("|-----");
     }
-    printf("\n");
+    printf("|\n");
 
     for (int i = 0; i < tam; i++) {
         // Identificador da linha
         printf("%c   |", idLin);
         idLin += 1;
 
-        printf("  "); // Desloca espaços do 1o separadorvertical
+        printf("  "); // Desloca espaços do 1o separador vertical
         for (int j = 0; j < tam; j++) {
-            // Tabuleiro
-            if (j < tam - 1) {printf("%c  |  ", matriz[i][j]);}
+            // Tabuleirov
+            if (j < tam) {printf("%c  |  ", matriz[i][j]);}
             else {printf("%c", matriz[i][j]);}
         }
         printf("\n");
 
         // Separadores horizontais (exceto na última linha)
         if (i < tam - 1) {
-            {printf("----|");} // Desloca espaços da borda esquerda
+            {printf("    |");} // Desloca espaços da borda esquerda
             for (int k = 0; k < tam; k++) {
                 printf("-----");
-                if (k < tam - 1) printf("|");
+                if (k < tam) printf("|");
             }
             printf("\n");
         }
     }
+
+    // Última linha de separadores horizontais
+    printf("    ");
+    // Separadores horizontais
+    for (int k = 0; k < tam; k++) {
+        printf("|-----");
+    }
+    printf("|\n");
     printf("\n");
 }
-
 
 int main () {
 
