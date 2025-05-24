@@ -8,6 +8,10 @@
     Quantidade de vezes que número de busca ocorre em número base
  */
 
+ /*
+ gcc Q6_solucao2.c -o Q6_solucao2 && ./Q6_solucao2
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
