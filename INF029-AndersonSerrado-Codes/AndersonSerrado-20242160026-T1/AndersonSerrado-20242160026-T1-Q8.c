@@ -247,9 +247,9 @@ int main () {
         
         exibeMatriz();
 
-        for (int i = 0; i < tam; i++) {
+        /*for (int i = 0; i < tam; i++) {
             printf("| %d |", linhas[i]);
-        }
+        }*/
 
         // Verificação da vitória
         if (jogadas >= 3) {
@@ -266,7 +266,7 @@ int main () {
         fgets(celula, sizeof(celula), stdin);
         celula[strcspn(celula, "\n")] = '\0';
 
-        // LImpeza do buffer
+        // Limpeza do buffer
         while(getchar() != '\n');
         
         // Jogadas válidas
