@@ -119,20 +119,28 @@ int validaPosicao (char celula[], int *idLin, int *idCol, char matriz[tam][tam])
     return 0;
 }
 
-int validaBarco (int barco, char direcao) {
+int validaBarco (int barco, int barcos[], char direcao) {
     
     int sentinela = 0;
     
     // Valida tamanho do barco
-    for (int i = 0; i < tiposBarcos; i++) {
-        if (barco == tamBarcos[i]) {sentinela = 1; break;}
+    int i;
+    for (i = 0; i < tiposBarcos; i++) {
+        if (barco == tamBarcos[i]) {sentinela = 1; break;} // Conserva o i
     }
 
     if (sentinela == 0) {
         printf("\nBarco inválido. Tente novamente...");
         return -1;
     }
+
+    // Valida a quantidade de barcos
+    if (barcos[i] == 0) {
+        printf("\nO jogador não possui mais barcos de tamanho %d disponíveis. Tente novamente...", barco);
+        return -1;
+    }
     
+    // Valida a direção do barco
     direcao = toupper(direcao);
     if (direcao != 'H' && direcao != 'V') {
         printf("\nDireção inválida. Tente novamente...");
@@ -142,10 +150,52 @@ int validaBarco (int barco, char direcao) {
     return 0;
 }
 
-void marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[]) {
+int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[], char direcao) {
     
-    //    
-    matriz[idLin][idCol] = 'N';
+    int sentinela = 0;
+
+    // Procura o índice do barco
+    int k;
+    for (k = 0; k < tiposBarcos; k++) {
+        if (barco == tamBarcos[k]) {break;} // Conserva o valor de i
+    }
+
+    // Inicializa as variáveis auxiliares
+    int dLin = 0, dCol = 0;
+    if (direcao == 'H') {dCol = 1;} // Horizontal
+    else {dLin = 1;} // Vertical
+
+    // Marca o barco
+    int i;
+    for (i = 0; i < barco; i++) {
+        if (matriz[idLin][idCol] == ' ') {
+            matriz[idLin][idCol] = 'N';
+            idLin += dLin;
+            idCol += dCol;
+        }
+        else {sentinela = 1; break;} // Conserva i
+    }
+
+    // Sobreposição de barcos
+    if (sentinela == 1) {
+        
+        // Retorna os índices para a última posição marcada
+        idLin -= dLin;
+        idCol -= dCol;
+        
+        // Desfaz as alterações na matriz
+        for (int j = i; j >= 1; j--) {
+            matriz[idLin][idCol] = ' ';
+            idLin -= dLin;
+            idCol -= dCol;
+        }
+        return -1;
+    }
+
+    // Marca o contorno do barco
+
+    // Atualiza a quantidade de barcos do jogador
+    barcos[i]--;
 }
 
 void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
@@ -165,14 +215,14 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
         while (flagCelula != 0 || flagBarco != 0) {  
             exibeMatriz(matriz);
 
-            printf("Informe o tamanho do barco: ");
+            printf("Informe o tamanho do barco (1, 3 ou 4): ");
             scanf("%d", &barco);
 
             printf("Informe a direção do barco (H ou V): ");
             scanf(" %c", &direcao);
             while(getchar() != '\n'); // Limpa o buffer
 
-            flagBarco = validaBarco(barco, direcao);
+            flagBarco = validaBarco(barco, barcos, direcao);
 
             // Barco inválido
             if (flagBarco == -1) {
@@ -186,7 +236,8 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
 
             // Posição e barco válidos
             if (flagCelula == 0) { 
-                marcaBarco(matriz, idLin, idCol, barco, barcos);                
+                // Verificar retorno de marcaBarco
+                marcaBarco(matriz, idLin, idCol, barco, barcos, direcao);                
             }
             // Posição inválida
             else {
