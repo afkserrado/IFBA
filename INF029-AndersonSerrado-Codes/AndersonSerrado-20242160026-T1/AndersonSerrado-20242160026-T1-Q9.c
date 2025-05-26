@@ -75,6 +75,7 @@ void exibeMatriz (char matriz[tam][tam]) {
     printf("\n");
 }
 
+// Verifica o tamanho do barco é válido (1, 3 ou 4)
 int validaBarco (int barco, int barcos[], char direcao) {
     
     int sentinela = 0;
@@ -160,6 +161,7 @@ int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direca
     return 0;
 }
 
+// Preenche a matriz com N para o barco e L para o seu contorno
 int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[], char direcao) {
     
     int sentinela = 0;
@@ -257,6 +259,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
     return 0;
 }
 
+// Posiciona o barco, com auxílio das funções anteriores
 void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
     
     // Declarações
