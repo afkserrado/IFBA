@@ -163,6 +163,7 @@ int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direca
 int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[], char direcao) {
     
     int sentinela = 0;
+    int iniLin = idLin, iniCol = idCol;
 
     // Procura o índice do barco
     int k;
@@ -182,6 +183,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
             matriz[idLin][idCol] = 'N';
             idLin += dLin;
             idCol += dCol;
+            //printf("idLin = %d | idCol = %d\n", idLin, idCol);
         }
         else {sentinela = 1; break;} // Conserva i
     }
@@ -203,8 +205,51 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
         return -1;
     }
 
-    // Marca o contorno do barco
+    // Marca o início do contorno (quinta superior esquerda)
+    iniLin--;
+    iniCol--;
 
+    // Largura do barco. Sempre igual a 1
+    int largura = 1;
+
+    // Problema de borda
+    // Se iniLin ou iniCol for 0, as linhas anteriores decrementam para -1
+    // Corrige iniLin e iniCol, incrementando para 0
+    if (iniLin < 0) {iniLin++;}
+    if (iniCol < 0) {iniCol++;}
+
+    // Determina os limites do contorno
+    int limLin = 0, limCol = 0;
+    if (direcao == 'H') {
+        limLin = iniLin + largura + 1;
+        limCol = iniCol + barco + 1;
+    }
+    else {
+        limLin = iniLin + barco + 1;
+        limCol = iniCol + largura + 1;
+    }
+
+    // Problema de borda
+    // Evita que limLin e limCol ultrapasse as bordas do tabuleiro
+    if (limLin >= tam) limLin = tam - 1;
+    if (limCol >= tam) limCol = tam - 1;
+
+    // Problema de borda
+    // Se iniLin ou iniCol for 0, limLin ou limCol fica a 2 quadrados de distância de N
+    // Corrige limLin e limCol, mantendo a distância de 1 quadrado
+    if (iniLin == 0) {limLin--;}
+    if (iniCol == 0) {limCol--;}
+
+    //printf("iniLin = %d | iniCol = %d | limLin = %d | limCol = %d", iniLin, iniCol, limLin, limCol);
+
+    // Marca o contorno do barco
+    for (int lin = iniLin; lin <= limLin; lin++) {
+        for (int col = iniCol; col <= limCol; col++) {
+            if (matriz[lin][col] == ' ') {
+                matriz[lin][col] = 'L';
+            }
+        }
+    }
     
     // Atualiza a quantidade de barcos do jogador
     barcos[k]--;
