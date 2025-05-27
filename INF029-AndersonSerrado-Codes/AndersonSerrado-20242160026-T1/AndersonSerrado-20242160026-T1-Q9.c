@@ -10,6 +10,7 @@
 // Variáveis globais
 int tamBarcos[] = {4,3,1};
 int tiposBarcos = sizeof(tamBarcos) / sizeof(tamBarcos[0]);
+int largura = 1;
 
 // Preenche a matriz com espaços (' ')
 void iniciaMatriz (char matriz[tam][tam]) {
@@ -161,8 +162,19 @@ int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direca
     return 0;
 }
 
+// Cria um indexador único para uma célula da matriz
+int concatenaPosicao (int idLin, int idCol) {
+    return idLin * tam + idCol;
+}
+
+// Converte um indexador único de uma célula para linha e coluna
+void separaPosicao () {
+    // idLin = idxCel / tam;
+    // idCol = idxCel % tam;
+}
+
 // Preenche a matriz com N para o barco e L para o seu contorno
-int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[], char direcao) {
+int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barcos[], char direcao, int p[], int *cont) {
     
     int sentinela = 0;
     int iniLin = idLin, iniCol = idCol;
@@ -178,13 +190,18 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
     if (direcao == 'H') {dCol = 1;} // Horizontal
     else {dLin = 1;} // Vertical
 
-    // Marca o barco
+    // Marca o barco na matriz e no vetor de posições
     int i;
     for (i = 0; i < barco; i++) {
         if (matriz[idLin][idCol] == ' ') {
             matriz[idLin][idCol] = 'N';
+            p[*cont] = concatenaPosicao(idLin, idCol);
+            printf("cont = %d | p = %d\n", *cont, p[*cont]);
+
+            // Incrementos
             idLin += dLin;
             idCol += dCol;
+            (*cont)++;
             //printf("idLin = %d | idCol = %d\n", idLin, idCol);
         }
         else {sentinela = 1; break;} // Conserva i
@@ -196,23 +213,24 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
         // Retorna os índices para a última posição marcada
         idLin -= dLin;
         idCol -= dCol;
+        (*cont)--;
         
         // Desfaz as alterações na matriz
         for (int j = i; j >= 1; j--) {
             matriz[idLin][idCol] = ' ';
+            p[*cont] = 0;
+
             idLin -= dLin;
             idCol -= dCol;
+            (*cont)--;
         }
-        printf("\nJá existe um barco marcado nessa posição. Tente novamente...");
+        printf("\nJá existe um barco marcado nessa posição ou ela faz parte dos limites de um barco. Tente novamente...");
         return -1;
     }
 
     // Marca o início do contorno (quinta superior esquerda)
     iniLin--;
     iniCol--;
-
-    // Largura do barco. Sempre igual a 1
-    int largura = 1;
 
     // Problema de borda
     // Se iniLin ou iniCol for 0, as linhas anteriores decrementam para -1
@@ -260,7 +278,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
 }
 
 // Posiciona o barco, com auxílio das funções anteriores
-void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
+void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[], int p[], int *cont) {
     
     // Declarações
     char celula[4]; // +1 para o \0
@@ -304,7 +322,7 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[]) {
             // Posição e barco válidos
             if (flagCelula == 0) { 
                 // Verificar retorno de marcaBarco
-                flagMarca = marcaBarco(matriz, idLin, idCol, barco, barcos, direcao); 
+                flagMarca = marcaBarco(matriz, idLin, idCol, barco, barcos, direcao, p, cont); 
                 if (flagMarca != 0) {printf("\n");}               
             }
             // Posição inválida
@@ -323,8 +341,13 @@ int main () {
         system("clear");
     #endif
 
-    char m1[tam][tam];
-    char m2[tam][tam];
+    char m1[tam][tam]; // Tabuleiro do jogador 1
+    char m2[tam][tam]; // Tabuleiro do jogador 2
+    int p1[10] = {0}; // Guarda os navios do jogador 1
+    int p2[10] = {0}; // Guarda os navios do jogador 2
+    int cont1 = 0; // Conta o número de Ns do jogador 1
+    int cont2 = 0; // Conta o número de Ns do jogador 2
+
     int barcos1[] = {1,1,3}; // 4, 3 e 1
     int barcos2[] = {1,1,3}; // 4, 3 e 1
 
@@ -335,7 +358,7 @@ int main () {
     iniciaMatriz(m1);
     iniciaMatriz(m2);
 
-    posicionarBarcos(m1, 1, barcos1);
-    posicionarBarcos(m2, 2, barcos2);
+    posicionarBarcos(m1, 1, barcos1, p1, &cont1);
+    posicionarBarcos(m2, 2, barcos2, p2, &cont2);
     
 } // Fim da main
