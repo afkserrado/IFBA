@@ -152,6 +152,26 @@ int q1(char data[]) {
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
 
+void inverteData (char data[], char dataInvertida[]) {
+    int len = strlen(data);
+    int k = 0;
+    for (int i = len - 1; i >= 0; i--) {
+        if (data[i] == '/') { // Mês e ano
+            for (int j = i + 1; j < len && data[j] != '/'; j++) {
+                dataInvertida[k] = data[j];
+                k++;
+            }
+        } // Dia
+        else if (i == 0) {
+            for (int j = 0; data[j] != '/'; j++) {
+                dataInvertida[k] = data[j];
+                k++;
+            }
+        }
+    }
+    dataInvertida[k] = '\0';
+}
+
 DiasMesesAnos q2(char datainicial[], char datafinal[]) {
     
     // Calcule os dados e armazene nas três variáveis a seguir
@@ -188,13 +208,19 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         if (dtqFinal.iAno < 100) {dtqFinal.iAno += 2000;}
 
         // ### Verifica se a data inicial é posterior à final ###
-        // Converte a data em um único número no formato: aaaammdd
-        // Este trabalho só considera datas entre 1000 e 9999
-        int idataInvertida = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
-        int fdataInvertida = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
+        char idataInvertida[11];
+        inverteData(datainicial, idataInvertida);
+        int intdi = atoi(idataInvertida);
+
+        char fdataInvertida[11];
+        inverteData(datafinal, fdataInvertida);
+        int intdf = atoi(fdataInvertida);
+
+        printf("\ndi: %s | df: %s", idataInvertida, fdataInvertida);
+        printf("\ndi: %d | df: %d", intdi, intdf);
 
         // Compara as datas
-        if (idataInvertida > fdataInvertida) {
+        if (intdi > intdf) {
             dma.retorno = 4;
             dma.qtdAnos = 0;
             dma.qtdMeses = 0;
@@ -223,14 +249,14 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             // Guarda o mês anterior ao mês final
             int mesAnterior = dtqFinal.iMes - 1; 
             
+            if (dtqFinal.iMes >= 3) {anoParaBissexto = dtqFinal.iAno;} // Ano final
+            else {anoParaBissexto = dtqFinal.iAno - 1;} // Ano anterior ao ano final
+            
             // Se o mês final for janeiro, corrige o mês anterior para dezembro
             if (mesAnterior == 0) {
                 mesAnterior = 12; // Corrige o mês anterior
             }
 
-            if (dtqFinal.iMes >= 3) {anoParaBissexto = dtqFinal.iAno;} // Ano final
-            else {anoParaBissexto = dtqFinal.iAno - 1;} // Ano anterior ao ano final
-            
             // Ajusta fevereiro em ano bissexto
             if (mesAnterior == 2) {
                 if (bissexto(anoParaBissexto)) {
@@ -465,6 +491,15 @@ int main () {
 
     strcpy(datainicial, "06/06/2017");
     strcpy(datafinal, "07/07/2017");
+    dma = q2(datainicial, datafinal);
+    printf("\nIntervalo: %s - %s\n", datainicial, datafinal);
+    printf("%d\n", dma.retorno == 1);
+    printf("%d\n", dma.qtdDias == 1);
+    printf("%d\n", dma.qtdMeses == 1);
+    printf("%d\n", dma.qtdAnos == 0);
+
+    strcpy(datainicial, "6/6/2017");
+    strcpy(datafinal, "7/7/17");
     dma = q2(datainicial, datafinal);
     printf("\nIntervalo: %s - %s\n", datainicial, datafinal);
     printf("%d\n", dma.retorno == 1);

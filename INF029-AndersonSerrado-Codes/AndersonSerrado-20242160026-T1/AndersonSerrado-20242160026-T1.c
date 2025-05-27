@@ -225,15 +225,15 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             difMes--; // Corrige o mês
 
             // Guarda o mês anterior ao mês final
-            int mesAnterior = dtqFinal.iMes - 1; 
-            
-            if (dtqFinal.iMes >= 3) {anoParaBissexto = dtqFinal.iAno;} // Ano final
-            else {anoParaBissexto = dtqFinal.iAno - 1;} // Ano anterior ao ano final
+            int mesAnterior = dtqFinal.iMes - 1;
             
             // Se o mês final for janeiro, corrige o mês anterior para dezembro
             if (mesAnterior == 0) {
                 mesAnterior = 12; // Corrige o mês anterior
             }
+
+            if (dtqFinal.iMes >= 3) {anoParaBissexto = dtqFinal.iAno;} // Ano final
+            else {anoParaBissexto = dtqFinal.iAno - 1;} // Ano anterior ao ano final   
 
             // Ajusta fevereiro em ano bissexto
             if (mesAnterior == 2) {
@@ -253,7 +253,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         // Caso 3: 29/02/2016 a 29/02/2020 -> 4a0m0d (regral geral)
         // Caso 4: DD/MM (01 OU 02)/AAAA bissexto a DD-1/MM (01 OU 02)/AAAA não bissexto -> 1a0m0d
         if (bissexto(dtqInicial.iAno) && bissexto(dtqFinal.iAno) != 1 && difMes == 11 && difDia == 30) {
-            printf("\nEntrou");
+            //printf("\nEntrou");
             difAno += 1;
             difMes = 0;
             difDia = 0;
