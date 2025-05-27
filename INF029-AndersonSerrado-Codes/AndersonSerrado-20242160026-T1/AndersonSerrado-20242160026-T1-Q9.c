@@ -12,6 +12,15 @@ int tamBarcos[] = {4,3,1};
 int tiposBarcos = sizeof(tamBarcos) / sizeof(tamBarcos[0]);
 int largura = 1;
 
+// Limpa a tela
+void limparTela () {
+    #ifdef _WIN32
+        system("cls");   
+    #else
+        system("clear"); 
+    #endif
+}  
+
 // Preenche a matriz com espaços (' ')
 void iniciaMatriz (char matriz[tam][tam]) {
     for (int i = 0; i < tam; i++){
@@ -334,12 +343,7 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[], int p[],
 
 int main () {
 
-    // Limpa a tela
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+    limparTela();
 
     char m1[tam][tam]; // Tabuleiro do jogador 1
     char m2[tam][tam]; // Tabuleiro do jogador 2
