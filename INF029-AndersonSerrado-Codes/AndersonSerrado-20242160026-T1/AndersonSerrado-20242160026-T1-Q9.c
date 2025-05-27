@@ -4,12 +4,13 @@
 #include <ctype.h>
 
 // Constantes
-#define qtdBarcos 5
+#define qtdBarcos 2
 #define tam 10
 
 // Variáveis globais
 int tamBarcos[] = {4,3,1};
 int tiposBarcos = sizeof(tamBarcos) / sizeof(tamBarcos[0]);
+int maxNs = 10;
 int largura = 1;
 
 // Limpa a tela
@@ -117,7 +118,7 @@ int validaBarco (int barco, int barcos[], char direcao) {
 }
 
 // Converte de char para int e verifica se os valores são válidos
-int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direcao) {
+int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direcao, int tipo) {
     
     // Valida o comprimento da célula
     int lenCelula = strlen(celula);
@@ -153,18 +154,21 @@ int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direca
     if (celula[2] == '\n') {*idCol = celula[1] - '1';}
     else {*idCol = 9;}
 
-    if (direcao == 'H') {
-        int limiteh = tam - barco;
-        if (*idCol > limiteh) {
-            printf("\nCélula inválida. O barco extrapola os limites do tabuleiro. Tente novamente...");
-            return -1;
+    // Só executa se validaPosicao for chamada pela função posicionarBarcos
+    if (tipo == 0) {
+        if (direcao == 'H') {
+            int limiteh = tam - barco;
+            if (*idCol > limiteh) {
+                printf("\nCélula inválida. O barco extrapola os limites do tabuleiro. Tente novamente...");
+                return -1;
+            }
         }
-    }
-    else {
-        int limitev = tam - barco;
-        if (*idLin > limitev) {
-            printf("\nCélula inválida. O barco extrapola os limites do tabuleiro. Tente novamente...");
-            return -1;
+        else {
+            int limitev = tam - barco;
+            if (*idLin > limitev) {
+                printf("\nCélula inválida. O barco extrapola os limites do tabuleiro. Tente novamente...");
+                return -1;
+            }
         }
     }
     
@@ -205,7 +209,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
         if (matriz[idLin][idCol] == ' ') {
             matriz[idLin][idCol] = 'N';
             p[*cont] = concatenaPosicao(idLin, idCol);
-            printf("cont = %d | p = %d\n", *cont, p[*cont]);
+            //printf("cont = %d | p = %d\n", *cont, p[*cont]);
 
             // Incrementos
             idLin += dLin;
@@ -216,7 +220,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
         else {sentinela = 1; break;} // Conserva i
     }
 
-    // Sobreposição de barcos
+    // Barco marcado em posição inválida (N ou L)
     if (sentinela == 1) {
         
         // Retorna os índices para a última posição marcada
@@ -229,6 +233,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
             matriz[idLin][idCol] = ' ';
             p[*cont] = 0;
 
+            // Decrementos
             idLin -= dLin;
             idCol -= dCol;
             (*cont)--;
@@ -287,7 +292,7 @@ int marcaBarco (char matriz[tam][tam], int idLin, int idCol, int barco, int barc
 }
 
 // Posiciona o barco, com auxílio das funções anteriores
-void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[], int p[], int *cont) {
+void posicionarBarcos (char matriz[tam][tam], int jogador, int barcos[], int p[], int *cont) {
     
     // Declarações
     char celula[4]; // +1 para o \0
@@ -326,7 +331,7 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[], int p[],
 
             printf("Informe a posição do barco %d: ", i + 1);
             fgets(celula, sizeof(celula), stdin);
-            flagCelula = validaPosicao(celula, &idLin, &idCol, barco, direcao);
+            flagCelula = validaPosicao(celula, &idLin, &idCol, barco, direcao, 0);
 
             // Posição e barco válidos
             if (flagCelula == 0) { 
@@ -341,28 +346,60 @@ void posicionarBarcos(char matriz[tam][tam], int jogador, int barcos[], int p[],
     } // Fim do for
 }
 
+void atacar () {
+
+/*
+1º Jogador informa a posição;
+2º Validar a posição informada, passando o tipo 1;
+    3º Se a posição for válida, converte a posição para um idxCel com concatenaPosicao
+    4º Busca o idxCel no vetor p;
+        5º Se o idxCel existir em p, marca o p[i] com -1 e marca a matriz com O
+    6º Se i idxCel não existir marca a matriz com X
+
+
+*/
+
+}
+
 int main () {
 
     limparTela();
 
-    char m1[tam][tam]; // Tabuleiro do jogador 1
-    char m2[tam][tam]; // Tabuleiro do jogador 2
-    int p1[10] = {0}; // Guarda os navios do jogador 1
-    int p2[10] = {0}; // Guarda os navios do jogador 2
-    int cont1 = 0; // Conta o número de Ns do jogador 1
-    int cont2 = 0; // Conta o número de Ns do jogador 2
-
-    int barcos1[] = {1,1,3}; // 4, 3 e 1
-    int barcos2[] = {1,1,3}; // 4, 3 e 1
-
-    // Tamanho dos barcos
-    // Pedir a direção do barco: V ou H
-    // Validar posição: contorno
+    // Declarações
+    char m1[tam][tam]; // Tabuleiro
+    char m2[tam][tam];
 
     iniciaMatriz(m1);
     iniciaMatriz(m2);
 
+    // Declarações
+    int p1[10]; // Guarda a posição dos barcos
+    int p2[10];
+
+    // Inicialização p
+    for (int i = 0; i < maxNs; i++) {
+        p1[i] = -1;
+        p2[i] = -1;
+    }
+
+    int cont1 = 0; // Conta o número de Ns marcados
+    int cont2 = 0;
+    int barcos1[] = {1,1,3}; // 4, 3 e 1
+    int barcos2[] = {1,1,3}; // 4, 3 e 1
+
     posicionarBarcos(m1, 1, barcos1, p1, &cont1);
     posicionarBarcos(m2, 2, barcos2, p2, &cont2);
+
+    limparTela();
+    printf("Let the games begin 😈!\n");
+
+    // Declarações
+    int sank1 = 0; // Conta o número de Ns afundados
+    int sank2 = 0;
+
+    while (sank1 < maxNs && sank2 < maxNs) {
+        atacar(m1, p1, &sank1); // Jogador 1
+        atacar(m2, p2, &sank2); // Jogador 2
+    }
     
 } // Fim da main
