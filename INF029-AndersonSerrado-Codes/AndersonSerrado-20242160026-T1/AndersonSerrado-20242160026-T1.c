@@ -1,4 +1,4 @@
-// #################################################
+/* #################################################
 //  Instituto Federal da Bahia
 //  Salvador - BA
 //  Curso de Análise e Desenvolvimento de Sistemas http://ads.ifba.edu.br
@@ -17,9 +17,10 @@
 //  Semestre: 2º
 
 //  Copyright © 2016 Renato Novais. All rights reserved.
-// Última atualização: 07/05/2021 - 19/08/2016
+//  Última atualização: 07/05/2021 - 19/08/2016
 
 // #################################################
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -110,7 +111,7 @@ int q1(char data[]) {
     
     // Chama a função quebraData
     // quebraData divide a string data em strings sDia, sMes, sAno
-    DataQuebrada dataEntrada = quebraData(data); // recebe dq, do escopo de quebraData
+    DataQuebrada dataEntrada = quebraData(data); // Recebe dq, do escopo de quebraData
 
     // Verifica se o formato de entrada está correto
     if (dataEntrada.valido == 0) {
@@ -193,11 +194,11 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         // ### Verifica se a data inicial é posterior à final ###
         // Converte a data em um único número no formato: aaaammdd
         // Este trabalho só considera datas entre 1000 e 9999
-        int idataConcat = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
-        int fdataConcat = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
+        int idataInvertida = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
+        int fdataInvertida = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
 
         // Compara as datas
-        if (idataConcat > fdataConcat) {
+        if (idataInvertida > fdataInvertida) {
             dma.retorno = 4;
             dma.qtdAnos = 0;
             dma.qtdMeses = 0;
@@ -245,15 +246,6 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
             
             difDia = diasMes[mesAnterior - 1] - dtqInicial.iDia + dtqFinal.iDia;
         }
-
-        // Ajuste para bissextos com 365 dias
-        // Caso o ano seja bissexto e tenha 365 dias, contabiliza como 1 ano completo
-        /*if (bissexto(dtqInicial.iAno) && difMes == 11 && difDia == 30 && dtqFinal.iDia == dtqInicial.iDia - 1) {
-            printf("\nEntrou");
-            difAno += 1;
-            difMes = 0;
-            difDia = 0;
-        }*/
 
         // Anos bissextos
         // Caso 1: 28/02/2016 a 28/02/2017 (366d) ou 29/02/2016 a 01/03/2017 (366d) -> 1a0m0d (regra geral)

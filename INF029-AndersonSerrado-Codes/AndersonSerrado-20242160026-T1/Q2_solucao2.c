@@ -190,11 +190,11 @@ DiasMesesAnos q2(char datainicial[], char datafinal[]) {
         // ### Verifica se a data inicial é posterior à final ###
         // Converte a data em um único número no formato: aaaammdd
         // Este trabalho só considera datas entre 1000 e 9999
-        int idataConcat = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
-        int fdataConcat = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
+        int idataInvertida = dtqInicial.iAno * 10000 + dtqInicial.iMes * 100 + dtqInicial.iDia;
+        int fdataInvertida = dtqFinal.iAno * 10000 + dtqFinal.iMes * 100 + dtqFinal.iDia;
 
         // Compara as datas
-        if (idataConcat > fdataConcat) {
+        if (idataInvertida > fdataInvertida) {
             dma.retorno = 4;
             dma.qtdAnos = 0;
             dma.qtdMeses = 0;
@@ -410,7 +410,7 @@ int main () {
     strcpy(datainicial, "29/02/2016");
     strcpy(datafinal, "28/02/2020");
     dma = q2(datainicial, datafinal);
-    printf("\nIntervalo: %s - %s\n", datainicial, datafinal);
+    printf("\nxx Intervalo: %s - %s\n", datainicial, datafinal);
     printf("Retorno: %d\n", dma.retorno == 1);
     printf("Anos: %d\n", dma.qtdAnos == 3); 
     printf("Meses: %d\n", dma.qtdMeses == 11);
@@ -419,7 +419,7 @@ int main () {
     strcpy(datainicial, "29/02/2016");
     strcpy(datafinal, "29/02/2020");
     dma = q2(datainicial, datafinal);
-    printf("\nIntervalo: %s - %s\n", datainicial, datafinal);
+    printf("\nxx Intervalo: %s - %s\n", datainicial, datafinal);
     printf("Retorno: %d\n", dma.retorno == 1);
     printf("Anos: %d\n", dma.qtdAnos == 4); 
     printf("Meses: %d\n", dma.qtdMeses == 0);
@@ -435,7 +435,7 @@ int main () {
     printf("Dias: %d\n", dma.qtdDias == 0);
 
     // Testes do corretor
-    printf("\nTestes do correto:\n");
+    printf("\nTestes do corretor:\n");
     strcpy(datainicial, "01/06/2015");
     strcpy(datafinal, "01/06/2016");
     dma = q2(datainicial, datafinal);
