@@ -462,17 +462,6 @@ int q5(int num) {
     Quantidade de vezes que número de busca ocorre em número base
  */
 
-// Inverte os algarismos separados de um número inteiro em um vetor
-void inverteNumero (int iVetor[], int i) {
-    int temp;
-    for (int j = 0; j < i/2; j++) {
-        temp = iVetor[j];
-        iVetor[j] = iVetor[i - j - 1];
-        iVetor[i - j - 1] = temp;
-    }
-    return;
-}
-
 // Converte os algarismos inteiros de um vetor em caracteres
 void itoaArray (char cVetor[], int iVetor[], int i) {
     int j;
@@ -518,13 +507,9 @@ int q6(int numerobase, int numerobusca) {
     char cVetor_base[tam];
     char cVetor_busca[tam];
 
-    // Separa o número e guarda em um vetor
+    // Separa o número, guarda em um vetor e armazena a qtd. de dígitos
     int tamBase = separaNumero(numerobase, iVetor_base);
     int tamBusca = separaNumero(numerobusca, iVetor_busca);
-
-    // Coloca na ordem original os algarimos do número separado
-    inverteNumero(iVetor_base, tamBase);
-    inverteNumero(iVetor_busca, tamBusca);
 
     // Converte de int para char
     itoaArray(cVetor_base, iVetor_base, tamBase);
@@ -690,20 +675,20 @@ int q7(char matriz[8][10], char palavra[6]) {
     proch(len, palavra, matriz, &achou);
 
     // Procura a palavra na vertical ↕️
-    procv(len, palavra, matriz, &achou);
+    if (achou != 1) {procv(len, palavra, matriz, &achou);}
 
     // Procura a palavra na direção paralela à diagonal principal ↘️↖️
-    procip(len, palavra, matriz, &achou);
+    if (achou != 1) {procip(len, palavra, matriz, &achou);}
 
     // Procura a palavra na direção paralela à diagonal secundária ↙️↗️
-    procis(len, palavra, matriz, &achou);
+    if (achou != 1) {procis(len, palavra, matriz, &achou);}
 
     // Procura a "palavraInvertida" somente se "palavra" não for palíndromo
     if (strcmp(palavra, palavraInvertida) != 0) {
-        proch(len, palavraInvertida, matriz, &achou); // ↔️
-        procv(len, palavraInvertida, matriz, &achou); // ↕️
-        procip(len, palavraInvertida, matriz, &achou); // ↘️↖️
-        procis(len, palavraInvertida, matriz, &achou); // ↙️↗️
+        if (achou != 1) proch(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procv(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procip(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procis(len, palavraInvertida, matriz, &achou);
     }
 
     // Não achou

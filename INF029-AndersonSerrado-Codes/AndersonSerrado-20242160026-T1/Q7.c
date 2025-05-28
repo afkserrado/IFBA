@@ -154,20 +154,20 @@ int q7(char matriz[8][10], char palavra[6]) {
     proch(len, palavra, matriz, &achou);
 
     // Procura a palavra na vertical ↕️
-    procv(len, palavra, matriz, &achou);
+    if (achou != 1) {procv(len, palavra, matriz, &achou);}
 
     // Procura a palavra na direção paralela à diagonal principal ↘️↖️
-    procip(len, palavra, matriz, &achou);
+    if (achou != 1) {procip(len, palavra, matriz, &achou);}
 
     // Procura a palavra na direção paralela à diagonal secundária ↙️↗️
-    procis(len, palavra, matriz, &achou);
+    if (achou != 1) {procis(len, palavra, matriz, &achou);}
 
     // Procura a "palavraInvertida" somente se "palavra" não for palíndromo
     if (strcmp(palavra, palavraInvertida) != 0) {
-        proch(len, palavraInvertida, matriz, &achou); // ↔️
-        procv(len, palavraInvertida, matriz, &achou); // ↕️
-        procip(len, palavraInvertida, matriz, &achou); // ↘️↖️
-        procis(len, palavraInvertida, matriz, &achou); // ↙️↗️
+        if (achou != 1) proch(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procv(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procip(len, palavraInvertida, matriz, &achou);
+        if (achou != 1) procis(len, palavraInvertida, matriz, &achou);
     }
 
     // Não achou

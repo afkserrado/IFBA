@@ -107,8 +107,9 @@ int q6(int numerobase, int numerobusca) {
     */
 
     // Coloca na ordem original os algarimos do número separado
-    inverteNumero(iVetor_base, tamBase);
-    inverteNumero(iVetor_busca, tamBusca);
+    // Não precisa reverter
+    //inverteNumero(iVetor_base, tamBase);
+    //inverteNumero(iVetor_busca, tamBusca);
 
     /*Debug
     exibeiVetor(iVetor_base, tamBase);
