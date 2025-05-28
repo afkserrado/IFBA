@@ -1,4 +1,4 @@
-// Não funciona completamente
+// Não finalizada
 
 #include <stdio.h>
 #include <string.h>
