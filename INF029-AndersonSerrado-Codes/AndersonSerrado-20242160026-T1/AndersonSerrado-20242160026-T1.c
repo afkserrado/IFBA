@@ -308,9 +308,11 @@ int q3(char *texto, char c, int isCaseSensitive) {
          }
      }
      
+     /*
      printf("caractereCopia: %c\n", c);
      printf("textoCopia: %s\n", texto);
      printf("isCaseSensitive: %d\n", isCaseSensitive);
+     */
  
      return qtdOcorrencias;
 }
@@ -407,8 +409,8 @@ int q4(char *strTexto, char *strBusca, int posicoes[30]) {
     Número invertido
  */
 
- // Guarda os algarismos de um número inteiro em um vetor
- int separaNumero(int num, int vetor[]) {
+// Guarda os algarismos de um número inteiro em um vetor
+int separaNumero(int num, int vetor[]) {
     int i;
     for (i = 0; num != 0; i++) {
         vetor[i] = num % 10;
@@ -431,10 +433,9 @@ int q5(int num) {
 
     int i = separaNumero(num, vetor);
 
-    num = 0; // Reset
-    
     // Junta os algarismos e transforma em um número
     // Solução 1
+    num = 0; // Reset
     for (int j = 0; j < i; j++) {
         num = num * 10 + vetor[j];
     }
