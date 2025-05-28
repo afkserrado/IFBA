@@ -4,14 +4,14 @@
 #include <ctype.h>
 
 // Constantes
-#define qtdBarcos 2 // 5
+#define qtdBarcos 5
 #define tam 10
+#define maxNs 10
+#define largura 1
 
 // Variáveis globais
 int tamBarcos[] = {4,3,1};
 int tiposBarcos = sizeof(tamBarcos) / sizeof(tamBarcos[0]);
-int maxNs = 2; // 10
-int largura = 1;
 
 // Limpa a tela
 void limparTela() {
