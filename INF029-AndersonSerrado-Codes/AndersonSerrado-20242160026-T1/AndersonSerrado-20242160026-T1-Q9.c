@@ -154,7 +154,7 @@ int validaPosicao (char celula[], int *idLin, int *idCol, int barco, char direca
     if (celula[2] == '\n') {*idCol = celula[1] - '1';}
     else {*idCol = 9;}
 
-    // Só executa se validaPosicao for chamada pela função posicionarBarcos
+    // Para a função posicionarBarcos
     if (tipo == 0) {
         if (direcao == 'H') {
             int limiteh = tam - barco;
@@ -346,24 +346,54 @@ void posicionarBarcos (char matriz[tam][tam], int jogador, int barcos[], int p[]
     } // Fim do for
 }
 
-void atacar () {
+void atacar (char matriz[tam][tam], int p[], int *sank, int jogador) {
 
-/*
-1º Jogador informa a posição;
-2º Validar a posição informada, passando o tipo 1;
-    3º Se a posição for válida, converte a posição para um idxCel com concatenaPosicao
-    4º Busca o idxCel no vetor p;
-        5º Se o idxCel existir em p, marca o p[i] com -1 e marca a matriz com O
-    6º Se i idxCel não existir marca a matriz com X
+    char celula[4];
+    int flagCelula = -1;
+    int idLin = -1, idCol = -1;
 
+    while (flagCelula != 0) {  
 
-*/
+        printf("\nJogador %d - Sua vez de atacar: ", jogador);
+        fgets(celula, sizeof(celula), stdin);
+        flagCelula = validaPosicao(celula, &idLin, &idCol, 0, '0', 0);
 
+        // Posição inválida
+        if (flagCelula != 0) { 
+            printf("\n");
+            continue;
+        }
+
+        // Verifica se a posição já foi atacada antes
+        if (matriz[idLin][idCol] == 'O' || matriz[idLin][idCol] == 'X') {
+            printf("\nEssa posição já foi escolhida. Tente novamente...");
+            flagCelula = -1; // Reinicia o loop
+        }
+    }
+
+    // Transforma os índices da célula em um indexador único
+    int idxCel = concatenaPosicao(idLin, idCol);    
+
+    // Busca o indexador no vetor de posições
+    int i;
+    for (i = 0; i < maxNs; i++) {
+        // Barco encontrado
+        if (idxCel == p[i]) {
+            p[i] = -1; // "Elimina" a posição já encontrada
+            matriz[idLin][idCol] = 'O'; // Marca a posição acertada
+            (*sank)++; // Incrementa o número de Ns afundados
+            break; // Saída antecipada; Conserva o valor de i
+        }
+    }
+    // Barco não encontrado
+    if (i == maxNs) {matriz[idLin][idCol] = 'X';}
 }
 
 int main () {
 
     limparTela();
+    printf("Bem vindo ao Batalha Naval!\n");
+    printf("Pressione qualquer tecla para continuar.\n");
 
     // Declarações
     char m1[tam][tam]; // Tabuleiro
@@ -373,8 +403,8 @@ int main () {
     iniciaMatriz(m2);
 
     // Declarações
-    int p1[10]; // Guarda a posição dos barcos
-    int p2[10];
+    int p1[maxNs]; // Guarda a posição dos barcos
+    int p2[maxNs];
 
     // Inicialização p
     for (int i = 0; i < maxNs; i++) {
@@ -398,8 +428,8 @@ int main () {
     int sank2 = 0;
 
     while (sank1 < maxNs && sank2 < maxNs) {
-        atacar(m1, p1, &sank1); // Jogador 1
-        atacar(m2, p2, &sank2); // Jogador 2
+        atacar(m2, p2, &sank2, 1); // Jogador 1
+        atacar(m1, p1, &sank1, 2); // Jogador 2
     }
     
 } // Fim da main

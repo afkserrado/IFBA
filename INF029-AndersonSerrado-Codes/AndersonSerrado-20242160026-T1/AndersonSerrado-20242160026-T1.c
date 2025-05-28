@@ -32,6 +32,21 @@
 
 DataQuebrada quebraData(char data[]);
 
+#include <locale.h>
+
+void configurarLocale() {
+    #if defined(_WIN32) || defined(_WIN64) // Windows
+        setlocale(LC_ALL, "Portuguese"); 
+
+    #elif defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__) // Linux e macOS
+        setlocale(LC_ALL, "pt_BR.UTF-8");  
+    
+    #else
+        // Padrão genérico
+        setlocale(LC_ALL, "");
+    #endif
+}
+
 /*
 ## função utilizada para testes  ##
 
@@ -335,7 +350,7 @@ int q3(char *texto, char c, int isCaseSensitive) {
 int q4(char *strTexto, char *strBusca, int posicoes[30]) {
     
     // Garante que as funções da biblioteca <wchar.h> reconheçam corretamente não somente os caracteres ASCII, mas também caracteres Unicode
-    setlocale(LC_ALL, ""); 
+    configurarLocale();
 
     // Comprimento das strings multibytes
     int slenTexto = strlen(strTexto);
@@ -711,15 +726,15 @@ DataQuebrada quebraData(char data[]) {
         }
         sDia[i] = data[i];	
 	}
-	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
-		sDia[i] = '\0';  // coloca o barra zero no final
+	if (i == 1 || i == 2) { // Testa se tem 1 ou dois digitos
+		sDia[i] = '\0';  // Coloca o barra zero no final
 	}
     else {
 		dq.valido = 0;
         return dq;
     }  
 	
-	int j = i + 1; //anda 1 cada para pular a barra
+	int j = i + 1; // Anda 1 cada para pular a barra
 	i = 0;
 
     // Guarda o mês
@@ -731,15 +746,15 @@ DataQuebrada quebraData(char data[]) {
         sMes[i] = data[j];
 		i++;
 	}
-	if (i == 1 || i == 2) { // testa se tem 1 ou dois digitos
-		sMes[i] = '\0';  // coloca o barra zero no final
+	if (i == 1 || i == 2) { // Testa se tem 1 ou dois digitos
+		sMes[i] = '\0';  // Coloca o barra zero no final
 	}
     else {
 		dq.valido = 0;
         return dq;
     }
 	
-	j = j + 1; //anda 1 cada para pular a barra
+	j = j + 1; // Anda 1 cada para pular a barra
 	i = 0;
 	
     // Guarda o ano
@@ -751,8 +766,8 @@ DataQuebrada quebraData(char data[]) {
         sAno[i] = data[j];
 	 	i++;
 	}
-	if (i == 2 || i == 4) { // testa se tem 2 ou 4 digitos
-		sAno[i] = '\0';  // coloca o barra zero no final
+	if (i == 2 || i == 4) { // Testa se tem 2 ou 4 digitos
+		sAno[i] = '\0';  // Coloca o barra zero no final
 	}
     else {
 		dq.valido = 0;
