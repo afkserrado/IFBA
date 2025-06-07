@@ -24,35 +24,34 @@ while numero != 0:
     consumo = int(input("Informe o consumo em kWh: "))
     tipo = int(input("Informe o tipo do consumidor (1 - residencial; 2 - comercial; 3 - industrial): "))
 
-    for chave in tarifa:
-        if chave == tipo:
-            custo = consumo * tarifa[chave]
+    if tipo not in [1,2,3]:
+        print("Tipo invalido. Informe um numero de 1 a 3.\n")
+        continue
 
-    lista = {"numero": numero, "consumo": consumo, "tipo": tipo, "tarifa": tarifa[tipo], "custo": custo}
+    custo = consumo * tarifa[tipo]
 
     #Total para cada tipo
-    if lista["tipo"] == 1:
-        tt1 += lista["consumo"]
+    if tipo == 1:
+        tt1 += consumo
         cont1 += 1
-    elif lista["tipo"] == 2:
-        tt2 += lista["consumo"]
+    elif tipo == 2:
+        tt2 += consumo
         cont2 += 1
-    elif lista["tipo"] == 3:
-        tt3 += lista["consumo"]
+    elif tipo == 3:
+        tt3 += consumo
 
-    print(f"{lista}")
-    print(f"Custo total: {custo: .2f}\n")
+    print(f"Custo total: R$ {custo: .2f}\n")
 
-print(f"Total de consumo do tipo 1: {tt1}.\n")
-print(f"Total de consumo do tipo 2: {tt2}.\n")
-print(f"Total de consumo do tipo 3: {tt3}.\n")
+print(f"Total de consumo do tipo 1: {tt1} kWh.\n")
+print(f"Total de consumo do tipo 2: {tt2} kWh.\n")
+print(f"Total de consumo do tipo 3: {tt3} kWh.\n")
 
 if cont1 > 0:
-    print(f"Media de consumo do tipo 1: {tt1/cont1: .2f}")
+    print(f"Media de consumo do tipo 1: {tt1/cont1: .2f} kWh.")
 else:
     print("Nenhum consumidor do tipo 1 registrado.")
 
 if cont2 > 0:
-    print(f"Media de consumo do tipo 2: {tt2/cont2: .2f}")
+    print(f"Media de consumo do tipo 2: {tt2/cont2: .2f} kWh.")
 else:
     print("Nenhum consumidor do tipo 2 registrado.")
