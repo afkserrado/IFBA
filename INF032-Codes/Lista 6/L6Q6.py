@@ -1,8 +1,10 @@
 '''
 6.Entrar com vários números ate entrar com o numero 999. para cada numero imprimir seus divisores.
+
+OK
 '''
 
-entrada = 0
+entrada = ""
 while entrada != "999":
     entrada = input("Informe um numero: ")
     
@@ -13,6 +15,10 @@ while entrada != "999":
         break
     
     numero = int(entrada)
+
+    if numero == 0:
+        print("O número 0 não possui divisores.\n")
+        continue
 
     print(f"Divisores de {numero}:")
     for i in range(1, numero // 2 + 1):

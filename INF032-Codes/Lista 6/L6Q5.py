@@ -1,5 +1,7 @@
 '''
-5.Entrar com nomes enquanto forem diferentes de FIM e imprimir o primeiro caracter de cada nome;
+5.Entrar com nomes enquanto forem diferentes de FIM e imprimir o primeiro caracter de cada nome.
+
+OK
 '''
 
 nome = "0"

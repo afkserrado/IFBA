@@ -1,5 +1,7 @@
 '''
 1. Entrar como n's números e imprimir o triplo de cada. o programa encerra quando entrar com o numero 999.
+
+OK
 '''
 
 numero = 0
