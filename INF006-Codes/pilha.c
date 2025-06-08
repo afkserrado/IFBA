@@ -6,7 +6,7 @@
 // Pilha
 
 // Cria a estrutura de uma pilha
-typedef struct {
+typedef struct pilha {
     int *itens; // Ponteiro para o array que armazena os elementos da pilha
     int tamanho; // Tamanho máximo da pilha
     int topo; // Índice do topo da pilha (inicialmente -1, porque começa vazia)
