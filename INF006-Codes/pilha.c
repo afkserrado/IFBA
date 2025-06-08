@@ -49,7 +49,7 @@ int pop (pilha *lista) {
 }
 
 // Retorna o último item inserido na pilha
-int topo (pilha *lista) {
+int top (pilha *lista) {
     if (!pilha_vazia(lista)) {
         return lista->itens[lista->topo]; // Retorna o item do topo
     } 
@@ -88,7 +88,7 @@ int main() {
     push(lista, 5);
     push(lista, 15);
     imprimir_pilha(lista);
-    printf("Topo: %d\n", topo(lista));
+    printf("Topo: %d\n", top(lista));
     printf("Tamanho: %d\n", size(lista));
     clear(lista);
     imprimir_pilha(lista);
