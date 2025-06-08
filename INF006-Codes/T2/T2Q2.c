@@ -8,6 +8,9 @@ Aluno: Anderson Serrado
 T2Q2
 
 Implemente uma pilha de texto todos os elementos est˜ao sempre ordenados alfabeticamente sem ferir a politica LIFO (las-in first-out).
+
+Obs. 1: entende-se que os nomes são todos simples.
+Obs. 2: entende-se que os nomes começam com uma letra capital.
 */
 
 // ##################################################### //
@@ -16,61 +19,14 @@ Implemente uma pilha de texto todos os elementos est˜ao sempre ordenados alfabe
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <math.h>
 
 // ##################################################### //
 // CONSTANTES
 
-#define tamEntrada 3001
-
-// ##################################################### //
-// STRUCTS
-
-typedef struct {
-    int x;
-    int y;
-    float distancia;
-} ponto;
+#define tamEntrada 3001 // 3000 caracteres + 1 para o \0
 
 // ##################################################### //
 // FUNÇÕES
-
-// Elimina letras e parênteses da linha
-void limparLinha(char linha[tamEntrada]) {
-    int i, j = 0;  
-    int len = strlen(linha); // Calcula o comprimento da linha
-    for (i = 0; i < len; i++) {
-        if (isdigit(linha[i]) || linha[i] == ',' || linha[i] == ' ' || linha[i] == '-') {
-            // Shift
-            linha[j] = linha[i];
-            j++;
-        }
-    }
-    linha[j] = '\0'; // Insere o terminador nulo
-}
-
-// Calcula a distância entre dois pontos
-float calculaDistancia (int x1, int y1, int x2, int y2) {
-    float distancia = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-    return distancia;
-}
-
-//Insertion sort
-void insertionSort (ponto A[], int cont){
-    int i, j;
-    ponto temp;
-    for (j = 1; j < cont; j++){
-        temp = A[j];
-        i = j - 1;
-        
-        while (i >= 0 && A[i].distancia > temp.distancia){
-            A[i + 1] = A[i];
-            i--;
-        }
-        A[i + 1] = temp;
-    }
-}
 
 // ##################################################### //
 // MAIN
@@ -78,8 +34,8 @@ void insertionSort (ponto A[], int cont){
 int main () {
 
     // Abre o arquivo e retorna um endereço de memória
-    FILE *arqEntrada = fopen("L0Q1.in", "r"); // Ponteiro para o tipo FILE
-    FILE *arqSaida = fopen("L0Q1.out", "w");
+    FILE *arqEntrada = fopen("L1Q2.in", "r"); // Ponteiro para o tipo FILE
+    FILE *arqSaida = fopen("L1Q2.out", "w"); // Cria o arquivo se não existir
 
     // Se o arquivo não puder ser aberto, fopen retorna NULL
     if (arqEntrada == NULL || arqSaida == NULL) {
@@ -90,9 +46,10 @@ int main () {
     // Declarações
     char linha[tamEntrada];
     char *token;
-    char delimitador[] = ", ";
+    char delimitador[] = " ";
+    char nomes[tamEntrada];
+    int cont = 0;
     int flag = 0;
-    ponto pontos[100]; // Supondo um máximo de 100 pontos
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
@@ -100,69 +57,62 @@ int main () {
 
         // Pula a linha após o primeiro loop e evita pular após o último
         if (flag == 1) {
-            fprintf(arqSaida, "\n"); // Próxima linha
+            fprintf(arqSaida, "\n");
         }
         
-        // Remove o caractere de nova linha (caso exista)
-        linha[strcspn(linha, "\n")] = '\0';  // Remove o '\n' se presente
-
-        limparLinha(linha);
+        // Remove o \n (caso exista)
+        linha[strcspn(linha, "\n")] = '\0';
 
         // Resets
-        int cont = 0; // Marca a posição do ponto no vetor de pontos
-        float distance = 0; // Distância total entre os pontos
-        float shortcut = 0; // Distância entre o primeiro e último pontos
-        int erro = 0;
+        cont = 0;
 
-        token = strtok(linha, delimitador); // Pega o primeiro par
+        // Pega o primeiro nome da linha
+        token = strtok(linha, delimitador);
+
+        /*
+        Obs. 1: como a linha sempre tem pelo menos um nome, o primeiro nome nunca é NULL.
+        Obs. 2: 'strtok' já insere o terminador nulo ('\0') ao final da string.
+        */
+
+        // Tratamento de erros
+        if (token == NULL) {  // Caso a linha esteja vazia ou com formato incorreto
+            fprintf(stderr, "Erro: linha vazia ou inválida.\n");
+            continue; // Pula para a próxima linha
+        }
 
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
-        while (token != NULL && cont < 100) { 
-                        
-            pontos[cont].x = atoi(token); // Coordenada x do par atual
-            token = strtok(NULL, delimitador);
-
-            if (token == NULL) {
-                erro = 1; // Número ímpar de valores
-                break;
-            }
-
-            pontos[cont].y = atoi(token); // Coordenada y do par atual
-
-            // Guarda a distância do ponto até a origem
-            pontos[cont].distancia = calculaDistancia(0, 0, pontos[cont].x, pontos[cont].y);
+        while (token != NULL) { 
             
-            cont++; // Passa para o próximo par
-
-            token = strtok(NULL, delimitador); // Busca os próximos pares
-        }
-
-        if (erro || cont == 0) continue; // Linha não lida. Passa para a próxima
-
-        // Linha só tem 1 ponto
-        if (cont <= 1) { 
-            distance = 0;
-            shortcut = 0;
-        }
-        // Calcula a distância entre o primeiro e último pontos
-        else {
-            shortcut = calculaDistancia(pontos[0].x, pontos[0].y, pontos[cont - 1].x, pontos[cont - 1].y);
-
-            distance = 0;
-            for (int i = 1; i < cont; i++) {
-                distance += calculaDistancia(pontos[i - 1].x, pontos[i - 1].y, pontos[i].x, pontos[i].y);
+            // Copia o nome para o array 'nomes'
+            for (int i = 0; token[i] != '\0'; i++) {
+                nomes[cont] = token[i];
+                cont++;
             }
+
+            // Coloca um espaço entre os nomes
+            nomes[cont] = ' ';
+            cont++;
+
+            // 'strtok' recebe NULL para buscar o próximo token na mesma string, mas após o token anterior
+            token = strtok(NULL, delimitador); // Busca o próximo nome
         }
 
-        insertionSort(pontos, cont);
+        // Corrige a última posição para remover o último ' ' adicionado
+        if (cont > 0) {
+            cont--;
+        }
+
+        // Verifica se houve algum erro no processamento da linha
+        if (cont == 0) {
+            fprintf(arqSaida, "Erro: não foi possível processar a linha.\n");
+            continue; // Pula para a próxima linha caso não haja nomes válidos
+        }
 
         // Escreve os resultados no arquivo de saída
-        fprintf(arqSaida, "points ");
         for (int i = 0; i < cont; i++) {
-            fprintf(arqSaida, "(%d,%d) ", pontos[i].x, pontos[i].y);
+            fprintf(arqSaida, "%c", nomes[i]);
         }
-        fprintf(arqSaida, "distance %.2f shortcut %.2f", distance, shortcut);
         
         flag = 1;
     }
