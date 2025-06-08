@@ -18,7 +18,7 @@ typedef struct lista_dup{
 // Cria e inicializa um novo nó e configura seus ponteiros para NULL
 node *init_node (int chave) {
     node *node_st = malloc(sizeof(node)); // Aloca memória para o primeiro nó
-    node_st->chave = chave;
+    node_st->chave = chave; // node_st de first node
     node_st->ante = NULL;
     node_st->prox = NULL;
     return node_st;
