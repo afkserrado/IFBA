@@ -48,12 +48,32 @@ int pop (pilha *lista) {
     }
 }
 
+// Retorna o último item inserido na pilha
+int topo (pilha *lista) {
+    if (!pilha_vazia(lista)) {
+        return lista->itens[lista->topo]; // Retorna o item do topo
+    } 
+    else {
+        printf("Pilha vazia.\n");
+        return INT_MAX; // Retorna um valor de erro se a pilha estiver vazia
+    }
+}
+
+// Retorna a quantidade de itens na pilha
+int size (pilha *lista) {
+    return lista->topo + 1; // topo é um índice de base 0
+}
+
+// Limpa todos os itens da pilha sem destrui-la
+void clear (pilha *lista) {
+    lista->topo = -1; // Reseta o topo
+}
+
 void imprimir_pilha (pilha *lista) {
     printf("<< \n");
     for (int i = lista->topo; i >= 0; i--) {
         if (i == lista->topo) {
             printf("topo ->  %d\n", lista->itens[i]); // Marca o topo
-            printf("\t %d\n", lista->itens[i]); // Imprime o topo
         } 
         else
             printf("\t %d\n", lista->itens[i]); // Imprime os demais elementos
@@ -67,6 +87,10 @@ int main() {
     push(lista, 10);
     push(lista, 5);
     push(lista, 15);
+    imprimir_pilha(lista);
+    printf("Topo: %d\n", topo(lista));
+    printf("Tamanho: %d\n", size(lista));
+    clear(lista);
     imprimir_pilha(lista);
 
     // Liberação de memória
