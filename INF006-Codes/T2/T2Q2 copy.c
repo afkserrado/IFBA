@@ -29,11 +29,11 @@ Obs. 2: entende-se que os nomes começam com uma letra capital.
 #define tamLinha 3001 // 3000 caracteres + 1 para o \0
 
 // ##################################################### //
-// ESTRUTURAS DE DADOS: PILHA
+// ESTRUTURAS DE DADOS
 
 // Cria a estrutura de uma pilha
 typedef struct pilha {
-    char **nomes; // Ponteiro para o array de ponteiros de strings
+    char *nomes; // Ponteiro para o array que armazena os elementos da pilha
     int tamanho; // Tamanho máximo da pilha
     int topo; // Índice do topo da pilha (inicialmente -1, porque começa vazia)
 } pilha;
@@ -67,7 +67,7 @@ tamPilha = ceil(((tamLinha - 1) + 1) / 2);
 // Cria e inicializa uma pilha chamada pilha_nomes
 int tamPilha = ceil((float)tamLinha / 2);
 void init_pilha (pilha *pilha_nomes) {
-    pilha_nomes->nomes = malloc(tamPilha * sizeof(char*)); // Aloca memória para o array de ponteiros de strings
+    pilha_nomes->nomes = malloc(tamPilha * sizeof(char)); // Aloca memória para o array da pilha
     pilha_nomes->tamanho = tamPilha; // Define o tamanho máximo da pilha
     pilha_nomes->topo = -1; // Inicializa o topo como -1 (pilha vazia)
 }
@@ -81,22 +81,18 @@ bool pilha_vazia (pilha *pilha_nomes) {
 }
 
 // Insere elementos na pilha
-void push (pilha *pilha_nomes, char *token) {
+void push (pilha *pilha_nomes, int item) {
     if (!pilha_cheia(pilha_nomes)) { // Se a pilha estiver vazia
-        pilha_nomes->topo++; // Incrementa o topo, adicionando o item na pilha_nomes
-        
-        // Aloca memória para a string
-        pilha_nomes->nomes[pilha_nomes->topo] = malloc(strlen(token) + 1); 
-
-        // Guarda a string na pilha
-        strcpy(pilha_nomes->nomes[pilha_nomes->topo], token);
+        pilha_nomes->topo = pilha_nomes->topo + 1; // Incrementa o topo, adicionando o item na pilha_nomes
+        pilha_nomes->nomes[pilha_nomes->topo] = item; // Insere o item no topo da pilha
     }
+    // !!!!!!!! AJUSTAR
     else {
         printf("Pilha cheia.\n");
     }
 }
 
-/*// Remove elementos da pilha
+// Remove elementos da pilha
 int pop (pilha *pilha_nomes) {
     if (!pilha_vazia(pilha_nomes)) { // Se a pilha não estiver vazia
         pilha_nomes->topo = pilha_nomes->topo - 1; // Decrementa o topo, removendo o item da pilha_nomes
@@ -107,20 +103,18 @@ int pop (pilha *pilha_nomes) {
         printf("Pilha vazia.\n");
         return INT_MAX; // Retorna um valor de erro se a pilha estiver vazia
     }
-}*/
+}
 
-void imprimir_pilha (pilha *pilha_nomes, int pushes, FILE *arqSaida) {
-    int base = pilha_nomes->topo - (pushes - 1); // Índice do primeiro elemento da linha
-    int topo = pilha_nomes->topo;
-
-    for (int i = base; i <= topo; i++) {
-        if (i == topo) {
-            fprintf(arqSaida, "%s", pilha_nomes->nomes[i]); // Imprime o topo
-        }
-        else {
-            fprintf(arqSaida, "%s ", pilha_nomes->nomes[i]); // Imprime os demais elementos
-        }
+void imprimir_pilha (pilha *pilha_nomes) {
+    printf("<< \n");
+    for (int i = pilha_nomes->topo; i >= 0; i--) {
+        if (i == pilha_nomes->topo) {
+            printf("topo ->  %d\n", pilha_nomes->nomes[i]); // Marca o topo
+        } 
+        else
+            printf("\t %d\n", pilha_nomes->nomes[i]); // Imprime os demais elementos
     }
+    printf(">>\n");
 }
 
 // ##################################################### //
@@ -133,7 +127,6 @@ int main () {
 
     //printf("tamPilha = %d\n", tamPilha);
     pilha *pilha_nomes = malloc(sizeof(pilha));
-    init_pilha(pilha_nomes);
 
     // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L1Q2.in", "r"); // Ponteiro para o tipo FILE
@@ -149,8 +142,9 @@ int main () {
     char linha[tamLinha];
     char *token;
     char delimitador[] = " ";
+    char nomes[tamLinha];
     int flag = 0;
-    int pushes;
+    int cont;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
@@ -161,9 +155,14 @@ int main () {
             fprintf(arqSaida, "\n");
         }
         
-        linha[strcspn(linha, "\n")] = '\0'; // Remove o \n (caso exista)
-        token = strtok(linha, delimitador); // Pega o primeiro nome da linha
-        pushes = 0; // Reset
+        // Remove o \n (caso exista)
+        linha[strcspn(linha, "\n")] = '\0';
+
+        // Resets
+        cont = 0;
+
+        // Pega o primeiro nome da linha
+        token = strtok(linha, delimitador);
 
         /*
         Obs. 1: como a linha sempre tem pelo menos um nome, o primeiro nome nunca é NULL.
@@ -180,30 +179,47 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            push(pilha_nomes, token); // Guarda o token na pilha
-            pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
-            token = strtok(NULL, delimitador); // Busca o próximo nome
+            
+            /*// Copia o nome para o array 'nomes'
+            for (int i = 0; token[i] != '\0'; i++) {
+                nomes[cont] = token[i];
+                cont++;
+            }*/
+
+            push(pilha_nomes, *token);
+
+            /*// Coloca um espaço entre os nomes
+            nomes[cont] = ' ';
+            cont++;
+            */
+
+            // Busca o próximo nome
+            token = strtok(NULL, delimitador);
 
             /*
             Obs.: 'strtok' recebe NULL para buscar o próximo token na mesma string, mas após o token anterior
             */
         }
 
+        // Corrige a última posição para remover o último ' ' adicionado
+        if (cont > 0) {
+            cont--;
+        }
+
         // Verifica se houve algum erro no processamento da linha
-        if (pushes == 0) {
+        if (cont == 0) {
             fprintf(arqSaida, "Erro: não foi possível processar a linha.");
             flag = 1;
             continue; // Pula para a próxima linha caso não haja nomes válidos
         }
-          
-        imprimir_pilha(pilha_nomes, pushes, arqSaida);
 
+        // Escreve os resultados no arquivo de saída
+        for (int i = 0; i < cont; i++) {
+            fprintf(arqSaida, "%c", nomes[i]);
+        }
+        
         flag = 1;
     }
-
-    // Liberação de memória
-    free(pilha_nomes->nomes);  // Libera a memória alocada para o array de itens
-    free(pilha_nomes);  // Libera a memória alocada para a estrutura da pilha
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
     fclose(arqSaida); // Fecha o arquivo e libera a memória

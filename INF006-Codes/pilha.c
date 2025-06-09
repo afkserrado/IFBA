@@ -85,6 +85,17 @@ void imprimir_pilha (pilha *pilha_nv) {
 
 int main() {
     pilha *pilha_nv = malloc(sizeof(pilha));
+
+    /*
+    'malloc' separa um espaço dentro da memória para armazenar a pilha e retorna o endereço desse espaço para a variável 'pilha_nv'.
+
+    Ou seja, 'pilha_nv' é declarada como uma variável do tipo ponteiro para pilha. Como ela armazena o endereço de um espaço de memória, precisamos saber quem é esse endereço. O 'malloc', então, separa um espaço na memória para armazenar uma todos os campos de uma 'pilha' e retorna esse endereço para 'pilha_nv'.
+
+    Sendo assim, 'pilha_nv' aponta para um espaço na memória que possui 16 bytes: 8 do int *itens + 4 de int tamanho + 4 de int topo.
+
+    'itens' também é um ponteiro, que aponta para outro espaço de memória, mas esse espaço é variável, pois depende do tamanho. Isto é, o espaço de memória destinado aos itens da pilha possui 4 bytes para cada item da pilha. Se a pilha tiver 10 itens, então 'itens' apontará para um espaço de memória com 40 bytes.
+    */
+
     inicializa_pilha(pilha_nv, 10);
     push(pilha_nv, 10);
     push(pilha_nv, 5);
