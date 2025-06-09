@@ -39,6 +39,17 @@ typedef struct pilha {
 } pilha;
 
 /*
+'nomes' é como um vetor de ponteiros. Cada i aponta para um outro endereço. Ou seja, 'nomes' contém um endereço correspondente a um bloco contíguo de memória. Cada índice desse bloco contém um outro endereço, que aponta para o início da string. 
+
+Por exemplo, se a pilha contiver os nomes Anderson, Kleyson e Serrado:
+nomes[0] > contém o endereço de memória onde 'A', primeira letra do primeiro nome, está armazenada.
+nomes[2] > da mesma forma, aponta para o endereço de memória de 'S', que é um bloco contíguo, contendo o nome "Serrado".
+
+Portanto, int *itens é como um vetor de inteiros.
+Por outro lado, char **nomes é como um vetor de ponteiros, ou como uma matriz de char.
+*/
+
+/*
 Dimensionando o tamanho da pilha:
 
 Pior caso: a linha estaria preenchida até o final, mas cada nome seria apenas uma letra

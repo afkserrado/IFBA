@@ -19,6 +19,10 @@ void inicializa_pilha (pilha *pilha_nv, int tamanho) {
     pilha_nv->topo = -1; // Inicializa o topo como -1 (pilha vazia)
 }
 
+/*
+'itens' é como se fosse um vetor de inteiros. 'malloc' separa um bloco contíguo de memória para armazenar os inteiros. Esse bloco terá tamanho * 4 bytes. 'itens', portanto, contém o endereço de memória do primeiro byte desse bloco.
+*/
+
 bool pilha_cheia (pilha *pilha_nv) {
     return pilha_nv->topo == pilha_nv->tamanho - 1; // Retorna true se a pilha estiver cheia
 }
