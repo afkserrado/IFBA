@@ -21,6 +21,7 @@ void inicializa_pilha (pilha *pilha_nv, int tamanho) {
 
 /*
 'itens' é como se fosse um vetor de inteiros. 'malloc' separa um bloco contíguo de memória para armazenar os inteiros. Esse bloco terá tamanho * 4 bytes. 'itens', portanto, contém o endereço de memória do primeiro byte desse bloco.
+Quando fazemos itens[1], estamos acessando o segundo inteiro desse bloco, que ocupa os bytes 5 a 8.
 */
 
 bool pilha_cheia (pilha *pilha_nv) {
