@@ -24,6 +24,19 @@ void inicializa_pilha (pilha *pilha_nv, int tamanho) {
 Quando fazemos itens[1], estamos acessando o segundo inteiro desse bloco, que ocupa os bytes 5 a 8.
 */
 
+/*
+'pilha_nv' é um ponteiro para 'pilha'. Ou seja, ela aponta para um bloco de memória que contém dados do tipo 'pilha'.
+
+Sendo assim, 'pilha_nv' tem um total de 16 bytes:
+int *itens = 8 bytes (qualquer endereço de memória precisa de 8 bytes na arquitetura x64)
+int tamanho = 4 bytes
+int topo = 4 bytes
+
+Mas '*itens' é um ponteiro que aponta para um bloco de memória onde de fato estão os itens da pilha. 'pilha_nv' apenas armazena o endereço desse bloco, e não o bloco.
+
+Se o 'tamanho' for 5, então o bloco apontado por 'itens' teria 4 * 5 = 20 bytes, pois são necessários 4 bytes para cada número armazenado na pilha.
+*/
+
 bool pilha_cheia (pilha *pilha_nv) {
     return pilha_nv->topo == pilha_nv->tamanho - 1; // Retorna true se a pilha estiver cheia
 }

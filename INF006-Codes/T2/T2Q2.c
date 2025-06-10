@@ -92,7 +92,7 @@ bool pilha_vazia (pilha *pilha_nomes) {
 }
 
 // Insere elementos na pilha
-void push (pilha *pilha_nomes, char *token) {
+void push (pilha *pilha_nomes, char *token, FILE *arqSaida) {
     if (!pilha_cheia(pilha_nomes)) { // Se a pilha estiver vazia
         pilha_nomes->topo++; // Incrementa o topo, adicionando o item na pilha_nomes
         
@@ -103,7 +103,7 @@ void push (pilha *pilha_nomes, char *token) {
         strcpy(pilha_nomes->nomes[pilha_nomes->topo], token);
     }
     else {
-        printf("Pilha cheia.\n");
+        fprintf(arqSaida, "Pilha cheia."); // Imprime o topo
     }
 }
 
@@ -191,7 +191,7 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            push(pilha_nomes, token); // Guarda o token na pilha
+            push(pilha_nomes, token, arqSaida); // Guarda o token na pilha
             pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
             token = strtok(NULL, delimitador); // Busca o próximo nome
 
