@@ -90,22 +90,6 @@ bool pilha_cheia (pilha *pilha_nomes) {
     return pilha_nomes->topo == pilha_nomes->tamanho - 1; // Retorna true se a pilha estiver cheia
 }
 
-// Insere elementos na pilha (pilha tradicional)
-/*void push (pilha *pilha_nomes, char *token, FILE *arqSaida) {
-    if (!pilha_cheia(pilha_nomes)) { // Se a pilha estiver vazia
-        pilha_nomes->topo++; // Incrementa o topo, adicionando o item na pilha_nomes
-        
-        // Aloca memória para a string
-        pilha_nomes->nomes[pilha_nomes->topo] = malloc(strlen(token) + 1); 
-
-        // Guarda a string na pilha
-        strcpy(pilha_nomes->nomes[pilha_nomes->topo], token);
-    }
-    else {
-        fprintf(arqSaida, "Pilha cheia.");
-    }
-}*/
-
 // Insere elementos na pilha
 void push (pilha *pilha_nomes, char *token) {
     if (!pilha_cheia(pilha_nomes)) { // Se a pilha estiver vazia
@@ -117,9 +101,6 @@ void push (pilha *pilha_nomes, char *token) {
         // Guarda a string na pilha
         strcpy(pilha_nomes->nomes[pilha_nomes->topo], token);
     }
-    /*else {
-        fprintf(arqSaida, "Pilha cheia.");
-    }*/
 }
 
 // Verifica se a pilha está vazia
@@ -133,51 +114,40 @@ char* pop (pilha *pilha_nomes) {
         pilha_nomes->topo--; // Decrementa o topo, removendo o item da pilha_nomes
         return pilha_nomes->nomes[pilha_nomes->topo + 1]; // Retorna o elemento removido
     }
-    /*else {
-        printf("Pilha vazia.\n");
-        return INT_MAX; // Retorna um valor de erro se a pilha estiver vazia
-    }*/
 }
 
-void comparar (pilha *pilha_nomes, char *token, pilha *pilha_aux, int *pops) {
-    *pops = 0;
+void comparar (pilha *pilha_nomes, char *token, pilha *pilha_aux, FILE *arqSaida) {
+    int pops = 0;
     char *nome;
     
     if (!pilha_vazia(pilha_nomes)) { // Se a pilha não estiver vazia
         while (pilha_nomes->topo >= 0 && strcmp(token, pilha_nomes->nomes[pilha_nomes->topo]) < 0) {
             nome = pop(pilha_nomes);
             push(pilha_aux, nome);
-            (*pops)++;
+            pops++;
+        }
+
+        if (pops > 0) {
+            fprintf(arqSaida, " %dx−pop", pops);
         }
         
         // Guarda o token na pilha na posição ordenada
-        push(pilha_nomes, token); 
+        push(pilha_nomes, token);
+        fprintf(arqSaida, " push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
 
-        // Realoca os elementos removidos na pilha_nomes
-        if (*pops > 0) {
+        // Realoca os elementos removidos, caso haja, na pilha_nomes
+        if (pops > 0) {
             while (!pilha_vazia(pilha_aux)) {
                 nome = pop(pilha_aux);
                 push(pilha_nomes, nome);
+                fprintf(arqSaida, " push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
             }
         }
         
     }
     else { // Se a pilha estiver vazia
-        push(pilha_nomes, token); // Guarda o token na pilha
-    }
-}
-
-void imprimir_pilha (pilha *pilha_nomes, int pushes, FILE *arqSaida) {
-    int base = pilha_nomes->topo - (pushes - 1); // Índice do primeiro elemento da linha
-    int topo = pilha_nomes->topo;
-
-    for (int i = base; i <= topo; i++) {
-        if (i == topo) {
-            fprintf(arqSaida, "%s", pilha_nomes->nomes[i]); // Imprime o topo
-        }
-        else {
-            fprintf(arqSaida, "%s ", pilha_nomes->nomes[i]); // Imprime os demais elementos
-        }
+        push(pilha_nomes, token); // Guarda o token no topo da pilha
+        fprintf(arqSaida, "push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
     }
 }
 
@@ -234,7 +204,6 @@ int main () {
     char delimitador[] = " ";
     int flag = 0;
     int pushes;
-    int pops;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
@@ -269,7 +238,7 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            comparar(pilha_nomes, token, pilha_aux, &pops);
+            comparar(pilha_nomes, token, pilha_aux, arqSaida);
             pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
             token = strtok(NULL, delimitador); // Busca o próximo nome
 
@@ -284,12 +253,10 @@ int main () {
             flag = 1;
             continue; // Pula para a próxima linha caso não haja nomes válidos
         }
-          
-        imprimir_pilha(pilha_nomes, pushes, arqSaida);
 
         // Impede a quebra de linha após a última linha do arquivo
         // Reinicializa a pilha após a primeira linha
-        flag = 1; 
+        flag = 1;
     }
 
     // Libera a memória alocada para as pilhas
