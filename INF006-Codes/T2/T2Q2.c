@@ -206,9 +206,6 @@ void reinicializar_pilha(pilha *p) {
 }
 
 // ##################################################### //
-// FUNÇÕES
-
-// ##################################################### //
 // MAIN
 
 int main () {
@@ -243,13 +240,13 @@ int main () {
     // Percorre o arquivo
     while (fgets(linha, tamLinha, arqEntrada) != NULL) { 
 
-        // Reinicializa a pilha, liberando as strings e fazendo topo = -1
-        reinicializar_pilha(pilha_nomes);
-        reinicializar_pilha(pilha_aux);
-        
-        // Pula uma linha após o primeiro loop e evita pular após o último
         if (flag == 1) {
+            // Pula uma linha após o primeiro loop e evita pular após o último
             fprintf(arqSaida, "\n");
+
+            // Reinicializa a pilha, liberando as strings e fazendo topo = -1
+            reinicializar_pilha(pilha_nomes);
+            reinicializar_pilha(pilha_aux);
         }
         
         linha[strcspn(linha, "\n")] = '\0'; // Remove o \n (caso exista)
@@ -272,7 +269,7 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            comparar(pilha_nomes, strdup(token), pilha_aux, &pops);
+            comparar(pilha_nomes, token, pilha_aux, &pops);
             pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
             token = strtok(NULL, delimitador); // Busca o próximo nome
 
@@ -290,6 +287,8 @@ int main () {
           
         imprimir_pilha(pilha_nomes, pushes, arqSaida);
 
+        // Impede a quebra de linha após a última linha do arquivo
+        // Reinicializa a pilha após a primeira linha
         flag = 1; 
     }
 
