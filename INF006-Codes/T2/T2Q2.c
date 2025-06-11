@@ -116,7 +116,7 @@ char* pop (pilha *pilha_nomes) {
     }
 }
 
-void comparar (pilha *pilha_nomes, char *token, pilha *pilha_aux, FILE *arqSaida) {
+void processar_token (pilha *pilha_nomes, char *token, pilha *pilha_aux, FILE *arqSaida) {
     int pops = 0;
     char *nome;
     
@@ -238,7 +238,7 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            comparar(pilha_nomes, token, pilha_aux, arqSaida);
+            processar_token(pilha_nomes, token, pilha_aux, arqSaida);
             pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
             token = strtok(NULL, delimitador); // Busca o próximo nome
 
