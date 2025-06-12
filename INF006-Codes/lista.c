@@ -33,6 +33,7 @@ Obs. 2: os bytes de padding não são utilizados para armazenar dados, apenas pa
 // Define a estrutura de uma lista duplamente encadeada
 typedef struct lista_dup {
     node *cabeca;
+    node *cauda;
 } lista_dup;
 
 // Cria e inicializa um novo nó e configura seus ponteiros para NULL
@@ -54,6 +55,7 @@ Obs. 2: a função init_node retorna um ponteiro para node, que aponta para a me
 lista_dup *init_lista () {
     lista_dup *lista = malloc(sizeof(lista_dup));
     lista->cabeca = NULL;
+    lista->cauda = NULL;
     return lista;
 }
 
@@ -61,12 +63,58 @@ lista_dup *init_lista () {
 void inserir_node (lista_dup *lista, node *node_novo) {
     if (lista->cabeca == NULL) { // Lista vazia
         lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
+        lista->cauda = node_novo;
     }
-    else { // Lista não vazia
+    /*
+    Obs. 1: "node_novo->ante" e "node_novo->prox" já apontam para NULL, porque isso foi definido no momento da inicialização do node_novo com init_node.
+    
+    Obs. 2: ao fazer "lista->cauda = node_novo" garantimos que "lista->cauda" sempre seja o último elemento da lista, pois a inserção está ocorrendo sempre na cabeça.
+    */ 
+
+    else { // Lista não vazia  
         // Insere o novo nó no início da lista
         node_novo->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
         lista->cabeca->ante = node_novo; // "ante" do atual "cabeca" aponta para o novo nó
         lista->cabeca = node_novo; //  "cabeca" recebe o novo nó
+    }
+}
+
+void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
+    if (lista->cabeca == NULL) { // Lista vazia
+        lista->cabeca = node_novo;
+    }
+    else { // Lista não vazia
+        
+        // Variáveis temporárias
+        node *x = lista->cabeca;
+        int chave = node_novo->chave;
+
+        while (x != NULL && x->chave < chave) {
+            x = x->prox;
+        }
+        /*
+        Quando o while é interrompido, 'x' guarda a posição do elemento imediatamente após à posição na qual a chave deve ser inserida. Por exemplo, se a lista contém 5, 7 e 9, 'x' possuíra o endereço de 9.
+        */
+
+        // Caso 1: o node_novo é o primeiro item da lista
+        if (x->ante == NULL) {
+            node_novo->prox = lista->cabeca;
+            node_novo->ante = NULL;
+            lista->cabeca->ante = node_novo;
+            lista->cabeca = node_novo;
+        }
+        // Caso 2: o node_novo é o último item da lista
+        else if (x == NULL) {
+            node_novo->prox = NULL;
+            node_novo->ante = x->ante;
+        }
+        // Caso 3: o node_novo ocupa qualquer posição intermediária da lista
+        else {
+            node_novo->ante = x->ante;
+            node_novo->prox = x;
+            x->ante->prox = node_novo;
+            x->ante = node_novo;      
+        }
     }
 }
 
