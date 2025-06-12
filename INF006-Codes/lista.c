@@ -4,30 +4,50 @@
 // Lista duplamente encadeada não ordenada
 
 // Define a estrutura de um nó da lista
-typedef struct node{
+typedef struct node {
     int chave;
-    struct node *ante;
+    struct node *ante; 
     struct node *prox;
 } node;
 
+/*
+Uma instância do tipo node possui 24 bytes:
+
+- 4 bytes para o int chave
+- 4 bytes de padding (adicionados pelo compilador)
+- 8 bytes para o ponteiro ante
+- 8 bytes para o ponteiro prox
+
+O que é o "padding"?
+O padding é uma técnica utilizada pelo compilador que adiciona bytes extras à estrutura de dados. Isso é feito para garantir que os endereços de memória dos ponteiros (que ocupam 8 bytes) estejam alinhados a múltiplos de 8 bytes. O alinhamento de memória é uma prática importante, especialmente em arquiteturas de 64 bits, onde a CPU lê os dados de 8 em 8 bytes (64 bits), garantindo que o acesso à memória seja otimizado.
+
+Por que o padding é necessário?
+Em uma arquitetura x64, a CPU trabalha de forma mais eficiente quando os dados estão alinhados de acordo com seu tamanho, especialmente para tipos como ponteiros (8 bytes). Se a estrutura node fosse armazenada sem o preenchimento (padding), o ponteiro ante poderia não estar alinhado a 8 bytes, o que faria com que a CPU precisasse realizar acessos adicionais à memória, prejudicando a performance.
+
+Ao adicionar 4 bytes de padding entre o int chave e o ponteiro ante, o compilador assegura que o ponteiro comece em um endereço múltiplo de 8 bytes, permitindo que a CPU faça o acesso em blocos de 8 bytes e melhor aproveite os recursos de memória da arquitetura de 64 bits.
+
+Obs. 1: lembrando que a palavra de um processador x64 é 64 bits. Por isso ele lê de 8 em 8 bytes.
+Obs. 2: os bytes de padding não são utilizados para armazenar dados, apenas para alinhamento.
+*/
+
 // Define a estrutura de uma lista duplamente encadeada
-typedef struct lista_dup{
+typedef struct lista_dup {
     node *cabeca;
 } lista_dup;
 
 // Cria e inicializa um novo nó e configura seus ponteiros para NULL
 node *init_node (int chave) {
-    node *node_st = malloc(sizeof(node)); // Aloca memória para o primeiro nó
-    node_st->chave = chave; // node_st de first node
-    node_st->ante = NULL;
-    node_st->prox = NULL;
-    return node_st;
+    node *node_novo = malloc(sizeof(node)); // Aloca memória para o primeiro nó
+    node_novo->chave = chave;
+    node_novo->ante = NULL;
+    node_novo->prox = NULL;
+    return node_novo;
 }
 
 /*
-Obs. 1: a variável "novo" é como se fosse um "array" heterogêneo, porque ela precisa armazenar dados diferentes (neste caso, um inteiro e dois endereços).
-Ao alocar memória com malloc, estamos definindo o tamanho desse "array", e ao mesmo tempo garantindo espaço suficiente na memória para esse nó caso a struct "node" seja modificada no futuro.
-Obs. 2: "init_node" é um ponteiro para "node", pois retorna uma variável do tipo ponteiro para node.
+Obs. 1: a variável node_novo é um ponteiro para uma estrutura node, que contém dados de tipos diferentes (neste caso, um int e dois ponteiros). A alocação de memória com malloc garante espaço suficiente para armazenar todos os campos dessa estrutura.
+
+Obs. 2: a função init_node retorna um ponteiro para node, que aponta para a memória alocada para o nó recém-criado.
 */
 
 // Cria e inicializa uma nova lista, configurando o head para NULL (lista vazia)
@@ -38,21 +58,28 @@ lista_dup *init_lista () {
 }
 
 // Insere um novo nó no início da lista
-void inserir_node (lista_dup *lista, node *node_nv) {
+void inserir_node (lista_dup *lista, node *node_novo) {
     if (lista->cabeca == NULL) { // Lista vazia
-        lista->cabeca = node_nv; // Insere o novo nó na cabeça da lista
+        lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
     }
     else { // Lista não vazia
         // Insere o novo nó no início da lista
-        node_nv->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
-        lista->cabeca->ante = node_nv; // "ante" do atual "cabeca" aponta para o novo nó
-        lista->cabeca = node_nv; //  "cabeca" recebe o novo nó
+        node_novo->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
+        lista->cabeca->ante = node_novo; // "ante" do atual "cabeca" aponta para o novo nó
+        lista->cabeca = node_novo; //  "cabeca" recebe o novo nó
     }
 }
 
 // Remover um nó qualquer da lista
 void remover_node (lista_dup *lista, int chave) {
     node *x = lista->cabeca;
+
+    /*
+    É o mesmo que fazer:
+    node *x;
+    x = lista->cabeca
+    */
+
     while (x != NULL && x->chave != chave) { // Procurando a chave na lista
         x = x->prox;
     }
@@ -90,6 +117,17 @@ void imprimir_lista (lista_dup *lista) {
     printf(" (NULL)\n\n"); // Fim da lista
 }
 
+// Função para liberar todos os nós da lista
+void liberar_lista(lista_dup *lista) {
+    node *x = lista->cabeca;
+    while (x != NULL) {
+        node *temp = x;
+        x = x->prox;
+        free(temp); // Libera a memória de cada nó
+    }
+    free(lista); // Libera a memória da lista
+}
+
 int main(){
     lista_dup *idades = init_lista();
 
@@ -113,4 +151,7 @@ int main(){
     remover_node(idades, 100);
     printf("Depois\n");
     imprimir_lista(idades);
+
+    // Libera a memória alocada para todos os nós e para a lista
+    liberar_lista(idades);
 }
