@@ -79,9 +79,11 @@ void inserir_node (lista_dup *lista, node *node_novo) {
     }
 }
 
+// Insere um novo nó na posição ordenada
 void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
     if (lista->cabeca == NULL) { // Lista vazia
         lista->cabeca = node_novo;
+        lista->cauda = node_novo;
     }
     else { // Lista não vazia
         
@@ -97,7 +99,7 @@ void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
         */
 
         // Caso 1: o node_novo é o primeiro item da lista
-        if (x->ante == NULL) {
+        if (x == lista->cabeca) {
             node_novo->prox = lista->cabeca;
             node_novo->ante = NULL;
             lista->cabeca->ante = node_novo;
@@ -106,7 +108,9 @@ void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
         // Caso 2: o node_novo é o último item da lista
         else if (x == NULL) {
             node_novo->prox = NULL;
-            node_novo->ante = x->ante;
+            node_novo->ante = lista->cauda;
+            lista->cauda->prox = node_novo;
+            lista->cauda = node_novo;
         }
         // Caso 3: o node_novo ocupa qualquer posição intermediária da lista
         else {
@@ -153,7 +157,7 @@ void remover_node (lista_dup *lista, int chave) {
                 lista->cauda = x->ante;
                 lista->cauda->prox = NULL;
             }
-            else {
+            else { // Elemento intermediário
                 x->ante->prox = x->prox; // O "ante" do atual aponta para o "prox" do atual
                 x->prox->ante = x->ante; // O "prox" do atual aponta para o "ante" do atual
             }
@@ -187,12 +191,35 @@ void liberar_lista(lista_dup *lista) {
 int main(){
     lista_dup *idades = init_lista();
 
+    /*
     inserir_node(idades, init_node(20));
     inserir_node(idades, init_node(37));
     inserir_node(idades, init_node(18));
     inserir_node(idades, init_node(40));
     inserir_node(idades, init_node(18));
     inserir_node(idades, init_node(-1));
+
+    imprimir_lista(idades);
+    remover_node(idades, -1);
+    printf("Depois\n");
+    imprimir_lista(idades);
+    remover_node(idades, 40);
+    printf("Depois\n");
+    imprimir_lista(idades);
+    remover_node(idades, 20);
+    printf("Depois\n");
+    imprimir_lista(idades);
+    remover_node(idades, 100);
+    printf("Depois\n");
+    imprimir_lista(idades);
+    */
+
+    inserir_node_ordenado(idades, init_node(20));
+    inserir_node_ordenado(idades, init_node(37));
+    inserir_node_ordenado(idades, init_node(18));
+    inserir_node_ordenado(idades, init_node(40));
+    inserir_node_ordenado(idades, init_node(18));
+    inserir_node_ordenado(idades, init_node(-1));
 
     imprimir_lista(idades);
     remover_node(idades, -1);
