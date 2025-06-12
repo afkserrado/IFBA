@@ -120,6 +120,11 @@ void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
 
 // Remover um nó qualquer da lista
 void remover_node (lista_dup *lista, int chave) {
+    
+    if (lista->cabeca == NULL) { // Lista vazia
+        return;
+    }
+    
     node *x = lista->cabeca;
 
     /*
@@ -136,6 +141,7 @@ void remover_node (lista_dup *lista, int chave) {
         if (x == lista->cabeca) { // Se for o primeiro nó
             if (x->prox == NULL) { // Se a lista só possuir um nó
                 lista->cabeca = NULL;
+                lista->cauda = NULL;
             }
             else { // Se a lista possuir mais de um nó
                 lista->cabeca = x->prox;
@@ -143,10 +149,12 @@ void remover_node (lista_dup *lista, int chave) {
             }
         }
         else { // Se não for o primeiro nó
-            if (x->ante != NULL) {
-                x->ante->prox = x->prox; // O "ante" do atual aponta para o "prox" do atual
+            if (x == lista->cauda) { // Se for o último nó
+                lista->cauda = x->ante;
+                lista->cauda->prox = NULL;
             }
-            if (x->prox != NULL) {
+            else {
+                x->ante->prox = x->prox; // O "ante" do atual aponta para o "prox" do atual
                 x->prox->ante = x->ante; // O "prox" do atual aponta para o "ante" do atual
             }
         }
