@@ -23,42 +23,74 @@ T2Q1
 
 #define dimLinha 3001 // 3000 caracteres + 1 para o \0
 
-// Lista duplamente encadeada não ordenada
+// ##################################################### //
+// LISTAS DUPLAMENTE ENCADEADAS
 
-// Define a estrutura de um nó da lista
-typedef struct node {
-    int marcador; // Marca o início de um start
+// Define a estrutura de um nó da lista principal
+typedef struct pNode {
     int chave;
-    struct node *ante; 
-    struct node *prox;
-} node;
+    struct pNode *ante; 
+    struct pNode *prox;
+    struct sNode *ramo;
+} pNode;
 
-// Define a estrutura de uma lista duplamente encadeada
-typedef struct lista_dup {
-    node *cabeca;
-    node *cauda;
-} lista_dup;
+// Define a estrutura de um nó da lista secundária
+typedef struct sNode {
+    int chave;
+    int id; // Marca o início de um start
+    struct sNode *ante; 
+    struct sNode *prox;
+} sNode;
 
-// Cria e inicializa um novo nó, configurando seus ponteiros para NULL
-node *init_node (int chave) {
-    node *node_novo = malloc(sizeof(node)); // Aloca memória para o primeiro nó
+// Define a estrutura da lista duplamente encadeada principal
+typedef struct pLista {
+    pNode *cabeca;
+    pNode *cauda;
+} pLista;
+
+// Define a estrutura da lista duplamente encadeada secundária
+typedef struct sLista {
+    sNode *cabeca;
+    sNode *cauda;
+} sLista;
+
+// Cria e inicializa um novo nó na lista principal, configurando seus ponteiros para NULL
+pNode *init_pNode (int chave) {
+    pNode *node_novo = malloc(sizeof(pNode)); // Aloca memória para o primeiro nó
     node_novo->chave = chave;
-    node_novo->marcador = 0;
     node_novo->ante = NULL;
     node_novo->prox = NULL;
     return node_novo;
 }
 
-// Cria e inicializa uma nova lista, configurando o head para NULL (lista vazia)
-lista_dup *init_lista () {
-    lista_dup *lista = malloc(sizeof(lista_dup));
+// Cria e inicializa um novo nó na lista secundária, configurando seus ponteiros para NULL
+sNode *init_sNode (int chave) {
+    sNode *node_novo = malloc(sizeof(sNode)); // Aloca memória para o primeiro nó
+    node_novo->chave = chave;
+    node_novo->id = -1;
+    node_novo->ante = NULL;
+    node_novo->prox = NULL;
+    return node_novo;
+}
+
+// Cria e inicializa a lista principal, configurando o head para NULL (lista vazia)
+pLista *init_pLista () {
+    pLista *lista = malloc(sizeof(pLista));
     lista->cabeca = NULL;
     lista->cauda = NULL;
     return lista;
 }
 
-// Insere um novo nó no início da lista
-void inserir_node (lista_dup *lista, node *node_novo) {
+// Cria e inicializa a lista secundária, configurando o head para NULL (lista vazia)
+sLista *init_sLista () {
+    sLista *lista = malloc(sizeof(sLista));
+    lista->cabeca = NULL;
+    lista->cauda = NULL;
+    return lista;
+}
+
+// Insere um novo nó início da lista principal
+void inserir_pNode (pLista *lista, pNode *node_novo) {
     if (lista->cabeca == NULL) { // Lista vazia
         lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
         lista->cauda = node_novo;
@@ -71,8 +103,8 @@ void inserir_node (lista_dup *lista, node *node_novo) {
     }
 }
 
-// Insere um novo nó na posição ordenada
-void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
+// Insere um novo nó na lista principal, na posição ordenada
+void inserir_pNode_ordenado (pLista *lista, pNode *node_novo) {
     if (lista->cabeca == NULL) { // Lista vazia
         lista->cabeca = node_novo;
         lista->cauda = node_novo;
@@ -80,7 +112,7 @@ void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
     else { // Lista não vazia
         
         // Variáveis temporárias
-        node *x = lista->cabeca;
+        pNode *x = lista->cabeca;
         int chave = node_novo->chave;
 
         while (x != NULL && x->chave < chave) {
@@ -111,40 +143,73 @@ void inserir_node_ordenado (lista_dup *lista, node *node_novo) {
     }
 }
 
-// Imprime a lista
-void imprimir_lista (lista_dup *lista) {
-    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+// Insere um novo nó início da lista secundária
+void inserir_sNode (sLista *lista, sNode *node_novo) {
+    if (lista->cabeca == NULL) { // Lista vazia
+        lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
+        lista->cauda = node_novo;
+    }
+    else { // Lista não vazia  
+        // Insere o novo nó no início da lista
+        node_novo->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
+        lista->cabeca->ante = node_novo; // "ante" do atual "cabeca" aponta para o novo nó
+        lista->cabeca = node_novo; //  "cabeca" recebe o novo nó
+    }
+}
+
+// Imprime a lista principal
+void imprimir_pLista (pLista *lista) {
+    pNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
     printf("\n(NULL)"); // Início da lista
     while (x != NULL) {
-        printf("<- (%d | %d) ->", x->chave, x->marcador);
+        printf("<- (%d) ->", x->chave);
         x = x->prox;
     }
     printf(" (NULL)\n\n"); // Fim da lista
 }
 
-// Função para liberar todos os nós da lista
-void liberar_lista(lista_dup *lista) {
-    node *x = lista->cabeca;
+// Imprime a lista secundária
+void imprimir_sLista (sLista *lista) {
+    sNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+    printf("\n(NULL)"); // Início da lista
     while (x != NULL) {
-        node *temp = x;
+        printf("<- (%d | %d) ->", x->chave, x->id);
+        x = x->prox;
+    }
+    printf(" (NULL)\n\n"); // Fim da lista
+}
+
+// Função para liberar todos os nós da lista principal
+void liberar_pLista(pLista *lista) {
+    pNode *x = lista->cabeca;
+    while (x != NULL) {
+        pNode *temp = x;
         x = x->prox;
         free(temp); // Libera a memória de cada nó
     }
     free(lista); // Libera a memória da lista
 }
- // Converte um token para int e adiciona na lista
-void processar_token (char *token, lista_dup *lista) {
-    if (token == NULL) {return;}
-    
-    int chave = atoi(token);
-    inserir_node(lista, init_node(chave));
+
+// Função para liberar todos os nós da lista
+void liberar_sLista(sLista *lista) {
+    sNode *x = lista->cabeca;
+    while (x != NULL) {
+        sNode *temp = x;
+        x = x->prox;
+        free(temp); // Libera a memória de cada nó
+    }
+    free(lista); // Libera a memória da lista
 }
+
+// ##################################################### //
+// MAIN
 
 int main () {
 
     // Inicialização das listas
-    lista_dup *lsp = init_lista(); // lsp = lista principal
-    lista_dup *lss = init_lista(); // lss = lista secundária
+    pLista *lsp = init_pLista(); // lsp = lista principal
+    pLista *lsp_ord = init_pLista(); // lsp = lista principal
+    sLista *lss = init_sLista(); // lss = lista secundária
 
     // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L1Q1.in", "r"); // Ponteiro para o tipo FILE
@@ -161,8 +226,8 @@ int main () {
     char *saveptr1, *saveptr2; // Ponteiros para salvar o estado
     char del1[] = "start";
     char del2[] = " ";
-    int v[1000], cont = 0;
     int flag = 0;
+    int id = 0;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
@@ -193,15 +258,23 @@ int main () {
 
             // Pega o primeiro número do token (substring)
             subtoken = strtok_r(token, del2, &saveptr2);
-            v[cont++] = INT_MAX; // Marca o início da substring
+
+            // Inicializa as variáveis auxiliares
+            int num = atoi(subtoken);
+            int soma = 0;
 
             // Separa os números (subtokens) do token (substring)
             while (subtoken != NULL) {
-                v[cont++] = atoi(subtoken);  // Converte e armazena no vetor
-                processar_token(subtoken, lss);
+                sNode *temp = init_sNode(num);
+                inserir_sNode(lss, temp);
+                temp->id = id;
+                soma += num;
                 subtoken = strtok_r(NULL, del2, &saveptr2);  // Busca o próximo número
+                if (subtoken != NULL) {num = atoi(subtoken);}
             }
-            lss->cabeca->marcador = -1;
+            id++;
+            inserir_pNode(lsp, init_pNode(soma));
+            lsp->cabeca->ramo = lss->cabeca;
             token = strtok_r(NULL, del1, &saveptr1);
         }
 
@@ -210,21 +283,14 @@ int main () {
         flag = 1;
     }
 
-    // Impressão final do vetor v[]
-    printf("\n| ");
-    for (int i = 0; i < cont; i++) {
-        if (i == 0) {
-            printf("%d", v[i]); // Imprime o primeiro número sem barra vertical antes
-        } else {
-            printf(" | %d", v[i]); // Imprime os outros números com barra vertical antes
-        }
-    }
-    printf(" |\n");
-
     // Libera a memória alocada para as listas
-    imprimir_lista(lss);
-    liberar_lista(lss);
-    liberar_lista(lsp);
+    printf("\nLista principal:\n");
+    imprimir_pLista(lsp);
+    printf("\n");
+    printf("\nLista secundária:\n");
+    imprimir_sLista(lss);
+    liberar_pLista(lsp);
+    liberar_sLista(lss);
     
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
     fclose(arqSaida); // Fecha o arquivo e libera a memória
