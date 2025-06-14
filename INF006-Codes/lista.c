@@ -36,7 +36,7 @@ typedef struct lista_dup {
     node *cauda;
 } lista_dup;
 
-// Cria e inicializa um novo nó e configura seus ponteiros para NULL
+// Cria e inicializa um novo nó, configurando seus ponteiros para NULL
 node *init_node (int chave) {
     node *node_novo = malloc(sizeof(node)); // Aloca memória para o primeiro nó
     node_novo->chave = chave;
