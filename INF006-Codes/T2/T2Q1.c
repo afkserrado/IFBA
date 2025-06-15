@@ -95,20 +95,6 @@ sLista *init_sLista () {
     return lista;
 }
 
-// Insere um novo nó início da lista principal
-void inserir_pNode (pLista *lista, pNode *node_novo) {
-    if (lista->cabeca == NULL) { // Lista vazia
-        lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
-        lista->cauda = node_novo;
-    }
-    else { // Lista não vazia  
-        // Insere o novo nó no início da lista
-        node_novo->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
-        lista->cabeca->ante = node_novo; // "ante" do atual "cabeca" aponta para o novo nó
-        lista->cabeca = node_novo; //  "cabeca" recebe o novo nó
-    }
-}
-
 // Insere um novo nó na lista principal, na posição ordenada (ordem decrescente)
 void inserir_pNode_ordenado (pLista *lista, pNode *node_novo) {
     // Lista vazia
@@ -156,20 +142,6 @@ void inserir_pNode_ordenado (pLista *lista, pNode *node_novo) {
     }
 }
 
-// Insere um novo nó início da lista secundária
-void inserir_sNode (sLista *lista, sNode *node_novo) {
-    if (lista->cabeca == NULL) { // Lista vazia
-        lista->cabeca = node_novo; // Insere o novo nó na cabeça da lista
-        lista->cauda = node_novo;
-    }
-    else { // Lista não vazia  
-        // Insere o novo nó no início da lista
-        node_novo->prox = lista->cabeca; // "prox" do novo nó aponta para o atual "cabeca"
-        lista->cabeca->ante = node_novo; // "ante" do atual "cabeca" aponta para o novo nó
-        lista->cabeca = node_novo; //  "cabeca" recebe o novo nó
-    }
-}
-
 // Insere um novo nó na lista principal, na posição ordenada (ordem decrescente)
 void inserir_sNode_ordenado (sLista *lista, sNode *node_novo) {
     // Lista vazia
@@ -212,28 +184,6 @@ void inserir_sNode_ordenado (sLista *lista, sNode *node_novo) {
             x->ante = node_novo;      
         }
     }
-}
-
-// Imprime a lista principal
-void imprimir_pLista (pLista *lista) {
-    pNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
-    printf("\n(NULL)"); // Início da lista
-    while (x != NULL) {
-        printf("<- (%d | %p) ->", x->chave, x->ramo);
-        x = x->prox;
-    }
-    printf(" (NULL)\n\n"); // Fim da lista
-}
-
-// Imprime a lista secundária
-void imprimir_sLista (sLista *lista) {
-    sNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
-    printf("\n(NULL)"); // Início da lista
-    while (x != NULL) {
-        printf("<- (%d | %d | %p) ->", x->chave, x->id, x);
-        x = x->prox;
-    }
-    printf(" (NULL)\n\n"); // Fim da lista
 }
 
 // Imprime as listas
@@ -366,16 +316,9 @@ int main () {
         imprimir_listas(lsp, lss, arqSaida);
         
         // Impede a quebra de linha após a última linha do arquivo
-        // Reinicializa a pilha após a primeira linha
         flag = 1;
 
-        printf("\nLista principal:\n");
-        imprimir_pLista(lsp);
-        printf("\n");
-        printf("\nLista secundária:\n");
-        imprimir_sLista(lss);
-
-        // Libera a memória alocada para as listas
+        // Libera a memória alocada para as listas após cada linha
         liberar_pLista(lsp);
         liberar_sLista(lss);
     }
