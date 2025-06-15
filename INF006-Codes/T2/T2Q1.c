@@ -1,8 +1,10 @@
 /*
 Próximos passos:
-- Implementar um algoritmo para ordenar a lista principal;
+- Implementar um algoritmo para ordenar a lista principal; (OK)
 - Implementar um algoritmo para ordenar a lista secundária;
-- Printar no arquivo de saída;
+- Printar no arquivo de saída; (OK)
+- Remover cauda?
+- Fazer lista simplesmente encadeada?
 */
 
 /*
@@ -21,9 +23,6 @@ T2Q1
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
-#include <stdbool.h>
-#include <math.h>
 
 // ##################################################### //
 // CONSTANTES
@@ -125,9 +124,13 @@ void inserir_pNode_ordenado (pLista *lista, pNode *node_novo) {
         int chave = node_novo->chave;
 
         // Encontra a posição correta
-        while (x != NULL && x->chave > chave) {
+        while (x != NULL && x->chave >= chave) {
             x = x->prox;
         }
+
+        /*
+        Obs.: o ">=" mantém a ordem relativa dos elementos com a mesma chave (soma). Isso garante que, se existirem n nós consecutivos com a mesma chave na lista principal, apenas o último seja exibido, já que os nós da lista principal já são inseridos de forma decrescente.
+        */
 
         // Caso 1: o node_novo é o primeiro item da lista
         if (x == lista->cabeca) {
@@ -167,6 +170,50 @@ void inserir_sNode (sLista *lista, sNode *node_novo) {
     }
 }
 
+// Insere um novo nó na lista principal, na posição ordenada (ordem decrescente)
+void inserir_sNode_ordenado (sLista *lista, sNode *node_novo) {
+    // Lista vazia
+    if (lista->cabeca == NULL) {
+        lista->cabeca = node_novo;
+        lista->cauda = node_novo;
+    }
+    // Lista não vazia
+    else {
+        
+        // Variáveis temporárias
+        sNode *x = lista->cabeca;
+        int chave = node_novo->chave;
+        int id = node_novo->id;
+
+        // Encontra a posição correta
+        while (x != NULL && x->chave < chave && x->id == id) {
+            x = x->prox;
+        }
+
+        // Caso 1: o node_novo é o primeiro item da lista
+        if (x == lista->cabeca) {
+            node_novo->prox = lista->cabeca;
+            node_novo->ante = NULL;
+            lista->cabeca->ante = node_novo;
+            lista->cabeca = node_novo;
+        }
+        // Caso 2: o node_novo é o último item da lista
+        else if (x == NULL) {
+            node_novo->prox = NULL;
+            node_novo->ante = lista->cauda;
+            lista->cauda->prox = node_novo;
+            lista->cauda = node_novo;
+        }
+        // Caso 3: o node_novo ocupa qualquer posição intermediária da lista
+        else {
+            node_novo->ante = x->ante;
+            node_novo->prox = x;
+            x->ante->prox = node_novo;
+            x->ante = node_novo;      
+        }
+    }
+}
+
 // Imprime a lista principal
 void imprimir_pLista (pLista *lista) {
     pNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
@@ -187,6 +234,34 @@ void imprimir_sLista (sLista *lista) {
         x = x->prox;
     }
     printf(" (NULL)\n\n"); // Fim da lista
+}
+
+// Imprime as listas
+void imprimir_listas (pLista *lsp, sLista *lss, FILE *arqSaida) {
+    
+    int flag;
+    pNode *x = lsp->cabeca; // Inicializa x com a "cabeca" da lista
+
+    while (x != NULL) {
+        if (x->prox != NULL && x->chave == x->prox->chave) {
+            x = x->prox; // Pula a chave atual
+            continue; // Avança o loop
+        }
+
+        // Insere um espaço entre as sublistas, exceto no final da linha
+        if (flag == 1) {fprintf(arqSaida, " ");}
+     
+        fprintf(arqSaida, "start");
+
+        sNode *y = x->ramo;
+        int id = y->id;
+        while (y != NULL && y->id == id) {
+            fprintf(arqSaida, " %d", y->chave);
+            y = y->prox;
+        }
+        x = x->prox;
+        flag = 1;
+    }
 }
 
 // Função para liberar todos os nós da lista principal
@@ -216,10 +291,6 @@ void liberar_sLista(sLista *lista) {
 
 int main () {
 
-    // Inicialização das listas
-    pLista *lsp = init_pLista(); // lsp = lista principal
-    sLista *lss = init_sLista(); // lss = lista secundária
-
     // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L1Q1.in", "r"); // Ponteiro para o tipo FILE
     FILE *arqSaida = fopen("L1Q1.out", "w"); // Cria o arquivo se não existir
@@ -241,6 +312,10 @@ int main () {
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
     while (fgets(linha, dimLinha, arqEntrada) != NULL) { 
+
+        // Inicialização das listas
+        pLista *lsp = init_pLista(); // lsp = lista principal
+        sLista *lss = init_sLista(); // lss = lista secundária
 
         if (flag == 1) {
             // Pula uma linha após o primeiro loop e evita pular após o último
@@ -275,34 +350,36 @@ int main () {
             // Separa os números (subtokens) do token (substring)
             while (subtoken != NULL) {
                 sNode *sTemp = init_sNode(num);
-                inserir_sNode(lss, sTemp);
                 sTemp->id = id;
+                inserir_sNode_ordenado(lss, sTemp);
                 soma += num;
                 subtoken = strtok_r(NULL, del2, &saveptr2);  // Busca o próximo número
                 if (subtoken != NULL) {num = atoi(subtoken);}
             }
             id++;
             pNode *pTemp = init_pNode(soma);
-            inserir_pNode_ordenado(lsp, pTemp);
             pTemp->ramo = lss->cabeca;
+            inserir_pNode_ordenado(lsp, pTemp);
             token = strtok_r(NULL, del1, &saveptr1);
         }
 
+        imprimir_listas(lsp, lss, arqSaida);
+        
         // Impede a quebra de linha após a última linha do arquivo
         // Reinicializa a pilha após a primeira linha
         flag = 1;
+
+        printf("\nLista principal:\n");
+        imprimir_pLista(lsp);
+        printf("\n");
+        printf("\nLista secundária:\n");
+        imprimir_sLista(lss);
+
+        // Libera a memória alocada para as listas
+        liberar_pLista(lsp);
+        liberar_sLista(lss);
     }
 
-    printf("\nLista principal:\n");
-    imprimir_pLista(lsp);
-    printf("\n");
-    printf("\nLista secundária:\n");
-    imprimir_sLista(lss);
-
-    // Libera a memória alocada para as listas
-    liberar_pLista(lsp);
-    liberar_sLista(lss);
-    
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
     fclose(arqSaida); // Fecha o arquivo e libera a memória
     return EXIT_SUCCESS;
