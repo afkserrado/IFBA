@@ -1,4 +1,11 @@
 /*
+Próximos passos:
+- Implementar um algoritmo para ordenar a lista principal;
+- Implementar um algoritmo para ordenar a lista secundária;
+- Printar no arquivo de saída;
+*/
+
+/*
 Instituto Federal da Bahia (IFBA)
 Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)
 Semestre 2025.1
@@ -103,19 +110,22 @@ void inserir_pNode (pLista *lista, pNode *node_novo) {
     }
 }
 
-// Insere um novo nó na lista principal, na posição ordenada
+// Insere um novo nó na lista principal, na posição ordenada (ordem decrescente)
 void inserir_pNode_ordenado (pLista *lista, pNode *node_novo) {
-    if (lista->cabeca == NULL) { // Lista vazia
+    // Lista vazia
+    if (lista->cabeca == NULL) {
         lista->cabeca = node_novo;
         lista->cauda = node_novo;
     }
-    else { // Lista não vazia
+    // Lista não vazia
+    else {
         
         // Variáveis temporárias
         pNode *x = lista->cabeca;
         int chave = node_novo->chave;
 
-        while (x != NULL && x->chave < chave) {
+        // Encontra a posição correta
+        while (x != NULL && x->chave > chave) {
             x = x->prox;
         }
 
@@ -162,7 +172,7 @@ void imprimir_pLista (pLista *lista) {
     pNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
     printf("\n(NULL)"); // Início da lista
     while (x != NULL) {
-        printf("<- (%d) ->", x->chave);
+        printf("<- (%d | %p) ->", x->chave, x->ramo);
         x = x->prox;
     }
     printf(" (NULL)\n\n"); // Fim da lista
@@ -173,7 +183,7 @@ void imprimir_sLista (sLista *lista) {
     sNode *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
     printf("\n(NULL)"); // Início da lista
     while (x != NULL) {
-        printf("<- (%d | %d) ->", x->chave, x->id);
+        printf("<- (%d | %d | %p) ->", x->chave, x->id, x);
         x = x->prox;
     }
     printf(" (NULL)\n\n"); // Fim da lista
@@ -208,7 +218,6 @@ int main () {
 
     // Inicialização das listas
     pLista *lsp = init_pLista(); // lsp = lista principal
-    pLista *lsp_ord = init_pLista(); // lsp = lista principal
     sLista *lss = init_sLista(); // lss = lista secundária
 
     // Abre o arquivo e retorna um endereço de memória
@@ -265,16 +274,17 @@ int main () {
 
             // Separa os números (subtokens) do token (substring)
             while (subtoken != NULL) {
-                sNode *temp = init_sNode(num);
-                inserir_sNode(lss, temp);
-                temp->id = id;
+                sNode *sTemp = init_sNode(num);
+                inserir_sNode(lss, sTemp);
+                sTemp->id = id;
                 soma += num;
                 subtoken = strtok_r(NULL, del2, &saveptr2);  // Busca o próximo número
                 if (subtoken != NULL) {num = atoi(subtoken);}
             }
             id++;
-            inserir_pNode(lsp, init_pNode(soma));
-            lsp->cabeca->ramo = lss->cabeca;
+            pNode *pTemp = init_pNode(soma);
+            inserir_pNode_ordenado(lsp, pTemp);
+            pTemp->ramo = lss->cabeca;
             token = strtok_r(NULL, del1, &saveptr1);
         }
 
@@ -283,12 +293,13 @@ int main () {
         flag = 1;
     }
 
-    // Libera a memória alocada para as listas
     printf("\nLista principal:\n");
     imprimir_pLista(lsp);
     printf("\n");
     printf("\nLista secundária:\n");
     imprimir_sLista(lss);
+
+    // Libera a memória alocada para as listas
     liberar_pLista(lsp);
     liberar_sLista(lss);
     
