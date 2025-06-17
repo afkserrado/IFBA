@@ -98,13 +98,23 @@ void inserir_iNode_ordenado (iLista *LE, iNode *node_novo) {
     }
 }
 
-void imprimir_iLista (iLista *LE, FILE *arqSaida) {
+void imprimir_iLista_arq (iLista *LE, FILE *arqSaida) {
     iNode *x = LE->cabeca; // Inicializa x com a "cabeca" da lista
     fprintf(arqSaida, "LE");
     while (x != NULL) {
         fprintf(arqSaida, " %d", x->chave);     
         x = x->prox;
     }
+}
+
+void imprimir_iLista (iLista *LE) {
+    iNode *x = LE->cabeca; // Inicializa x com a "cabeca" da lista
+    printf("LE: ");
+    while (x != NULL) {
+        printf("%d ", x->chave);     
+        x = x->prox;
+    }
+    printf("\n");
 }
 
 // Função para liberar todos os nós da lista principal
@@ -246,18 +256,25 @@ void imprimir_rLista_arq (rLista *LI, FILE *arqSaida) {
 }
 
 void imprimir_rLista (rLista *LI) {
+    if (LI == NULL || LI->cabeca == NULL) {
+        printf("LI: vazia\n");
+        return;
+    }
+    
     rNode *x = LI->cabeca; // Inicializa x com a "cabeca" da lista
     printf("LI: ");
     do {
-        printf("%.2f ", x->chave);     
+        printf("Atual: %.2f ", x->chave);     
         x = x->prox;
+        printf("Prox: %.2f |", x->chave); 
     } while (x != LI->cabeca);
     printf("\n");
 }
 
 // Função para liberar todos os nós da lista principal
-void liberar_rLista(rLista *LI) {
-    if (LI == NULL || LI->cabeca == NULL) { // Lista vazia
+void liberar_rLista(rLista *LI) {   
+    if (LI == NULL || LI->cabeca == NULL) {
+        printf("LI: vazia\n");
         return;
     }
     
@@ -274,9 +291,8 @@ void liberar_rLista(rLista *LI) {
 // FUNÇÕES
 
 void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
-    
-    // Declarações e inicializações
     iNode *x = LE->cabeca; // Inicializa x com a "cabeca" da lista LE
+    
     float dif; // Diferença
     int flag;
     
@@ -290,9 +306,7 @@ void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
 
         // Verifica se a lista não está vazia
         if (y != NULL) {
-            rNode *inicio = y; // Guarda a "cabeca" inicial
             do {
-                // Variáveis auxiliares
                 rNode *temp = NULL;
                 dif = fabs(y->chave - x->chave);
 
@@ -306,22 +320,14 @@ void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
                     temp = y; 
                 }
 
-                // Avança y ANTES de remover
-                y = y->prox;
+                y = y->prox; // Incrementa
 
                 // Remove uma chave real já impressa da lista LI
                 if (temp != NULL) {
-                    remover_rNode(LI,temp->chave);
-
-                    if (LI->cabeca == NULL) {
-                        break;
-                    }
-
-                    if (temp == inicio) {
-                        inicio = LI->cabeca;
-                    }
+                    remover_rNode(LI,10.10);
+                    imprimir_rLista(LI);
                 }
-            } while (y != inicio && LI->cabeca != NULL);
+            } while (y != LI->cabeca && LI->cabeca != NULL);
         }
 
         fprintf(arqSaida, ")");
@@ -338,10 +344,9 @@ int main () {
 
     // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L1Q3.in", "r"); // Ponteiro para o tipo FILE
-    FILE *arqSaida = fopen("L1Q3.out", "w"); // Cria o arquivo se não existir
 
     // Se o arquivo não puder ser aberto, fopen retorna NULL
-    if (arqEntrada == NULL || arqSaida == NULL) {
+    if (arqEntrada == NULL) {
         printf("Os arquivos não podem ser abertos. Verifique se os arquivos e o executável estão na mesma pasta.\n");
         return EXIT_FAILURE;
     }
@@ -363,13 +368,11 @@ int main () {
 
         // Verificar se a alocação de memória falhou
         if (LE == NULL || LI == NULL) {
-            fprintf(arqSaida, "Erro ao alocar memória para as listas. Pulando para a próxima linha.\n");
             continue; // Passa para a próxima linha sem parar o programa
         }
 
         if (flag == 1) {
             // Pula uma linha após o primeiro loop e evita pular após o último
-            fprintf(arqSaida, "\n");
         }
         
         // Limpa a entrada
@@ -384,7 +387,6 @@ int main () {
 
         // Verifica se a lista LE está vazia
         if (token == NULL) {  // Caso a LE esteja vazia ou com formato incorreto
-            fprintf(arqSaida, "Erro: linha vazia ou inválida.");
             flag = 1;
             continue; // Pula para a próxima linha
         }
@@ -411,7 +413,6 @@ int main () {
 
         // Verifica se a lista LI está vazia
         if (token == NULL) {  // Caso a LI esteja vazia ou com formato incorreto
-            fprintf(arqSaida, "Erro: linha vazia ou inválida.");
             flag = 1;
             continue; // Pula para a próxima linha
         }
@@ -433,8 +434,51 @@ int main () {
         // Impede a quebra de linha após a última linha do arquivo
         flag = 1;
 
-        // Imprime os resultados
-        imprimir_lista(LE, LI, arqSaida);
+        float num;
+        printf("Nova linha: \n");
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 4.99;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 4.33;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 4.11;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 6.88;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 6.15;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 9.30;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 9.20;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        num = 10.10;
+        printf("Após remoção: do %.2f\n", num);
+        remover_rNode(LI, num);
+        imprimir_iLista(LE);
+        imprimir_rLista(LI);
+        printf("\n");
 
         // Libera a memória alocada para as listas após cada linha
         liberar_iLista(LE);
@@ -442,6 +486,5 @@ int main () {
     }
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
-    fclose(arqSaida); // Fecha o arquivo e libera a memória
     return EXIT_SUCCESS;
 }
