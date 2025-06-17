@@ -41,6 +41,7 @@ typedef struct iLista {
 // Cria e inicializa um novo nó na lista de inteiros, configurando seus ponteiros para NULL
 iNode *init_iNode (int chave) {
     iNode *node_novo = malloc(sizeof(iNode)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {return NULL;}
     node_novo->chave = chave;
     node_novo->ante = NULL;
     node_novo->prox = NULL;
@@ -49,10 +50,11 @@ iNode *init_iNode (int chave) {
 
 // Cria e inicializa a lista de inteiros, configurando o head para NULL (lista vazia)
 iLista *init_iLista () {
-    iLista *lista = malloc(sizeof(iLista));
-    lista->cabeca = NULL;
-    lista->cauda = NULL;
-    return lista;
+    iLista *LE = malloc(sizeof(iLista));
+    if (LE == NULL) {return NULL;}
+    LE->cabeca = NULL;
+    LE->cauda = NULL;
+    return LE;
 }
 
 // Insere um nó na lista de inteiros, na posição ordenada (ordem crescente)
@@ -128,6 +130,7 @@ typedef struct rLista {
 // Cria e inicializa um novo nó na lista de reais, configurando seus ponteiros para NULL
 rNode *init_rNode (float chave) {
     rNode *node_novo = malloc(sizeof(rNode)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {return NULL;}
     node_novo->chave = chave;
     node_novo->prox = NULL;
     node_novo->status = 0;
@@ -137,6 +140,7 @@ rNode *init_rNode (float chave) {
 // Cria e inicializa a lista de reais, configurando o head para NULL (lista vazia)
 rLista *init_rLista () {
     rLista *LI = malloc(sizeof(rLista));
+    if (LI == NULL) {return NULL;}
     LI->cabeca = NULL;
     LI->cauda = NULL;
     return LI;
@@ -154,32 +158,33 @@ void inserir_rNode_ordenado (rLista *LI, rNode *node_novo) {
     else {
         
         // Variáveis temporárias
-        rNode *x = LI->cabeca; // Marca a chave imediatamente posterior o node_novo
-        rNode *y = NULL; // Marca a chave imediatamente anterior ao node_novo
+        rNode *posterior = LI->cabeca; // Marca a chave imediatamente posterior o node_novo
+        rNode *anterior = NULL; // Marca a chave imediatamente anterior ao node_novo
         float chave = node_novo->chave;
 
         // Encontra a posição correta
-        while (x != NULL && x->chave > chave) {
-            y = x;
-            x = x->prox;
-        }
+        do {
+            if (posterior->chave <= chave) {break;}
+            anterior = posterior;
+            posterior = posterior->prox;
+        } while (posterior != LI->cabeca);
 
         // Caso 1: o node_novo é o primeiro item da lista
-        if (x == LI->cabeca) {
+        if (posterior == LI->cabeca && anterior == NULL) {
             node_novo->prox = LI->cabeca;
             LI->cabeca = node_novo;
             LI->cauda->prox = LI->cabeca; // Fecha o círculo
         }
         // Caso 2: o node_novo é o último item da lista
-        else if (x == NULL) {
+        else if (posterior == LI->cabeca && anterior != NULL) {
             node_novo->prox = LI->cabeca;
             LI->cauda->prox = node_novo;
             LI->cauda = node_novo;
         }
         // Caso 3: o node_novo ocupa qualquer posição intermediária da lista
         else {
-            node_novo->prox = x;
-            y->prox = node_novo;     
+            node_novo->prox = posterior;
+            anterior->prox = node_novo;     
         }
     }
 }
@@ -234,8 +239,8 @@ void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
                     if (flag == 1) {fprintf(arqSaida, "->");}
                     // Imprime um número real da lista LI
                     fprintf(arqSaida, "%.2f", y->chave);
-                    flag = 1; 
-                    y->status = 1;
+                    flag = 1; // Controla a impressão do "->"
+                    y->status = 1; // Atualiza o status para evitar repetição
                 }
                 y = y->prox; // Avança
             } while (y != inicio);
@@ -269,10 +274,14 @@ int main () {
     char del1[] = "LI"; // Delimitador entre "LE" e "LI"
     char del2[] = " "; // Delimitador entre números
     int flag = 0;
+    int erroMemoria;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
     while (fgets(entrada, dimLinha, arqEntrada) != NULL) { 
+
+        // Controla erros de alocação de memória
+        erroMemoria = 0;
 
         // Inicialização das listas
         iLista *LE = init_iLista(); // LE = lista externa (inteiros)
@@ -302,6 +311,8 @@ int main () {
         // Verifica se a lista LE está vazia
         if (token == NULL) {  // Caso a LE esteja vazia ou com formato incorreto
             fprintf(arqSaida, "Erro: linha vazia ou inválida.");
+            liberar_iLista(LE);
+            liberar_rLista(LI);
             flag = 1;
             continue; // Pula para a próxima linha
         }
@@ -314,11 +325,24 @@ int main () {
             // Insere um novo nó na lista de inteiros
             int num = atoi(subtoken);
             iNode *temp = init_iNode(num);
+
+            // Falha de alocação de memória
+            if (temp == NULL) {
+                liberar_iLista(LE);
+                liberar_rLista(LI);
+                fprintf(arqSaida, "Falha de alocação de memória.");
+                flag = 1;
+                erroMemoria = 1;
+                break; // Sai do while interno e vai para próxima linha
+            }
+
             inserir_iNode_ordenado(LE, temp);
 
             // Pega o próximo subtoken (inteiro) da lista LE
             subtoken = strtok_r(NULL, del2, &saveptr2);
         }
+
+        if (erroMemoria == 1) {continue;}
 
         // ##################################################### //
         // LI (REAIS)
@@ -329,6 +353,8 @@ int main () {
         // Verifica se a lista LI está vazia
         if (token == NULL) {  // Caso a LI esteja vazia ou com formato incorreto
             fprintf(arqSaida, "Erro: linha vazia ou inválida.");
+            liberar_iLista(LE);
+            liberar_rLista(LI);
             flag = 1;
             continue; // Pula para a próxima linha
         }
@@ -341,11 +367,24 @@ int main () {
             // Insere um novo nó na lista de reais
             float num = atof(subtoken);
             rNode *temp = init_rNode(num);
+
+            // Falha de alocação de memória
+            if (temp == NULL) {
+                liberar_iLista(LE);
+                liberar_rLista(LI);
+                fprintf(arqSaida, "Falha de alocação de memória.");
+                flag = 1;
+                erroMemoria = 1;
+                break; // Sai do while interno e vai para próxima linha
+            }
+
             inserir_rNode_ordenado(LI, temp);
 
             // Pega o próximo subtoken (float) da lista LI
             subtoken = strtok_r(NULL, del2, &saveptr2);
         }
+
+        if (erroMemoria == 1) {continue;}
         
         // Impede a quebra de linha após a última linha do arquivo
         flag = 1;
