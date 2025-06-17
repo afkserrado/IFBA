@@ -98,15 +98,6 @@ void inserir_iNode_ordenado (iLista *LE, iNode *node_novo) {
     }
 }
 
-void imprimir_iLista (iLista *LE, FILE *arqSaida) {
-    iNode *x = LE->cabeca; // Inicializa x com a "cabeca" da lista
-    fprintf(arqSaida, "LE");
-    while (x != NULL) {
-        fprintf(arqSaida, " %d", x->chave);     
-        x = x->prox;
-    }
-}
-
 // Função para liberar todos os nós da lista principal
 void liberar_iLista(iLista *lista) {
     iNode *x = lista->cabeca;
@@ -125,6 +116,7 @@ void liberar_iLista(iLista *lista) {
 typedef struct rNode {
     float chave;
     struct rNode *prox;
+    int status;
 } rNode;
 
 // Define a estrutura da lista de reais
@@ -138,6 +130,7 @@ rNode *init_rNode (float chave) {
     rNode *node_novo = malloc(sizeof(rNode)); // Aloca memória para o primeiro nó
     node_novo->chave = chave;
     node_novo->prox = NULL;
+    node_novo->status = 0;
     return node_novo;
 }
 
@@ -191,83 +184,23 @@ void inserir_rNode_ordenado (rLista *LI, rNode *node_novo) {
     }
 }
 
-// Remover um nó qualquer da lista de reais
-void remover_rNode (rLista *LI, float chave) {
-    
-    if (LI->cabeca == NULL) { // Lista vazia
-        return;
-    }
-    
-    // Inicializa as variáveis temporárias
-    rNode *atual = LI->cabeca; 
-    rNode *anterior = LI->cauda; // Nó anterior ao atual
-
-    // Pesquisa a chave
-    do { 
-        if (atual->chave == chave) {
-            break;
-        }
-        anterior = atual;
-        atual = atual->prox;
-    } while (atual != LI->cabeca);
-
-    // Remove o nó encontrado
-    if (atual->chave == chave) { // Chave encontrada
-        if (atual == LI->cabeca) { // Se for o primeiro nó
-            if (atual->prox == atual) { // Se a lista só possuir um nó
-                LI->cabeca = NULL;
-                LI->cauda = NULL;
-            }
-            else { // Se a lista possuir mais de um nó
-                LI->cabeca = atual->prox;
-                LI->cauda->prox = LI->cabeca; // Fecha o círculo
-            }
-        }
-        else { // Se não for o primeiro nó
-            if (atual == LI->cauda) { // Se for o último nó
-                LI->cauda = anterior;
-                LI->cauda->prox = LI->cabeca; // Fecha o círculo
-            }
-            else { // Elemento intermediário
-                anterior->prox = atual->prox;
-            }
-        }
-        free(atual); // Libera a memória do nó removido
-    }
-}
-
-void imprimir_rLista_arq (rLista *LI, FILE *arqSaida) {
-    rNode *x = LI->cabeca; // Inicializa x com a "cabeca" da lista
-    fprintf(arqSaida, "LI");
-    do {
-        fprintf(arqSaida, " %.2f", x->chave);     
-        x = x->prox;
-    } while (x != LI->cabeca);
-}
-
-void imprimir_rLista (rLista *LI) {
-    rNode *x = LI->cabeca; // Inicializa x com a "cabeca" da lista
-    printf("LI: ");
-    do {
-        printf("%.2f ", x->chave);     
-        x = x->prox;
-    } while (x != LI->cabeca);
-    printf("\n");
-}
-
 // Função para liberar todos os nós da lista principal
 void liberar_rLista(rLista *LI) {
-    if (LI == NULL || LI->cabeca == NULL) { // Lista vazia
+    if (LI == NULL) { // Lista vazia
         return;
     }
     
-    rNode *x = LI->cabeca;
-    do {
-        rNode *temp = x;
-        x = x->prox;
-        free(temp); // Libera a memória de cada nó
-    } while (x != LI->cabeca);
-    free(LI); // Libera a memória da lista
+    // Libera memória dos nós da lista
+    if (LI->cabeca != NULL) {
+        rNode *x = LI->cabeca;
+        do {
+            rNode *temp = x;
+            x = x->prox;
+            free(temp); // Libera a memória de cada nó
+        } while (x != LI->cabeca);
+    }
+
+    free(LI); // Libera a memória da lista, mesmo que ela esteja vazia
 }
 
 // ##################################################### //
@@ -277,6 +210,7 @@ void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
     
     // Declarações e inicializações
     iNode *x = LE->cabeca; // Inicializa x com a "cabeca" da lista LE
+    rNode *inicio = LI->cabeca; // Inicializa y com a "cabeca" da lista LI
     float dif; // Diferença
     int flag;
     
@@ -290,42 +224,25 @@ void imprimir_lista (iLista *LE, rLista *LI, FILE *arqSaida) {
 
         // Verifica se a lista não está vazia
         if (y != NULL) {
-            rNode *inicio = y; // Guarda a "cabeca" inicial
             do {
                 // Variáveis auxiliares
-                rNode *temp = NULL;
                 dif = fabs(y->chave - x->chave);
 
                 // Imprime uma chave real da lista LI
-                if (dif < 1.0f) {
+                if (dif < 1.0f && y->status == 0) {
                     // Imprime "->" apenas antes de um número real LI
                     if (flag == 1) {fprintf(arqSaida, "->");}
                     // Imprime um número real da lista LI
                     fprintf(arqSaida, "%.2f", y->chave);
                     flag = 1; 
-                    temp = y; 
+                    y->status = 1;
                 }
-
-                // Avança y ANTES de remover
-                y = y->prox;
-
-                // Remove uma chave real já impressa da lista LI
-                if (temp != NULL) {
-                    remover_rNode(LI,temp->chave);
-
-                    if (LI->cabeca == NULL) {
-                        break;
-                    }
-
-                    if (temp == inicio) {
-                        inicio = LI->cabeca;
-                    }
-                }
-            } while (y != inicio && LI->cabeca != NULL);
+                y = y->prox; // Avança
+            } while (y != inicio);
         }
 
         fprintf(arqSaida, ")");
-        x = x->prox; // Incrementa
+        x = x->prox; // Avança
         if (x != NULL) {fprintf(arqSaida, "->");}
     }
     fprintf(arqSaida, "]");
