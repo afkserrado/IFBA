@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-// Lista duplamente encadeada
+// Lista duplamente encadeada linear
 
 // Define a estrutura de um nó da lista
 typedef struct node {
