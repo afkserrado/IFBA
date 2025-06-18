@@ -80,7 +80,7 @@ void inserir_node_ordenado (lslc *lista, node *node_novo) {
             lista->cauda->prox = lista->cabeca; // Fecha o círculo
         }
         // Caso 2: o node_novo é o último item da lista
-        else if (posterior == lista->cabeca && anterior != NULL) {
+        else if (posterior == lista->cabeca) {
             node_novo->prox = lista->cabeca;
             lista->cauda->prox = node_novo;
             lista->cauda = node_novo;
@@ -144,25 +144,6 @@ void remover_node (lslc *lista, int chave) {
     }
 }
 
-// Limpar lista
-void limpar_lista (lslc *lista) {
-    // Lista vazia
-    if (lista->cabeca == NULL) { 
-        printf("A lista está vazia.\n");
-        return;
-    }
-
-    node *atual = lista->cabeca;
-    do {
-        node *temp = atual;
-        atual = atual->prox;
-        free(temp);
-    } while (atual != lista->cabeca);
-
-    lista->cabeca = NULL;
-    lista->cauda = NULL;
-}
-
 // Imprimir lista
 void imprimir_lista (lslc *lista) {
     // Lista vazia
@@ -180,11 +161,30 @@ void imprimir_lista (lslc *lista) {
     printf("(%d)<-head\n\n", lista->cabeca->chave); // Fim da lista
 }
 
+// Limpar lista
+void limpar_lista (lslc *lista) {
+    // Lista vazia
+    if (lista->cabeca == NULL) { 
+        printf("A lista já está vazia.\n");
+        return;
+    }
+
+    node *atual = lista->cabeca;
+    do {
+        node *temp = atual;
+        atual = atual->prox;
+        free(temp);
+    } while (atual != lista->cabeca);
+
+    lista->cabeca = NULL;
+    lista->cauda = NULL;
+}
+
 // Liberar a memória alocada para os nós e a lista
 void liberar_lista(lslc *lista) {
     // Lista vazia
     if (lista == NULL) { 
-        printf("A lista já está vazia.\n");
+        printf("Não há lista para liberar.\n");
         return;
     }
     
@@ -194,7 +194,7 @@ void liberar_lista(lslc *lista) {
         do {
             node *temp = x;
             x = x->prox;
-            free(temp); // listabera a memória de cada nó
+            free(temp); // Libera a memória de cada nó
         } while (x != lista->cabeca);
     }
 
