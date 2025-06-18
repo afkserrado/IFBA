@@ -1,3 +1,8 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+// Lista duplamente encadeada circular
+
 // Remover um nó qualquer da lista de reais
 void remover_rNode (rLista *LI, float chave) {
     
