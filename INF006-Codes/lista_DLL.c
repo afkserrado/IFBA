@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // Lista duplamente encadeada linear
 
@@ -51,7 +51,7 @@ Obs. 1: a variável node_novo é um ponteiro para uma estrutura node, que conté
 Obs. 2: a função init_node retorna um ponteiro para node, que aponta para a memória alocada para o nó recém-criado.
 */
 
-// Cria e inicializa uma nova lista, configurando o head para NULL (lista vazia)
+// Cria e inicializa uma nova lista, configurando seus ponteiros para NULL (lista vazia)
 lista_dup *init_lista () {
     lista_dup *lista = malloc(sizeof(lista_dup));
     lista->cabeca = NULL;
