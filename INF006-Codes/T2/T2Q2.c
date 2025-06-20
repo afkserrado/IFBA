@@ -127,23 +127,23 @@ void processar_token (pilha *pilha_nomes, char *token, FILE *arqSaida) {
 
         // Imprime a quantidade de pops
         if (pops > 0) {
-            fprintf(arqSaida, " %dx−pop", pops);
+            fprintf(arqSaida, " %dx-pop", pops);
         }
         
         // Imprime o push do novo nome
-        fprintf(arqSaida, " push−%s", token);
+        fprintf(arqSaida, " push-%s", token);
 
         int topo = pilha_nomes->topo;
         int i = topo - pops + 1;
         
         while (i <= topo) {
-            fprintf(arqSaida, " push−%s", pilha_nomes->nomes[i]);
+            fprintf(arqSaida, " push-%s", pilha_nomes->nomes[i]);
             i++;
         }
     }
     else { // Se a pilha estiver vazia
         push(pilha_nomes, token, &pops); // Guarda o token no topo da pilha
-        fprintf(arqSaida, "push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
+        fprintf(arqSaida, "push-%s", pilha_nomes->nomes[pilha_nomes->topo]);
     }
 }
 
