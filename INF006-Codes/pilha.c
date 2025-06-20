@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <limits.h>
 
-// Pilha
+// Pilha com vetor
 
 // Cria a estrutura de uma pilha
 typedef struct pilha {
@@ -47,7 +47,7 @@ bool pilha_vazia (pilha *pilha_nv) {
 
 // Insere elementos na pilha
 void push (pilha *pilha_nv, int item) {
-    if (!pilha_cheia(pilha_nv)) { // Se a pilha estiver vazia
+    if (!pilha_cheia(pilha_nv)) { // Se a pilha não estiver cheia
         pilha_nv->topo = pilha_nv->topo + 1; // Incrementa o topo, adicionando o item na pilha_nv
         pilha_nv->itens[pilha_nv->topo] = item; // Insere o item no topo da pilha
     }
@@ -55,6 +55,26 @@ void push (pilha *pilha_nv, int item) {
         printf("Pilha cheia.\n");
     }
 }
+
+// Insere elementos ordenadamente na pilha (crescente)
+void push_ordenado (pilha *pilha_nv, int item) {
+    if (!pilha_cheia(pilha_nv)) { // Se a pilha não estiver cheia
+    
+        int i = pilha_nv->topo; // Topo inicial
+        pilha_nv->topo += 1; // Incrementa o topo
+        
+        // Encontra a posição correta do item novo
+        while (i >= 0 && pilha_nv->itens[i] > item) {
+            pilha_nv->itens[i + 1] = pilha_nv->itens[i];
+            i--;
+        }
+        // Insere o novo item na posição correta
+        pilha_nv->itens[i + 1] = item;
+    }
+    else { // Pilha cheia
+        printf("Pilha cheia.\n");
+    }
+ }
 
 // Remove elementos da pilha
 int pop (pilha *pilha_nv) {
@@ -90,7 +110,7 @@ void clear (pilha *pilha_nv) {
 }
 
 void imprimir_pilha (pilha *pilha_nv) {
-    printf("<< \n");
+    //printf("<< \n");
     for (int i = pilha_nv->topo; i >= 0; i--) {
         if (i == pilha_nv->topo) {
             printf("topo ->  %d\n", pilha_nv->itens[i]); // Marca o topo
@@ -98,7 +118,7 @@ void imprimir_pilha (pilha *pilha_nv) {
         else
             printf("\t %d\n", pilha_nv->itens[i]); // Imprime os demais elementos
     }
-    printf(">>\n");
+    //printf(">>\n");
 }
 
 int main() {
@@ -114,17 +134,27 @@ int main() {
     'itens' também é um ponteiro, que aponta para outro espaço de memória, mas esse espaço é variável, pois depende do tamanho. Isto é, o espaço de memória destinado aos itens da pilha possui 4 bytes para cada item da pilha. Se a pilha tiver 10 itens, então 'itens' apontará para um espaço de memória com 40 bytes.
     */
 
+    // Push
     inicializa_pilha(pilha_nv, 10);
     push(pilha_nv, 10);
     push(pilha_nv, 5);
     push(pilha_nv, 15);
     imprimir_pilha(pilha_nv);
-    printf("Topo: %d\n", top(pilha_nv));
+    printf("\nTopo: %d\n", top(pilha_nv));
     printf("Tamanho: %d\n", size(pilha_nv));
     clear(pilha_nv);
-    imprimir_pilha(pilha_nv);
+    printf("\n");
 
-    // Liberação de memória
+    // Push ordenado
+    inicializa_pilha(pilha_nv, 10);
+    push_ordenado(pilha_nv, 15);
+    push_ordenado(pilha_nv, 10);
+    push_ordenado(pilha_nv, 5);
+    imprimir_pilha(pilha_nv);
+    printf("\nTopo: %d\n", top(pilha_nv));
+    printf("Tamanho: %d\n", size(pilha_nv));
+
+    // Libera a memória alocada para a pilha e seus itens
     free(pilha_nv->itens);  // Libera a memória alocada para o array de itens
     free(pilha_nv);  // Libera a memória alocada para a estrutura da pilha
 }
