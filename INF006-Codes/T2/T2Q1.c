@@ -55,6 +55,7 @@ typedef struct sLista {
 // Cria e inicializa um novo nó na lista principal, configurando seus ponteiros para NULL
 pNode *init_pNode (int chave) {
     pNode *node_novo = malloc(sizeof(pNode)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {return NULL;}
     node_novo->chave = chave;
     node_novo->ante = NULL;
     node_novo->prox = NULL;
@@ -64,6 +65,7 @@ pNode *init_pNode (int chave) {
 // Cria e inicializa um novo nó na lista secundária, configurando seus ponteiros para NULL
 sNode *init_sNode (int chave) {
     sNode *node_novo = malloc(sizeof(sNode)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {return NULL;}
     node_novo->chave = chave;
     node_novo->id = -1;
     node_novo->ante = NULL;
@@ -74,6 +76,7 @@ sNode *init_sNode (int chave) {
 // Cria e inicializa a lista principal, configurando o head para NULL (lista vazia)
 pLista *init_pLista () {
     pLista *lista = malloc(sizeof(pLista));
+    if (lista == NULL) {return NULL;}
     lista->cabeca = NULL;
     lista->cauda = NULL;
     return lista;
@@ -82,6 +85,7 @@ pLista *init_pLista () {
 // Cria e inicializa a lista secundária, configurando o head para NULL (lista vazia)
 sLista *init_sLista () {
     sLista *lista = malloc(sizeof(sLista));
+    if (lista == NULL) {return NULL;}
     lista->cabeca = NULL;
     lista->cauda = NULL;
     return lista;
@@ -150,7 +154,7 @@ void inserir_sNode_ordenado (sLista *lista, sNode *node_novo) {
         int id = node_novo->id;
 
         // Encontra a posição correta
-        while (x != NULL && x->chave < chave && x->id == id) {
+        while (x != NULL && x->id == id && x->chave < chave) {
             x = x->prox;
         }
 
@@ -207,25 +211,27 @@ void imprimir_listas (pLista *lsp, sLista *lss, FILE *arqSaida) {
 }
 
 // Função para liberar todos os nós da lista principal
-void liberar_pLista(pLista *lista) {
-    pNode *x = lista->cabeca;
+void liberar_listas(pLista *lsp, sLista *lss) {
+    
+    // Libera a memória alocada para os nós da lista principal
+    pNode *x = lsp->cabeca;
     while (x != NULL) {
-        pNode *temp = x;
+        pNode *pTemp = x;
         x = x->prox;
-        free(temp); // Libera a memória de cada nó
+        free(pTemp); // Libera a memória de cada nó
     }
-    free(lista); // Libera a memória da lista
-}
 
-// Função para liberar todos os nós da lista
-void liberar_sLista(sLista *lista) {
-    sNode *x = lista->cabeca;
-    while (x != NULL) {
-        sNode *temp = x;
-        x = x->prox;
-        free(temp); // Libera a memória de cada nó
+    // Libera a memória alocada para os nós da lista secundária
+    sNode *y = lss->cabeca;
+    while (y != NULL) {
+        sNode *sTemp = y;
+        y = y->prox;
+        free(sTemp);
     }
-    free(lista); // Libera a memória da lista
+
+    // Libera a memória alocada para as estruturas das listas
+    free(lsp);
+    free (lss);
 }
 
 // ##################################################### //
@@ -249,7 +255,6 @@ int main () {
     char del1[] = "start";
     char del2[] = " ";
     int flag = 0;
-    int id = 0;
 
     // Lê o arquivo de entrada até o fim, quando fgets retorna NULL
     // Percorre o arquivo
@@ -284,6 +289,8 @@ int main () {
             continue; // Pula para a próxima linha
         }
 
+        int id = 0; // Identificador único de cada start da linha
+
         // Lê a linha até encontrar "start ", separando a substring, ou até o fim da linha
         // Percorre uma linha
         while (token != NULL) {
@@ -313,13 +320,18 @@ int main () {
                 inserir_sNode_ordenado(lss, sTemp);
 
                 // Tratamento de erros: overflow da soma
-                if (soma > INT_MAX) {soma = INT_MAX;}
-
-                soma += num;
+                if (num > 0 && soma > INT_MAX - num) {
+                    soma = INT_MAX;
+                } 
+                else if (num < 0 && soma < INT_MIN - num) {
+                    soma = INT_MIN;
+                } 
+                else {soma += num;}
 
                 subtoken = strtok_r(NULL, del2, &saveptr2);  // Busca o próximo número
                 if (subtoken != NULL) {num = atoi(subtoken);}
             }
+            
             id++;
             pNode *pTemp = init_pNode(soma);
             pTemp->ramo = lss->cabeca;
@@ -339,8 +351,7 @@ int main () {
         flag = 1;
 
         // Libera a memória alocada para as listas após cada linha
-        liberar_pLista(lsp);
-        liberar_sLista(lss);
+        liberar_listas(lsp, lss);
     }
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
