@@ -90,60 +90,63 @@ bool pilha_cheia (pilha *pilha_nomes) {
     return pilha_nomes->topo == pilha_nomes->tamanho - 1; // Retorna true se a pilha estiver cheia
 }
 
-// Insere elementos ordenadamente na pilha (crescente)
-void push (pilha *pilha_nomes, char *token, int *pops) {
-    if (!pilha_cheia(pilha_nomes)) { // Se a pilha não estiver cheia
-
+// Insere elementos na pilha
+void push (pilha *pilha_nomes, char *token) {
+    if (!pilha_cheia(pilha_nomes)) { // Se a pilha estiver vazia
+        pilha_nomes->topo++; // Incrementa o topo, adicionando o item na pilha_nomes
+        
         // Aloca memória para a string
-        pilha_nomes->nomes[pilha_nomes->topo + 1] = malloc(strlen(token) + 1);
+        pilha_nomes->nomes[pilha_nomes->topo] = malloc(strlen(token) + 1); 
 
-        int i = pilha_nomes->topo; // Topo inicial
-        pilha_nomes->topo += 1; // Incrementa o topo
-
-        // Encontra a posição correta do token novo
-        while (i >= 0 && strcmp(pilha_nomes->nomes[i], token) > 0) {
-            strcpy(pilha_nomes->nomes[i + 1],pilha_nomes->nomes[i]);
-            (*pops)++;
-            printf("pops = %d\n", *pops);
-            i--;
-        }
-        // Insere o novo token na posição correta
-        strcpy(pilha_nomes->nomes[i + 1],token);
+        // Guarda a string na pilha
+        strcpy(pilha_nomes->nomes[pilha_nomes->topo], token);
     }
- }
+}
 
 // Verifica se a pilha está vazia
 bool pilha_vazia (pilha *pilha_nomes) {
     return pilha_nomes->topo == -1; // Retorna true se o topo for -1 (pilha vazia)
 }
 
-void processar_token (pilha *pilha_nomes, char *token, FILE *arqSaida) {
+// Remove elementos da pilha
+char* pop (pilha *pilha_nomes) {
+    if (!pilha_vazia(pilha_nomes)) { // Se a pilha não estiver vazia
+        pilha_nomes->topo--; // Decrementa o topo, removendo o item da pilha_nomes
+        return pilha_nomes->nomes[pilha_nomes->topo + 1]; // Retorna o elemento removido
+    }
+}
+
+void processar_token (pilha *pilha_nomes, char *token, pilha *pilha_aux, FILE *arqSaida) {
     int pops = 0;
     char *nome;
     
     if (!pilha_vazia(pilha_nomes)) { // Se a pilha não estiver vazia
-        
-        // Insere o novo nome na posição ordenada e conta os pops
-        push(pilha_nomes, token, &pops);
+        while (pilha_nomes->topo >= 0 && strcmp(token, pilha_nomes->nomes[pilha_nomes->topo]) < 0) {
+            nome = pop(pilha_nomes);
+            push(pilha_aux, nome);
+            pops++;
+        }
 
-        // Imprime a quantidade de pops
         if (pops > 0) {
             fprintf(arqSaida, " %dx−pop", pops);
         }
         
-        // Imprime o push do novo nome
-        fprintf(arqSaida, " push−%s", token);
+        // Guarda o token na pilha na posição ordenada
+        push(pilha_nomes, token);
+        fprintf(arqSaida, " push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
 
-        int topo = pilha_nomes->topo;
-        int i = topo - pops + 1;
-        
-        while (i <= topo) {
-            fprintf(arqSaida, " push−%s", pilha_nomes->nomes[i]);
-            i++;
+        // Realoca os elementos removidos, caso haja, na pilha_nomes
+        if (pops > 0) {
+            while (!pilha_vazia(pilha_aux)) {
+                nome = pop(pilha_aux);
+                push(pilha_nomes, nome);
+                fprintf(arqSaida, " push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
+            }
         }
+        
     }
     else { // Se a pilha estiver vazia
-        push(pilha_nomes, token, &pops); // Guarda o token no topo da pilha
+        push(pilha_nomes, token); // Guarda o token no topo da pilha
         fprintf(arqSaida, "push−%s", pilha_nomes->nomes[pilha_nomes->topo]);
     }
 }
@@ -235,7 +238,7 @@ int main () {
         // Lê a linha até o fim, quando strtok retorna NULL, e separa a string
         // Percorre uma linha
         while (token != NULL) { 
-            processar_token(pilha_nomes, token, arqSaida);
+            processar_token(pilha_nomes, token, pilha_aux, arqSaida);
             pushes++; // Contabiliza a quantidade de pushes (nomes da linha)
             token = strtok(NULL, delimitador); // Busca o próximo nome
 
