@@ -15,6 +15,10 @@ typedef struct pilha {
 // Cria e inicializa uma pilha chamada pilha_nv
 void inicializa_pilha (pilha *pilha_nv, int tamanho) {
     pilha_nv->itens = malloc(tamanho * sizeof(int)); // Aloca memória para o array da pilha
+    if (pilha_nv->itens == NULL) {
+        printf("Erro ao alocar memória para os itens da pilha.\n");
+        return;
+    }
     pilha_nv->tamanho = tamanho; // Define o tamanho máximo da pilha
     pilha_nv->topo = -1; // Inicializa o topo como -1 (pilha vazia)
 }
