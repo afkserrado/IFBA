@@ -179,11 +179,9 @@ int main () {
 
     // Aloca memória para a pilha
     pilha *pilha_nomes = malloc(sizeof(pilha));
-    pilha *pilha_aux = malloc(sizeof(pilha));
 
     // Inicializa as pilhas a cada nova linha
     init_pilha(pilha_nomes);
-    init_pilha(pilha_aux);
 
     // Abre o arquivo e retorna um endereço de memória
     FILE *arqEntrada = fopen("L1Q2.in", "r"); // Ponteiro para o tipo FILE
@@ -212,7 +210,6 @@ int main () {
 
             // Reinicializa a pilha, liberando as strings e fazendo topo = -1
             reinicializar_pilha(pilha_nomes);
-            reinicializar_pilha(pilha_aux);
         }
         
         linha[strcspn(linha, "\n")] = '\0'; // Remove o \n (caso exista)
@@ -258,7 +255,6 @@ int main () {
 
     // Libera a memória alocada para as pilhas
     liberar_pilha(pilha_nomes);
-    liberar_pilha(pilha_aux);
 
     fclose(arqEntrada); // Fecha o arquivo e libera a memória
     fclose(arqSaida); // Fecha o arquivo e libera a memória
