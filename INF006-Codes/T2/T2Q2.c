@@ -104,7 +104,6 @@ void push (pilha *pilha_nomes, char *token, int *pops) {
         while (i >= 0 && strcmp(pilha_nomes->nomes[i], token) > 0) {
             strcpy(pilha_nomes->nomes[i + 1],pilha_nomes->nomes[i]);
             (*pops)++;
-            printf("pops = %d\n", *pops);
             i--;
         }
         // Insere o novo token na posição correta
