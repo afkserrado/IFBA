@@ -39,6 +39,10 @@ typedef struct lista_dup {
 // Cria e inicializa um novo nó, configurando seus ponteiros para NULL
 node *init_node (int chave) {
     node *node_novo = malloc(sizeof(node)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {
+        printf("Erro ao alocar memória para o nó.\n");
+        return;
+    }
     node_novo->chave = chave;
     node_novo->ante = NULL;
     node_novo->prox = NULL;
@@ -54,6 +58,10 @@ Obs. 2: a função init_node retorna um ponteiro para node, que aponta para a me
 // Cria e inicializa uma nova lista, configurando seus ponteiros para NULL (lista vazia)
 lista_dup *init_lista () {
     lista_dup *lista = malloc(sizeof(lista_dup));
+    if (lista == NULL) {
+        printf("Erro ao alocar memória para a estrutura da lista.\n");
+        return;
+    }
     lista->cabeca = NULL;
     lista->cauda = NULL;
     return lista;

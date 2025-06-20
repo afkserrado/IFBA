@@ -3,14 +3,32 @@
 #include <stdbool.h>
 #include <limits.h>
 
-// Pilha com vetor
+// Pilha com lista encadeada
 
-// Cria a estrutura de uma pilha
+// Define a estrutura de um nó da lista
+typedef struct node {
+    int chave;
+    struct node *ante; 
+    struct node *prox;
+} node;
+
+// Cria a estrutura de uma pilha baseada em lista duplamente encadeada
 typedef struct pilha {
-    int *itens; // Ponteiro para o array que armazena os elementos da pilha
-    int tamanho; // Tamanho máximo da pilha
-    int topo; // Índice do topo da pilha (inicialmente -1, porque começa vazia)
+    node *topo; 
 } pilha;
+
+// Cria e inicializa um novo nó, configurando seus ponteiros para NULL
+node *init_node (int chave) {
+    node *node_novo = malloc(sizeof(node)); // Aloca memória para o primeiro nó
+    if (node_novo == NULL) {
+        printf("Erro ao alocar memória para o nó.\n");
+        return;
+    }
+    node_novo->chave = chave;
+    node_novo->ante = NULL;
+    node_novo->prox = NULL;
+    return node_novo;
+}
 
 // Cria e inicializa uma pilha chamada pilha_nv
 void inicializa_pilha (pilha *pilha_nv, int tamanho) {
