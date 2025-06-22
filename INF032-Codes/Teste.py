@@ -1,1 +1,1 @@
-print("Testando o python com vscode OK")
+print("Testando python de novo")
