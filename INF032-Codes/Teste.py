@@ -9,3 +9,5 @@ plt.title("Reta") # Título do gráfico
 plt.xlabel("Eixo x") # Título do eixo x
 plt.ylabel("Eixo y") # Título do eixo y
 plt.show() # Exibe o gráfico
+
+# Teste
