@@ -1,0 +1,2152 @@
+
+/*Avaliação I - 2024.1
+Questão I
+Um centro de pesquisas está inaugurando um grande acelerador de partículas,
+com um emissor e três sensores, numerados 1, 2 e 3. Uma partícula, após sair
+do emissor, entra no acelerador onde pode dar várias voltas sendo acelerada a
+velocidades muito altas. Num determinado momento, a partícula sai do
+acelerador por uma das três saídas, atingindo um dos sensores. A figura mostra
+o caminho por onde as partículas trafegam, com uma graduação de 1 quilômetro.
+Por exemplo, do emissor até o acelerador são 3 quilômetros e a circunferência
+do acelerador tem 8 quilômetros.
+*/
+#include <stdio.h>
+
+main()
+{
+    //"km" é a distância total percorrida pela partícula.
+    int km, resto;
+    
+    printf("\nInforme a distancia total percorrida pela particula: ");
+    scanf("%d", &km);
+    
+    /*A distância percorrida entre o emissor e a entrada do acelerador é de 3 km. A partícula só vai percorrer esse caminho uma única vez. Por isso, para facilitar as operações aritméticas, tiramos essa parte do percursso da distância total percorrida.
+    */
+    if (km < 6)
+        {
+        printf("\nA particula nao foi detectada por nenhum sensor.");
+        return 1;
+        }
+        
+    km -= 3;
+    
+    resto = km%8;
+    
+    if (resto == 5)
+        printf("\nO sensor atingido foi o de numero 3.");
+    else if (resto == 4)
+        printf("\nO sensor atingido foi o de numero 2.");
+    else if (resto == 3)
+        printf("\nO sensor atingido foi o de numero 1.");
+    else
+        printf("\nA particula nao foi detectada por nenhum sensor.");
+}
+
+
+
+/*Avaliação I - 2024.1
+Questão II
+Um cadeado possui um sistema de código para ser aberto em vez de uma chave. O 
+cadeado contém uma sequência de três rodas. Cada roda possui os 9 dígitos (0
+..9) em ordem. Se você move uma roda para cima, o dígito que ela mostra muda 
+para o próximo dígito (se o dígito mostrado for '9', então ela muda para '0').
+Se você move uma roda para baixo, ela muda para o dígito anterior (se a dígito
+mostrado for '0', ela muda para '9'). O cadeado abre quando as rodas mostrarem
+uma determinada sequência numérica. Escreva um programa que leia a
+configuração atual do cadeado (número atualmente exibido pelas rodas) e o número
+de desbloqueio (a senha armazenada nas rodas) e indique qual o menor número de
+movimentos necessários para abrir o cadeado. Por exemplo, se o número atual for
+152 e o segredo for 971, serão precisos: dois movimentos para o primeiro número
+(1→0→9), dois movimentos para o segundo número (5→6→7) e um número para o
+terceiro número (1→2), logo a saída deverá ser 5.
+*/
+#include <stdio.h>
+
+main() 
+{
+    int atual, senha, movimentos, indo, voltando;
+    int x1, x2, x3; //Separação dos números da sequência atual.
+    int y1, y2, y3; //Separação dos números da senha.
+    
+    printf("\nInforme a sequencia numerica atual do cadeado: ");
+    scanf("%d", &atual);
+    
+    printf("\nInforme a senha do cadeado: ");
+    scanf("%d", &senha);
+    
+    //printf("\nAtual = %d; Senha = %d", atual, senha);
+    
+    x1 = atual/100;
+    x2 = (atual/10)%10;
+    x3 = atual%10;
+    //printf("\n%d %d %d", x1, x2, x3);
+    
+    y1 = senha/100;
+    y2 = (senha/10)%10;
+    y3 = senha%10;
+    //printf("\n%d %d %d", y1, y2, y3);
+    
+    //Movimentos da roda 1
+    /*"Indo" é o movimento de girar a roda para cima, passando para o próximo
+    número.
+    "Voltando" é o movimento de girar a roda para baixo, passando para o número
+    anterior.*/
+    
+    if (x1>=y1) {
+        indo = 9-x1+1+y1; //O "1" é o movimento do 9 para o 0.
+        voltando = x1-y1;
+        
+        if (indo <= voltando)
+            movimentos = indo;
+        else
+            movimentos = voltando;
+         printf("\nRoda 1: %d %d %d", indo, voltando, movimentos);}    
+    else {
+        indo = y1-x1;
+        voltando = x1+1+9-y1; //O "1" é o movimento do 0 para o 9.
+        
+        if (indo <= voltando)
+            movimentos += indo;
+        else
+            movimentos += voltando;
+        printf("\nRoda 1: %d %d %d", indo, voltando, movimentos);}
+    
+    //Movimentos da roda 2
+    if (x2>=y2) {
+        indo = 9-x2+1+y2; //O "1" é o movimento do 9 para o 0.
+        voltando = x2-y2;
+        
+        if (indo <= voltando)
+            movimentos += indo;
+        else
+            movimentos += voltando;
+            printf("\nRoda 2: %d %d %d", indo, voltando, movimentos);} 
+            
+    else {
+        indo = y2-x2;
+        voltando = x2+1+9-y2; //O "1" é o movimento do 0 para o 9.
+        
+        if (indo <= voltando)
+            movimentos += indo;
+        else
+            movimentos += voltando;
+        printf("\nRoda 2: %d %d %d", indo, voltando, movimentos);}
+    
+    //Movimentos da roda 3
+        if (x3>=y3) {
+        indo = 9-x3+1+y3; //O "1" é o movimento do 9 para o 0.
+        voltando = x3-y3;
+        
+        if (indo <= voltando)
+            movimentos += indo;
+        else
+            movimentos += voltando;
+            printf("\nRoda 3: %d %d %d", indo, voltando, movimentos);}
+            
+    else {
+        indo = y3-x3;
+        voltando = x3+1+9-y3; //O "1" é o movimento do 0 para o 9.
+        
+        if (indo <= voltando)
+            movimentos += indo;
+        else
+            movimentos += voltando;
+            printf("\nRoda 3: %d %d %d", indo, voltando, movimentos);}
+            
+    /*O "if" para verificar se "indo <= voltando" poderia ser substituído pela
+    expressão abaixo:
+    
+    operação      (condição        ) ? valor se verdadeiro : valor se falso
+    movimentos += (indo <= voltando) ? indo : voltando;*/
+
+    printf("\nA quantidade de movimentos necessarias para chegar na senha e = %d", movimentos);
+}
+
+
+
+/*Avaliação I - 2023.2
+Questão I
+Sua tarefa é escrever um programa em C, que leia um inteiro, indicando o maior
+número que um computador consegue representar, e, uma expressão codificada por um
+inteiro de até 7 dígitos, onde os três menos significativos, compõem o segundo
+operando, o quarto dígito menos significativo codifica a operação desejada (1 -
+para adição, 2 - para subtração, 3 - para multiplicação, 4 - para divisão), os
+restantes mais significativos compõem o primeiro operando e indique o resultado da
+operação ou se ocorrerá overflow. Por exemplo, para um computador cujo maior
+inteiro seja 256, e a expressão de entrada seja 2501008, a saída indicará overflow.
+Mas, se a entrada for 502008, a saída deverá ser 42.
+*/
+#include <stdio.h>
+
+main() 
+{
+    int limite, expressao;
+    int x1, x2, x3, x4, x5, x6, x7; //Separações
+    int operando1, operando2; //Números da expressão codificada
+    
+    printf("\nInforme o maior numero que o computador consegue representar: ");
+    scanf("%d", &limite);
+    //printf("\n%d", limite);
+    
+    printf("\nInforme uma expressao codificada de ate 7 digitos: ");
+    scanf("%d", &expressao);
+    
+    //Verificando se a expressão informada tem até 7 dígitos.
+    if (expressao > 9999999)
+        printf("\nExpressao invalida.");
+        return 1;
+    
+    //Operando 1
+    x1 = expressao/1000000;         //Milhão
+    x2 = (expressao/100000)%10;     //Centena de milhar
+    x3 = (expressao/10000)%10;      //Dezena de milhar
+    
+    //Operação
+    x4 = (expressao/1000)%10;       //Milhar
+    
+    //Operando 2
+    x5 = (expressao/100)%10;        //Centena
+    x6 = (expressao/10)%10;         //Dezena
+    x7 = expressao%10;              //Unidade
+    
+    operando1 = x1*100+x2*10+x3;
+    operando2 = x5*100+x6*10+x7;
+    
+    //printf("\n %d \n %d \n %d \n %d \n %d \n %d \n %d \n %d \n %d", x1, x2, x3, x4, x5, x6, x7, operando1, operando2);
+    
+    if (x4 == 1)
+        operando1 += operando2;
+    else if (x4 == 2)
+        operando1 -= operando2;
+    else if (x4 == 3)
+        operando1 *= operando2;
+    else if (x4 == 4)
+        {
+        if (operando2 == 0)
+            {
+            printf("\nDivisao por 0.");
+            return 1;
+            }
+        else
+            operando1 /= operando2;
+        }
+    else
+        {
+        printf("\nOperacao matematica nao reconhecida.");
+        return 1;
+        }
+        
+    if (operando1 > limite)
+        printf("\nOverflow: o resultado da operacao solicitada e superior ao maior numero representavel por este sistema.");
+    else
+        printf("\nO resultado da operacao e %d.", operando1);
+}
+
+
+
+/*Avaliação I - 2023.2
+Questão II
+Um algoritmo genético pode ser definido como uma técnica utilizada para encontrar 
+soluções aproximadas em problemas de otimização e busca. Uma das operações 
+utilizadas durante a execução de um algoritmo genético é a mutação por swap. Nesta
+operação um dos bits do algoritmo tem o valor trocado por seu complementar. Por 
+exemplo, considerando a seguinte numeração de bits - b4b3b2b1b0 - o indivíduo 28 
+(11100) após a operação de swap que modifica o seu bit 3 passa a representar o 
+indivíduo 20 (10100). Escreva um programa em C, que leia um indivíduo entre 0 e 35
+, e um valor de bit entre 0 e 4, aplique a operação de mutação por swap e escreva
+o novo inteiro gerado.
+*/
+#include <stdio.h>
+
+main() 
+{
+    int numero, bit, x1, x2, x3, x4, x5, x6, binario, inteiro;
+    
+    printf("\nInforme um numero de 0 a 35: ");
+    scanf("%d", &numero);
+    
+    printf("\nInforme um valor de bit de 0 a 4: ");
+    scanf("%d", &bit);
+    
+    if (numero < 0 || numero > 35)
+        {
+        printf("\nNumero invalido. Informe um numero entre 0 e 35.");
+        return 1;
+        }
+        
+    if (bit < 0 || bit > 4)
+        {
+        printf("\nNumero de bit invalido. Informe um bit entre 0 e 4.");
+        return 1;
+        }
+    
+    //Número em binário |x6|x5|x4|x3|x2|x1|
+    x1 = numero%2;
+    x2 = (numero/2)%2;
+    x3 = (numero/4)%2;
+    x4 = (numero/8)%2;
+    x5 = (numero/16)%2;
+    x6 = (numero/32)%2;
+    
+    binario = 100000*x6 + 10000*x5 + 1000*x4 + 100*x3 + 10*x2 + x1;
+    printf("\nO numero %d em binario e %d.", numero, binario);
+ 
+    if (bit == 0)
+        x1 = 1 - x1;
+    else if (bit == 1)
+        x2 = 1 - x2;
+    else if (bit == 2)
+        x3 = 1 - x3;
+    else if (bit == 3)
+        x4 = 1 - x4;
+    else if (bit == 4)
+        x5 = 1 - x5;
+    
+    /*Na conversão de decimal para binário, após dividirmos sucessivamente o número por 2, pegamos o último quociente mais os restos das divisões anteriores, sempre de baixo para cima.*/ 
+    binario = 100000*x6 + 10000*x5 + 1000*x4 + 100*x3 + 10*x2 + x1;
+    inteiro = 32*x6 + 16*x5 + 8*x4 + 4*x3 + 2*x2 + x1;
+    
+    printf("\nO novo numero em binario e %d, e em decimal e %d.", binario, inteiro);
+}
+
+
+
+/*Avaliação I - 2023.1
+Questão II
+O código de Gray é um sistema de código binário inventado por Frank Gray. O código é não ponderado onde de um número para outro apenas um bit varia. Este sistema de codificação surgiu quando os circuitos lógicos digitais se realizavam com válvulas termoiônicas e dispositivos eletromecânicos. Os contadores necessitavam de potências muito elevadas e geravam ruído quando vários bits modificavam-se simultaneamente. O uso do código Gray
+garantiu que qualquer mudança variaria apenas um bit.
+
+Escreva um programa em C, que leia dois inteiros codificados em decimal entre 0 e 7 e verifique se eles são números POTENCIALMENTE sequenciais no código Gray. Por exemplo, os
+números 4 (100) e 5 (101) são números potencialmente sequenciais no código Gray, no entanto 5 (101) e 6 (110) não são.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    //Números decimais de 0 a 7
+    int numero1, numero2;
+    
+    //Transformação dos números decimais em binário
+    int x1, x2, x3, x4,  y1, y2, y3, y4;
+    
+    //Acumulador
+    int acumulador = 0;
+    
+    printf("\nDigite um numero decimal de 0 a 7: ");
+    scanf("%d", &numero1);
+    
+    printf("\nDigite outro numero decimal de 0 a 7: ");
+    scanf("%d", &numero2);
+    
+    //Conversão de decimal para binário
+    x1 = numero1%2;
+    x2 = (numero1/2)%2;
+    x3 = (numero1/4)%2;
+    x4 = (numero1/8)%2;
+   // printf("\n%d %d %d %d", x4, x3, x2, x1);
+    
+    y1 = numero2%2;
+    y2 = (numero2/2)%2;
+    y3 = (numero2/4)%2;
+    y4 = (numero2/8)%2;
+   // printf("\n%d %d %d %d", y4, y3, y2, y1);
+   
+    if (x4 != y4)
+        acumulador += 1;
+    
+    if (x3 != y3)
+        acumulador += 1;
+        
+    if (x2 != y2)
+        acumulador += 1;
+        
+    if (x1 != y1)
+        acumulador += 1;
+        
+    //printf("\n%d", acumulador);
+    
+    if (acumulador == 1)
+        printf("\nOs numeros %d e %d sao potencialmente sequenciais no codigo Gray.", numero1, numero2);
+    else
+        printf("\nOs numeros %d e %d nao sao potencialmente sequencias no codigo Gray.", numero1, numero2);
+}
+
+
+
+/*Avaliação I - 2022.1
+Questão I
+Solução 1 (incompleta)
+Na álgebra de inteiros foi definida uma nova operação chamada de maximização de inteiros. A maximização de dois números inteiros A e B segue as seguintes regras:
+
+1. Inicialmente fazemos A e B terem o mesmo número de dígitos, adicionando zeros à esquerda conforme necessário.
+
+2. Então cada dígito de A (do menos significativo ao mais significativo) é comparado com o dígito correspondente de B. Nesta comparação, o dígito de menor valor é eliminado do número a que pertence (se eles são iguais, nenhum é eliminado).
+
+3. O resultado da operação é a dupla de números formados pelos dígitos remanescentes. Caso não haja dígitos remanescentes em um dos números, o equivalente na dupla resultado para este número é -1.
+
+Por exemplo, considere a maximização de 453 e 92. Após o passo 1, teremos: 453 e 092; em seguida compar -se 4 > 0; 5 < 9 e 3>2. Será eliminado o 5 do primeiro número e serão eliminados o 0 e o 2 do segundo número. A dupla resultado será (43 e 5). Sua tarefa é escrever um programa em C, que calcule a operação maximização para dois inteiros entre 0 e 999.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    //Para receber os números de entrada
+    int numeroA, numeroB;
+    
+    //Para separar os números
+    int x1, x2, x3, y1, y2, y3;
+    
+    //Para contar os números modificados
+    int contadorA = 0, contadorB = 0;
+    
+    printf("\nInforme um numero de 0 a 999: ");
+    scanf("%d", &numeroA);
+    
+    if (numeroA < 0 || numeroA > 999)
+        {printf("\nNumero invalido. Informe um numero entre 0 e 999.");
+        return 1;}
+    
+    printf("\nInforme outro numero de 0 a 999: ");
+    scanf(" %d", &numeroB);
+    
+    if (numeroB < 0 || numeroB > 999)
+        {printf("\nNumero invalido. Informe um numero entre 0 e 999.");
+        return 1;}
+        
+    //Separação dos números
+    x1 = numeroA/100;
+    x2 = (numeroA/10)%10;
+    x3 = numeroA%10;
+    
+    y1 = numeroB/100;
+    y2 = (numeroB/10)%10;
+    y3 = numeroB%10;
+    
+    /*Não precisamos adicionar zeros para números menores que 100, nas operações de separação dos números o "0" já é retornado caso o dividendo seja menor que o divisor.*/
+    
+    //printf("%d %d %d", x1, x2, x3);
+    
+    /*Os contadores, contadorA e contadorB, foram criados para verificar quantos algarismos foram substituídos. Se x1 > y1, fazemos y1 = 0. Porém, não podemos dizer que se numeroB = 0, mostre -1, porque se os valores de entrada fossem numeroA = 000 e numeroB = 000, as saídas seriam -1, quando deveriam ser 0, pois não houve substituição de algarismos.*/
+    
+    if (x1 > y1)
+        {y1 = 0;
+        contadorB += 1;}
+        
+    else if (y1 > x1)
+        {x1 = 0;
+        contadorA += 1;}
+        
+     if (x2 > y2)
+        {y2 = 0;
+        contadorB += 1;}
+        
+    else if (y2 > x2)
+        {x2 = 0;
+        contadorA += 1;}
+    
+     if (x3 > y3)
+        {y3 = 0;
+        contadorB += 1;}
+        
+    else if (y3 > x3)
+        {x3 = 0;
+        contadorA += 1;}
+    
+    numeroA = 0;
+    numeroB = 0;
+    
+    if (contadorA != 3)
+        {if (x1 != 0) numeroA = numeroA*10 + x1;
+         if (x2 != 0) numeroA = numeroA*10 + x2;
+         if (x3 != 0) numeroA = numeroA*10 + x3;}
+    
+    else 
+        numeroA = -1;
+        
+    if (contadorB != 3)
+        {if (y1 != 0) numeroB = numeroB*10 + y1;
+         if (y2 != 0) numeroB = numeroB*10 + y2;
+         if (y3 != 0) numeroB = numeroB*10 + y3;}
+    
+    else 
+        numeroB = -1;
+
+    printf("\nOs numeros remanescentes sao %d e %d.", numeroA, numeroB);
+    
+}
+
+
+
+/*Avaliação I - 2022.1
+Questão I
+Solução 2
+Na álgebra de inteiros foi definida uma nova operação chamada de maximização de inteiros. A maximização de dois números inteiros A e B segue as seguintes regras:
+
+1. Inicialmente fazemos A e B terem o mesmo número de dígitos, adicionando zeros à esquerda conforme necessário.
+
+2. Então cada dígito de A (do menos significativo ao mais significativo) é comparado com o dígito correspondente de B. Nesta comparação, o dígito de menor valor é eliminado do número a que pertence (se eles são iguais, nenhum é eliminado).
+
+3. O resultado da operação é a dupla de números formados pelos dígitos remanescentes. Caso não haja dígitos remanescentes em um dos números, o equivalente na dupla resultado para este número é -1.
+
+Por exemplo, considere a maximização de 453 e 92. Após o passo 1, teremos: 453 e 092; em seguida compar -se 4 > 0; 5 < 9 e 3>2. Será eliminado o 5 do primeiro número e serão eliminados o 0 e o 2 do segundo número. A dupla resultado será (43 e 5). Sua tarefa é escrever um programa em C, que calcule a operação maximização para dois inteiros entre 0 e 999.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    //Para receber os números de entrada
+    int numeroA, numeroB;
+    
+    //Para separar os números
+    int x1, x2, x3, y1, y2, y3;
+    
+    //Para juntar os números remanescentes
+    int acumuladorA = 0, acumuladorB = 0;
+    
+    //Para contar os números modificados
+    int contadorA = 0, contadorB = 0;
+    
+    printf("\nInforme um numero de 0 a 999: ");
+    scanf("%d", &numeroA);
+    
+    if (numeroA < 0 || numeroA > 999)
+        {printf("\nNumero invalido. Informe um numero entre 0 e 999.");
+        return 1;}
+    
+    printf("\nInforme outro numero de 0 a 999: ");
+    scanf(" %d", &numeroB);
+    
+    if (numeroB < 0 || numeroB > 999)
+        {printf("\nNumero invalido. Informe um numero entre 0 e 999.");
+        return 1;}
+        
+    //Separação dos números
+    x1 = numeroA/100;
+    x2 = (numeroA/10)%10;
+    x3 = numeroA%10;
+    
+    y1 = numeroB/100;
+    y2 = (numeroB/10)%10;
+    y3 = numeroB%10;
+    
+    /*Não precisamos adicionar zeros para números menores que 100; nas operações de separação dos números o "0" já é retornado caso o dividendo seja menor que o divisor.*/
+    
+    //printf("%d %d %d", x1, x2, x3);
+    
+    /*Os contadores, contadorA e contadorB, foram criados para verificar quantos algarismos foram substituídos. Se x1 > y1, fazemos y1 = 0. Porém, não podemos dizer que se numeroB = 0, mostre -1, porque se os valores de entrada fossem numeroA = 000 e numeroB = 000, as saídas seriam -1, quando deveriam ser 0, pois não houve substituição de algarismos.*/
+    
+    /*
+    - Comparação e eliminação dos algarismos que são menores que o concorrente.
+    - Juntando algarismos sob determinadas condições.
+    - Se numeroA = numeroB, todas essas condições são puladas.
+    */
+    if (x1 > y1)
+        {acumuladorA = acumuladorA*10 + x1;
+        contadorB += 1;}
+        
+    else if (y1 > x1)
+        {acumuladorB = acumuladorB*10 + y1;
+        contadorA += 1;}
+    
+    if (x2 > y2)
+        {acumuladorA = acumuladorA*10 + x2;
+        contadorB += 1;}
+        
+    else if (y2 > x2)
+        {acumuladorB = acumuladorB*10 + y2;
+        contadorA += 1;}
+        
+    if (x3 > y3)
+        {acumuladorA = acumuladorA*10 + x3;
+        contadorB += 1;}
+        
+    else if (y3 > x3)
+        {acumuladorB = acumuladorB*10 + y3;
+        contadorA += 1;}
+   
+   /*
+   - Verificando se os números tiveram algarismos substituídos.
+   - Se numeroA = numeroB, acumuladorA = 0, acumuladoB = 0, contadorA = 0 e contadorB = 0.
+   - Assim, se numeroA = numeroB, todas as condições são puladas e numeroA e numeroB permanecem inalterados, exibindo seus valores originais.
+   */
+    if (contadorA == 3)
+        numeroA = -1;
+        
+    else if (contadorA > 0)
+        numeroA = acumuladorA;
+        
+   if (contadorB == 3)
+        numeroB = -1;
+        
+    else if (contadorB > 0)
+        numeroB = acumuladorB;
+        
+    printf("\nOs numeros remanescentes sao %d e %d.", numeroA, numeroB);
+    
+}
+
+
+
+/*Avaliação I - 2022.1
+Questão II
+Chronos possui um relógio muito antigo e valioso. Contudo, embora seus ponteiros
+ainda funcionem perfeitamente, seus marcadores e números se tornaram ilegíveis. Para
+a sorte de Chronos, o relógio foi construído com um mostrador que indica o valor dos
+ângulos medidos entre os ponteiros de hora e minutos e a posição de repouso,
+equivalente a 00:00. Assim, quando for 00:00 o marcador indica de ângulos indica 000
+e 000. Às 06:00, o marcador de ângulos, indicará: 180 e 000. Às 06:30, contudo o
+valor do marcador de ângulos será: 195 e 180. Você deve escrever um programa, que
+leia os valores do marcador de ângulos e calcule a hora indicada pelo relógio.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    //angulo1 marcas as horas; angulo2, os minutos
+    int angulo1, angulo2, horas, minutos;
+    
+    /*
+    O ângulo entre o ponto 0 e o ponto 3 do relógio é de 90º.
+    Sendo assim, o ângulo entre dois pontos consecutivos, como 1 e 2, é 30º.
+    O ponto 1 marca 5 minutos; o 2, 10; o 3, 15 e assim por diante. 
+    Sendo assim, entre dois pontos consecutivos temos 5 minutos.
+    Logo, 30º/5 = 6º. Ou seja, o ponteiro dos minutos anda 6º a cada minuto.
+    */
+    
+    printf("\nInforme o angulo das horas: ");
+    scanf("%d", &angulo1);
+    
+    if (angulo1 > 360 || angulo1 < 0)
+        {printf("\nO angulo não pode ser menor que 0 ou maior que 360.");
+        return 1;}
+    
+    printf("\nInforme o angulo dos minutos: ");
+    scanf(" %d", &angulo2);
+    
+    if (angulo2 > 360 || angulo2 < 0)
+        {printf("\nO angulo não pode ser menor que 0 ou maior que 360.");
+        return 1;}
+
+    /*
+    Conversão de ângulo para horas.
+    Se angulo1 < 30, angulo1/30 = 0, mas quando o ponteiro das horas aponta para
+    o 0, lemos como 12.*/
+    if (angulo1 < 30 || angulo1 == 360)
+        horas = 12;
+    else
+        horas = angulo1/30;
+    
+    /*
+    Conversão de ângulo para minutos.
+    Ao contrários das horas, o minuto pode marcar 0, por isso a condição é
+    angulo2 == 0, e não menor que 6º.*/
+    if (angulo2 == 360)
+        minutos = 0;
+    else
+        minutos = angulo2/6;
+       
+    printf("\nO relogio marca %02d:%02d", horas, minutos); 
+}
+
+
+
+/*Avaliação I - 2021.2
+Questão 1
+Diferente dos computadores binários tradicionais, que fazem
+representações numéricas usando dígitos binários, os computadores 
+ternários balanceados fazem sua representação numérica
+através de dígitos ternários balanceados ou trits. 
+
+No sistema de numeração ternário balanceado, de forma similar aos 
+sistemas de representação tradicionais, os valores numéricos são
+posicionais. Nesse caso, a base aplicada é a base três. Assim, o
+dígito mais à direita vale um, contudo, deslocá-lo uma posição à
+esquerda, equivale a multiplicá-lo por três. 
+
+Existem três trits possíveis: 2, 1 e 0. O trit 2 adiciona o valor
+posicional correspondente, o 1 não adiciona nem subtrai e o 0, subtrai
+o valor em questão. Por exemplo: o número 222 em ternário balanceado
+equivale a: 9 + 3 + 1 = 13. Já o número 2010, equivale a 27-9+0-1=17.
+
+Escreva um programa em C, que leia um número de até quatro trits e
+imprima o seu equivalente em decimal.
+*/
+#include <stdio.h>
+
+int main() {
+    
+    int numero, decimal;
+    int x1, x2, x3, x4;
+    
+    printf("\nInforme um numero de ate quatro digitos no sistema trits: ");
+    scanf("%d", &numero);
+
+    //Separação do número
+    x1 = numero/1000;
+    x2 = (numero/100)%10;
+    x3 = (numero/10)%10;
+    x4 = numero%10;
+    
+    //Tratamento de erros. Os trits só podem ter algarismos de 0 a 2
+    if (x1 > 2 || x2 > 2 || x3 > 2 || x4 > 2 || x1 < 0 || x2 < 0 || x3 < 0 || x4 < 0)
+        {printf("\nNumero invalido. Informe um numero de ate quatro digitos no sistema trits.");
+        return 1;}
+    
+    /*Tratamento de erros. Caso o número informado fosse 10, por exemplo, x1 = 
+    0/1000 = 0. Sem a verificação do numero >= 1000, esse x1 = 0 seria
+    transformado em x1 = -27, quando na verdade ele é um zero à esquerda.*/
+    if (numero >= 1000)    
+        {if (x1 == 2)
+            x1 = 3*3*3;
+        else if (x1 == 1)
+            x1 = 0;
+        else 
+            x1 = -1*(3*3*3);}
+        
+    if (numero >= 100)
+        {if (x2 == 2)
+            x2 = 3*3;
+        else if (x2 == 1)
+            x2 = 0;
+        else 
+            x2 = -1*(3*3);}
+        
+    if (numero >=10)
+        {if (x3 == 2)
+            x3 = 3;
+        else if (x3 == 1)
+            x3 = 0;
+        else 
+            x3 = -1*(3);}
+        
+    if (x4 == 2)
+        x4 = 1;
+    else if (x4 == 1)
+        x4 = 0;
+    else 
+        x4 = -1;
+    
+    decimal = x1 + x2 + x3 + x4;
+    
+    printf("\nO numero convertido para decimal e %d.", decimal);
+}
+
+
+
+/*Avaliação I - 2021.2
+Questão 2
+O código de confirmação de uma transação bancária é calculada considerando os
+quatro dígitos finais do cartão e o horário da transação no formato HHMM. Para o
+cálculo, são gerados dois números considerando para o primeiro os maiores numerais
+de cada posição, e para o segundo o menor númeral de cada posição. Em seguida, o
+menor número é subtraído do maior e seu invertido é gerado. Este último valor é o
+código de confirmação da transação. 
+
+Por exemplo, para o cartão 4392 e uma transação realizada às 12:15, o código de
+confirmação será igual a 3813; calculado da seguinte forma: 4395 - 1212 = 3183,
+que quando invertido, gera o número 3813.
+
+Escreva um programa em C, que leia um número de quatro dígitos do cartão e um
+outro representando o horário no formato HHMM e imprima o código de confirmação
+calculado.*/
+
+#include <stdio.h>
+
+int main()
+{
+    int cartao, horario, codigo;
+    
+    //Dígitos do cartão (xs), do horário (ys) e do código (zs).
+    int x1, x2, x3, x4;
+    int y1, y2, y3, y4;
+    int z1, z2, z3, z4;
+    
+    //Variável para auxiliar na troca de valores entre os xs e os ys.
+    int a;
+    
+    printf("\nInforme os quatro ultimos digitos do cartao: ");
+    scanf("%d", &cartao);
+    
+    /*Tratamento de erro. Ainda não verifica se o cartão informado possui quatro dígitos.*/
+    if (cartao > 9999 || cartao < 0)
+        {printf("\nNumero do cartao invalido. Informe um numero de ate quatro digitos.");
+        return 1;}
+    
+    printf("\nInforme o horario da transacao no formato HHMM 24: ");
+    scanf(" %d", &horario);
+    
+    /*Tratamento de erro. Ainda não verifica se o horário informado possui quatro dígitos.*/
+    if (horario > 2359 || horario < 0)
+        {printf("\nHorario invalido.");
+        return 1;}
+    
+    //Separação dos dígitos do cartão.
+    x1 = cartao/1000;
+    x2 = (cartao/100)%10;
+    x3 = (cartao/10)%10;
+    x4 = cartao%10;
+    
+    //Separação dos dígitos do horário.
+    y1 = horario/1000;
+    y2 = (horario/100)%10;
+    y3 = (horario/10)%10;
+    y4 = horario%10;
+    
+    if (y1 > x1)
+        {a = x1;
+        x1 = y1;
+        y1 = a;}
+        
+   if (y2 > x2)
+        {a = x2;
+        x2 = y2;
+        y2 = a;}
+        
+    if (y3 > x3)
+        {a = x3;
+        x3 = y3;
+        y3 = a;}
+        
+    if (y4 > x4)
+        {a = x4;
+        x4 = y4;
+        y4 = a;}
+        
+    //Recomposição dos números.    
+    cartao = 1000*x1+100*x2+10*x3+x4;
+    horario = 1000*y1+100*y2+10*y3+y4;
+    
+    //printf("%d %d", cartao, horario);
+    
+    codigo = cartao - horario;
+    
+    //Separação dos dígitos do código.
+    z1 = codigo/1000;
+    z2 = (codigo/100)%10;
+    z3 = (codigo/10)%10;
+    z4 = codigo%10;
+    
+    //Recomposição do código.
+    
+    codigo = 1000*z4+100*z3+10*z2+z1;
+    
+    printf("\nO codigo e %04d.", codigo);
+}
+
+
+
+/*Avaliação I - 2018.2
+Questão I
+Carl aprendeu recentemente o que é o sistema binário. Ele aprendeu, por exemplo, que a representação binária de um inteiro positivo k é uma string anan−1...a1a0 onde cada ai é um dígito binário 0 ou 1, iniciando com an = 1, e de tal forma que k = Σ ai × 2i. 
+César, o irmão mais velho de Carl, resolveu lhe propor um desafio: "Olhe Carl, eu tenho uma pergunta fácil para você: eu te darei um valor inteiro, e você tem que me diz quantos dígitos 1 existem na representação binária deste número. Se prepare!". Carl aceitou o desafio.
+Para ajudar Carl, você deve escrever um algoritmo em C, que o ajude nesta tarefa. O algoritmo deverá ler um inteiro entre 0 e 32 e imprimir o total de dígitos 1 existentes no número.
+*/
+#include <stdio.h>
+
+int main() {
+
+    int numero, binario;
+    
+    int x1, x2, x3, x4, x5, x6, contador = 0;
+    
+    printf("\nInforme um numero inteiro entre 0 e 32: ");
+    scanf("%d", &numero);
+    
+    if (numero < 0 || numero > 32)
+        {printf("\nNumero invalido. O numero informado deve estar entre 0 e 32.");
+        return 1;}
+        
+    if (numero % 2 == 1) contador += 1;
+    if ((numero / 2) % 2 == 1) contador += 1;
+    if ((numero / 4) % 2 == 1) contador += 1;
+    if ((numero / 8) % 2 == 1) contador += 1;
+    if ((numero / 16) % 2 == 1) contador += 1;
+    if ((numero / 32) % 2 == 1) contador += 1;
+
+    /*No lugar de 'contador += 1' pode-se fazer 'contador ++'.*/
+    
+    printf("\nO numero de digitos '1' no equivalente binario do numero %d e %d.", numero, contador);
+}
+
+
+
+/*Avaliação I - 2018.1
+Questão 1
+Definimos a paridade de um inteiro n como a soma dos seus bits em representação binária computada módulo (resto da divisão inteira) dois. Como exemplo, o número 21 = (10101)2 possui três 1s na sua representação binária e portanto ele possui paridade 1 (3 módulo 2 = 1).
+Neste problema, você deverá escrever um programa em C, que calcule a paridade de um inteiro entre 0 e 31 e então gerar um novo inteiro com paridade 0, formado através do acréscimo de 0 ou 1 (para gerar a paridade 0) no bit menos significativo do novo inteiro. Em seguida deverá imprimir este novo número.
+Por exemplo, se a entrada for 21 = (10101)2, a saída deverá ser 43 = (101011)2. Caso a entrada seja 15 = (1111)2, a saída deverá ser 30 = (11110)
+*/
+
+#include <stdio.h>
+
+int main() {
+    
+    int numero, paridade, saida;
+    
+    //int binario;
+    
+    int x1, x2, x3, x4, x5;
+    
+    printf("\nInforme um numero inteiro entre 0 e 31: ");
+    scanf("%d", &numero);
+    
+    if (numero < 0 || numero > 31)
+        {printf("\nNumero invalido. Informe um numero inteiro entre 0 e 31.");
+        return 1;}
+    
+    x1 = numero%2;          //Algarismo menos significativo
+    x2 = (numero/2)%2;
+    x3 = (numero/4)%2;
+    x4 = (numero/8)%2;
+    x5 = (numero/16)%2;     //Algarismo mais significativo
+    
+    paridade = (x1+x2+x3+x4+x5)%2;
+    
+    /*Como a questão pede que seja acrescentado um novo bit após o menos significativo,
+    basta realizarmos a operação abaixo para encontrar o equivalente, em decimal, ao bi
+    ário formado pelo número original +  o novo bit.*/
+    saida = numero * 2 + paridade;
+    
+    //printf("Paridade = %d", paridade);
+    
+    /*if (paridade == 1)
+        //{binario = x5*100000+x4*10000+x3*1000+x2*100+x1*10+1;
+       // printf("\nBinario = %d", binario);
+        saida = x5*32 + x4*16 + x3*8 + x2*4 + x1*2 + 1;//}
+    else
+        //{binario = x5*100000+x4*10000+x3*1000+x2*100+x1*10+0;
+        //printf("\nBinario = %d", binario);
+        saida = x5*32 + x4*16 + x3*8 + x2*4 + x1*2 + 0;//}
+    */
+    printf("\nO novo inteiro e %d.", saida);
+}
+
+
+
+/*Avaliação I - 2018.1
+Questão 2
+Ao continuar sua jornada, Biu se depara com seu primeiro oponente: um incrível
+Rattata. Como Biu é bastante calculista, ele pede ajuda a você para descobrir se a
+sequência de ataques que ele pretende utilizar contra o seu oponente irá derrota
+-lo, considerando que seu pokémon não morra antes.
+
+No jogo, Biu utilizará apenas três ataques e cada ataque corresponde a um número.
+Para o Rattata ser derrotado, dos três ataques selecionados por Biu, deve existir:
+       - Um número maior que dez.
+       - Um número par.
+       
+Caso essas duas condições não forem satisfeitas, o Rattata não será derrotado.
+Outra observação é que se Biu escolher o ataque de número 0, independente se as
+condições de vitória forem satisfeitas, o Rattata também não será derrotado.
+
+*/
+#include <stdio.h>
+
+int main() {
+    
+    int ataque1, ataque2, ataque3, contador;
+    
+    printf("\nInforme um numero correspondente a cada um dos tres ataques: ");
+    scanf("%d %d %d", &ataque1, &ataque2, &ataque3);
+    
+    //Verifica se algum dos ataques é '0'. Se sim, Rattata não sera derrotado
+    if (ataque1 == 0 || ataque2 == 0 || ataque3 == 0)
+        {printf("\nO Rattata nao pode ser derrotado.");
+        return 1;}
+
+    if  (
+        (ataque1 > 10 && (ataque2%2 == 0 || ataque3%2 == 0)) ||
+        (ataque2 > 10 && (ataque1%2 == 0 || ataque3%2 == 0)) ||
+        (ataque3 > 10 && (ataque1%2 == 0 || ataque2%2 == 0))
+        )
+        printf("\nO Rattata será derrotado.");
+        
+    else
+        printf("\nO Rattata nao pode ser derrotado.");
+        
+    /*if (ataque1 > 10 && (ataque2%2 == 0 || ataque3%2 == 0))
+        printf("\nO Rattata será derrotado.");
+    
+    else if (ataque2 > 10 && (ataque1%2 == 0 || ataque3%2 == 0))
+        printf("\nO Rattata será derrotado.");
+    
+    else if (ataque3 > 10 && (ataque1%2 == 0 || ataque2%2 == 0))
+        printf("\nO Rattata será derrotado.");
+    
+    else
+        printf("\nO Rattata nao pode ser derrotado.");*/
+}
+
+
+
+/*Avaliação I - 2017.2
+Questão 1
+Considere um algoritmo similar ao de cálculo de dígito verificador de código de
+barras do tipo UPC:O cálculo do dígito verificador se dá como no exemplo abaixo.
+Considere o código fictício: 2345. 
+
+Para o cálculo do dígito verificador, você deve adicionar todos os de posições
+ímpares. No exemplo, somaremos os dígitos 2 e 4 (posição 1 e 3), o que gera o
+valor 6. 
+
+Multiplique 3 pelo resultado dessa soma; no exemplo, multiplicaremos 6 por 3, o
+que gera o valor 18. 
+
+Então, deve-se somar os dígitos das posições pares (3 e 5, que estão nas posições
+2 e 4, no exemplo, gerando o valor 8). 
+
+Adicionase a este valor, soma dos dígitos pares, o resultado do produto
+previamente calculado (8+18 = 26, no exemplo). 
+
+O dígito verificador é determinado calculando-se o número que deve ser adicionado
+a esta soma, para criar um múltiplo de 10; no caso do exemplo, o dígito
+verificador será 4, pois 26+4 = 30, que é igual a 10 * 3.
+
+Escreva um programa em C que leia UM ÚNICO número de 4 dígitos e gere UM ÚNICO
+número de 5 dígitos composto pelos dígitos lidos seguido no número verificador. Ou
+seja, usando o exemplo citado, o programa deveria ler o número 2345 e gerar como
+saída o número 23454.
+
+*/
+#include <stdio.h>
+
+//Número a ser multiplicado pela soma dos números nas posições ímpares
+#define fator 3 
+
+int main() {
+
+    int numero, x1, x2, x3, x4;
+    int impar, par, soma, multiplo, dv;
+    
+    printf("\nInforme um numero de ate quatro digitos: ");
+    scanf("%d", &numero);
+    
+    if (numero < 0 || numero > 9999)
+        {printf("\nNumero invalido. Informe um numero de ate quatro digitos.");
+        return 1;}
+    
+    //Extração dos dígitos
+    x1 = numero/1000;           //Posição 1 - Ímpar
+    x2 = (numero/100)%10;       //Posição 2 - Par
+    x3 = (numero/10)%10;        //Posição 3 - Ímpar
+    x4 = numero%10;             //Posição 4 - Par
+    
+    impar = (x1+x3)*fator;
+    par   = (x2+x4);
+    soma  = impar + par; 
+    
+    /*Se a soma for um múltiplo de 10, o dv deve ser '0', pois, de outro modo,
+    seria precismo somar a 'soma' com '10' para chegar ao próximo múltiplo de 10,
+    mas o número final só pode ter 5 dígitos. Por exemplo, se soma = 20, o próximo
+    múltiplo seria 30 e o dv seria 10.*/
+    if (soma%10 == 0)
+        dv = 0;
+    
+    else
+        /*Como queremos o próximo múltiplo de 10, basta  (1) dividirmos a 'soma'
+        por 10, (2) somar o quociente inteiro dessa divisão com 1 e (3)
+        multiplicar esse resultado por 10.*/
+        {multiplo = ((soma/10) + 1)*10;
+        dv = multiplo - soma;}
+    
+    /*Para acrescentar uma nova unidade a um número, basta multiplicarlo por
+    10 e somar com a unidade a ser acrescentada.*/
+    numero = numero*10 + dv;
+    
+    printf("\nO codigo e %d.", numero);
+}
+
+
+
+/*Avaliação I - 2017.2
+Questão 2
+O controle do colesterol plasmático é importante na prevenção de doenças
+coronarianas. Um dos fatores mais importantes na prevenção destas doenças é a
+redução dos níveis de LDL-Colesterol no plasma sanguíneo. Contudo a medição direta
+do LDL-Colesterol, uma partícula de tamanho muito menor que as do HDL-Colesterol
+por exemplo, requer processos de ultra-centrifugação, que tornam este exame muito
+caro e somente possível de ser executados em laboratórios de pesquisa com
+equipamentos muito específicos. 
+
+Assim, os laboratórios costumam usar a equação de Friedewald para estimar o LDL
+-Colesterol à partir dos valores do Colesterol Total, HDL-Colesterol Total e
+Triglicerídeos: 
+[colesterol total] − [HDL total] − 20% do valor de triglicerídios = LDL estimado.
+
+Considere a tabela abaixo e escreva um programa em C, que leia os valores de
+Colesterol Total, HDL- Colesterol Total e Triglicerídeos de um paciente, para
+indicar em qual categoria de nível de LDL-Colesterol, ele se encontra:
+
+Níveis de LDL-Colesterol                    Categoria
+Menor que 100mg/dl                          Ótimo
+100mg/dl a 129mg/dl                         Sub-ótimo
+130mg/dl a 159mg/dl                         Limítrofe
+160mg/dl a 189mg/dl                         Alto
+190mg/dl ou superior                        Muito alto
+
+*/
+#include <stdio.h>
+
+#define fator 0.20
+
+int main() {
+    
+    float col, HDL, trg, LDL;
+    
+    printf("\nInforme os valores do colesterol total, HDL total e o triglicerídeos: ");
+    scanf("%f %f %f", &col, &HDL, &trg);
+    
+    LDL = col - HDL - fator*trg;
+    
+    if (LDL < 100) printf("\nCategoria do colesterol: otimo");
+    else if (LDL <= 129) printf("\nCategoria do colesterol: sub-otimo");
+    else if (LDL <= 159) printf("\nCategoria do colesterol: limitrofe");
+    else if (LDL <= 189) printf("\nCategoria do colesterol: alto");
+    else printf("\nCategoria do colesterol: muito alto");
+}
+
+
+
+/*Avaliação I - 2017.1
+Questão 1 
+Flíper é um tipo de jogo onde uma bolinha de metal cai por um
+labirinto de caminhos até chegar na parte de baixo do labirinto. A
+quantidade de pontos que o jogador ganha depende do caminho que a
+bolinha seguir. O jogador pode controlar o percurso da bolinha mudando
+a posição de algumas portinhas do labirinto. Cada portinha pode estar
+na posição 0, que significa virada para a esquerda, ou na posição 1
+que quer dizer virada para a direita. Considere o flíper da figura
+abaixo, que tem três portinhas. A portinha Q está na posição 0 e a
+portinha R, na posição 1. Desse jeito, a bolinha vai cair pelo caminho
+C.
+
+Escreva um programa em C, que leia a posição das portinhas P, Q e R e
+indique em qual das saídas a bolinha irá cair.
+*/
+#include <stdio.h>
+
+int main() {
+    
+    //'p', 'q' e 'r' indicam as portas
+    int p, q ,r;
+    
+    printf("\nInforme a posicao das portas p, q e r, sendo 0 para esquerda e 1 para direita: ");
+    scanf("%d %d %d", &p, &q, &r);
+    
+    if (p < 0 || q < 0 || r < 0 || p > 1 || q > 1 || r > 1)
+        {printf("\nPosicao invalida. Informe 0, para a esquerda, ou 1, para a direita.");
+        return 1;}
+        
+    if (q == 0)
+        //q = 0 e r = 0
+        {if (r == 0)
+            printf("\nA bolinha caira na saida 'D'");
+        //q = 0 e r = 1
+        else
+            printf("\nA bolinha caira na saida 'C'");}
+        
+    else
+        //q = 1 e p = 0
+        {if (p == 0)
+            printf("\nA bolinha caira na saida 'B'");
+        //q = 1 e p = 1
+        else
+            printf("\nA bolinha caira na saida 'A'");}
+}
+
+
+
+/*Avaliação I - 2017.1
+Questão 2
+Em um país muito distante, as pessoas são viciadas em um jogo de apostas bastante simples. O jogo é baseado em números e é chamado jogo do bicho. O nome do jogo deriva do fato que os números são divididos em 25 grupos, dependendo do valor dos dois últimos dígitos (dezenas e unidades), e cada grupo recebe o nome de um animal. Cada grupo é associado a um animal da seguinte forma: o primeiro grupo (burro) consiste nos números 01, 02, 03 e 04; o segundo grupo (águia) é composto dos números 05, 06, 07 e 08; e assim em diante, até o ultimo grupo contendo os números 97, 98, 99 e 00. 
+
+As regras do jogo são simples. No momento da aposta, o jogador decide o valor da aposta V e um número N (0 <= N <= 99999). Todos os dias, na praça principal da cidade, um número M é sorteado (0 <= M <= 99999). O prêmio de cada apostador é calculado da seguinte forma:
+
+    • se M e N têm os mesmos quatro últimos dígitos (milhar, centena, dezena e unidade), o apostador recebe V × 3000 (por exemplo, N = 14302 e M = 34302);
+    • se M e N têm os mesmos três últimos dígitos (centena, dezena e unidade), o apostador recebe V × 500 (por exemplo, N = 33444 e M = 22444);
+    • se M e N têm os mesmos dois últimos dígitos (dezena e unidades), o apostador recebe V × 50 (por exemplo, N = 112 e M = 142212);
+    • se M e N têm os dois últimos dígitos no mesmo grupo, correspondendo ao mesmo animal, o apostador recebe V × 16 (por exemplo, N = 82197 and M = 337600);
+    • se nenhum dos casos acima ocorrer, o apostador não recebe nada. 
+    
+    Obviamente, o prêmio dado a cada apostador é o máximo possível de acordo com as regras acima. No entanto, não é possível acumular prêmios, de forma que apenas um dos critérios acima deve ser aplicado no cálculo do prêmio. Escreva um programa em C, que leia o valor apostado, o número escolhido pelo apostador, e o número sorteado, calcule e imprima qual o prêmio que o apostador deve receber.
+*/
+#include <stdio.h>
+
+int main() {
+    float V;
+    int N, M;
+    
+    // Dados de entrada
+    printf("\nInforme o valor da aposta: ");
+    scanf("%f", &V);
+    
+    printf("\nInforme os numeros da aposta (0 a 99999): ");
+    scanf("%d", &N);
+    
+    printf("\nInforme os numeros do sorteio (0 a 99999): ");
+    scanf("%d", &M);
+    
+    // Tratamento de erros
+    if (V <= 0 || N < 0 || N > 99999 || M < 0 || M > 99999) {
+        printf("\nDados incorretos. O valor da aposta deve ser maior que 0, e os números devem estar entre 0 e 99999.\n");
+        return 1;
+    }
+
+    // Obtendo os dois últimos dígitos de N e M
+    int ultimosN = N % 100;
+    int ultimosM = M % 100;
+
+    // Obtendo os três últimos dígitos de N e M
+    int ultimos3N = N % 1000;
+    int ultimos3M = M % 1000;
+
+    // Obtendo os quatro últimos dígitos de N e M
+    int ultimos4N = N % 10000;
+    int ultimos4M = M % 10000;
+
+    // Calculando o grupo dos números
+    int grupoN = (ultimosN - 1) / 4 + 1; // Exemplo: 01-04 -> grupo 1, 05-08 -> grupo 2
+    int grupoM = (ultimosM - 1) / 4 + 1;
+
+    // Ajustando para o caso do grupo 00 pertencer ao último grupo
+    if (ultimosN == 0) grupoN = 25;
+    if (ultimosM == 0) grupoM = 25;
+
+    // Verificação das condições de premiação
+    if (ultimos4N == ultimos4M) {
+        printf("\nO valor recebido pela aposta será R$%.2f.\n", V * 3000);
+    } else if (ultimos3N == ultimos3M) {
+        printf("\nO valor recebido pela aposta será R$%.2f.\n", V * 500);
+    } else if (ultimosN == ultimosM) {
+        printf("\nO valor recebido pela aposta será R$%.2f.\n", V * 50);
+    } else if (grupoN == grupoM) {
+        printf("\nO valor recebido pela aposta será R$%.2f.\n", V * 16);
+    } else {
+        printf("\nO apostador não ganhou nada.\n");
+    }
+}
+
+
+
+/*Avaliação I - 2017.1
+Questão 3
+Arquimedes acaba de mudar de escola e a primeira coisa que percebeu na nova escola é que a gangorra do parquinho não é simétrica, uma das extremidades é mais longa que a outra. Após brincar algumas vezes com um amigo de mesmo peso, ele percebeu que quando está em uma extremidade, a gangorra se desequilibra para o lado dele (ou seja, ele fica na parte de baixo, e o amigo na parte de cima), mas quando eles trocam de lado, a gangorra se desequilibra para o lado do amigo. Sem entender a situação, Arquimedes pediu ajuda a outro amigo de outra série, que explicou que o comprimento do lado interfere no equilíbrio da gangorra, pois a gangorra estará equilibrada quando P1 x C1 = P2 x C2, onde P1 e P2 são os pesos da criança no lado esquerdo e direito, respectivamente, e C1 e C2 são os comprimentos da gangorra do lado esquerdo e direito, respectivamente. Com a equação, Joãozinho já consegue dizer se a gangorra está equilibrada ou não, mas, além disso, ele quer saber para qual lado a gangorra descerá caso esteja desequilibrada. Escreva um programa em C, que leia os pesos das crianças e os comprimentos dos lados da gangorra, calcule e diga se a gangorra ficará equilibrada, penderá pro lado 1 ou pro lado 2.
+*/
+#include <stdio.h>
+
+int main() {
+    
+    float p1, p2, c1, c2;
+    
+    printf("\nInforme o peso da crianca 1 e o comprimento do lado 1: ");
+    scanf("%f %f", &p1, &c1);
+    
+    printf("\nInforme o peso da crianca 2 e o comprimento do lado 2: ");
+    scanf("%f %f", &p2, &c2);
+    
+     if (p1 < 0 || p2 < 0 || c1 < 0 || c2 < 0) {
+        printf("Os valores de peso e comprimento devem ser positivos.\n");
+        return 1;}
+    
+    if (p1*c1 == p2*c2)
+        printf("\nA gangorra esta em equilibrio.");
+    else if (p1*c1 > p2*c2)
+        printf("\nA gangorra pendera para o lado 1.");
+    else 
+        printf("\nA gangorra pendera para o lado 2.");
+}
+
+
+
+/*Avaliação Ib - 2015.2
+Questão 1
+Escreva um programa em C que calcule o desconto previdenciário de um funcionário.
+Dado um salário, o programa deve imprimir o valor do desconto proporcional ao mesmo.
+O cálculo segue a regra: o desconto é de 11% do valor do salário, entretanto, o
+valor máximo de desconto é 570,88.
+*/
+#include <stdio.h>
+
+#define percentual 0.11
+#define descontoMAX 570.88
+
+int main() {
+    
+    float salario, desconto;
+    
+    printf("\nInforme o salario do funcionario: ");
+    scanf("%f", &salario);
+    
+    if (salario < 0)
+        {printf("\nSalario informado invalido. Informe um salario maior que 0.");
+        return 1;}
+        
+    desconto = salario*percentual;
+    
+    if (desconto > 570.88)
+        printf("\nO desconto sera de R$%.02f.", descontoMAX);
+    else 
+        printf("\nO desconto sera de R$%.02f.", desconto);
+}
+
+
+
+/*Avaliação Ib - 2015.2
+Questão 2]
+Solução 1 (mais longa)
+Escreva um programa em C que receba como entrada três inteiros representando uma
+data (dia, mês e ano), calcule e escreva como saída o dia seguinte (dia, mês e ano).
+Lembre-se que os meses 01, 03, 05, 07, 08, 10 e 12 possuem 31 dias, os meses 04, 06,
+09 e 11 possuem 30 dias, e o mês 02 pode possuir 28 ou 29 dias (em caso de ano
+bissexto). Um ano é bissexto se ele é divisível por 4. No entanto, se o ano for
+divisível por 100 e não for divisível por 400, ele não é bissexto.
+*/
+#include <stdio.h>
+
+int main() {
+    
+    //Entradas
+    int dia, mes, ano, bissexto;
+    
+    //Saídas
+    int dia_s , mes_s, ano_s;
+    
+    printf("\nInforme um dia, mes e ano: ");
+    scanf("%d %d %d", &dia, &mes, &ano);
+    
+    dia_s = dia;
+    mes_s = mes;
+    ano_s = ano;
+    
+    if ((ano%4 == 0 && ano%100 != 0) || ano%400 == 0)
+        //É bissexto
+        bissexto = 1;
+    else
+        //Não é bissexto
+        bissexto = 0;
+    
+    //Tratamento de erros de entrada
+    if (
+        dia > 31 || dia <= 0 ||
+        mes > 12 || mes <= 0 ||
+        ano <= 0  ||
+        ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia >= 31) ||
+        (mes == 2 && bissexto == 1 && dia > 29) ||
+        (mes == 2 && bissexto == 0 && dia > 28)
+        )
+        
+        {printf("\nInforme uma data valida.");
+        return 1;}
+    
+    //Calculando o dia seguinte
+    
+    //Fevereiro e ano bissexto    
+    if (mes == 2 && bissexto == 1)
+        {if (dia == 29)
+            {dia_s = 1;
+            mes_s ++;}
+        else
+            dia_s ++;}
+    
+    //Fevereiro e ano comum       
+    else if (mes == 2 && bissexto == 0)
+        {if (dia == 28)
+            {dia_s = 1;
+            mes_s ++;}
+        else
+            dia_s ++;}
+    
+    //Abril, junho, setembro ou novembro        
+    else if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        {if (dia == 30)
+            {dia_s = 1;
+            mes_s ++;}
+        else
+            dia_s ++;}
+            
+    //Dezembro
+    else if (mes == 12 && dia == 31)
+        {dia_s = 1;
+        mes_s = 1;
+        ano_s ++;}
+        
+    //Demais meses
+    else if (dia == 31)
+        {dia_s = 1;
+        mes_s ++;}
+        
+    else
+        dia_s ++;
+    
+    printf("\nO dia seguinte e %02d/%02d/%04d", dia_s, mes_s, ano_s);
+}
+
+
+
+/*Avaliação Ib - 2015.2
+Questão 2
+Solução 2 (compacta)
+Escreva um programa em C que receba como entrada três inteiros representando uma
+data (dia, mês e ano), calcule e escreva como saída o dia seguinte (dia, mês e an
+). Lembre-se que os meses 01, 03, 05, 07, 08, 10 e 12 possuem 31 dias, os meses 0
+, 06, 09 e 11 possuem 30 dias, e o mês 02 pode possuir 28 ou 29 dias (em caso de
+ano bissexto). Um ano é bissexto se ele é divisível por 4. No entanto, se o ano
+for divisível por 100 e não for divisível por 400, ele não é bissexto.
+*/
+#include <stdio.h>
+
+int main() {
+    
+    //Entradas
+    int dia, mes, ano;
+    
+    //Saídas
+    int dia_s , mes_s, ano_s;
+    
+    //Auxiliares
+    int dias_do_mes;
+    
+    printf("\nInforme um dia, mes e ano: ");
+    scanf("%d %d %d", &dia, &mes, &ano);
+    
+    //Inicialização das variáveis do dia seguinte
+    dia_s = dia;
+    mes_s = mes;
+    ano_s = ano;
+    
+    //Calculando os dias do mês
+    if (mes == 2)
+        //Verificando se o ano é bissexto
+        {if ((ano%4 == 0 && ano%100 != 0) || ano%400 == 0)
+            //É bissexto
+            dias_do_mes = 29;
+        else
+            //Não é bissexto
+            dias_do_mes = 28;}
+    
+    else if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        dias_do_mes = 30;
+    else
+        dias_do_mes = 31;
+    
+    //Tratamento de erros de entrada
+    if (dia < 1 || dia > dias_do_mes || mes < 1 || mes > 12 || ano < 1)
+        {printf("\nInforme uma data valida.");
+        return 1;}
+        
+    //Calculando a data seguinte
+    if (dia == dias_do_mes)         //Último dia do mês
+        {dia_s = 1;
+        
+        if (mes == 12)
+            {mes_s = 1;
+            ano_s ++;}
+            
+        else
+            mes_s ++;}
+            
+    else
+        dia_s ++;
+        
+    /*if (dia == 31 && mes == 12)
+        {dia_s = 1;
+        mes_s = 1;
+        ano_s ++;}
+        
+    else if (dia == dias_do_mes)
+        {dia_s = 1;
+        mes_s ++;}
+        
+    else
+        dia_s ++;
+    */
+    
+    printf("\nO dia seguinte e %02d/%02d/%04d", dia_s, mes_s, ano_s);
+}
+
+
+
+/*Avaliação Ib - 2015.2
+Questão 3
+Para determinar o número de lâmpadas necessárias para um cômodo de uma residência,
+existem normas que indicam o mínimo de potência de iluminação exigida por metro
+quadrado (m²), conforme a classe de utilização deste cômodo. A tabela abaixo exibe
+esses valores:
+
+Classe	    Utilização	        Potência (W) / m²
+I	        Quarto	            12
+            Sala de TV	
+II	        Sala	            15
+            Cozinha	
+            Varanda	
+III	        Banheiro	        20
+            Escritório	
+            
+Suponha que serão usadas na iluminação apenas lâmpadas de 60W. Escreva um programa
+em C que leia a classe de utilização do cômodo e suas dimensões (largura e
+comprimento), calcule e imprima o número de lâmpadas de 60W necessárias para a
+iluminação do cômodo.
+
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    
+    int classe, lampadas;
+    float largura, comprimento, area;
+    
+    printf("\nInforme a classe de utilizacao (1, 2 ou 3): ");
+    scanf("%d", &classe);
+    
+    printf("\nInforme a largura e comprimento do comodo em metros: ");
+    scanf("%f %f", &largura, &comprimento);
+    
+    if (classe < 1 || classe > 3)
+        {printf("\nA classe informada deve estar entre 1 e 3.");
+        return 1;}
+        
+    area = largura*comprimento;
+    
+    //printf("\nA area do comodo e %.2f m2.", area);
+    
+    if (classe == 1)
+        lampadas = ceil((area*12)/60);
+    else if (classe == 2)   
+        lampadas = ceil((area*15)/60);
+    else 
+        lampadas = ceil((area*20)/60);
+       
+    //No mínimo precisaremos de uma lâmpada por cômodo 
+    if (lampadas == 0)
+        lampadas = 1;
+        
+    printf("\nSerao necessarias %d lampadas.", lampadas);
+    
+}
+
+
+
+/*Avaliação I - 2015.1
+Questão 1
+Escreva um programa em C que leia um número menor que 9999 e mostre a soma dos
+dígitos centrais (2º e 3º dígitos). Assim, se o número informado for 4326, a saída
+do programa deverá ser 5 (3 + 2).
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int numero, x1, x2;
+    
+    printf("\nInforme um numero entre 1000 e 9999: ");
+    scanf("%d", &numero);
+    
+    if (numero < 1000 || numero > 9999)
+        {printf("\nO numero informado e invalido.");
+        return 1;}
+        
+    x1 = (numero/100)%10;
+    x2 = (numero/10)%10;
+
+    printf("\nA soma dos digitos centrais e %d.", x1+x2);
+    
+}
+
+
+
+/*Avaliação I - 2015.1
+Questão 2
+Escreva um programa em C que leia um número menor que 9999, representando uma senha.
+O programa deve verificar se a senha é válida (e imprimir “Senha válida”), ou se a
+senha viola alguma das seguintes regras, caso em que o programa deverá apresentar a
+mensagem de violação correspondente:
+
+Regra | Mensagem
+1 – Algarismos iguais: a senha é formada por quatro algarismos idênticos. Ex.: 5555
+Mensagem: "A senha é formada por algarismos iguais"
+
+2 – Sequência crescente: a senha é formada por algarismos que formam uma sequência crescente. Ex.: 3456
+Mensagem: "A senha é formada por uma sequência crescente"
+
+3 – Sequência decrescente: a senha é formada por algarismos que formam uma sequência decrescente. Ex.: 4321
+Mensagem: "A senha é formada por uma sequência decrescente"
+*/
+
+#include <stdio.h>
+
+int main() {
+    
+    int senha, x1, x2, x3, x4;
+    
+    printf("\nInforme uma senha de quatro digitos (máx 9999): ");
+    scanf("%d", &senha);
+    
+    if (senha < 1000 || senha > 9999)
+        {printf("\nSenha invalida.");
+        return 1;}
+        
+    //Extração das partes do número
+    x1 = senha/1000;           //Milhar
+    x2 = (senha/100)%10;       //Centena
+    x3 = (senha/10)%10;        //Dezena
+    x4 = senha%10;             //Unidade
+    
+    //Regra 1
+    if (x1 == x2 && x2 == x3 && x3 == x4)
+        printf("\nA senha e formada por algarismos iguais.");
+    //Regra 2
+    else if (x2 == x1+1 && x3 == x2+1 && x4 == x3+1)
+        printf("\nA senha e formada por uma sequencia crescente.");
+    //Regra 3
+    else if (x4 == x3-1 && x3 == x2-1 && x2 == x1-1)
+        printf("\nA senha e formada por uma sequencia decrescente.");
+    else
+        printf("\nA senha e valida.");
+    
+}
+
+
+
+/*Avaliação I - 2015.1
+Questão 3
+Escreva um programa em C que leia quatro notas de um aluno e imprima a nota final
+deste aluno. O cálculo da nota final é feito descartando-se a menor das quatro notas
+e calculando a média aritmética das três notas restantes.
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    float n1, n2, n3, n4, menor, media;
+    
+    //Entrada
+    printf("\nInforme quatro notas: ");
+    scanf("%f %f %f %f", &n1, &n2, &n3, &n4);
+    
+    //Tratamento de erro dos dados de entrada
+    if (n1 < 0 || n1 > 10 || n2 < 0 || n2 > 10 || n3 < 0 || n3 > 10 || n4 < 0 || n4 > 10)
+        {printf("\nInforme notas entre 0 e 10.");
+        return 1;}
+        
+    //Inicializando menor como n1 (não necessariamente n1 é o menor valor)
+    menor = n1;
+    
+    //Encontrando a menor nota
+    if (menor > n2)
+        menor = n2;
+    
+    if (menor > n3)
+        menor = n3;
+    
+    if (menor > n4)
+        menor = n4;
+    
+    //Calculando a média   
+    media = (n1+n2+n3+n4-menor)/3;
+    
+    //Exibindo a média
+    printf("A media das notas e %.2f", media);
+}
+
+
+
+/*Avaliação I - 2015.1
+Questão 4
+Escreva um programa em C que leia duas sequências de três números correspondendo à
+idade em anos, meses e dias de duas pessoas. O programa deve verificar e imprimir
+qual das duas pessoas (a primeira ou a segunda) é mais velha ou se elas possuem a
+mesma idade. Por exemplo, se os valores lidos forem:
+
+Primeira pessoa: 8 anos, 4 meses e 2 dias
+Segunda pessoa: 8 anos, 3 meses e 15 dias
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    //Entradas
+    //a = anos, m = meses, d = dias
+    int a1, m1, d1, a2, m2, d2;
+    
+    //Declarando e inicializando a variável auxiliar 'maisvelho'
+    int maisvelho = 0;
+
+    printf("\nInforme quantos anos, meses e dias de idade tem a pessoa 1: ");
+    scanf("%d %d %d", &a1, &m1, &d1);
+    
+    printf("\nInforme quantos anos, meses e dias de idade tem a pessoa 2: ");
+    scanf("%d %d %d", &a2, &m2, &d2);
+    
+    //Tratatamento de erros dos dados de entrada
+    if (a1 < 0 || a2 < 0 || m1 < 0 || m2 < 0 || m1 > 12 || m2 > 12 || d1 < 0 || d2 < 0 || d1 > 31 || d2 > 31)
+        {printf("\nInforme uma idade valida.");
+        return 1;}
+
+    //Comparando as idades
+    if (a1 > a2)
+        maisvelho = 1;
+    
+    else if (a2 > a1)
+        maisvelho = 2;
+    
+    else 
+        {if (m1 > m2)
+            maisvelho = 1;
+        else if (m2 > m1)
+            maisvelho = 2;
+        else
+            {if (d1 > d2)
+                maisvelho = 1;
+            else if (d2 > d1)
+                maisvelho = 2;}}
+                
+    if (maisvelho == 1)
+        printf("\nA pessoa 1 e mais velha.");
+    else if (maisvelho == 2)
+        printf("\nA pessoa 2 e mais velha.");
+    else
+        printf("\nAs duas pessoas possuem a mesma idade.");
+}
+
+
+
+/*Avaliação 1 – 2018.1
+Questão 3
+
+Nos primeiros anos após a Revolução Francesa, intelectuais foram encarregados de erradicar da sociedade certas tradições e superstições da era negra da realeza. Algumas destas contribuições alcançaram um amplo sucesso, tais como o sistema métrico. Outras caíram em (quase) completo esquecimento, tais como o sistema de tempo decimal, inventado pelo matemático Gilbert Romme. O sistema de tempo decimal divide o dia em 10 horas decimais, que são divididas em 100 minutos decimais, que por sua vez são divididos em 100 segundos decimais. Você foi encarregado pela mundialmente famosa fabricante de relógios "Splatch" para incluir mais uma característica inútil na próxima linha de produtos: um mostrador de tempo decimal. Sua primeira tarefa é implementar um programa em C, que converta um tempo no formato tradicional para um tempo decimal com precisão de um centésimo de segundo. 
+
+A entrada do seu programa é um único número que codifica uma hora no formato HHMMSSCC, onde 0 ≤ HH ≤ 23, 0 ≤ MM ≤ 59, 0 ≤ SS ≤ 59 e 0 ≤ CC ≤ 99.
+
+A saída é um número que codifique o horário decimal correspondente à entrada informada correspondente, no formato HMMSSCC, onde 0 ≤ H ≤ 9, 0 ≤ MM ≤ 99, 0 ≤ SS ≤ 99 e 0 ≤ CC ≤ 99.
+
+Por exemplo, para a entrada 14273467 (14h27m34s67/100), a saída deverá ser 6024846 (6h02m48s46/100).*/
+
+#include <stdio.h>
+
+int main() {
+    // Variáveis para entrada e saída
+    long long entrada;
+    int HH, MM, SS, CC;
+    double tempo_total_segundos, tempo_decimal_total, H_decimal, M_decimal, S_decimal, C_decimal;
+
+    // Leitura da entrada no formato HHMMSSCC
+    printf("Digite o horário no formato HHMMSSCC:\n");
+    scanf("%lld", &entrada);
+
+    // Extração das partes da entrada
+    CC = entrada % 100;
+    entrada /= 100;
+    SS = entrada % 100;
+    entrada /= 100;
+    MM = entrada % 100;
+    entrada /= 100;
+    HH = entrada;
+
+    // Conversão para segundos totais (base tradicional)
+    tempo_total_segundos = (HH * 3600) + (MM * 60) + SS + (CC / 100.0);
+
+    // Conversão para o sistema decimal (base 10 horas por dia)
+    tempo_decimal_total = tempo_total_segundos * (100000.0 / 86400.0);
+
+    // Separação das partes do tempo decimal
+    H_decimal = (int)(tempo_decimal_total / 10000); // Extrai horas decimais
+    tempo_decimal_total -= H_decimal * 10000;
+    M_decimal = (int)(tempo_decimal_total / 100); // Extrai minutos decimais
+    tempo_decimal_total -= M_decimal * 100;
+    S_decimal = (int)tempo_decimal_total; // Extrai segundos decimais
+    C_decimal = (int)((tempo_decimal_total - S_decimal) * 100 + 0.5); // Centésimos arredondados
+
+    // Impressão no formato HMMSSCC
+    printf("Horário no formato decimal: %d%02d%02d%02d\n", (int)H_decimal, (int)M_decimal, (int)S_decimal, (int)C_decimal);
+
+    return 0;
+}
+
+/*Avaliação 1 – 2012.2
+Questão 1
+
+Escreva um algoritmo em linguagem C que leia um número de até três dígitos (menorou igual a (777)8) em octal (sistema de numeração base 8) e escreva o seu equivalente em base 10. Por exemplo, o número (435)8, equivale ao número (285)10. (4*82 + 3*81 +5*80 = 4*64+ 3*8+5*1=256+24+5=285). Demonstre um teste de mesa considerando os valores indicados (entrada = 435; saída=285).
+*/
+
+#include <stdio.h>
+
+main(){
+	int num8,  num10;
+	int alg1, alg2, alg3;
+		
+	scanf("%d",&num8);
+	
+	alg1 = num8/100;
+	alg2 = (num8/10)%10;
+	alg3 = num8%10;
+	
+	num10 = (alg1*64) + (alg2*8) + alg3;
+	printf("%d", num10);
+}
+
+/*Avaliação I - 2012.2
+Questão 2
+Escreva um algoritmo em linguagem C que leia o horário de entrada (hora, minuto) e ohorário de saída (hora, minuto) de uma aula e escreva o tempo de duração desta aula, no formato hora:minuto.
+*/
+
+#include <stdio.h>
+
+int main() {
+    int horaInicial, minuInicial, horaFinal, minuFinal;
+    int total_minutos, duracH, duracM;
+
+    // Leitura dos horários de entrada e saída
+    scanf("%d %d", &horaInicial, &minuInicial);
+    scanf("%d %d", &horaFinal, &minuFinal);
+
+    // Cálculo da diferença total em minutos
+    total_minutos = (horaFinal * 60 + minuFinal) - (horaInicial * 60 + minuInicial);
+
+    // Caso a diferença seja negativa, significa que a aula passou da meia-noite
+    if (total_minutos < 0) {
+        total_minutos += 24 * 60; // Adiciona 24 horas em minutos (1440 minutos)
+    }
+
+    // Calcula a duração em horas e minutos
+    duracH = total_minutos / 60;  // Horas
+    duracM = total_minutos % 60;  // Minutos
+
+    // Exibe a duração no formato hora:minuto
+    printf("%d:%02d\n", duracH, duracM);
+
+    return 0;
+}
+
+/* Avaliação 1 - 2012.2
+Questão 3
+
+Escreva um algoritmo em linguagem C que calcule e imprima a média obtida pelo aluno para aprovação direta (se superior a 7.0) ou o valor mínimo que o aluno (não aprovadopor média) precisa obter numa prova final para ser aprovado. Considere que são realizadas três provas durante o semestre e que para aprovação em final a média obtidade acordo com a equação abaixo precisa ser igual ou superior a 5.0.  
+
+MédiaFinal= ((média aritmética das três avaliações parciais) x  2+(notada provafinal) x1)/3*/
+
+#include <stdio.h>
+
+main(){
+	
+	float nota1, nota2, nota3, media, notaM;
+	
+	scanf("%f",&nota1);
+	scanf("%f",&nota2);
+	scanf("%f",&nota3);
+	
+	media = (nota1+nota2+nota3)/3;
+	if(media<7){
+		notaM = (5*3) - (media*2);
+		printf("Você foi pra prova final.A nota mínima que tu precisa tirar é %.2f.", notaM);
+	}
+	else{
+		printf("Você foi aprovado(a) com %.2f", media);
+	}
+}
+
+/*Escreva um algoritmo em linguagem C que leia dois valores numéricos, representando um dia e um mês e escreva a data equivalente por extenso. Por exemplo, se os números
+informados forem 02 e 06, a saída deverá ser ‘dois de junho’; caso a data informada seja 01 e 12, a saída deverá ser ‘primeiro de dezembro’.*/
+
+#include <stdio.h>
+
+main ()
+{
+	
+	int dia, mes, unid, dezena;
+	scanf("%d %d", &dia, &mes);
+
+    //Tratamento de erros
+    if (dia <= 0 || mes <= 0 || dia > 31 || mes > 12)
+        {printf("\nErro.");
+        return 1;}
+        
+    dezena = dia/10;
+    unid = dia%10;
+        
+    if (dia >= 10 && dia <= 19)
+        {switch (dia)
+						{case 10: printf("Dez"); break;
+            case 11: printf("Onze"); break;
+            case 12: printf("Doze"); break;
+            case 13: printf("Treze"); break;
+            case 14: printf("Catorze"); break;
+            case 15: printf("Quinze"); break;
+            case 16: printf("Dezesseis"); break;
+            case 17: printf("Dezessete"); break;
+            case 18: printf("Dezoito"); break;
+            case 19: printf("Dezenove"); break;}}
+				
+	else if (dezena == 0)
+	    printf("");
+	
+	else if (dezena == 2)
+	    printf("Vinte");
+	    
+	else if (dezena == 3)
+        printf("Trinta");
+        
+    if (dia >= 21 && dia <= 29 || dia == 31)
+        printf(" e ");
+      
+    if (dezena < 1 || dezena > 1) 
+        switch (unid)
+            {case 1: printf("Um"); break;
+            case 2: printf("Dois"); break;
+            case 3: printf("Três"); break;
+            case 4: printf("Quatro"); break;
+            case 5: printf("Cinco"); break;
+            case 6: printf("Seis"); break;
+            case 7: printf("Sete"); break;
+            case 8: printf("Oito"); break;
+            case 9: printf("Nove"); break;}
+			
+	printf(" de ");
+	
+	switch (mes)
+				{case 1: printf("Janeiro."); break;
+        case 2: printf("Fevereiro."); break;
+        case 3: printf("Março."); break;
+        case 4: printf("Abril."); break;
+        case 5: printf("Maio."); break;
+        case 6: printf("Junho."); break;
+        case 7: printf("Julho."); break;
+        case 8: printf("Agosto."); break;
+        case 9: printf("Setembro."); break;
+        case 10: printf("Outubro."); break;
+        case 11: printf("Novembro."); break;
+        case 12: printf("Dezembro."); break;}
+}
+
+
+
+/*Avaliação 1 - 2014.2
+Questão 1
+Escreva um programa em C, que leia a probabilidade de dois eventos independentes
+acontecerem. Em seguida, o programa deverá calcular e imprimir a probabilidade de um
+dos dois eventos ocorrer, bem como dos dois eventos ocorrerem. A probabilidade é dada
+pelas fórmulas abaixo:
+P (A e B) = P(A) x P(B)
+P(A ou B) = P(A) + P (B) – P(A e B)
+*/
+
+#include <stdio.h>
+
+int main() {
+    float P_A, P_B, P_A_e_B, P_A_ou_B;
+
+    // Leitura das probabilidades dos eventos A e B
+    printf("Digite a probabilidade de ocorrer o evento A (entre 0 e 1): ");
+    scanf("%f", &P_A);
+
+    printf("Digite a probabilidade de ocorrer o evento B (entre 0 e 1): ");
+    scanf("%f", &P_B);
+
+    // Cálculo da probabilidade de ambos os eventos ocorrerem (A e B)
+    P_A_e_B = P_A * P_B;
+
+    // Cálculo da probabilidade de um dos eventos ocorrer (A ou B)
+    P_A_ou_B = P_A + P_B - P_A_e_B;
+
+    // Impressão dos resultados
+    printf("Probabilidade de ambos os eventos ocorrerem (P(A e B)): %.5f\n", P_A_e_B);
+    printf("Probabilidade de um dos eventos ocorrer (P(A ou B)): %.5f\n", P_A_ou_B);
+
+}
+
+
+
+/* Avaliação 1 - 2014.2
+Questão 2
+Escreva um programa em C, que receba três números representando uma coordenada 
+geográfica expressa em graus, minutos e segundos, calcule e imprima este valor em graus decimais. Para tanto, considere que 60 minutos equivalem a um grau e 60 segundos 
+equivalem a um minuto. Assim, por exemplo, 37º39’20’’ (37 graus, 39 minutos e 20 
+segundos) equivalem, aproximadamente, a 37.65556 graus decimais.
+
+*/
+
+#include <stdio.h>
+
+int main() {
+    int graus, minutos, segundos;
+    float graus_decimais;
+
+    // Leitura dos valores de graus, minutos e segundos
+    printf("Digite a coordenada em graus, minutos e segundos (graus minutos segundos):\n");
+    scanf("%d %d %d", &graus, &minutos, &segundos);
+
+    // Conversão para graus decimais
+    graus_decimais = graus + (minutos / 60.0) + (segundos / 3600.0);
+
+    // Impressão do resultado
+    printf("A coordenada em graus decimais é: %.5f\n", graus_decimais);
+
+}
+
+
+
+/*Avaliação 1 - 2014.2
+Questão 3
+Sabendo que triângulo é uma figura geométrica de três lados onde cada um dos lados é
+menor que a soma dos outros dois, escreva um programa em C, que receba três valores e
+verifique e imprima se eles podem ser os comprimentos dos lados de um triângulo.
+*/
+
+#include <stdio.h>
+
+int main() {
+    float a, b, c;
+
+    // Leitura dos três lados
+    printf("Digite os três lados do triângulo: ");
+    scanf("%f %f %f", &a, &b, &c);
+
+    // Verificação da desigualdade triangular
+    if (a + b > c && a + c > b && b + c > a) {
+        printf("Os valores podem formar um triângulo.\n");
+    } else {
+        printf("Os valores não podem formar um triângulo.\n");
+   
+}
+
+
+
+/*Avaliação 1 - 2024.2
+Questão 1
+O hotel da Colônia de Férias dos Professores está com uma
+promoção para as férias de julho. A promoção é válida para
+quem chegar a partir do dia 1 de julho e sair no dia 1 de
+agosto. O preço da diária do hotel é menor para quem chegar
+mais cedo, e vai aumentando a cada dia. Mais precisamente, a
+promoção funciona assim:
+
+    • A diária do hotel para cada quem chegar no dia 1 é D
+    Reais. Assim, quem chegar no dia 1 vai pagar um total de
+    31 × D Reais.
+    
+    • A diária do hotel aumenta A reais por dia. Ou seja, a
+    diária é D + A Reais para quem chegar no dia 2; D + 2 ×
+    A Reais no dia 3; D + 3 × A Reais no dia 4 e assim por
+    diante.
+    
+    • A partir do dia 16 a diária não aumenta mais. Note que
+    quem chegar no dia 2 vai pagar um total de 30 × (D + A)
+    reais; quem chegar no dia 3 vai pagar um total de 29 ×
+    (D + 2 × A) reais, e assim por diante.
+    
+A sua tarefa é escrever um programa em C que leia férias, o
+valor da diária (D), o valor do aumento diário (A) e a data
+de entrada do professor hóspede, calcule e escreva o valor
+total da hospedagem.
+*/
+
+#include <stdio.h>
+
+int main() {
+    
+    int diaEntrada, majoracao, diarias;
+    float valorDiaria, valorAumento, total;
+    
+    printf("\nInforme o dia de entrada, o valor da diaria e o valor do aumento: ");
+    scanf("%d %f %f", &diaEntrada, &valorDiaria, &valorAumento);
+    
+    if (diaEntrada <= 0 || diaEntrada > 31)
+        {printf("Erro: dia de entrada invalido. Deve estar entre 1 e 31.");
+        return 1;}
+    
+    diarias = 31 - diaEntrada + 1;
+    
+    /*A majoração aumenta em uma unidade a cada dia, até o dia 15. A partir do dia 16, ela se torna fixa e igual a 15.*/
+    if (diaEntrada < 16)
+        majoracao = diaEntrada - 1;
+    else
+        majoracao = 15;
+        
+    total = diarias * (valorDiaria + majoracao*valorAumento);
+    
+    printf("\nO valor total da hospedagem e R$ %.2f", total);
+}
+
+
+
+/*Avaliação 1 - 2024.2
+Questão 2
+Um treinador de basquete deseja otimizar a pontuação dos
+seus atletas durante os jogos. Para tanto, ele mediu o
+percentual de acertos dos atletas em três faixas de
+distância para a cesta: arremessos realizados dentro do
+garrafão (valem dois pontos), arremessos de meia distância
+(feitos fora do garrafão, mas dentro da linha de três ponto
+, que também valem dois pontos) e arremessos de longa
+distância (além da linha de três pontos e que valem 3 ponto
+).
+
+Com estes percentuais de acerto, ele consegue calcular a
+esperança de pontuação por arremesso do jogador. Assim, para
+Stephen Curry o mapa de lançamentos, o percentual de acertos
+e a esperança de pontos por arremesso está apresentado na
+tabela abaixo:
+
+Área de Jogo    Percentual de Acerto    Esperança de Pontos 
+
+Arremessos dentro do Garrafão   0.580   0.580 * 2 = 1.160
+Arremessos de Meia Distância    0.460   0.460 * 2 = 0.920
+Arremessos de Longa Distância   0.450   0.450 * 3 = 1.350
+
+Escreva um programa em C que receba como entrada as
+porcentagens de acerto de cada tipo de arremesso (em valores
+decimais entre 0 e 1, representando a probabilidade de
+acerto) e imprima qual tipo de arremesso, o jogador deve
+priorizar. Por exemplo, no caso de Curry, o programa deve
+gerar como saída: “Preferir arremessos de longa distância
+(1.350 pontos por arremesso)”.
+*/
+
+#include <stdio.h>
+
+int main() {
+    
+    //Percentual da certo
+    float p1, p2, p3;
+    
+    //Esperança de pontos por arremesso
+    float e1, e2, e3, maior;
+    
+    printf("\nInforme o percentual de acerto para cada tipo de arremesso: ");
+    scanf("%f %f %f", &p1, &p2, &p3);
+    
+    if (p1 < 0 || p1 > 1 || p2 < 0 || p2 > 1 || p3 < 0 || p3 > 1)
+        {printf("\nErro: informe valores entre 0 e 1.");
+        return 1;}
+    
+    //Operações: cálculo das esperanças de acerto
+    e1 = p1*2;
+    e2 = p2*2;
+    e3 = p3*3;
+    
+    //Comparação
+    maior = e1;
+    
+    if (maior < e2)
+        maior = e2;
+        
+    if (maior < e3)
+        maior = e3;
+        
+    //Resultado
+    if (maior == e1)
+        printf("\nOptar pelo arremesso 1 (%.3f por arremesso).", e1);
+    else if (maior == e2)
+        printf("\nOptar pelo arremesso 2 (%.3f por arremesso).", e2);
+    else 
+        printf("\nOptar pelo arremesso 3 (%.3f por arremesso).", e3);
+
+}

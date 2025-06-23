@@ -1,0 +1,1617 @@
+
+/*Avaliação III - 2024.2
+Q1
+
+i) Filtro quadrado
+ii) Passo do mesmo tamanho do filtro
+iii) A dimensão da imagem é múltiplo da divisão do filtro
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    //Declarações
+    //N = dimensão da matriz imagem; f = dimensão do filtro
+    int N, f;
+    
+    //i = linha; j = coluna
+    int i, j, l, c, maior = 0;
+    
+    //Entrada de dados: dimensão da imagem e filtro
+    printf("\nInforme o tamanho da matriz imagem: ");
+    scanf("%d", &N);
+    
+    if (N <= 0){
+        printf("\nInforme um numero maior que 0.");
+        return 1;
+    }
+    
+    printf("\nInforme o tamanho do filtro: ");
+    scanf("%d", &f);
+    
+    if (f <= 0 || N % f != 0){
+        printf("\nO filtro deve ser um numero maior que 0 e um divisor da matriz imagem.");
+        return 1;
+    }
+    
+    //Declarações
+    int p = f; //Passo
+    int n = N / f; //Dimensão da matriz reduzida
+    int M[N][N]; //Matriz imagem
+    int m[n][n]; //Matriz reduzida
+    
+    //Entrada de dados: matriz imagem
+    for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz: ", i, j);
+            scanf("%d", &M[i][j]);
+        }
+    }
+
+    //Exibindo a matriz imagem
+    printf("\nMatriz: \n");
+    for (i = 0; i < N; i++){
+        printf("\n");
+        for (j = 0; j < N; j++){
+            printf("%8d", M[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Aplicando o filtro de max pooling
+    //Percorrendo as linhas da matriz imagem
+    for (i = 0; i < N; i += p){
+        //Percorrendo as colunas da matriz imagem
+        for (j = 0; j < N; j += p){
+            maior = 0; //Reinicializando maior
+            
+            //Submatriz
+            //Percorrendo as linhas da matriz filtro
+            for (l = i; l < i + p; l++){
+                //Percorrendo as colunas da matriz filtro
+                for(c = j; c < j + p; c++){
+                    if (M[l][c] > maior)
+                        maior = M[l][c];
+                }
+            }
+            //Guardando o maior valor da submatriz na matriz reduzida
+            m[i / f][j / f] = maior;
+        }
+    }
+    
+    //Exibindo a matriz reduzida
+    printf("\nMatriz reduzida: \n");
+    for (i = 0; i < n; i++){
+        printf("\n");
+        for (j = 0; j < n; j++){
+            printf("%8d", m[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+
+
+/*Avaliação III - 2024.2
+QUESTÃO II – Escreva um programa em C, que leia uma string qualquer e como saída gere a posição da primeira ocorrência de cada letra do alfabeto na string. 
+Considere, que a letra pode ter sido digitada tanto em maiúscula como em minúscula.
+
+Por exemplo para a string: “Olha! Eu sei como processar Strings!”.
+
+O seu programa deve gerar como saída:
+A(3) C(13) E(6) G(33) H(2) I(11) L(1) M(15) N(32) O(0) P(18) R(19) S(9) T(29) U(7)
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+#define letras 26
+
+int main() {
+
+    //Declarações
+    char texto[tamanho];
+    char alfabeto[letras] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int indice[letras];
+    int len, cont, cont2;
+    
+    //Inicializando o vetor indice
+    //Inicialização direta só funciona com 0
+    for (cont = 0; cont < letras; cont++){
+        indice[cont] = -1;
+    }
+    
+    //Entrada de dados
+    printf("\nDigite um texto: ");
+    fgets(texto, sizeof(texto), stdin);
+    texto[strcspn(texto, "\n")] = '\0';
+    
+    //Comprimento do texto
+    len = strlen(texto);
+
+    //Buscando a primeira aparição de cada letra do alfabeto
+    //Percorrendo o texto
+    for (cont = 0; cont < len; cont++){
+        //Convertendo para maiúsculas
+        texto[cont] = toupper(texto[cont]);
+        
+        //Percorrendo o alfabeto
+        for (cont2 = 0; cont2 < letras; cont2++){
+            //Letra encontrada
+            if (texto[cont] == alfabeto[cont2] && indice[cont2] == -1){
+                indice[cont2] = cont;
+                break;
+            }
+        }
+    }
+    
+    //Exibindo o vetor indice
+    for (cont = 0; cont < letras; cont++){
+        if (indice[cont] != -1){
+            printf("%c(%d) ", alfabeto[cont], indice[cont]);
+        }
+    }
+}
+
+
+
+/*Avaliação III - 2024.1
+Uma folha de papel é composta de uma sequência de retângulos com diferentes alturas mas com larguras fixas, tal que as bases dos retângulos estão assentadas em uma linha horizontal. 
+A figura ilustra uma folha exemplo com 33 retângulos. Nós gostaríamos de fazer um único corte horizontal, com a ajuda de um estilete e uma régua, que maximize o número resultante 
+de pedaços separados pelo corte. A figura mostra quatro diferentes cortes que resultariam, respectivamente, em 4, 11, 10 e 3 pedaços. 
+
+Considere que a o seu programa opera sobre uma folha quadrada de no máximo 50 unidades de altura por 50 unidades (retângulos) de largura. 
+Escreva um programa em C, que leia as 50 alturas dos retângulos, calcule e informe e qual a maior quantidade de pedaços obtidas por um único corte horizontal e qual a altura deste corte.
+*/
+
+#include <stdio.h>
+
+int main() {
+
+
+
+/*Avaliação III - 2024.1
+Um algoritmo de redução de sequências de proteínas por equivalentes foi construído baseado na regra de substituição de subcadeias. 
+A ideia geral do algoritmo é a seguinte. Considere um dicionário de subcadeias como se segue:
+
+“AA” → “C”
+“BB” → “D”
+“CC” → “E”
+“ABC” → “C”
+“CB” → “A”
+
+Considere uma fita de proteína qualquer como entrada, e o algoritmo substituirá interativamente as subcadeias por seus equivalentes, 
+priorizando as primeiras entradas do dicionário (se for o caso), gerando uma nova interação, até que nenhuma substituição seja mais possível. 
+No exemplo acima, as seguintes subcadeias serão geradas até a parada do algoritmo:
+
+AABABBD → CBABBD → CBADD→ AADD→ CDD.
+
+Neste caso, a proteína equivalente CDD será a saída do algoritmo. 
+Considere uma cadeia de proteína de tamanho máximo 50 e um dicionário de equivalência de tamanho máximo 10 e escreva um programa em C, que leia 
+uma string representando uma proteína e escreva a string que representa a proteína equivalente gerada pelo algoritmo.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_PROTEINA 50
+#define MAX_SUBCADEIAS 5
+#define DICIONARIO 10
+
+int main(){
+    
+    char subcadeias[][MAX_SUBCADEIAS] = {"AA","BB","CC","ABC","CB"};
+    char traducao[] = {'C','D','E','C','A'};
+    char fita[MAX_PROTEINA], subfita[DICIONARIO];
+    
+    int i, j, z;
+    int len_fita, len_subcadeia;
+    int encontrou = 0;
+    
+    //Entrada de dados
+    printf("\nInforme uma fita: ");
+    scanf("%s", fita);
+    
+    //Comprimento da fita
+    len_fita = strlen(fita);
+    
+    //Convertendo a fita para maiúsculas
+    for (i = 0; i < len_fita; i++){
+        fita[i] = toupper(fita[i]);
+    }
+    
+    //Loop infinito
+    while (1){
+        //Inicializa a flag
+        encontrou = 0;
+        
+        //Percorre as subcadeias
+        for (i = 0; i < MAX_SUBCADEIAS; i++){
+            //Comprimento da subcadeia da linha i
+            len_subcadeia = strlen(subcadeias[i]);
+            
+            //Percorre a fita
+            for (j = 0; j <= len_fita - len_subcadeia; j++){
+                //Copiando a substring de fita para a subfita
+                strncpy(subfita, &fita[j], len_subcadeia);
+                
+                //Adiciona o terminador nulo
+                subfita[len_subcadeia] = '\0';
+                
+                if (strcmp(subcadeias[i], subfita) == 0){
+                    //Traduz a fita
+                    fita[j] = traducao[i];
+                    
+                    //Move os caracteres para a esquerda
+                    for (z = j + 1; z < len_fita - (len_subcadeia - 1); z++){
+                        fita[z] = fita[z + (len_subcadeia - 1)];
+                    }
+                    
+                    //Recalcula o comprimento da fita
+                    len_fita -= (len_subcadeia - 1);
+                    
+                    //Adiciona o terminador nulo
+                    fita[len_fita] = '\0';
+                    
+                    //Atualiza a flag
+                    encontrou = 1;
+                    
+                    //Sai do loop do j
+                    break;
+                }//Fim do if
+            } //Fim do j
+            
+            //Sai do loop do i
+            if (encontrou == 1){
+                break;
+            }
+            
+        } //Fim do i
+        
+        //Sai do loop infinito se não houver mais substituições
+        if (encontrou == 0){
+            break;
+        }
+        
+    } //Fim do while
+    
+    printf("\nFita traduzida: %s", fita);
+} 
+
+
+
+/*Avaliação III - 2023.2
+Questão II (5.0) - Palavras como “Belo”, “fiNo”, “CrUz” e “FLor” possuem a interessante propriedade de que suas letras aparecem todas em ordem alfabética. 
+Por exemplo, em “FLor”, F vem antes de L no alfabeto, L vem antes de o, e o vem antes de r. Dizemos que palavras com essa propriedade são ordenadas. 
+Escreva um programa em C, que leia uma palavra e determine se ela é uma palavra ordenada.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 100
+
+int main() {
+
+    char palavra[tamanho];
+    
+    int len, i, teste;
+    
+    printf("\nInforme uma palavra: ");
+    scanf("%s", palavra);
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Convertendo para maiúsculas
+    for (i = 0; i < len; i++){
+        palavra[i] = toupper(palavra[i]);
+    }
+
+    //Palavra maiúscula
+    //printf("\n%s", palavra);
+    
+    //Flag
+    teste = 1; //A palavra é ordenada
+    
+    //Verificando se a palavra é ordenada
+    for (i = 1; i < len; i++){
+        if (palavra[i] < palavra[i-1]){
+            teste = 0; //A palavra não está ordenada
+            break; //Sai do laço
+        }
+    }
+    
+    if (teste == 0)
+        printf("\nA palavra %s nao e ordenada.", palavra);
+    else
+        printf("\nA palavra %s e ordenada.", palavra);
+}
+
+
+
+/*Avaliação III - 2023.2
+Q1
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define I 9
+#define J 14
+
+int main() {
+
+    char M[I][J], M_mod[I][J];
+    char c;
+    
+    int i, j;
+    int flag, flag2;
+    
+    //Entrada de dados
+    //Percorrendo as linhas
+    for (i = 0; i < I; i++){
+        //Percorrendo as colunas
+        for (j = 0; j < J; j++){
+            printf("\nInforme o elemento da posicao %dx%d da matriz: ", i, j);
+            
+            do{
+                scanf(" %c", &c);
+                
+                //Verificando se o caractere é válido
+                if(strchr(".o#", c) == NULL){
+                    flag = 0;
+                    printf("\nEntrada invalida! Informe um caractere valido (.o#) para a posicao %dx%d da matriz: ", i, j);
+                }
+                else{
+                    flag = 1;
+                    M[i][j] = c;
+                }
+            }
+            while (flag == 0);
+        }
+    }
+        
+    //Exibindo a matriz original
+    printf("\nMatriz: \n");
+    for (i = 0; i < I; i++){
+        printf("\n");
+        for (j = 0; j < J; j++){
+            printf("%8c", M[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Copiando a matriz original para a matriz modificada
+    for (i = 0; i < I; i++){
+        for (j = 0; j < J; j++){
+            M_mod[i][j] = M[i][j];
+        }
+    }
+    
+    //Ajusta a madriz modificada
+    //Loop infinito
+    while(1){
+        
+        flag2 = 0; //Matriz auxiliar não foi modificada
+        
+        //Percorrendo as linhas
+        for (i = 0; i < I; i++){
+            //Percorrendo as colunas
+            for (j = 0; j < J; j++){
+                //i > 0, j > 0, i < I + 1 e j < J + 1 verifica se os índices são válidos
+                //Atualiza a célula se o elemento acima for 'o' 
+                if (i > 0 && M[i - 1][j] == 'o'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+                //Atualiza a célula se o elemento à esquerda for 'o' e o elemento inferior à esquerda for '#'
+                else if (i < I - 1 && j > 0 && M[i][j-1] == 'o' && M[i+1][j-1] == '#'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+                //Atualiza a célula se o elemento à direita for 'o' e o elemento inferior à direita for '#'
+                else if (i < I - 1 && j < J - 1 && M[i][j+1] == 'o' && M[i+1][j+1] == '#'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+            }
+        }
+        //Após percorrer toda a matriz, se flag2 = =, ela não foi modificada
+        if (flag2 == 0)
+            break; //Sai do primeiro loop (while)
+            
+        //Copiando a matriz modificada para a matriz original
+        for (i = 0; i < I; i++){
+            for (j = 0; j < J; j++){
+                M[i][j] = M_mod[i][j];
+            }
+        }
+    }
+
+    //Exibindo a matriz modificada
+    printf("\nMatriz modificada: \n");
+    for (i = 0; i < I; i++){
+        printf("\n");
+        for (j = 0; j < J; j++){
+            printf("%8c", M_mod[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Avaliação III - 2023.2
+Q1
+
+Solução 2: linha por linha
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define I 9
+#define J 14
+
+int main() {
+
+    char M[I][J], M_mod[I][J];
+    char c;
+    
+    int i, j;
+    int flag, flag2;
+    
+    //Entrada de dados: linha por linha
+    for (i = 0; i < I; i++) {
+        printf("Informe a linha %d: ", i);
+        scanf("%s", M[i]);  // Lê a linha como uma string
+    }
+        
+    //Exibindo a matriz original
+    printf("\nMatriz: \n");
+    for (i = 0; i < I; i++){
+        printf("\n");
+        for (j = 0; j < J; j++){
+            printf("%8c", M[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Copiando a matriz original para a matriz modificada
+    for (i = 0; i < I; i++){
+        for (j = 0; j < J; j++){
+            M_mod[i][j] = M[i][j];
+        }
+    }
+    
+    //Ajusta a madriz modificada
+    //Loop infinito
+    while(1){
+        
+        flag2 = 0; //Matriz auxiliar não foi modificada
+        
+        //Percorrendo as linhas
+        for (i = 0; i < I; i++){
+            //Percorrendo as colunas
+            for (j = 0; j < J; j++){
+                //i > 0, j > 0, i < I + 1 e j < J + 1 verifica se os índices são válidos
+                //Atualiza a célula se o elemento acima for 'o' 
+                if (i > 0 && M[i - 1][j] == 'o'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+                //Atualiza a célula se o elemento à esquerda for 'o' e o elemento inferior à esquerda for '#'
+                else if (i < I - 1 && j > 0 && M[i][j-1] == 'o' && M[i+1][j-1] == '#'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+                //Atualiza a célula se o elemento à direita for 'o' e o elemento inferior à direita for '#'
+                else if (i < I - 1 && j < J - 1 && M[i][j+1] == 'o' && M[i+1][j+1] == '#'){
+                    M_mod[i][j] = 'o';
+                    flag2 = 1; //Matriz auxiliar foi modificada
+                }
+            }
+        }
+        //Após percorrer toda a matriz, se flag2 = =, ela não foi modificada
+        if (flag2 == 0)
+            break; //Sai do primeiro loop (while)
+            
+        //Copiando a matriz modificada para a matriz original
+        for (i = 0; i < I; i++){
+            for (j = 0; j < J; j++){
+                M[i][j] = M_mod[i][j];
+            }
+        }
+    }
+
+    //Exibindo a matriz modificada
+    printf("\nMatriz modificada: \n");
+    for (i = 0; i < I; i++){
+        printf("\n");
+        for (j = 0; j < J; j++){
+            printf("%8c", M_mod[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Avaliação III - 2023.1
+QUESTÃO II: 
+Um laboratório é responsável pelo sequenciamento do DNA de vírus. O DNA dos vírus é uma sequência das enzimas: citosina, guanina, adenosina e timina 
+(representados pelas letras C, G, A, e T). A manipulação do DNA pode acarretar em erro na identificação das enzimas. Para tentar recuperar as enzimas perdidas, 
+o laboratório usa a técnica de consenso que consiste na leitura de cinco sequências do DNA (todas do mesmo tamanho) e a montagem da sequência correta através 
+do cálculo do caracter mais frequente de cada posição. Em caso de ausência de consenso (empate entre os caracteres mais frequentes), o caracter da posição 
+será marcado com ‘?’. Por exemplo, considere as fitas abaixo e o consenso montado segundo a técnica:
+
+Fitas lidas
+CGGATTTT
+CGGAAATT
+GCGTTAAT
+GCGTTTTT
+ACGGACAT
+
+CONSENSO:
+?CG?T?TT
+
+Escreva um programa em C, que leia 5 strings representando as fitas de DNA (strings de tamanho até 8 caracteres), calcule e imprima a fita de DNA montada por consenso.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define I 5
+#define J 9 //8 caracteres + terminador nulo
+
+int main() {
+
+    char dnas [I][J];
+    char enzimas[] = {'A', 'C', 'G', 'T'};
+    char c, consenso[J], s[J];
+    
+    //Contadores
+    int i, j, k;
+    
+    int teste, freq = 0, maior = 0;
+    
+    //Entrada de dados
+    for (i = 0; i < I; i++){
+        printf("\nInforme a %da sequencia: ", i+1);
+        scanf("%s", s);
+        
+        teste = 1;
+        //Verifica se os caracteres são válidos
+        for (j = 0; s[j] != '\0'; j++){
+            if (strchr("acgtACGT", s[j]) == NULL){
+                printf("\nSequencia invalida.\n");
+                i--;
+                teste = 0;
+                break; //Sai do loop interno
+            }
+        }
+        
+        //Se algum caractere for inválido, avança
+        if (teste == 0){
+            continue;
+        }
+        
+        //Caso os caracteres sejam válidos
+        //Copia o dna de s para dna
+        strcpy(dnas[i], s);
+        
+        //Converte para maiúsculas
+        for (j = 0; dnas[i][j] != '\0'; j++){
+            dnas[i][j] = toupper(dnas[i][j]);
+        }
+    }
+    
+    //Exibe as sequências inseridas
+    printf("\nSequencias inseridas:");
+    for (i = 0; i < I; i++){
+        printf("\n%s", dnas[i]);
+    }
+    printf("\n");
+
+    //Conta os caracteres de cada coluna da matriz de dnas
+    for (j = 0; j < J - 1; j++){
+        maior = 0;
+        consenso[j] = '?'; //Inicializando
+        
+        for (k = 0; k < 4; k++){
+            freq = 0;
+            
+            for (i = 0; i < I; i++){
+                if (dnas[i][j] == enzimas[k]){
+                    freq++;
+                }
+            }
+            if (freq > maior){
+                maior = freq;
+                c = enzimas[k];
+            }
+            else if (freq == maior){
+                c = '?';
+            }
+        }
+        consenso[j] = c;
+    }
+    
+    //Adiciona o terminador nulo
+    consenso[J - 1] = '\0';
+    
+    //Exibe o consenso
+    printf("\nO consenso e: %s", consenso);
+}
+
+
+
+/*Avaliação III - 2023.1
+Questão I (5.0)
+Um jogo de caças palavras é realizado através da apresentação de um conjunto de letras arranjadas de forma aparentemente aleatórias em uma grade quadrada ou retangular. 
+Nesta grade, os jogadores devem identificar, de forma alternada, palavras, que devem ser procuradas no sentido horizontal e/ou vertical da grade. 
+Nesta variação do jogo, a pontuação por palavra é dependente do tamanho da palavra encontrada: i) caso a palavra indicada pelo jogador não exista, ele recebe -5 pontos; 
+caso exista, ii) a pontuação é o tamanho da palavra encontrada. Por exemplo, para a grade abaixo:
+
+    ABLNHEHLLTBQJFRGQH
+    KJULOCALIZARARVMNT
+    FEOGEQHTLOIDFMBAOE
+    RWBNUSGEVIXOIOXGUS
+    BRDARGTENTATIVAYJT
+    EARHSOWESLFVCDPZJE
+    WECSWATLXBMTLCDPNI
+
+As palavras a seguir terão, respectivamente, a pontuação indicada:
+
+• LOCALIZAR - 9 pontos
+• TENTATIVA - 9 pontos
+• BAIXA - 5 pontos
+• TESTE - 5 pontos
+• LOGICA - -5 pontos.
+
+Escreva um programa que leia uma grade de MxN (para fins de teste, considere o valor de M como 7 e N como 17) caracteres e uma string 
+(tamanho máximo igual ao maior(M,N) + 1, para fins de teste), procure a string na grade e indique a pontuação marcada, segundo as regras apresentadas.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define I 3
+#define J 19 //18 caracteres + terminador nulo
+
+int main() {
+    
+    //Declarações
+    char M[I][J];
+    char palavra[J];
+    
+    int i, j, k;
+    
+    int pontos = 0, len;
+    
+    int encontrada = 1;
+    
+    //Entrada de dados: matriz
+    for (i = 0; i < I; i++){
+        printf("\nInforme a linha %d: ", i);
+        scanf("%s", M[i]);
+    }
+    
+    //Exibe a matriz
+    for (i = 0; i < I; i++){
+        printf("\n%s", M[i]);
+    }
+    printf("\n");
+    
+    //Loop infinito
+    while (1){
+        printf("\nInforme uma palavra: ");
+        scanf("%s", palavra);
+        
+        //Interrompe o programa
+        if (strcmp(palavra, "0") == 0){
+            break;
+        }
+        
+        //Comprimento da palavra
+        len = strlen(palavra);
+        
+        //Inicializa a variável
+        encontrada = 0; 
+        
+        //Percorrendo as linhas da matriz
+        for (i = 0; i < I; i++){
+            //Percorrendo as colunas da matriz
+            for (j = 0; j < J; j++){
+
+                //Evita a extrapolação da largura da matriz
+                if (j + len - 1 <= J - 2){
+                    //Busca horizontal
+                    if(strncmp(&M[i][j], palavra, len) == 0){
+                        encontrada = 1; //Palavra encontrada
+                    }
+                }
+            
+                //Evita a extrapolação da altura da matriz
+                if (encontrada == 0 && (i + len - 1) < I){
+                    //Assume que a palavra pode ser encontrada
+                    encontrada = 1; 
+                    
+                    //Busca vertical
+                    for (k = 0; k < len; k++){
+                        if (palavra[k] != M[i+k][j]){
+                            encontrada = 0;
+                            break;
+                        }
+                    }
+                }
+
+                //Após as buscas
+                if (encontrada == 1){
+                    printf("\nPalavra encontrada! Voce ganhou %d pontos.\n", len);
+                    pontos += len;
+                    printf("Agora voce tem %d pontos.\n", pontos);
+                    break; //Sai do loop das colunas
+                }
+                
+            } //Fim do loop das colunas
+            
+            if (encontrada == 1){
+                break; //Sai do loop das linhas
+            }
+        } //Fim do loop das linhas
+        
+        if (encontrada == 0){
+            printf("\nPalavra nao encontrada. Voce perdeu 5 pontos. ");
+            pontos -= 5;
+            printf("Agora voce tem %d pontos.\n", pontos);
+        }
+    }
+    
+    //Exibe os pontos
+    printf("\nJogo encerrado. Total de pontos: %d.", pontos);
+
+}
+
+
+
+/*Avaliação III - 2019.1
+Questão I
+Uma faixa de letras é um conjunto de letras minúsculas alfabeticamente consecutivas tomadas de 'a' até 'z'. A menor e maior letras da faixa, 
+separadas por dois pontos (o caractere ':'), são usadas para representar a faixa de letras. Por exemplo, a faixa "a:c" representa as letras 
+consecutivas 'a', 'b' e 'c'. (as aspas não fazem parte da faixa). A faixa "w:z" representa as letras 'w', 'x', 'y' e 'z'. A faixa "m:m" representa 
+apenas a letra 'm'. Escreva um programa em C, que leia uma string composta por letras minúsculas e espaços em branco e imprima as faixas de letras 
+que a compõe, ordenadas alfabeticamente pelo menor valor de cada faixa. Faixas de letras a serem impressas devem representar a maior sequência possível 
+de letras de entrada em ordem crescente. Ignore espaços e letras duplicadas contidas na entrada.
+
+Por exemplo, a string "iron maiden" tem cinco faixas de letras, "a:a" (a letra 'a'), "d:e" (as letras 'd' e 'e'), "i:i" (a letra 'i'), "m:o" 
+(as letras 'm', 'n' e 'o') e "r:r" (a letra 'x'). Assim a saída do programa deveria ser: "a:a d:e i:i m:o r:r".
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //1. Declarações
+    //1.1 Strings
+    char texto[tamanho];
+    char letras[] = "abcdefghijklmnopqrstuvwxyz";
+    char intervalos[26][3] = {'0'}; //Guarda os intervalos
+
+    //1.2 Integer
+    //Vetores
+    int encontradas[26] = {0}; //Marca as letras encontradas
+    
+    //Contadores
+    int i, j, k1, k2;
+    
+    //Outras
+    int len; 
+    
+    /*-----------------------------------------------------*/
+    
+    //Entrada de dados: texto
+    printf("\nDigite uma frase ou palavra (apenas letras minusculas ou espaços: \n");
+    fgets(texto, sizeof(texto), stdin);
+    texto[strcspn(texto, "\n")] = '\0';
+    printf("\n");
+    
+    //Comprimento do texto
+    len = strlen(texto);
+    
+    //Valida a entrada e marca as letras encontradas
+    for (i = 0; i < len; i++){
+        if (texto[i] >= 'a' && texto[i] <= 'z')
+            encontradas[texto[i] - 'a'] = 1;
+        else if (texto[i] != ' '){
+            printf("\nTexto invalido. Utilize apenas letras minusculas ou espacos.");
+            return 1;
+        }
+    }
+    
+    /*
+    //Exibe as letras
+    for (i = 0; i < 26; i++){
+        printf("%c  ", letras[i]);
+    }
+    printf("\n");
+    
+    //Exibe o vetor encontradas
+    for (i = 0; i < 26; i++){
+        printf("%d  ", encontradas[i]);
+    }
+    printf("\n");
+    */
+    
+    //Inicializações
+    k1 = 0; //Para percorrer as letras
+    k2 = 0; //Para contar os intervalos
+    
+    //Guarda os intervalos
+    //Percorrendo as linhas da matriz intervalos
+    for (i = 0; i < 26; i++){
+        
+        //Sai do loop se todas as letras já tiverem sido percorridas
+        if (k1 > 25)
+            break;
+            
+        //Guarda a posição da menor letra do intervalo
+        while (k1 < 26 && encontradas[k1] == 0){
+            k1++;
+        }
+        
+        if (k1 <= 25){
+            //Armazena a menor letra do intervalo
+            intervalos[k2][0] = letras[k1];
+            
+            //Inicializa o fim do intervalo com a mesma letra
+            intervalos[k2][1] = letras[k1];
+            
+            //Guarda a posição da maior letra do intervalo
+            while (k1 < 25 && encontradas[k1 + 1] == 1){
+                k1++;
+            }
+            
+            //Guarda a posição da maior letra do intervalo
+            intervalos[k2][1] = letras[k1];
+            
+            //Adiciona o terminador nulo
+            intervalos[k2][2] = '\0';
+            
+            //Incrementa os contadores
+            k1++;
+            k2++;
+        }
+    }
+    
+    //Exibindo uma matriz intervalos
+    printf("\nFaixas: ");
+    for (i = 0; i < k2; i++){
+        printf("%c:%c ", intervalos[i][0], intervalos[i][1]);
+    }
+}
+
+
+
+/*Avaliação III - 2019.1
+Questão II
+Em alguns lugares é comum lembrar um número do telefone associando seus dígitos a letras. Dessa maneira a expressão MY LOVE significa 69 5683. Claro que existem alguns problemas, uma vez que alguns números de telefone não formam uma palavra ou uma frase e os dígitos 1 e 0 não estão associados a nenhuma letra.
+
+Letras  Número
+ABC     2
+DEF     3
+GHI     4
+JKL     5
+MNO     6
+PQRS    7
+TUV     8
+WXYZ    9
+
+Escreva um programa em C que dada uma expressão, construa e imprima o número de telefone correspondente baseado na tabela abaixo. Uma expressão é composta por letras maiúsculas (A-Z), hifens (-) e os números 1 e 0. Por exemplo, para a entrada 1-LAR-DOCE-LAR, a saída deveria ser: 1-527-3623-527.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 100
+
+int main() {
+
+    //Declarações
+    char letras[8][5] = {"ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ"};
+    char texto[100];
+    
+    int i, j;
+    int len, numero[] = {2, 3, 4, 5, 6, 7, 8, 9};
+
+    //Entrada de dados
+    printf("\nDigite um texto: ");
+    fgets(texto, sizeof(texto), stdin);
+    texto[strcspn(texto, "\n")] = '\0';
+    
+    //Comprimento do texto
+    len = strlen(texto);
+    
+    //Conversão para maiúsculas
+    for (i = 0; i < len; i++){
+        if (texto[i] >= 'a' && texto[i] <= 'z')
+            texto[i] = toupper(texto[i]);
+        
+        // Validando a entrada para garantir que só temos letras, números e hifens
+        if (!((texto[i] >= 'A' && texto[i] <= 'Z') || texto[i] == '0' || texto[i] == '1' || texto[i] == '-')){
+            printf("\nTexto inválido. O texto deve conter apenas letras maiúsculas, números 0 e 1, e hifens.\n");
+            return 1;
+        }
+    }
+    
+    //Gerando o número de telefone
+    for (i = 0; i < len; i++){
+        if (texto[i] == '0' || texto[i] == '1' || texto[i] == '-')
+            //Imprime o caractere original
+            printf("%c", texto[i]);
+        else
+            for (j = 0; j < 8; j++){
+                if (strchr(letras[j], texto[i]) != NULL){
+                    //Imprime o caractere correspondente
+                    printf("%d", numero[j]);
+                    break; //Sai do loop, pois já encontrou a letra
+                }
+            }
+    }
+}
+
+
+
+/*Avaliação III - 2017.2
+3) (5.0) – Escreva um programa em C que crie uma estrutura que represente uma ficha de temperaturas com a menor e a maior temperatura lidas em um local. Em seguida deve-se criar uma arranjo que represente um mês de 30 dias para armazenar estas fichas. O programa deverá ler estes dados e calcular a média das temperaturas máximas, por fim, o programa deve imprimir os dias em que a temperatura máxima superou a média calculada.
+*/
+
+#include <stdio.h>
+#define dias 5
+
+struct temperaturas{
+    float min;
+    float max;
+};
+
+int main() {
+
+    struct temperaturas t[dias];
+    float n = 0, soma = 0, media = 0;
+    int i;
+    
+    for (i = 0; i < dias; i++){
+        printf("\nInforme a temperatura minima do dia %d: ", i + 1);
+        scanf("%f", &t[i].min);
+        
+        printf("\nInforme a temperatura maxima do dia %d: ", i + 1);
+        scanf("%f", &t[i].max);
+        
+        //Inverte os valores caso a mínima seja maior que a máxima
+        if (t[i].max < t[i].min){
+            n = t[i].min;
+            t[i].min = t[i].max;
+            t[i].max = n;
+        }
+        soma += t[i].max;
+    }
+    
+    media = (float)soma/dias;
+    printf("\nA media das temperaturas maximas e: %.2f.", media);
+    
+    int primeiro = 0;
+    printf("\nDias em que a temperatura maxima superou a media: ");
+    for (i = 0; i < dias; i++){
+        if (t[i].max > media){
+            if (primeiro == 0){
+                printf(" %d", i+1);
+                primeiro = 1;
+            }
+            else
+                printf(", %d", i+1);
+        }
+    }
+    printf(".");
+}
+
+
+
+/*Avaliação III - 2017.2
+2) (5.0) - Em qualquer experiência existe um erro associado aos valores obtidos. Uma técnica conhecida como suavização pode ser utilizada para reduzir o efeito desse erro na análise dos resultados. Escreva um programa em C, que permita ler os dados para um arranjo de 10 reais e, em seguida, produza uma suavização sobre esses dados. A suavização consiste em substituir o valor atual de uma posição pela média do valor da posição anterior, da posterior e dele próprio. 
+
+Assumindo que o identificador do arranjo é v, a suavização do valor da posição 5 é calculada pela soma entre v[4], v[5] e v[6] dividido por 3. No caso do primeiro elemento do arranjo, a suavização considera o primeiro, o segundo e o último. No caso do último, a suavização, considera o penúltimo, o último e o primeiro. Por fim, imprima o vetor suavizado.
+*/
+
+#include <stdio.h>
+#define tamanho 5
+
+int main() {
+
+    float v[tamanho];
+    
+    int i;
+    
+    //Guarda os valores inseridos pelo usuário
+    for (i = 0; i < tamanho; i++){
+        printf("\nInforme um numero real para a posicao %d: ", i);
+        scanf("%f", &v[i]);
+    }
+
+    //Suaviza o vetor
+    for (i = 0; i < tamanho; i++){
+        //Primeiro elemento do vetor
+        if (i == 0){
+            v[i] = (v[i] + v[i+1] + v[tamanho - 1])/3.0;
+        }
+        //Último elemento do vetor
+        else if (i == tamanho - 1){
+            v[i] = (v[i] + v[i-1] + v[0])/3.0;
+        }
+        //Demais elementos
+        else{
+            v[i] = (v[i] + v[i-1] + v[i+1])/3.0;
+        }
+    }
+    
+    printf("\nVetor suavizado: ");
+    printf("[");
+    int primeiro = 0;
+    for (i = 0; i < tamanho; i++){
+        if (primeiro == 0){
+            printf("%.2f", v[i]);
+            primeiro = 1;
+        }
+        else 
+            printf(", %.2f", v[i]);
+    }
+    printf("]");
+}
+
+
+
+/*Avaliação III - 2017.2
+1) (5.0) - Minhocas são muito importantes para a agricultura e como insumo para produção de ração animal. A Organização para Bioengenharia de Minhocas (OBM) é uma entidade não governamental que promove o aumento da produção, utilização e exportação de minhocas.
+
+Uma das atividades promovidas pela OBM é a manutenção de uma fazenda experimental para pesquisa de novas tecnologias de criação de minhocas. Na fazenda, a área destinada às pesquisas é de formato retangular, dividida em células quadradas de mesmo tamanho. Em cada célula é criada apenas uma espécie de minhoca. As células são utilizadas para testar os efeitos, sobre a produção de minhocas, de variações de espécies de minhoca, de tipos de terra, de adubo, de umidade, etc. Os pesquisadores da OBM mantêm um acompanhamento constante do desenvolvimento das minhocas em cada célula, e têm uma estimativa extremamente precisa da produtividade de cada uma das células.
+
+Um pesquisador da OBM inventou e construiu uma máquina colhedeira de minhocas, e quer testá- la na fazenda. A máquina tem a largura de uma célula, e em uma passada pelo terreno de uma célula colhe todas as minhocas dessa célula, separando-as, limpando-as e empacotando-as. Ou seja, a máquina eliminara uma das etapas mais intensivas de mão de obra no processo de produção de minhocas. A máquina, porém, ainda está em desenvolvimento e tem uma restrição: não faz curvas, podendo movimentar-se somente em linha reta.
+
+Decidiu-se então que seria efetuado um teste com a máquina, de forma a colher o maior número possível de minhocas em uma unica passada, em linha reta, de lado a lado do campo de minhocas. Ou seja, a máquina deve colher todas as minhocas de uma ‘coluna’ ou de uma ‘linha’ de células do campo de minhocas (a linha ou coluna cuja soma das produtividades esperadas das células é a maior possível). 
+
+Escreva um programa que, fornecido o mapa do campo de minhocas, descrevendo a produtividade estimada em cada célula, calcule o número esperado total de minhocas a serem colhidas pela máquina durante o teste, conforme descrito acima.
+*/
+
+#include <stdio.h>
+#define lin 3
+#define col 4
+
+int main() {
+
+    //Declarações
+    int m[lin][col] = {0};
+    int i, j;
+    int soma, maior = 0;
+    
+    //Guarda a produtividade de cada célula
+    for (i = 0; i < lin; i++){
+        for (j = 0; j < col; j++){
+            printf("\nInforme a produtividade da celula %dx%d: ", i, j);
+            scanf("%d", &m[i][j]);
+        }
+    }
+        
+    //Exibindo a fazenda
+    for (i = 0; i < lin; i++){
+        printf("\n");
+        for (j = 0; j < col; j++){
+            printf("%8d", m[i][j]);
+        }
+        printf("\n");
+    }
+    
+    //Somando na direção horizontal
+    for (i = 0; i < lin; i++){
+        soma = 0;
+        for (j = 0; j < col; j++){
+            soma += m[i][j];
+        }
+        if (soma > maior)
+            maior = soma;
+    }
+    
+    //Somando na direção vertical
+    for (j = 0; j < col; j++){
+        soma = 0;
+        for (i = 0; i < lin; i++){
+            soma += m[i][j];
+        }
+        if (soma > maior)
+            maior = soma;
+    }
+
+    printf("\nA produtividade e de %d minhocas.", maior);
+}
+
+
+
+/*Avaliação III - 2017.2
+QUESTÃO I - 3.0
+Escreva um programa em C que seja capaz de gerar o email de uma instituição, conforme as seguintes regras. O administrador do recurso deve informar o domínio da empresa e o nome completo do usuário. O email deverá ser composto pelo primeiro nome do usuário, seguido de um ponto, último nome do usuário, caractere at (‘@’) e domínio da empresa (tudo em minúsculo). Por exemplo, se o administrador informar como entrada o domínio inf027.ifba.edu.br e como nome do usuário Alan Mathison Turing, o programa deverá gerar como saída alan.turing@inf027.ifba.edu.br.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 100
+
+int main() {
+
+    char dominio[tamanho], nome[tamanho], primeiroNome[tamanho], ultimoNome[tamanho], email[tamanho] = {0};
+    char c;
+    
+    int len, len2, len3, i, j;
+    
+    printf("\nInforme o dominio do e-mail: ");
+    fgets(dominio, sizeof(dominio), stdin);
+    dominio[strcspn(dominio, "\n")] = '\0';
+    
+    printf("\nInforme um nome completo: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    //Comprimento
+    len = strlen(dominio);
+    len2 = strlen(nome);
+    
+    //Convertendo em minúsculas
+    for (i = 0; i < len; i++){
+        dominio[i] = tolower(dominio[i]);
+    }
+    
+    for (i = 0; i < len2; i++){
+        nome[i] = tolower(nome[i]);
+    }
+    
+    //Guardando o primeiro nome
+    for (i = 0; nome[i] != ' '; i++){
+        primeiroNome[i] = nome[i];
+    }
+    
+    //Adiciona o terminador nulo
+    primeiroNome[i] = '\0';
+    
+    //Guardando o último nome
+    for (i = len2 - 1; nome[i] != ' '; i--){
+        ultimoNome[len2 - 1 - i] = nome[i];
+    }
+    
+    //Adiciona o terminador nulo
+    ultimoNome[len2 - 1 - i] = '\0';
+    
+    //Revertendo ultimoNome
+    len3 = strlen(ultimoNome);
+    for (i = 0; i < len3/2; i++){
+        c = ultimoNome[i];
+        ultimoNome[i] = ultimoNome[len3 - 1 - i];
+        ultimoNome[len3 - 1 - i] = c;
+    }
+    
+    //Concatentando
+    strcat(email, primeiroNome);
+    strcat(email, ".");
+    strcat(email, ultimoNome);
+    strcat(email, "@");
+    strcat(email, dominio);
+    
+    printf("\nO email e: %s.", email);
+}
+
+
+
+/*Avaliação III - 2017.2
+QUESTÃO II- 4.0
+Escreva um programa em C que seja capaz de ‘compactar’ uma string de até 32.000 caracteres. Para isso, o algoritmo deve contar o número de ocorrências consecutivas de um caracter e substituir estas ocorrências pelo caractere, seguido desta quantidade. Assim, por exemplo, uma string “AAAAAABCCCCC”, deveria gerar uma string que represente os pares {<A,6>;<B,1>; <C;5>}. Assim, o algoritmo de compactação deve gerar como saída uma (também) string que seja composta por uma sequência de substrings formadas pelo caractere e o equivalente ASCII de sua quantidade de ocorrências. No caso em questão a string gerada deveria ter os seguintes caracteres:
+
+‘A’ ACK ‘B’ SOH ‘C’ ENQ ‘\0’
+
+O seu algoritmo deve considerar que o maior valor ASCII de um caracter é 255. Assim, para sequências de um mesmo caractere, cujo tamanho seja maior que 255, o algoritmo deverá gerar dois pares com o mesmo carácter consecutivamente. Por exemplo, caso exista uma sequência de 320, numerais ‘5’ (“555555… -repete o numeral 5 trezentos e dez vezes- ...5555”, a saída deveria ser a string {<5,255>;<5,65>;}, o que equivale à string:
+
+‘5’ ‘ÿ’ ‘5’ ‘A’ ‘\0’
+
+A string gerada deverá ser impressa.
+*/
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 32000
+
+int main() {
+
+    char string[tamanho] = {'0'};
+    char c1, c2;
+
+    int len, i, j, cont, cont2;
+    
+    printf("\nInforme uma string: ");
+    fgets(string, sizeof(string), stdin);
+    string[strcspn(string, "\n")] = '\0';
+    
+    len = strlen(string);
+    
+    //Operações
+    for (i = 0; i < len; i++){
+        //Reseta os contadores
+        cont = 1;
+        cont2 = 0;
+        
+        //Conta as ocorrências do caractere
+        while (string[i] == string[i+1]){
+            cont++;
+            i++;
+        }
+        //Se o número de caracteres for menor que 255
+        if (cont < 255){
+            //Converte de int para char
+            c1 = (char)cont;
+            
+            //Exibe o resultado
+            printf("%c;%c", string[i], c1);
+        }
+        //Se o número de caracteres exceder 255
+        else{
+            cont2 = cont - 255;
+            cont = 255;
+            
+            //Converte de int para char
+            c1 = (char)cont;
+            c2 = (char)cont2;
+            
+            //Exibe o resultado
+            printf("%c %c %c %c", string[i], c1, string[i], c2);
+        }
+        
+        //Se não for o último caractere
+        if (i < len - 1)
+            printf(" ");
+    }
+}
+
+
+
+/*Avaliação III - 2017.2
+QUESTÃO III - 3.0
+No contexto das telecomunicações, paridade refere-se ao número de bits '1' de um determinado número binário. Para assinalar a paridade, é adicionado, no final ou no início de uma seqüência binária, um dígito binário de paridade. 
+
+Por exemplo, considere a sequência “0000”. Esta sequência, já possui um número par de bits 1 e assim para manter a paridade, acrescenta-se um bit 0, a sequência: “00000”. Por sua vez a sequência “1011”, com número três bits 1, precisa de um novo bit ligado para obter a paridade: “10111”.
+
+A paridade é vulgarmente utilizada para detectar erros nas transmissões, já que o seu cálculo é extremamente simples. Por exemplo, se for anexado um bit de paridade extra a cada byte transmitido, um erro pode ser detectado se a paridade do byte não coincidir com o bit de paridade. Para um determinado protocolo de telecomunicações, se definiu um quadro composto de uma matriz de bits (4x4). 
+
+Contudo, para a transmissão, o protocolo faz uso de uma matriz 5x5, que acrescenta um bit deparidade a cada linha, e a cada coluna. Ao final acrescenta-se um bit de paridade, a linha / coluna extra (posição 4x4). Veja a tabela abaixo.
+
+Escreva um programa em C que leia uma matriz 4x4 de bits, calcule e imprima a matriz a ser transmitida acrescida com os bits de paridade.
+*/
+
+/*
+Se o nº de bits 1 for par, acrescenta 0.
+Se o nº de bits 1 for ímpar, acrescenta 1.
+*/
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tam 4
+
+int main() {
+
+    int m[tam][tam];
+    int n, i, j, cont = 0;
+    int tam2 = tam + 1;
+    int m2[tam2][tam2];
+
+    //Entrada de dados
+    for (i = 0; i < tam; i++){
+        for (j = 0; j < tam; j++){
+            printf("\nInforme o par %dx%d: ", i, j);
+            scanf("%d", &n);
+            
+            if (n != 0 && n != 1){
+                printf("\nValor invalido. Digite apenas 0 ou 1.");
+                j--;
+            }
+            else{
+                m[i][j] = n;
+                
+                //Copia os valores para a matriz paridade
+                m2[i][j] = n; 
+            }
+        }
+    }
+
+    //Exibe uma matriz
+    printf("\nMatriz: \n");
+    for (i = 0; i < tam; i++){
+        printf("\n");
+        for (j = 0; j < tam; j++){
+            printf("%8d", m[i][j]);
+        }
+        printf("\n");
+    }
+
+    //Linhas
+    for (i = 0; i < tam; i++){
+        //Reinicializando os contadores
+        cont = 0;
+        
+        for (j = 0; j < tam; j++){
+            //Conta o bit 1 por linha
+            if (m2[i][j] == 1)
+                cont++;
+        }
+        //Preenche a última coluna da linha com 0 ou 1
+        if (cont % 2 == 0) //Par
+            m2[i][tam2 - 1] = 0;
+        else //Ímpar
+            m2[i][tam2 - 1] = 1;
+    }
+    
+    //Colunas
+    for (j = 0; j < tam2; j++){
+        //Reinicializando os contadores
+        cont = 0;
+        
+        for (i = 0; i < tam2; i++){
+            //Conta o bit 1 por linha
+            if (m2[i][j] == 1)
+                cont++;
+        }
+        //Preenche a última coluna da linha com 0 ou 1
+        if (cont % 2 == 0) //Par
+            m2[tam2 - 1][j] = 0;
+        else //Ímpar
+            m2[tam2 - 1][j] = 1;
+    }
+    
+    //Exibe uma matriz
+    printf("\nMatriz paridade: \n");
+    for (i = 0; i < tam2; i++){
+        printf("\n");
+        for (j = 0; j < tam2; j++){
+            printf("%8d", m2[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Avaliação III - 2016.1
+Q1
+Arnaldo e Bernardo são dois garotos que compartilham um peculiar gosto por curiosidades matemáticas. Nos últimos tempos, sua principal diversão tem sido investigar propriedades matemáticas de tabuleiros quadrados preenchidos com inteiros. Recentemente, durante uma aula de matemática, os dois desafiaram os outros alunos da classe a criar quadrados mágicos, que são quadrados preenchidos com números de 1 a N2, de tal forma que a soma dos N números em uma linha, coluna ou diagonal principal do quadrado tenham sempre o mesmo valor. A ordem de um quadrado mágico é o seu número de linhas, e o valor do quadrado mágico é o resultado da soma de uma linha. Um exemplo de quadrado mágico de ordem 3 e valor 15 é mostrado na figura abaixo:
+
+2 7 6
+9 5 1
+4 3 8
+
+Para surpresa de Arnaldo e Bernardo, os outros alunos criaram um grande número de quadrados, alguns enormes e alegaram que todos eram quadrados mágicos. Arnaldo e Bernardo agora precisam de sua ajuda, para verificar se os quadrados criados são realmente quadrados mágicos. Você deve escrever um programa em C que, dado um quadrado, verifique se ele é mágico (use diretiva de pré-compilação para deixar o algoritmo genérico para qualquer ordem). A saída do programa deve ser 0, caso o quadrado não seja mágico ou seu valor, caso seja.
+*/
+
+#include <stdio.h>
+#define MAX 100
+
+int main() {
+
+    //Declarações
+    int m[MAX][MAX];
+    int N, i, j;
+    int somah, somav, somadp = 0, somads = 0, soma_esperada = 0;
+    
+    //Entrada de dados: ordem da matriz
+    printf("\nInforme a ordem da matriz: ");
+    scanf("%d", &N);
+    
+    //Verificando a validade de N
+    if (N > MAX || N <= 0){
+        printf("\n0");
+        return 1;
+    }
+    
+    //Entrada de dados: matriz
+    for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+            printf("\nInforme o numero da posicao %dx%d da matriz: ", i, j);
+            scanf("%d", &m[i][j]);
+        }
+    }
+    
+    //Somando os elementos das diagonais
+    //Condição da diagonal secundária: i + j = N - 1 > j = N - 1 - i
+    for (i = 0; i < N; i++){
+        somadp += m[i][i];          //Diagonal principal
+        somads += m[i][N - 1 - i];  //Diagonal secundária
+    }
+    
+    //Verificando se as diagonais são iguais
+    if (somadp != somads){
+        printf("0");
+        printf("\nA matriz nao e uma quadrado magico.");
+        return 1; //Encerra o programa
+    }
+    else
+        soma_esperada = somadp;
+        
+    //Somando as linhas e colunas
+    for (i = 0; i < N; i++){
+        //Inicializando
+        somah = 0;
+        somav = 0;
+        
+        for (j = 0; j < N; j++){
+            somah += m[i][j]; //Somando a linha i
+            somav += m[j][i]; //Somando a coluna i
+        }
+        if (somah != soma_esperada || somav != soma_esperada){
+            printf("0");
+            printf("\nA matriz nao e uma quadrado magico.");
+            return 1; //Encerra o programa
+        }
+    }
+    
+    //Se o programa não for encerrado
+    printf("\nA matriz e um quadrado magico de valor %d.", soma_esperada);
+}
+
+
+
+/*Avaliação III - 2016.1
+Questão II – (4.0)
+Corretores podem utilizar medidas de distância de strings para sugerir strings constantes de um dicionário. Uma destas medidas de distância é a distância de Hamming. A distância de Hamming entre duas strings de mesmo comprimento é o número de posições nas quais elas diferem entre si. Para o nosso problema, como as strings podem ter tamanho diferente, estenderemos este conceito e consideremos que metade das letras a mais que uma palavra tenha em relação a outra seja acrescentada no cálculo da distância entre elas.
+
+Assim considere a palavra: “CATIGURIA”. A distância desta palavra para as palavras CATEGORIA e FADIGA é dada como se segue:
+
+C A T I G U R I A 0+0+0+0+0+0+0+0+0=0
+F A D I G A 1+0 +1+0+0+1+0.5+0.5+0.5=7.5
+C A T E G O R I A 0+0+0+0+1+0+1+0+0=2
+
+Escreva um programa que leia uma string chamada string chave. Em seguida, leia outras 10 strings (use diretiva de pré-compilação para deixar o algoritmo genérico para qualquer quantidade de strings). O programa deve calcular as distâncias entre a string chave e as strings lidas, ordená-las de acordo com a distância (da mais próxima para a mais distante) e imprimir a string e a distância (na ordem indicada). Considere que as strings possuem tamanho máximo de 256.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#define quantidade 10
+#define caracteres 256
+
+/*
+Obs. 1: a distância de Hamming trata como diferentes caracteres maiúsculos de minúsculos. Por exemplo, A =/= a.
+*/
+
+int main() {
+
+    char chave[caracteres + 1]; //caracteres + 1 (terminador nulo)
+    char strings[quantidade][caracteres + 1];
+    
+    int len, len2, lim, i, j;
+    float distancias[quantidade] = {0.0};
+    
+    //Entrada de dados: string chave
+    printf("\nInforme a string chave: ");
+    fgets(chave, sizeof(chave), stdin);
+    chave[strcspn(chave, "\n")] = '\0';
+    
+    //Comprimento da string chave
+    len = strlen(chave);
+    
+    //Entrada de dados: demais strings
+    for (i = 0; i < quantidade; i++){
+        printf("\nInforme a string %d: ", i + 1);
+        fgets(strings[i], sizeof(strings[i]), stdin);
+        strings[i][strcspn(strings[i], "\n")] = '\0';
+    }
+
+    //Calculando as distancias
+    for (i = 0; i < quantidade; i++){
+        len2 = strlen(strings[i]);
+        
+        //Definindo lim
+        //Se len < len2, lim = len. Se não, lim = len2
+        lim = (len < len2) ? len : len2;
+            
+        //Percorrendo a chave
+        for (j = 0; j < lim; j++){
+            if (chave[j] != strings[i][j]){
+                distancias[i] += 1;
+            }
+        } //Fim do j
+        
+        //Soma a diferença de tamanho
+        distancias[i] += (fabs(len - len2) * 0.5);
+        
+    } //Fim do i
+
+    //Declarações
+    int temp, indices[quantidade]; 
+    
+    //Inicializa o vetor indices
+    for (i = 0; i < quantidade; i++) {
+        indices[i] = i;
+    }
+    
+    //Ordenação pelo método Bubble Sort (para índices)
+    for (i = 0; i < quantidade - 1; i++) {
+        for (j = 0; j < quantidade - i - 1; j++) {
+            if (distancias[indices[j]] > distancias[indices[j + 1]]) {
+                //Troca os índices
+                temp = indices[j];
+                indices[j] = indices[j + 1];
+                indices[j + 1] = temp;
+            }
+        }
+    }
+
+    //Exibindo os resultados
+    printf("\nResultado: \n");
+    for (i = 0; i < quantidade; i++){
+        printf("%s - %.2f\n", strings[indices[i]], distancias[indices[i]]);
+    }
+}
+
+
+
+#include <stdio.h>
+#define MAX_STR 50
+#define MAX_VERBETE 5
+#define TRUE 1
+#define FALSE 0
+
+int main(){
+    char verbete[MAX_VERBETE][MAX_STR] = {"AA", "BB", "CC", "ABC", "CB"};
+    char sinonimo[MAX_VERBETE][MAX_STR] = {"C", "D", "E", "C", "A"};
+    char achou;
+    int iCont;
+    
+    char str[MAX_STR] = "AABABC";
+    char novoStr[MAX_STR];
+    int ndxStr, ndxVerbete;
+    int ndxNovoStr, ndxSinonimo;
+    
+    for(iCont = 0; iCont < MAX_VERBETE; iCont++){
+        //BUSCA DO VERBETE
+        achou = FALSE;
+        for(ndxStr = 0; str[ndxStr] && !achou; ndxStr++){
+            achou = FALSE;
+            ndxVerbete = 0;
+            while(verbete[iCont][ndxVerbete] && 
+                  verbete[iCont][ndxVerbete] == str[ndxStr + ndxVerbete])
+                ndxVerbete++;    
+            if(verbete[iCont][ndxVerbete] == '\0'){
+                achou = TRUE;
+                ndxStr--;
+            }    
+        }        
+        //COPIA DO SINONIMO
+        if(achou == TRUE){   
+            for(ndxNovoStr = 0; ndxNovoStr < ndxStr; ndxNovoStr++)
+                novoStr[ndxNovoStr] = str[ndxNovoStr];    
+            for(ndxSinonimo=0; sinonimo[iCont][ndxSinonimo]; ndxSinonimo++)
+                novoStr[ndxNovoStr++] = sinonimo[iCont][ndxSinonimo];
+            for(ndxVerbete = 0; verbete[iCont][ndxVerbete]; ndxVerbete++, ndxStr++);    
+            for(; str[ndxStr]; ndxNovoStr++, ndxStr++)
+                novoStr[ndxNovoStr] = str[ndxStr]; 
+            novoStr[ndxNovoStr++] = '\0';    
+            for(ndxNovoStr=0; novoStr[ndxNovoStr]; ndxNovoStr++)
+                str[ndxNovoStr] = novoStr[ndxNovoStr];
+            str[ndxNovoStr] = '\0'; 
+            iCont = -1;
+        }
+    } 
+    printf("%s\n", str);
+} 

@@ -1,0 +1,709 @@
+
+/*Slide 4C - Repetição
+1) Escrever um programa que leia um conjunto de valores, imprimindo, para cada valor: seu quadrado, seu cubo e sua raiz quadrada. O conjunto é finalizado com o valor zero.
+
+Solução com while
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+    int numero = 1;
+
+    while (numero > 0)
+    
+        {printf("\nInforme um numero inteiro, positivo e maior ou igual a 1 (informe 0 para interromper o programa): ");
+            scanf("%d", &numero);
+            
+        if (numero > 0)
+            printf("\nNumero = %d \nQuadrado = %d \nCubo = %d \nRaiz quadrada = %.2f \n", numero, pow(numero,2), pow(numero,3), sqrt(numero));
+        else if (numero < 0)
+            printf("\nInforme um numero positivo.");
+        }
+    
+    printf("\nPrograma encerrado.");
+}
+
+
+
+/*Slide 4C - Repetição
+1) Escrever um programa que leia um conjunto de valores, imprimindo, para cada valor: seu quadrado, seu cubo e sua raiz quadrada. O conjunto é finalizado com o valor zero.
+
+Solução com do-while
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+    int numero;
+    
+    do
+        {printf("\nInforme um numero inteiro, positivo e maior ou igual a 1 (informe 0 para interromper o programa): ");
+            scanf("%d", &numero);
+            
+        if (numero > 0)
+            printf("\nNumero = %d \nQuadrado = %d \nCubo = %d \nRaiz quadrada = %.2f \n", numero, pow(numero,2), pow(numero,3), sqrt(numero));
+        else if (numero < 0)
+            printf("\nInforme um numero positivo.");
+        }
+    while (numero > 0);
+    
+    printf("\nPrograma encerrado.");
+}
+
+
+
+/*Slide 4C - Repetição
+1) Escrever um programa que leia um conjunto de valores, imprimindo, para cada valor: seu quadrado, seu cubo e sua raiz quadrada. O conjunto é finalizado com o valor zero.
+
+Solução com for
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+    int numero;
+    
+    //O for não necessariamente precisa de condições de início, fim e incremento
+    for (;;)
+        {printf("\nInforme um numero inteiro, positivo e maior ou igual a 1 (informe 0 para interromper o programa): ");
+            scanf("%d", &numero);
+            
+        if (numero == 0)
+            {printf("\nPrograma encerrado.");
+            break;}
+            
+        else if (numero > 0)
+            printf("\nNumero = %d \nQuadrado = %d \nCubo = %d \nRaiz quadrada = %.2f \n", numero, pow(numero,2), pow(numero,3), sqrt(numero));
+            
+        else
+            printf("\nInforme um numero positivo.");
+        }
+
+}
+
+
+
+/*Slide 4C - Repetição
+2) Escreva um programa que leia um número inteiro positivo e mostre o seu fatorial.
+Solução com while
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    int numero, fatorial, contador;
+    
+    //Número inteiro e positivo.
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    //Tratamento de erro
+    if (numero < 0)
+        {printf("\nErro. Informe um numero positivo.");
+        return 1;}
+    
+    //Inicializando o incremento
+    contador = 1;
+    fatorial = 1;
+    
+    while (contador <= numero)
+        {
+        fatorial = fatorial * contador;
+        contador++;
+        }
+        
+    printf("\nO fatorial de %d e %d.", numero, fatorial);
+}
+
+
+
+/*Slide 4C - Repetição
+2) Escreva um programa que leia um número inteiro positivo e mostre o seu fatorial.
+Solução com do-while
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    int numero, n_inicial, contador;
+    
+    //Número inteiro e positivo.
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    //Tratamento de erro
+    if (numero < 0)
+        {printf("\nErro. Informe um numero positivo.");
+        return 1;}
+    
+    n_inicial = numero;
+    
+    //Inicializando o incremento
+    contador = 1;
+    
+    do
+        {
+        numero = numero * contador;
+        contador++;
+        }
+    
+    while (contador <= (n_inicial - 1));
+        
+    printf("\nO fatorial de %d e %d.", n_inicial, numero);
+}
+
+
+
+/*Slide 4C - Repetição
+2) Escreva um programa que leia um número inteiro positivo e mostre o seu fatorial.
+Solução com for
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    int numero, n_inicial, contador;
+    
+    //Número inteiro e positivo.
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    //Tratamento de erro
+    if (numero < 0)
+        {printf("\nErro. Informe um numero positivo.");
+        return 1;}
+    
+    n_inicial = numero;
+    
+    for (contador = 1; contador <= n_inicial - 1; contador++)
+        numero = numero * contador;
+        
+    printf("\nO fatorial de %d e %d.", n_inicial, numero);
+}
+
+
+
+/*Slide 4C - Repetição
+3) Escreva um programa que leia um número inteiro e indique se o mesmo é primo ou não.
+
+Solução com while
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração das variáveis
+    int numero, divisor, teste;
+    
+    //Inicializações
+    
+    /*'divisor' inicialmente recebe 2, porque todo número primo já é divísivel por 1*/
+    divisor = 2;
+    
+    /*teste = 1, então o número é primo
+      teste = 0, então o número não é primo
+      Inicializaremos o teste em 1
+    */
+    teste = 1;
+    
+    printf("\nInforme um numero inteiro positivo: ");
+    scanf("%d", &numero);
+    
+    //Tratamento de erros
+    if (numero < 0)
+        {printf("Numero invalido. Informe um numero inteiro positivo.");
+        return 1;} //Finaliza o programa em função do erro
+        
+    //Operações
+    if (numero <= 1) 
+        teste = 0; //'0' e '1' não são primos
+        
+    /*Um número só é primo se ele possuir dois divisores: 1 e ele mesmo. Verificaremos, portanto, se o número possui algum divisor entre 2 e numero/2.
+    
+    Não precisamos verificar os números maiores que numero/2, pois nesses casos, com exceção do próprio número, a divisão inteira sempre terá um resto diferente de 0.
+    */
+    while (teste == 1 && divisor <= numero/2)
+        {
+        /*Se o resto da divisão entre o número e o divisor for igual a 0, significa que existe um número entre 2 e numero/2 pelo qual o número analisado é divisível. Portanto, ele não teria apenas 2 divisores.*/
+        if (numero % divisor == 0)
+            {teste = 0;
+            break;}
+            
+        divisor++; //Incremento
+        }
+        
+    if (teste == 0)
+        printf("\nO numero %d nao e primo.", numero);
+    else
+        printf("\nO numero %d e primo.", numero);
+        
+/*Embora numero % divisor = 0 se o número for 2 e o divisor for 2, o código não entra no loop, porque o while funciona de forma parecida ao if: a condição é verificada antes de entrar no conteúdo. Como divisor = 2 e numero/2 = 2/2 = 1, a condição não é atendida e código não entra no loop, mantendo teste = 1.*/
+}
+
+
+
+/*Slide 4C - Repetição
+3) Escreva um programa que leia um número inteiro e indique se o mesmo é primo ou não.
+
+Solução com do-while
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+    int numero, divisor, teste;
+    
+    // Solicitação de entrada
+    do 
+        {printf("\nInforme um numero inteiro, positivo e maior ou igual a 0: ");
+        scanf("%d", &numero);
+
+        if (numero < 0)
+            printf("\nNumero informado invalido.");}
+    while (numero < 0);
+
+    // Os números "0" e "1" não são primos
+    if (numero <= 1) 
+        {printf("\nO numero \"%d\" nao e um numero primo.", numero);
+        return 1;}
+     
+    //O número "2" é primo   
+    else if (numero == 2) 
+        {printf("\nO numero \"%d\" e um numero primo.", numero);
+        return 1;}
+        
+    // Inicialização
+    divisor = 2;
+    teste = 1; // Assume que o número é primo
+
+    do 
+        {if (numero%divisor == 0)
+            teste = 0; // Não é primo
+            break;
+
+        divisor++;} 
+        
+    while (teste == 1 && divisor <= numero/2);
+
+    // Resultado
+    if (teste == 1)
+        printf("\nO numero \"%d\" e um numero primo.", numero);
+    else
+        printf("\nO numero \"%d\" nao e um numero primo.", numero);
+
+/*O "2" foi tratado como um caso especial, pois quando o número é 2, o código entra na estrutura do-while e faz teste = 0. Logo, ao chegar no controle, a condição não é atendida e a mensagem de que o "2" não é um número primo é exibida.*/
+}
+
+
+
+/*Slide 4C - Repetição
+4) Aprimore o programa 3, para que ele imprima os 20 primeiros números primos.
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração das variáveis
+    int numero = 2, teste, divisor, contador = 1;
+    
+    //Operações
+
+    /*Um número só é primo se ele possuir dois divisores: 1 e ele mesmo. Verificaremos, portanto, se o número possui algo divisor entre 2 e numero/2.
+    
+    Não precisamos verificar os números maiores que numero/2, pois nesses casos, com exceção do próprio número, a divisão inteira sempre terá um resto diferente de 0.
+    */
+    while (contador <= 20)
+    {//Inicializações    
+    /*'divisor' inicialmente recebe 2, porque todo número primo já é divísivel por 1*/
+		    divisor = 2;
+    
+    /*teste = 1, então o número é primo
+      teste = 0, então o número não é primo
+      Inicializaremos o teste em 1
+    */
+		    teste = 1;
+    
+        while (teste == 1 && divisor <= numero/2)
+            {
+            /*Se o resto da divisão entre o número e o divisor for igual a 0, significa que existe um número entre 2 e numero/2 pelo qual o número analisado é divisível. Portanto, ele não teria apenas 2 divisores.*/
+            //Número não primo
+            if (numero % divisor == 0)
+                {teste = 0;}
+            
+            divisor++; //Incremento
+            }
+         
+        //Número primo   
+        if (teste == 1)
+            {printf(" %d", numero);
+            contador++; 
+            }
+        
+        numero++;
+    }
+}
+
+
+
+/*Slide 4C - Repetição
+5) Escrever um programa que calcula e escreve o produto dos números primos entre 92 e 1478.
+
+Solução com while
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração de variáveis
+    int n, cont, teste;
+    long long int produto;
+    
+    //Inicializações
+    n = 92;
+    produto = 1;
+    
+    //Operações
+    while (n <= 1478)
+        {
+        //Inicializações
+        cont = 2;
+        teste = 1;
+        
+        //Laço para verificar se o número é primo
+        while (teste == 1 && cont <= n/2)
+            {
+            //Verificação da primalidade
+            if (n%cont == 0)
+                teste = 0;      //Não é primo
+
+            cont++;
+            
+            }
+            
+        if (teste == 1)
+            produto *= n;
+        
+        /*if (teste == 1)
+            printf("%d\n", n);*/
+        
+        n++;
+        }
+    
+    //Saídas
+    printf("\nO produto dos numeros primos entre 92 e 1478 e %lld", produto);
+}
+
+
+
+/*Slide 4C - Repetição
+5) Escrever um programa que calcula e escreve o produto dos números primos entre 92 e 1478.
+
+Solução com for
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //Declaração de variáveis
+    int n, cont, teste;
+    long long int produto;
+    
+    //Inicializações
+    produto = 1;
+    
+    //Operações
+    for (n = 92; n <= 1478; n++)
+        {
+        //Inicializações
+        teste = 1;
+        
+        //Laço para verificar se o número é primo
+        for (cont = 2; teste == 1 && cont <= n/2; cont++)
+            {
+            //Verificação da primalidade
+            if (n%cont == 0)
+                teste = 0;      //Não é primo
+            }
+            
+        if (teste == 1)
+            produto *= n;
+        
+        /*if (teste == 1)
+            printf("%d\n", n);*/
+        }
+    
+    //Saídas
+    printf("\nO produto dos numeros primos entre 92 e 1478 e %lld", produto);
+}
+
+
+
+/*Slide 4C - Repetição
+6) Definir um programa que receba uma série de pares de números, e para cada par calcule a média aritmética, imprimindo o resultado. A série termina quando for lido o par 0,0.
+
+Solução com while
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //Variáveis
+    float n1, n2, media;
+    
+    //Inicialização
+    n1 = 1;
+    n2 = 1;
+    
+    while (n1 != 0 && n2 != 0)
+        {
+        printf("\nInforme um par de numeros: ");
+        scanf("%f %f", &n1, &n2);
+        
+        //Interrupção do laço
+        if (n1 == 0 && n2 == 0)
+            break;
+        
+        media = (n1+n2)/2;
+        
+        printf("\nA media do par (%.2f,%.2f) e %.2f.\n",n1, n2, media);
+        }
+        
+    printf("\nPrograma encerrado.");
+}
+
+
+
+/*Slide 4C - Repetição
+6) Definir um programa que receba uma série de pares de números, e para cada par calcule a média aritmética, imprimindo o resultado. A série termina quando for lido o par 0,0.
+
+Solução do-while
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //Variáveis
+    float n1, n2, media;
+
+    do
+        {
+        printf("\nInforme um par de numeros: ");
+        scanf("%f %f", &n1, &n2);
+        
+        //Interrupção do laço
+        if (n1 == 0 && n2 == 0)
+            break;
+        
+        media = (n1+n2)/2;
+        
+        printf("\nA media do par (%.2f,%.2f) e %.2f.\n",n1, n2, media);
+        }
+    while (n1 != 0 && n2 != 0);
+        
+    printf("\nPrograma encerrado.");
+}
+
+
+
+/*Slide 4C - Repetição
+6) Definir um programa que receba uma série de pares de números, e para cada par calcule a média aritmética, imprimindo o resultado. A série termina quando for lido o par 0,0.
+
+Solução for
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //Variáveis
+    float n1, n2, media;
+
+		//"for" infinito
+    for (;;)
+        {
+        printf("\nInforme um par de numeros: ");
+        scanf("%f %f", &n1, &n2);
+        
+        //Interrupção do laço
+        if (n1 == 0 && n2 == 0)
+            break;
+        
+        media = (n1+n2)/2;
+        
+        printf("\nA media do par (%.2f,%.2f) e %.2f.\n",n1, n2, media);
+        }
+    
+    printf("\nPrograma encerrado.");
+}
+
+
+
+/*Slide 4C - Repetição
+7)Ler m e escrever m linhas com i asteriscos alinhadas pela esquerda, onde i corresponde ao número da linha corrente. Exemplo: Para m=6 a saída do programa deve ser:
+*
+**
+***
+****
+*****
+******
+
+Solução com while
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //"m" é o número de linhas.
+    int m, lin, col;
+    
+    printf("\nInforme um numero de linhas: ");
+    scanf("%d", &m);
+    
+    if (m < 0)
+        {printf("Informe um numero maior ou igual a 0.");
+        return 1;}
+    
+    //Inicialização
+    lin = 1;
+    
+    while (lin <= m)
+        {
+        //Inicialização
+        col = 1;
+        while (col <= lin)
+            {
+            printf("*");
+            col++;
+            }
+        
+        lin++;
+        
+        //Para pular de linha
+        printf("\n");
+        }
+}
+
+
+
+/*Slide 4C - Repetição
+7)Ler m e escrever m linhas com i asteriscos alinhadas pela esquerda, onde i corresponde ao número da linha corrente. Exemplo: Para m=6 a saída do programa deve ser:
+*
+**
+***
+****
+*****
+******
+
+Solução com do-while
+*/
+#include <stdio.h>
+
+int main() 
+{
+    //"m" é o número de linhas.
+    int m, lin, col;
+    
+    printf("\nInforme um numero de linhas: ");
+    scanf("%d", &m);
+    
+    if (m < 0)
+        {printf("Informe um numero maior ou igual a 0.");
+        return 1;}
+    
+    //Inicialização
+    lin = 1;
+    
+    do 
+        {
+        //Inicialização
+        col = 1;
+        
+        do
+            {
+            printf("*");
+            col++;
+            }
+        while (col <= lin);
+        
+        lin++;
+        
+        //Para pular de linha
+        printf("\n");
+        }
+    while (lin <= m);
+}
+
+
+
+/*Slide 4C - Repetição
+8) Chico tem 1,50 metro e cresce 2 centímetros por ano, enquanto Zé tem 1,10 metro e cresce 3 centímetros por ano. Construa um programa que calcule e imprima quantos anos serão necessários para que Zé seja maior que Chico.
+
+Solução while
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+
+    int anos;
+    float hChico, hZe, txChico, txZe;
+    
+    anos = 0;
+    hChico = 1.50;
+    hZe = 1.10;
+    txChico = 0.02;
+    txZe = 0.03;
+
+    while (hChico > hZe)
+        {
+        hChico = hChico + txChico;
+        hZe = hZe + txZe;
+        
+        anos++;
+        }
+        
+    printf("\nZe superara a altura de chico em %d anos.", anos);
+}
+
+
+
+/*Slide 4C - Repetição
+8) Chico tem 1,50 metro e cresce 2 centímetros por ano, enquanto Zé tem 1,10 metro e cresce 3 centímetros por ano. Construa um programa que calcule e imprima quantos anos serão necessários para que Zé seja maior que Chico.
+
+Solução com for
+*/
+
+#include <stdio.h>
+
+int main() 
+{
+
+    int anos;
+    float hChico, hZe, txChico, txZe;
+    
+    // Inicialização
+    anos = 0;
+    hChico = 1.50;
+    hZe = 1.10;
+    txChico = 0.02;
+    txZe = 0.03;
+
+		/*Obs.: lembre-se que o 'for', assim com as demais estruturas de repetição, incrementam a variável contadora após o fim das operações do bloco.*/
+    for (; hZe <= hChico; anos++) 
+        {
+        hChico += txChico;
+        hZe += txZe;
+        }
+        
+    printf("\nZe superara a altura de chico em %d anos.", anos);
+}
