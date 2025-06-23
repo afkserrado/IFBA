@@ -1,0 +1,5201 @@
+
+/*Lista de exercícios I:
+1. Dado o tamanho da base e da altura de um retângulo, calcular a sua área e o
+seu perímetro.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+
+//Declaração de variáveis
+float b, h; 
+
+printf("\nInsira a base e a altura do retangulo em metros: ");
+scanf("%f %f", &b, &h);
+
+printf("\nO retangulo tem area de %.2f m² e perimetro de %.2f m", b*h, 2*(b+h));
+
+}
+
+
+
+/*Lista de exercícios I:
+2. Dado o tamanho do lado de um quadrado, calcular sua área e perímetro.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    float l, a, p;
+    
+    printf("\nInforme o lado do quadrado em metros: ");
+    scanf("%f", &l);
+    
+    a = pow(l, 2);
+    p = 4*l;
+    
+    printf("\nO quadrado tem area de %.2f m² e perimetro de %.2f m.", a, p);
+}
+
+
+
+
+/*Lista de exercícios I:
+3. Dado o tamanho do raio de uma circunferência, calcular a área e o perímetro 
+da mesma.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    float r, a, p;
+    
+    printf("\nInforme o raio da circuferencia em metros: ");
+    scanf("%f", &r);
+    
+    a = M_PI * pow(r,2);
+    p = 2 * M_PI * r;
+    
+    printf("\nA area da circuferencia e de %.2f m², e seu perimetro e %.2f m", a, p);
+}
+
+
+
+/*Lista de exercícios I:
+4. Dado os três lados de um triângulo determinar o perímetro do mesmo.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    float l1, l2, l3, p;
+    
+    printf("\nInforme os tres lados do triangulo: ");
+    scanf("%f %f %f" , &l1, &l2, &l3);
+    
+    p = l1+l2+l3;
+    
+    printf("\nO perimetro do triangulo e e %.2f m", p);
+}
+
+
+
+/*Lista de exercícios I:
+5. Ler um número inteiro e exibir o seu sucessor.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    int numero = 0, sucessor;
+    
+    while (numero != -1)
+    {
+        printf("\nInforme um numero inteiro (digite -1 para finalizar): ");
+        scanf("%d", &numero);
+        
+        if (numero == -1)
+            {
+            printf("\nPrograma encerrado.");
+            break;
+            }
+        
+        sucessor = numero + 1;
+        
+        printf("\nO sucessor de %d e o numero %d\n", numero, sucessor);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+6. Ler dois números inteiros e exibir o quociente e o resto da divisão inteira
+entre eles*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    int D, d, q, r; //D = dividendo; d = divisor
+    
+    printf("\nInforme o dividendo e o divisor (apenas numeros inteiros): ");
+    scanf("%d %d", &D, &d);
+    
+    if (d != 0)
+        {
+        q = D/d;
+        r = D%d;
+        printf("\nO quociente e o resto da divisao inteira sao, respectivamente, %d e %d", q, r);
+        }
+        
+    else
+        {
+        printf("\nDivisao por zero!");
+        }
+}
+
+
+
+/*Lista de exercícios I:
+7. Solicitar a idade de uma pessoa em dias e informar na tela a idade em anos, 
+meses e dias*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    int i, anos, meses, dias;
+    
+    printf("\nInforme a sua idade em dias: ");
+    scanf("%d", &i);
+    
+    anos = i/365;
+    meses = (i%365)/30;
+    dias = (i%365)%30;
+    
+    printf("\nVoce tem %d ano(s), %d mes(es) e %d dia(s) de idade.", anos, meses, dias);
+}
+
+
+
+/*Lista de exercícios I:
+8. Dado que a fórmula para conversão de Fahrenheit para Celsius é C = 5/9 (F –
+32), leu um valor de temperatura em Fahrenheit e exibi-lo em Celsius*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+
+{
+    float F, C;
+    
+    printf("\nInforme uma temperatura em Fahrenheit: ");
+    scanf("%f", &F);
+    
+    C = (5.0/9.0)*(F-32);
+    
+    printf("\nA temperatura é %.2f", C);
+
+}
+
+
+
+/*Lista de exercícios I:
+9. Faça um algoritmo que calcule e apresente o valor do volume de uma lata de
+óleo, dado seu raio e sua altura.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    float raio, altura, area, volume;
+    
+    printf("\nInforme o raio e a altura em metros: ");
+    scanf("%f %f", &raio, &altura);
+    
+    area = M_PI*pow(raio,2);
+    volume = area*altura;
+    
+    printf("\nO volume da lata e %.2f m³", volume);
+
+}
+
+
+
+/*Lista de exercícios I:
+10. Converter um inteiro informado menor ou igual a 32 para sua 
+representação em binário*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    int numero, x1, x2, x3, x4, x5, x6, y;
+    
+    printf("\nInforme um numero menor ou igual a 32: ");
+    scanf("%d", &numero);
+    
+    if (numero < 0 || numero > 32)
+        
+        printf("\nNumero invalido!");
+        
+    else
+       { 
+        x1 = numero%2;          //Menos significativo
+        x2 = (numero/2)%2;
+        x3 = (numero/4)%2;
+        x4 = (numero/8)%2;
+        x5 = (numero/16)%2;
+        x6 = (numero/32)%2;     //Mais significativo
+        
+        y = 100000*x6+10000*x5+1000*x4+100*x3+10*x2+x1;
+        
+        if (numero == 32)
+            {
+            printf("\nO numero em binario equivale a %d %d %d %d %d %d", x6, x5, x4, x3, x2, x1);
+            }
+            
+        else
+            {
+            printf("\nO numero em binario equivale a %d %d %d %d %d", x5, x4, x3, x2, x1); //Opção de resultado 1
+            printf("\nO numero em binario equivale a %d", y); /*Opção de resultado 2*/
+            
+            }
+    
+       }
+}
+
+
+
+/*Lista de exercícios I:
+11. Faça um algoritmo para calcular a nota semestral de um aluno. A nota
+semestral é obtida pela média aritmética entre a nota de 2 bimestres. Cada nota
+de bimestre é composta por 2 notas de provas.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    float p1, p2, p3, p4, nota;
+    
+    printf("\nInforme as notas das provas 1 e 2 do bimestre 1: ");
+    scanf("%f %f", &p1, &p2);
+    
+    printf("\nInforme as notas das provas 1 e 2 do bimestre 2: ");
+    scanf("%f %f", &p3, &p4);
+    
+    nota = (p1+p2+p3+p4)/4;
+    
+    printf("\nA nota semestral e %.2f.", nota);
+
+}
+
+
+
+/*Lista de exercícios I:
+12. Faça um algoritmo que transforme uma velocidade fornecida em m/s pelo
+usuário para Km/h. Para tal, multiplique o valor em m/s por 3,6.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    float v1, v2;
+    
+    printf("\nInforme a velocidade em m/s: ");
+    scanf("%f", &v1);
+    
+    v2 = v1*3.6;
+    
+    printf("\nA velocidade e %.2f km/h.", v2);
+
+}
+
+
+
+/*Lista de exercícios I:
+13. Um circuito elétrico é composto de duas resistências R1 e R2 em paralelo,
+e ambas em sequência de uma resistência R3. Faça um algoritmo para calcular a 
+resistência equivalente desse circuito.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    float R1, R2, R3, R;
+    
+    printf("\nInforme as resistencias R1, R2 e R3 em ohms: ");
+    scanf("%f %f %f", &R1, &R2, &R3);
+    
+    R = ((R1*R2)/(R1+R2) + R3);
+    
+    printf("\nA resistencia equivalente do circuito e %.2f ohms", R);
+
+}
+
+
+
+/*Lista de exercícios I:
+14. Em uma cidade se deseja sincronizar os semáforos. Com isto, quando um 
+semáforo abre (fica verde), os veículos que nele estavam parados tendem a 
+encontrar os próximos semáforos também abertos. Para que isto seja feito, os 
+próximos semáforos precisam abrir um pouco depois, dependendo da velocidade 
+permitida na via e da distância entre eles. Assim, ao abrir o semáforo, um 
+veículo começa a acelerar até atingir a velocidade permitida, que mantém até 
+chegar ao próximo semáforo, levando um certo tempo para percorrer essa distância
+. Para que encontre o próximo semáforo aberto, este deve abrir um pouco antes da
+chegada do veículo (por ex: 3 segundos antes). Faça assim um algoritmo que 
+informe quanto tempo depois um semáforo deve abrir, dada as seguintes 
+informações:
+a. a distância desde o semáforo anterior
+b. a velocidade permitida da via
+c. a aceleração típica dos carros*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    
+    /*"d" é da distância entre os semafóros; "v" é a velocidade máxima da via;
+    "a" é a aceleração; "t" é o tempo necessário para percorrer a distância
+    entre os dois semáfóros.*/
+    
+    //Entradas
+    float d, v, a;
+    
+    //Conversões
+    float V;
+    
+    //Outras variáveis
+    float t1, t2, t, s1, s2;
+    
+    printf("\nInforme a distancia entre os semaforos em metros, a velocidade maxima da via em km/h e a aceleracao tipica dos veiculos em m/s2: ");
+    scanf("%f %f %f", &d, &v, &a);
+    
+    /*Primeiro calculamos o tempo necessário para um veículo alcançar a 
+    velocidade máxima da via.
+    v = v0 + a*t1; v0 = 0 e v = vmáx da via.
+    t1 = v/a
+    */
+    
+    V = v/3.6;
+    
+    t1 = V/a;
+    
+    /*Agora precisamos saber qual a posição em que o veículo alcançou a
+    velocidade máxima da via.
+    s = s0 + v0*t + (a*t1^2)/2; s0 e v0 = 0; t1 é o tempo transcorrido entre a
+    posição s0 e a posição em que o veículo atinge a vmáx da via. 
+    
+    s1 = (a*t1^2)/2
+    */
+
+    s1 = a*pow(t1,2)/2;
+    
+    /*Agora precisamos calcular a distância que falta para ser percorrida pelo
+    veículo e o tempo necessário para percorrê-la sob uma velocidade constante
+    , que será a própria vmáx da via.
+    
+    v = d/t > t = v/d */
+    
+    t2 = (d-s1)/V;
+    
+    /*Assim, o tempo "t" é o tempo que o veículo levará para percorrer a 
+    distância entre os semáforos. Portanto, "t" é também o delay máximo entre 
+    os dois semáforos Se o delay > t, o veículo encontrará o semáforo 2 
+    fechado.*/
+    
+    t = floor(t1+t2);
+    
+    printf("\nO delay maximo entre os dois semaforos deve ser de %.0f segundos.", t);
+}
+
+
+
+/*Lista de exercícios I:
+15. Num dia de sol, você deseja medir a altura de um prédio, porém, a trena não é
+suficientemente longa. Assumindo que seja possível medir sua sombra e a do
+prédio no chão, e que você lembre da sua altura, faça um programa para ler os 
+dados necessários e calcular a altura do prédio.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+main()
+{
+    //"h" para altura; "d" para distância. "1" para a pessoa; "2" para o prédio
+    float h1, d1, h2, d2;
+    
+    printf("\nInforme a sua altura, a projecao horizontal da sua sombra e a projecao horizontal da sombra do predio em metros: ");
+    scanf("%f %f %f", &h1, &d1, &d2);
+    
+    h2 = (h1/d1)*d2;
+    
+    printf("\nA altura do predio e %.2f metros.", h2);
+
+}
+
+
+
+/*Lista de exercícios I:
+16. Escreva um programa para gerar o invertido de um número com três algarismos
+(exemplo: o invertido de 498 é 894).*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+main()
+{
+    int numero, invertido, x1, x2, x3;
+    
+    printf("\nDigite um numero de tres algarismos: ");
+    scanf("%d", &numero);
+    
+    /*Para garantir que o número digitado tenha 3 algarismos, devemos:
+    - Dividi-lo por 100. Se numero < 100, numero/100 = 0 (a parte inteira);
+    - Dividi-lo por 1000. Se numero >= 1000, numero/1000 >= 1 (a parte inteira).*/
+    
+    if (numero<100 || numero>=1000)
+        
+        printf("\nNumero invalido. Informe um numero de tres algarismos.");
+        
+    else
+        {
+        x1 = numero/100;        //Centena
+        x2 = (numero/10)%10;    //Dezena
+        x3 = numero%10;         //Unidade
+        
+        invertido = x3*100 + x2*10 + x1;
+        
+        printf("\nO numero invertido e %d.", invertido);
+        }
+}
+
+
+
+/*Lista de exercícios I:
+17. Um programa para gerenciar os saques de um caixa eletrônico deve possuir 
+algum mecanismo para decidir o número de notas de cada valor que deve ser 
+disponibilizado para o cliente que realizou o saque. Um possível critério seria 
+o da "distribuição ótima" no sentido de que as notas de menor valor fossem 
+distribuídas em número mínimo possível. Por exemplo, se a quantia solicitada 
+fosse R$ 87,00, o programa deveria indicar uma nota de R$ 50,00, três notas de 
+R$ 10,00, uma nota de R$ 5,00 e duas notas de R$ 1,00. Escreva um programa que 
+receba o valor da quantia solicitada e retorne a distribuição das notas de 
+acordo com o critério da distribuição ótima (considere existir notas de R$1,00; 
+R$2,00; R$5,00; R$10,00; R$20,00; R$50,00 e R$100,00).*/
+
+#include <stdio.h>
+
+main()
+{
+    //Método 1
+    int valor,x1, x2, x3, nota100, nota50, nota20, nota10, nota5, nota2, nota1;
+    
+    printf("\nInforme o valor a ser sacado: ");
+    scanf("%d", &valor);
+    
+    //Separação do valor em suas centenas, dezenas e unidades
+    
+    x1 = valor/100;         //Centenas
+    x2 = (valor/10)%10;     //Dezenas
+    x3 = valor%10;          //Unidades
+    
+    //Quantidade de notas
+    
+    nota100 = x1;            
+    nota50  = x2/5;         
+    nota20  = (x2%5)/2;
+    nota10  = (x2%5)%2;
+    nota5   = x3/5;
+    nota2   = (x3%5)/2;
+    nota1   = (x3%5)%2;
+    
+    printf("\nA distribuicao das notas e %d de 100", nota100);
+    printf("\nA distribuicao das notas e %d de 50", nota50);
+    printf("\nA distribuicao das notas e %d de 20", nota20);
+    printf("\nA distribuicao das notas e %d de 10", nota10);
+    printf("\nA distribuicao das notas e %d de 5", nota5);
+    printf("\nA distribuicao das notas e %d de 2", nota2);
+    printf("\nA distribuicao das notas e %d de 1", nota1);
+    
+    
+    /*x1, x2 e x3 retornam o número na casa das centenas, dezenas e unidades. Ou 
+    seja, se o valor é 980, x1 = 9, x2 = 8 e x3 = 0. Por isso a quantidade de cada
+    nota foi calculada da forma acima.*/
+    
+}
+
+
+
+/*Lista de exercícios I:
+17. Um programa para gerenciar os saques de um caixa eletrônico deve possuir 
+algum mecanismo para decidir o número de notas de cada valor que deve ser 
+disponibilizado para o cliente que realizou o saque. Um possível critério seria 
+o da "distribuição ótima" no sentido de que as notas de menor valor fossem 
+distribuídas em número mínimo possível. Por exemplo, se a quantia solicitada 
+fosse R$ 87,00, o programa deveria indicar uma nota de R$ 50,00, três notas de 
+R$ 10,00, uma nota de R$ 5,00 e duas notas de R$ 1,00. Escreva um programa que 
+receba o valor da quantia solicitada e retorne a distribuição das notas de 
+acordo com o critério da distribuição ótima (considere existir notas de R$1,00; 
+R$2,00; R$5,00; R$10,00; R$20,00; R$50,00 e R$100,00).*/
+
+#include <stdio.h>
+
+main()
+{
+		//Método 2
+    int valor, nota100, nota50, nota20, nota10, nota5, nota2, nota1;
+    
+    printf("\nInforme o valor a ser sacado: ");
+    scanf("%d", &valor);
+    
+    //Operações
+    nota100 = valor/100;
+    valor%=100;
+    
+    nota50 = valor/50;
+    valor%=50;
+    
+    nota20 = valor/20;
+    valor%=20;
+    
+    nota10 = valor/10;
+    valor%=10;
+    
+    nota5 = valor/5;
+    valor%=5;
+    
+    nota2 = valor/2;
+    valor%=2;
+    
+    nota1 = valor;
+    
+    /*O método funciona da seguinte forma: seja o número 1092. 
+    "nota100" recebe o resultado da divisão de 1092 por 100, que seria 10.
+    "valor" recebe o resto da divisão de 1092 por 100, que seria 92. 
+    
+    Daí em diante, cada nota vai receber o resultado da divisão do valor pelo peso
+    da nota e armazenar o resto na variável valor.
+    
+    Como a variável valor não tem outra utilidade além de receber o dado do 
+    usuário, podemos utilizá-la para ir armazenando o resto das divisões.*/ 
+    
+    //Visualizações
+    printf("\nA distribuicao das notas e");
+    printf("\n%d de 100", nota100);
+    printf("\n%d de 50", nota50);
+    printf("\n%d de 20", nota20);
+    printf("\n%d de 10", nota10);
+    printf("\n%d de 5", nota5);
+    printf("\n%d de 2", nota2);
+    printf("\n%d de 1", nota1);
+    
+}
+
+
+
+/*Lista de exercícios I:
+18. Escreva um programa que permute o valor de duas variáveis inteiras.*/
+
+#include <stdio.h>
+
+main()
+{
+    int a, b, c;
+    printf("\nDigite dois numeros inteiros: ");
+    scanf("%d %d", &a, &b);
+    
+    c = b;  //Salvando o valor original de "b"
+    b = a;  //Salvando o valor de "a" em "b"
+    a = c;  //Salvado o valor original de "b" em "a"
+    
+    printf("\nOs valores permutados sao %d e %d", a, b);
+}
+
+
+
+/*Lista de exercícios I:
+19. Escreva um programa que calcule a raiz de uma equação do primeiro grau.*/
+
+#include <stdio.h>
+
+main()
+{
+    //Equação do 1º grau: ax+b=0
+    
+    float a, b, x;
+    
+    printf("\nConsiderando a sentença matemática ax+b=0, que descreve uma equacao de grau 1, informe as constantes 'a' e 'b': ");
+    scanf("%f %f", &a, &b);
+    
+    x = (b*(-1))/a;
+    
+    printf("\nO valor de x e %.2f", x);
+    
+}
+
+
+
+/*Lista de exercícios I:
+20. Uma loja vende seus produtos no sistema entrada mais duas prestações, sendo a entrada maior do que ou igual às duas prestações, as quais devem ser iguais, inteiras e as maiores possíveis. Por exemplo, se o valor da mercadoria for R$ 270,00, a entrada e as duas prestações são iguais a R$ 90,00; se o valor da mercadoria for R$ 302,75, a entrada é de R$ 102,75 e as duas prestações são a iguais a R$ 100,00. Escreva um programa que receba o valor da mercadoria e forneça o valor da entrada e das duas prestações, de acordo com as regras acima. Observe que uma justificativa para a adoção desta regra é que ela facilita a confecção e o consequente pagamento dos boletos das duas prestações.*/
+
+#include <stdio.h>
+#include <math.h>
+
+main()
+{
+    float valor, entrada, parcela;
+    
+    printf("\nInforme o valor da mercadoria: ");
+    scanf("%f", &valor);
+    
+    parcela = floor(valor/3);
+    entrada  = valor - parcela*2;
+    
+    printf("\nO valor da entrada e de %.2f, e o valor das duas parcelas e de %.2f", entrada, parcela);
+    
+}
+
+
+
+/*Lista de exercícios I:
+21. Escreva um programa que leia um número e exiba se ele é positivo ou negativo.*/
+
+#include <stdio.h>
+
+main()
+{
+    int numero;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    if (numero==0)
+        
+        printf("\nO numero informado e zero");
+        
+    else if (numero>0)
+        
+        printf("\nO numero informado e positivo");
+        
+    else
+    
+        printf("\nO numero informado e negativo");
+}
+
+
+
+/*Lista de exercícios I:
+22. Escreva um programa que leia um número e exiba o seu módulo.*/
+
+#include <stdio.h>
+
+main()
+{
+    int numero;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    if (numero>=0)
+        printf("\nO modulo do numero e %d", numero);
+        
+    else
+    {
+    numero *= -1;
+    printf("\nO modulo do numero e %d", numero);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+24. Escreva um programa que leia três números e mostre o maior entre eles.*/
+
+#include <stdio.h>
+
+main()
+{
+    int a, b, c;
+    
+    printf("\nInforme um tres numeros inteiros: ");
+    scanf("%d %d %d", &a, &b, &c);
+    
+    if (a>=b && a>=c)
+    
+        printf("\nO maior valor e %d", a);
+        
+    else if (b>=a && b>=c)
+    
+        printf("\nO maior valor e %d", b);
+        
+    else
+    
+        printf("\nO maior valor e %d", c);
+    
+}
+
+
+
+/*Lista de exercícios I:
+25. Escreva um programa que leia o número equivalente ao mês e imprima a quantidade de
+dias deste mês.*/
+
+#include <stdio.h>
+
+main()
+{
+    int numero;
+    
+    printf("\nInforme um numero correspondente a um mes: ");
+    scanf("%d", &numero);
+    
+    switch (numero)
+        {
+            case 1:
+            printf("\nO mes e janeiro");
+            break;
+            
+            case 2:
+            printf("\nO mes e fevereiro");
+            break;
+            
+            case 3:
+            printf("\nO mes e marco");
+            break;
+            
+            case 4:
+            printf("\nO mes e abril");
+            break;
+            
+            case 5:
+            printf("\nO mes e maio");
+            break;
+            
+            case 6:
+            printf("\nO mes e junho");
+            break;
+            
+            case 7:
+            printf("\nO mes e julho");
+            break;
+            
+            case 8:
+            printf("\nO mes e agosto");
+            break;
+            
+            case 9:
+            printf("\nO mes e setembro");
+            break;
+            
+            case 10:
+            printf("\nO mes e outubro");
+            break;
+            
+            case 11:
+            printf("\nO mes e novembro");
+            break;
+            
+            case 12:
+            printf("\nO mes e dezembro");
+            break;
+            
+            default:
+            printf("\nNumero invalido");
+        }
+}
+
+
+
+/*Lista de exercícios I:
+26. Escreva um programa que leia 3 valores e escreva a soma dos 2
+maiores.
+*/
+
+#include <stdio.h>
+#define quantidade 3
+
+int main() {
+    
+    int i, valor[quantidade], max, min, soma = 0;
+    
+    printf("\n");
+    
+    for (i = 0; i < quantidade; i++){
+        printf("Informe o %dº valor: ", i+1);
+        scanf("%d", &valor[i]);}
+      
+    max = valor[0];
+    min = valor[0];
+    
+    for (i = 0; i < quantidade; i++){
+        if (valor[i] > max)
+            max = valor [i];
+        
+        if (valor[i] < min)
+            min = valor[i];
+        
+        soma += valor[i];}
+        
+    soma -= min;
+    
+    printf("\nA soma dos dois maiores e igual a %d.", soma);
+    
+}
+
+
+
+/*Lista de exercícios I:
+27. Escreva um programa que leia 3 números e calcule a média ponderada entre eles. Considere que o maior número recebe peso 5 e os outros dois recebem peso 2,5.
+*/
+
+#include <stdio.h>
+#define quantidade 3
+
+int main() {
+
+    int i, valor[quantidade], max, soma = 0, resto;
+    float media;
+    
+    printf("\n");
+    
+    for (i = 0; i < quantidade; i++){
+        printf("Informe o %dº numero: ", i+1);
+        scanf("%d", &valor[i]);}
+    
+    //Determinando o maior valor
+    max = valor[0];
+    for (i = 0; i < quantidade; i++){
+        if (valor[i] > max)
+            max = valor[i];
+        
+        soma += valor[i];
+    }
+    
+    //O 'resto' é a soma dos dois menores valores
+    resto = soma - max;
+    
+    //Cálculo da média ponderada
+    media = (max*5 + resto*2.5)/(5+2.5*2);
+    
+    printf("\nMaximo = %d", max);
+    printf("\nSoma = %d", soma);
+    printf("\nResto = %d", resto);
+    printf("\nA media ponderada e %.2f.", media);
+}
+
+
+
+/*Lista de exercícios I:
+28. Escreva um programa que leia uma letra e mostre se ela é vogal ou consoante.
+*/
+
+#include <stdio.h>
+#define quantidade 5
+
+int main() {
+    
+    //Declaração das variáveis
+    int i, teste = 0;
+    char letra;
+    char vogal[] = {'a', 'e', 'i', 'o', 'u'};
+    
+    //Entrada de dados
+    printf("\nInforme uma letra: ");
+    scanf(" %c", &letra);
+    
+    //Convertendo a letra de maiúscula para minúscula.
+    /*'32' é a diferença entre uma letra maiúscula e minúscula na tabela ASCII. Por exemplo, 'A' é 65 e 'a' é 97.*/
+    if (letra >= 'A' && letra <= 'Z')
+        letra = letra + 32;
+    
+    //Operações
+    for (i = 0; i < quantidade; i++){
+        if (letra == vogal[i]){
+            teste = 1;
+            break;}
+    }
+    
+    //Saídas
+    if (teste == 1)
+        printf("\nA letra %c é uma vogal.", letra);
+    else
+        printf("\nA letra %c é uma consoante.", letra);
+}
+
+
+
+/*Lista de exercícios I:
+31. Escreva um programa, que leia o número de passes tentados, o número de passes completos, o número de jardas passadas, o número de passes para touchdown e o número de passes interceptados e informe o QB Rating do quarterback.
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int passesTentados, passesCompletos, jardas, passesTouchdown, passesInter;
+    float parametro1, parametro2, parametro3, parametro4, quaterbackRating;
+    
+    printf("\nInforme o numero de passes tentados: ");
+    scanf("%d", &passesTentados);
+    
+    printf("\nInforme o numero de passes completos: ");
+    scanf("%d", &passesCompletos);
+    
+    printf("\nInforme o numero de jardas passadas: ");
+    scanf("%d", &jardas);
+    
+    printf("\nInforme o numero de passes para touchdown: ");
+    scanf("%d", &passesTouchdown);
+    
+    printf("\nInforme o numero de passes interceptados: ");
+    scanf("%d", &passesInter);
+ 
+    /*Apesar de 'parametro1' ser uma variável do tipo float, como estamos fazendo uma divisão de inteiros, precisamos colocar '(float)' antes da divisão para garantir a operação de decimais.*/
+    parametro1 = (((float)passesCompletos/passesTentados) - 0.3)/0.2;
+ 
+    if (parametro1 > 2.375)
+        parametro1 = 2.375;
+    else if (parametro1 < 0)
+        parametro1 = 0;
+        
+    parametro2 = (((float)jardas/passesTentados) - 3)/4;
+    
+    if (parametro2 > 2.375)
+        parametro2 = 2.375;
+    else if (parametro2 < 0)
+        parametro2 = 0;
+        
+    parametro3 = ((float)passesTouchdown/passesTentados)/0.05;
+    
+    if (parametro3 > 2.375)
+        parametro3 = 2.375;
+    else if (parametro3 < 0)
+        parametro3 = 0;
+        
+    parametro4 = (((float)passesInter/passesTentados) - 0.95)/0.04;
+    
+    if (parametro4 > 2.375)
+        parametro4 = 2.375;
+    else if (parametro4 < 0)
+        parametro4 = 0;
+        
+    quaterbackRating = (parametro1+parametro2+parametro3+parametro4)*100/6;
+    
+    //printf("\nParametro 1 = %.2f.", parametro1);
+    //printf("\nParametro 2 = %.2f.", parametro2);
+    //printf("\nParametro 3 = %.2f.", parametro3);
+    //printf("\nParametro 4 = %.2f.", parametro4);
+    printf("\nO Quaterback Rating e igual a %.2f.", quaterbackRating);
+}
+
+
+
+/*Lista de exercícios I:
+32. Escreva um programa que leia um caracter e diga se ele é uma vogal, consoante, número ou um símbolo (qualquer outro caracter, que não uma letra ou número).
+*/
+
+#include <stdio.h>
+#define vogais 5
+
+int main() {
+    
+    int i, testeLetra = 0;
+    char c;
+    char vogal[] = {'a', 'e', 'i', 'o', 'u'};
+    
+    printf("\nInforme um caractere: ");
+    scanf(" %c", &c);
+    
+    //Convertendo de maiúsculo para minúsculo
+    if (c >= 'A' && c <= 'Z')
+        c += 32;
+        
+    //Verificando se o caractere é uma letra.
+    if (c >= 'a' && c <= 'z'){
+        for (i = 0; i < vogais; i++){
+            if (c == vogal[i]){
+                testeLetra = 1;
+                break;}
+        }
+        
+        if (testeLetra == 1)
+        printf("\nO caractere %c e uma vogal.", c);
+        
+        else
+        printf("\nO caractere %c e uma consoante.", c);
+    }
+    
+    else if (c >= '0' && c <= '9')
+        printf("\nO caractere %c e um numero.", c);
+    
+    else
+        printf("\nO caractere %c e um simbolo.", c);
+
+}
+
+
+
+/*Lista de exercícios I:
+33. Escreva um algoritmo que leia 2 valores (x e y), que devem representar as coordenadas de um ponto em um plano. A seguir, determine qual o quadrante ao qual pertence o ponto, ou se está sobre um dos eixos cartesianos ou na origem (x=y=0).
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int x, y;
+    
+    printf("\nInforme x e y: ");
+    scanf("%d %d", &x, &y);
+    
+    if (x == 0 && y == 0)
+        printf("\nO ponto esta na origem.");
+    else if (x == 0)
+        printf("\nO ponto esta no eixo y.");
+    else if (y == 0)
+        printf("\nO ponto esta no eixo x.");
+    else if (x > 0 && y > 0)
+        printf("\nO ponto esta no 1º quadrante.");
+    else if (x > 0 && y < 0)
+        printf("\nO ponto esta no 2º quadrante.");
+    else if (x < 0 && y < 0)
+        printf("\nO ponto esta no 3º quadrante.");
+    else if (x < 0 && y > 0)
+        printf("\nO ponto esta no 4º quadrante.");
+}
+
+
+
+/*Lista de exercícios I:
+34. Uma financeira usa o seguinte critério para conceder empréstimos: o valor total do empréstimo deve ser até dez vezes o valor da renda mensal do solicitante e o valor da prestação deve ser no máximo 30% da renda mensal do solicitante. Escreva um programa que leia a renda mensal de um solicitante, o valor total do empréstimo solicitado e o número de prestações que o solicitante deseja pagar e informe se o empréstimo pode ou não ser concedido.*/
+
+#include <stdio.h>
+
+int main() {
+    
+    float renda, emprestimo, prestacao, max_emprestimo, max_prestacao;
+    int quant_prestacoes;
+    
+    //Entrada
+    printf("\nInforme a renda: ");
+    scanf("%f", &renda);
+    
+    printf("\nInforme o valor do emprestimo: ");
+    scanf("%f", &emprestimo);
+    
+    printf("\nInforme a quantidade de prestacoes: ");
+    scanf("%d", &quant_prestacoes);
+    
+    //Verficações de erro
+    if (quant_prestacoes <= 0 || renda < 0 || emprestimo < 0){
+        printf("\nInforme valores validos.");
+        return 1;}
+    
+    //Operações
+    prestacao = emprestimo/quant_prestacoes;
+    
+    //Critérios
+    max_emprestimo = renda*10;
+    max_prestacao = renda*0.30;
+    
+    //Saídas
+    
+    printf("\nEmprestimo solicitado: %.2f", emprestimo);
+    printf("\nQuantidade de prestacoes: %d", quant_prestacoes);
+    printf("\nValor da prestacao: %.2f", prestacao);
+    
+    printf("\n\nEmprestimo maximo: %.2f", max_emprestimo);
+    printf("\nPrestacao maxima: %.2f", max_prestacao);
+    
+    if (prestacao > max_prestacao && emprestimo > max_emprestimo)
+        printf("\n\nO emprestimo nao pode ser concedido, pois os valores do emprestimo solicitado e da prestacao ultrapassam os limite permitidos.");
+        
+    else if (emprestimo > max_emprestimo)
+        printf("\n\nO emprestimo nao pode ser concedido, pois o valor solicitado e ultrapassa o limite permitido.");
+        
+    else if (prestacao > max_prestacao)
+        printf("\n\nO emprestimo nao pode ser concedido, pois o valor da prestacao ultrapassa o limite permitido.");
+    
+    else
+        printf("\n\nO emprestimo pode ser concedido.");
+    
+}
+
+
+
+/*Lista de exercícios I:
+35. Escreva um programa que leia um número inteiro de 1 a 7 e informe o dia da semana correspondente, sendo domingo o dia de número 1. Se o número não corresponder a um dia da semana, mostre uma mensagem de erro.
+*/
+#include <stdio.h>
+
+int main() {
+
+    int n;
+    
+    //Sem usar o ponteiro (*) não é possível declarar as palavras dentro de um único vetor unidimensonal, porque palavras são strings (vetores de 1 linha e n colunas, em que cada coluna corresponde a um caractere)
+    char *dia[] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
+    
+    /*Outra opção, utilizando matriz bidimensional:
+    [7] indica o número de linhas, 1 para cada dia;
+    [10] indica o número de colunas, 1 para cada caractere;
+    char dia[7][10] = {
+        "Domingo",
+        "Segunda",
+        "Terça",
+        "Quarta",
+        "Quinta",
+        "Sexta",
+        "Sábado"
+    };*/
+    
+    printf("\nInforme um numero de 1 a 7: ");
+    scanf("%d", &n);
+    
+    if(n < 1 || n > 7)
+        printf("\nNumero informado invalido. Digite um numero de 1 a 7.");
+    else
+        //Usamos '%s' porque queremos exibir uma palavra, não um caractere
+        printf("\nO dia da semana é %s.", dia[n-1]);
+        
+}
+
+
+
+/*Lista de exercícios I:
+36. Em uma certificação são feitos são feitos 5 exames (I, II, III, IV e V). Escreva um programa que leia as notas destes exames e imprima a classificação do aluno, sabendo que a média é 70. Classificação: 
+    A – passou em todos os exames; 
+    B – passou em I, II e IV, mas não em III ou V; 
+    C – passou em I e II, III ou IV, mas não em V.
+    Reprovado – outras situações.
+*/
+#include <stdio.h>
+#define quantidade 5
+
+int main() {
+    
+    int i;
+    float notas[quantidade];
+    
+    //Entrada
+    for (i = 0; i < quantidade; i++){
+        printf("Informe a %da nota: ", i+1);
+        scanf("%f", &notas[i]);
+    }
+        
+    //Saídas
+    if (notas[0] >= 70 && notas[1] >= 70 && notas[2] >= 70 && notas[3] >= 70 && notas[4] >= 70)
+        printf("\nA - passou em todos os exames.");
+    else if (notas[0] >= 70 && notas[1] >= 70 && notas[3] >= 70 && (notas[2] < 70 || notas[4] < 70))
+        printf("\nB – passou em I, II e IV, mas não em III ou V.");
+    else if (notas[0] >= 70 && notas[1] >= 70 && (notas[2] >= 70 || notas[3] >= 70) && notas[4] < 70)
+        printf("\nC – passou em I e II, III ou IV, mas não em V.");
+    else
+        printf("\nReprovado – outras situações.");
+}
+
+
+
+/*Lista de exercícios I:
+37. Uma Cia de pulverização utiliza avião para pulverizar lavouras. Os custos de pulverização dependem do tipo de praga e da área a ser contratada conforme a tabela:
+
+Tipo 1 – ervas daninhas R$ 50,00 por acre;
+Tipo 2 – gafanhotos R$ 100,00 por acre;
+Tipo 3 – broca R$ 150,00 por acre;
+Tipo 4 – todos acima R$ 250,00 por acre.
+
+Se a área a ser pulverizada for superior a 1000 acres, o fazendeiro tem um desconto de 5%. Em adição, qualquer fazendeiro cujo custo for maior do que R$ 750,00 tem um desconto de 10% sobre o valor que ultrapassar os R$ 750,00. Caso ambos os descontos se aplicam o da área é calculado antes. Fazer um algoritmo que leia: o tipo de pulverização (1 a 4) e área a ser pulverizada; e imprima o valor a ser pago.
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    int tipo, i;
+    float area, pUnit[] = {50, 100, 150, 250}, vUnit, vTotal, excesso; 
+    
+    printf("\nInforme o tipo de pulverizacao aplicada:");
+    printf("\nTipo 1 – ervas daninhas R$ 50,00 por acre;");
+    printf("\nTipo 2 – gafanhotos R$ 100,00 por acre;");
+    printf("\nTipo 3 – broca R$ 150,00 por acre;");
+    printf("\nTipo 4 – todos acima R$ 250,00 por acre.\n");
+    
+    printf("\nA opcao escolhida e: ");
+    
+    scanf("%d", &tipo);
+    
+    //Validação do tipo
+    if (tipo < 1 || tipo > 4){
+        printf("\nOpcao informada invalida. Digite um numero de 1 a 4.");
+        return 1;}
+    
+    printf("\nInforme a area a ser pulverizada em acres: ");
+    scanf("%f", &area);
+    
+    
+    //Validação da área
+    if (area <= 0){
+        printf("\nArea informada invalida. Digite um numero maior que 0.");
+        return 1;}
+    
+    /*for (i = 0; i < 4; i++){
+        if (tipo - 1 == i){
+            vUnit = pUnit[i];
+            break;}
+    }*/
+    
+    //Determinação do valor unitário
+    vUnit = pUnit[tipo - 1];
+    
+    //Cálculo do valor total sem desconto
+    vTotal = vUnit * area;
+    
+    //printf("%.2f", vTotal);
+    
+    //Aplicação do desconto de 5% para área superior a 1000 acres
+    if (area > 1000){
+        vTotal *= 0.95;
+    }
+    
+    //Aplicação do desconto de 10% sobre o valor que ultrapassar 750 reais
+    if (vTotal > 750){
+        excesso = vTotal - 750;
+        excesso *= 0.90;
+        vTotal = 750 + excesso;
+    }
+        
+    printf("\nO valor a ser pago sera: R$ %.2f", vTotal);
+}
+
+
+
+/*Lista de exercícios I:
+38. Chama-se ano bissexto o ano ao qual é acrescentado um dia extra, ficando ele com 366 dias, um dia a mais do que os anos normais de 365 dias, ocorrendo a cada quatro anos. Escreva um programa que verifique se um ano é bissexto. Um ano é bissexto se ele é divisível por 4. Entretanto, se o ano é divisível por 100, ele não é bissexto. Mas, se ele fordivisível por 400, ele volta a ser bissexto.*/
+#include <stdio.h>
+
+int main() {
+
+    int ano = 0;
+    
+    while (ano != -1){
+        
+        printf("\nInforme um ano (digite -1 para parar): ");
+        scanf("%d", &ano);
+        
+        if (ano == -1){
+            printf("\nPrograma finalizado.");
+            break;}
+        
+        /*O uso do "continue" é necessário, pois ao informar um número negativo, o código exibe a mensagem solicitando um número maior ou igual a 0, mas também verifica se esse número é um ano bissexto. Com o continue, ele não faz a verificação de bissexto para anos negativos.*/   
+        else if (ano < 0){
+            printf("\nInforme um numero maior ou igual a 0.\n");
+            continue;}
+        
+        if ((ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0)
+            printf("\nO ano %d e bissexto.\n", ano);
+            
+        else 
+            printf("\nO ano %d nao e bissexto.\n", ano);
+    }
+
+}
+
+
+
+/*Lista de exercícios I:
+39. Em diversas situações, é útil o uso de dígitos verificadores. Dígito verificador ou algarismo de controle é um mecanismo de autenticação utilizado para verificar a validade e a autenticidade de um valor numérico, evitando dessa forma fraudes ou erros de transmissão ou digitação. Uma das formas mais comuns de cálculo de dígito verificadores é o método conhecido por módulo 11. O cálculo do DV no módulo 11 é feito, é feito como se segue: para calcular o primeiro dígito verificador, cada dígito do número, começando da direita para a esquerda (do dígito menos significativo para o dígito mais significativo) é multiplicado, na ordem, por 2, depois 3, depois 4 e assim
+sucessivamente, até o primeiro dígito do número. O somatório dessas multiplicações dividido por 11. O resto desta divisão (módulo 11) é subtraído da base (11), o resultado é o dígito verificador. O Banco do Brasil utiliza o código módulo 11, substituindo por X o valor do dígito verificador quando este é 10. Escreva um programa que receba um número com os 4 primeiros dígitos de uma agência e imprima o número da agência completo (numero – dv).*/
+
+#include <stdio.h>
+
+int main() {
+
+    int agencia, aux, DV = 0, cont;
+    int vAux[] = {2,3,4,5};
+    
+    printf("\nInforme o numero da agencia: ");
+    scanf("%d", &agencia);
+    
+    //A variável aux armazena o número da agência para que os cálculos sejam realizados sem perder o dado original
+    aux = agencia;
+    
+    for (cont = 0; cont < 4; cont++){
+        
+        DV += aux%10*vAux[cont];
+        aux /= 10;
+    }
+    
+    DV = 11 - DV%11;
+    
+    if (DV >= 10)
+        printf("\nO numero da agencia e: %d-X", agencia);
+    else
+        printf("\nO numero da agencia e: %d-%d", agencia, DV);
+}
+
+
+
+/*Lista de exercícios I:
+39. Em diversas situações, é útil o uso de dígitos verificadores. Dígito verificador ou algarismo de controle é um mecanismo de autenticação utilizado para verificar a validade e a autenticidade de um valor numérico, evitando dessa forma fraudes ou erros de transmissão ou digitação. Uma das formas mais comuns de cálculo de dígito verificadores é o método conhecido por módulo 11. O cálculo do DV no módulo 11 é feito, é feito como se segue: para calcular o primeiro dígito verificador, cada dígito do número, começando da direita para a esquerda (do dígito menos significativo para o dígito mais significativo) é multiplicado, na ordem, por 2, depois 3, depois 4 e assim
+sucessivamente, até o primeiro dígito do número. O somatório dessas multiplicações dividido por 11. O resto desta divisão (módulo 11) é subtraído da base (11), o resultado é o dígito verificador. O Banco do Brasil utiliza o código módulo 11, substituindo por X o valor do dígito verificador quando este é 10. Escreva um programa que receba um número com os 4 primeiros dígitos de uma agência e imprima o número da agência completo (numero – dv).*/
+
+//Solução alternativa. Solução anterior não permitia 0s à esquerda.
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+
+    char agencia[5];
+    int aux, DV = 0, cont;
+    int vAux[] = {5,4,3,2};
+    
+    printf("\nInforme o numero da agencia (com 4 digitos): ");
+    
+    //"agencia" é um array (vetor). Por isso, não é necessário o operador "&" no scanf, pois o nome do vetor já é um endereço de memória
+    scanf("%4s", agencia); //Lê até 4 digitos
+    
+    //Verificação de erro
+    //Se mais de 4 dígitos forem inseridos, o programa só lerá os 4 primeiros
+    if (strlen(agencia) != 4){
+        printf("O numero da agencia deve ter exatamente 4 dígitos.\n");
+        return 1;}
+    
+    for (cont = 0; cont < 4; cont++){
+        
+        //A subtração por '0' é para converter os caracteres do vetor agencia em números. Por exemplo, em  ASCII, o 0 é representado pelo número 48. Já o 3, pelo número 51. Quando subtraimos '0', estamos fazendo 51 - 48 = 3.
+        DV += (agencia[cont] - '0')*vAux[cont];}
+        
+    DV = 11 - DV%11;
+    
+    if (DV >= 10)
+        printf("\nO numero da agencia e: %s-X", agencia);
+    else
+        printf("\nO numero da agencia e: %s-%d", agencia, DV);
+        
+}
+
+
+
+/*Lista de exercícios I:
+40. Escreva um programa que receba um numero inteiro de 1 a 100 e mostre na tela o numero por extenso.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int numero, dezena, unidade;
+    
+    printf("\nInforme um numero de 1 a 100: ");
+    scanf("%d", &numero);
+    
+    if (numero < 1 || numero > 100){
+        printf("\nInforme um numero entre 1 e 100.");
+        return 1;}
+        
+    printf("\nO numero %d por extenso e: ", numero);
+
+    if (numero <= 19 || numero == 100)
+        
+        switch (numero){
+            case 1:
+            printf("um."); break;
+            case 2:
+            printf("dois."); break;
+            case 3:
+            printf("tres."); break;
+            case 4:
+            printf("quatro."); break;
+            case 5:
+            printf("cinco."); break;
+            case 6:
+            printf("seis."); break;
+            case 7:
+            printf("sete."); break;
+            case 8:
+            printf("oito."); break;
+            case 9:
+            printf("nove."); break;
+            case 10:
+            printf("dez."); break;
+            case 11:
+            printf("onze."); break;
+            case 12:
+            printf("doze."); break;
+            case 13:
+            printf("treze."); break;
+            case 14:
+            printf("quatorze."); break;
+            case 15:
+            printf("quinze."); break;
+            case 16:
+            printf("dezesseis."); break;
+            case 17:
+            printf("dezessete."); break;
+            case 18:
+            printf("dezoito."); break;
+            case 19:
+            printf("dezenove."); break;
+            case 100:
+            printf("cem."); break;} 
+        
+    else{
+        dezena = numero/10;
+        unidade = numero%10;
+        //printf("\n%d", dezena);
+        //printf("\n%d", unidade);
+        
+        //Dezenas
+        switch (dezena){
+            case 2:
+            printf("vinte"); break;
+            case 3:
+            printf("trinta"); break;
+            case 4:
+            printf("quarenta"); break;
+            case 5:
+            printf("cinquenta"); break;
+            case 6:
+            printf("sessenta"); break;
+            case 7:
+            printf("setenta"); break;
+            case 8:
+            printf("oitenta"); break;
+            case 9:
+            printf("noventa"); break;}
+        
+        //Unidades
+        if (unidade != 0){
+            printf(" e ");
+            switch (unidade){
+                
+                case 1:
+                printf("um."); break;
+                case 2:
+                printf("dois."); break;
+                case 3:
+                printf("tres."); break;
+                case 4:
+                printf("quatro."); break;
+                case 5:
+                printf("cinco."); break;
+                case 6:
+                printf("seis."); break;
+                case 7:
+                printf("sete."); break;
+                case 8:
+                printf("oito."); break;
+                case 9:
+                printf("nove."); break;}
+        }
+        else 
+            printf(".");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+41. Escreva um programa que imprima todos os números inteiros do intervalo fechado de 1 a 100.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int cont;
+    
+    for (cont = 1; cont <= 100; cont++)
+        printf("\n %d", cont);
+}
+
+
+
+/*Lista de exercícios I:
+42. Escreva um programa que imprima todos os números inteiros de 100 a 1 (em ordem
+decrescente).*/
+
+#include <stdio.h>
+
+int main() {
+
+    int cont;
+    
+    for (cont = 100; cont >= 1; cont--)
+        printf("\n %d", cont);
+}
+
+
+
+/*Lista de exercícios I:
+43. Escreva um programa que imprima todos os números pares do intervalo fechado de 1 a 100.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int cont;
+    
+    for (cont = 1; cont <= 100; cont++)
+        if (cont % 2 == 0)
+            printf("\n %d", cont);
+}
+
+
+
+/*Lista de exercícios I:
+44. Escreva um programa que imprima todos os números de 1 até 100, inclusive, e a soma de todos eles.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int cont, soma = 0;
+    
+    for (cont = 1; cont <= 100; cont++){
+        
+        soma += cont;
+        printf("\n %d", cont);}
+        
+    printf("\nA soma de todos os numeros de 1 a 100 e: %d.", soma);
+}
+
+
+
+/*Lista de exercícios I:
+45. Escreva um programa que leia 5 números, e imprima a média entre eles.*/
+
+#include <stdio.h>
+
+int main() {
+    
+    //Declarações
+    int cont;
+    float numero[5], soma, media;
+    
+    //Inicializações
+    cont = 0;
+    soma = 0;
+    
+    //Operações
+    while (cont < 5){
+        
+        printf("\nInforme o %dº numero: ", cont+1);
+        scanf("%f", &numero[cont]);
+        
+        soma += numero[cont];
+        
+        cont++;
+    }
+    
+    //Cálculo da média
+    media = soma/5;
+    
+    printf("\nA media e: %.2f.", media);
+    
+}
+
+
+
+/*Lista de exercícios I:
+46. Escreva um programa que calcule o quociente da divisão de A por B (número inteiros e positivos), ou seja, A / B, através de subtrações sucessivas. Esses dois valores são passados pelo usuário através do teclado.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int A, B, quociente;
+    
+    do{
+        
+        //Observações
+        printf("\nObs. 1: apenas numeros inteiros e positivos.");
+        printf("\nObs. 2: digite -1 para parar.\n");
+        
+        //Entrada de A
+        printf("\nInforme A: ");
+        scanf("%d", &A);
+        
+        //Verificação de erros de A
+        if (A == -1){
+            printf("\nPrograma finalizado.");
+            return 1;}
+            
+        if (A < 0){
+        printf("\nInforme apenas numeros inteiros e positivos.\n");
+        continue;}
+        
+        //Entrada de B
+        printf("\nInforme B: ");
+        scanf("%d", &B);
+        
+        //Verificação de erros de B
+        if (B == -1){
+            printf("\nPrograma finalizado.");
+            return 1;}
+        
+        //B não pode ser 0, pois não é possível dividir um número por 0
+        if (B <= 0){
+            printf("\nInforme apenas numeros inteiros e maiores que 0.\n");
+            continue;}
+        
+        //Inicialização
+        quociente = 0;
+        
+        //Operações
+        while (A >= B){
+            A -= B; //Subtrações sucessivas
+            quociente++;
+        }
+        
+        printf("\nO quociente de A por B e: %d.\n", quociente);
+    }
+    //Loop infinito
+    while(1);
+}
+
+
+
+/*Lista de exercícios I:
+47. Escreva um programa que calcule o resto da divisão de A por B (número inteiros e positivos), ou seja, A % B, através de subtrações sucessivas. Esses dois valores são passados pelo usuário através do teclado.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int A, B, quociente, resto;
+    
+    do{
+        
+        //Observações
+        printf("\nObs. 1: apenas numeros inteiros e positivos.");
+        printf("\nObs. 2: digite -1 para parar.\n");
+        
+        //Entrada de A
+        printf("\nInforme A: ");
+        scanf("%d", &A);
+        
+        //Verificação de erros de A
+        if (A == -1){
+            printf("\nPrograma finalizado.");
+            return 1;}
+            
+        if (A < 0){
+        printf("\nInforme apenas numeros inteiros e positivos.\n");
+        continue;}
+        
+        //Entrada de B
+        printf("\nInforme B: ");
+        scanf("%d", &B);
+        
+        //Verificação de erros de B
+        if (B == -1){
+            printf("\nPrograma finalizado.");
+            return 1;}
+        
+        //B não pode ser 0, pois não é possível dividir um número por 0
+        if (B <= 0){
+            printf("\nInforme apenas numeros inteiros e maiores que 0.\n");
+            continue;}
+        
+        //Inicialização
+        quociente = 0;
+        
+        //Operações
+        while (A >= B){
+            A -= B; //Subtrações sucessivas
+            quociente++;
+        }
+        
+        resto = A;
+        
+        printf("\nO quociente de A por B e: %d.\n", quociente);
+        printf("O resto da divisão de A por B e: %d.\n", resto);
+    }
+    //Loop infinito
+    while(1);
+}
+
+
+
+/*Lista de exercícios I:
+48. Escreva um programa que determine se um dado número N (digitado pelo usuário) é primo ou não.*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+
+    //Declaração
+    int N, cont, primo;
+
+    //Operações
+    //Loop infinito
+    while (1){
+        
+        printf("\nInforme um numero inteiro (digite -1 para parar): ");
+        scanf("%d", &N);
+        
+        //Condição de parada
+        if (N == -1){
+            printf("\nPrograma finalizado.");
+            return 1;}
+        
+        //Validação de erros
+        if (N < 0){
+            printf("\nDigite um numero positivo.\n");
+            continue;}
+            
+        //Caso dos números 0 e 1
+        if (N == 0 || N == 1){
+            printf("\nO numero %d nao e um numero primo.\n", N);
+            continue;}
+        
+        //Caso do número 2
+        if (N == 2){
+            printf("\nO numero %d e um numero primo.\n", N);
+            continue;}
+        
+        //Demais números
+        // Inicialização
+        
+        primo = 1; //Assumindo que é primo
+        
+        //Verificação da primalidade
+        if(N > 0){
+
+            for (cont = 2; cont <= sqrt(N); cont++){
+                
+                if (N%cont == 0){
+                    primo = 0; //Não é primo
+                    break;}
+            }
+        }
+        
+        //Resultado
+        if (primo == 1)
+            printf("\nO numero %d e primo.", N);
+        else
+            printf("\nO numero %d nao e primo.", N);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+50. Escreva um programa que leia um valor e imprima todas as possíveis combinações em que o lançamento de um par de dados tenha como resultado da soma dos valores dos dados o número lido. Por exemplo, se a entrada for o número 7, o programa deve imprimir as seguintes combinações: 
+    • 1 6.*/
+
+#include <stdio.h>
+
+int main() {
+
+    int numero, cont1, cont2;
+    
+    printf("\nInforme um numero: ");
+    scanf("%d", &numero);
+    
+    //Números negativos
+    if (numero < 0){
+        printf("\nInforme um numero positivo");
+        return 1;}
+    
+    //0 ou 1
+    if (numero <= 1){
+        printf("\nNao e possivel chegar a este resultado. O menor valor a ser encontrado e 2.");
+        return 1;}
+        
+    //Números maior que 12
+    if (numero > 12){
+        printf("\nNao e possivel chegar a este resultado. O maior valor que pode ser encontrado e 12.");
+        return 1;}
+    
+    for (cont1 = 1; cont1 <= 6; cont1++){
+        
+        for (cont2 = 1; cont2 <= 6; cont2++){
+            
+            if (cont1 + cont2 == numero){
+                printf("\n%d | %d", cont1, cont2);}
+        }
+    }
+}
+
+
+
+/*Lista de exercícios I:
+51. A série de Fibonacci é formada pela sequencia:
+• 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
+Escreva um programa que gere a série de FIBONACCI até o N-ésimo termo (com N sendo uma entrada do algoritmo).*/
+
+#include <stdio.h>
+
+int main() {
+
+    int N, i1, i2, cont, fibonacci;
+    
+    printf("\nInforme um numero inteiro positivo e maior que 0: ");
+    scanf("%d", &N);
+    
+    //Tratamento de erros
+    if (N <= 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+        
+    //Exibir cabeçalho
+    printf("\nSequencia de Fibonacci ate o %d-esimo termo:\n", N);
+      
+    //Exibe o primeiro termo
+    printf("\n1");
+    
+    //Exibe o segundo termo
+    if (N > 1)
+        printf(", 1");
+
+    i1 = 1;
+    i2 = 1;
+        
+    for (cont = 3; cont <= N; cont++){
+        
+        fibonacci = i1 + i2;
+        i1 = i2;
+        i2 = fibonacci;
+        
+        printf(", %d", fibonacci);
+    }
+    printf(".");
+}
+
+
+
+/*Lista de exercícios I:
+52. A série de FETUCCINE é gerada da seguinte forma: os dois primeiros termos são fornecidos pelo usuário; a partir daí, os termos são gerados com a soma ou subtração dos dois termos anteriores, ou seja:
+
+    1. Ai = Ai-1 + Ai-2, para i ímpar 
+    2. Ai = Ai-1 - Ai-2, para i par
+    
+    Criar um algoritmo em PORTUGOL que imprima os N primeiros termos da
+    série de FETUCCINE, sabendo-se que para existir esta série serão
+    necessários pelo menos três termos.*/
+
+#include <stdio.h>
+
+int main() {
+
+    //Ddeclarações
+    int N, A1, A2, fetuccine, cont;
+    
+    //Entrada de dados
+    printf("\nInforme um numero maior ou igual a 3: ");
+    scanf("%d", &N);
+    
+    //Tratamento de erros
+    if (N < 3){
+        printf("\nSao necessarios pelo menos tres termos para formar a serie de Fetuccine.");
+        return 1;}
+        
+    //Entrada de dados
+    printf("\nInforme o primeiro numero da serie de Fetuccine: ");
+    scanf("%d", &A1);
+    
+    printf("\nInforme o segundo numero da serie de Fetuccine: ");
+    scanf("%d", &A2);
+    
+    //Mensagem de saída
+    printf("\nA sequencia de Fetuccine ate o %d-esimo termo, comecando pelos numeros %d e %d, e: ", N, A1, A2);
+    
+    printf("\n%d, %d", A1, A2);
+    
+    //Operações
+    for (cont = 3; cont <= N; cont++){
+    
+        //N ímpar
+        if (cont%2 != 0)
+            fetuccine = A1 + A2;
+        //N par   
+        else
+            fetuccine = A1 - A2;
+            
+        A1 = A2;
+        A2 = fetuccine;
+        
+        printf(", %d", fetuccine);}
+    
+    printf(".");
+}
+
+
+
+/*Lista de exercícios I:
+53. Dado um país A, com 5.000.000 de habitantes e uma taxa de natalidade de 3% ao ano, e um país B com 7.000.000 de habitantes e uma taxa de natalidade de 2% ao ano, escreva um programa, que imprima o tempo necessário para que a população do país A ultrapasse a população do país B.*/
+
+#include <stdio.h>
+
+#define popA    5000000
+#define txA     0.03
+#define popB    7000000
+#define txB     0.02
+
+int main() {
+
+    int ano;
+    double ppA = popA, ppB = popB;
+    
+    for (ano = 0; ppA <= ppB; ano++){
+        
+        ppA += ppA*txA;
+        ppB += ppB*txB;
+    }
+    
+    /*
+    while (ppA <= ppB){
+        ppA += ppA*txA;
+        ppB += ppB*txB;
+        ano++;
+    }
+    */
+    printf("\nSerao necessarios %d anos para a populacao do pais A ultrapassar a populacao do pais B.", ano);
+}
+
+
+
+/*Lista de exercícios I:
+54. Construa um programa que receba um número e verifique se ele é um número triangular. (Um número é triangular quando é resultado do produto de três números consecutivos. Exemplo: 24 = 2 x 3 x 4)*/
+
+#include <stdio.h>
+
+int main() {
+
+    int numero, n1, n2, n3, produto;
+    
+    printf("\nInforme um numero inteiro positivo: ");
+    scanf("%d", &numero);
+    
+    if (numero < 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+    
+    //Inicialização
+    n1 = 1;
+    n2 = 2;
+    n3 = 3;
+    produto = 0;
+    
+    //Loop infinito
+    while (1){
+        produto = n1*n2*n3;
+        
+        if (produto == numero){
+            printf("\nO numero %d e triangular.", numero);
+            break;
+        }
+        
+        if (produto > numero){
+            printf("\nO numero %d nao e triangular.", numero);
+            break;}
+            
+        n1++;
+        n2++;
+        n3++;
+    }
+}
+
+
+
+/*Lista de exercícios I:
+55. Dizemos que dois números são amigos se cada um deles é igual a soma dos divisores próprios do outro. Os divisores próprios de um número positivo N são todos os divisores inteiros positivos de N exceto o próprio N. Um exemplo de números amigos são 284 e 220, pois os divisores próprios de 220 são 1, 2, 4, 5, 10, 11, 20, 22, 44, 55 e 110. Efetuando a soma destes números obtemos o resultado 284 (1 + 2 + 4 + 5 + 10 + 11 + 20 + 22 + 44 + 55 + 110 = 284). Os divisores próprios de 284 são 1, 2, 4, 71 e 142, efetuando a soma destes números obtemos o resultado 220 (1 + 2 + 4 + 71 + 142 = 220). Escreva um programa que dado dois inteiros, verifique se eles são amigos. (17296 e 18416 são amigos, por exemplo).*/
+
+#include <stdio.h>
+
+int main() {
+
+    int n1, n2, soma1, soma2, cont;
+    
+    printf("\nInforme dois numeros maiores que 0: ");
+    scanf("%d %d", &n1, &n2);
+    
+    if (n1 <= 0 || n2 <= 0){
+        printf("\nNumeros informados invalidos.");
+        return 1;}
+    
+    soma1 = 0;
+    soma2 = 0;
+    
+    for (cont = 1; cont <= n1/2; cont++){
+        if (n1%cont == 0)
+            soma1 += cont;}
+            
+    for (cont = 1; cont <= n2/2; cont++){
+        if (n2%cont == 0)
+            soma2 += cont;}
+            
+    if (soma1 == n2 && soma2 == n1)
+        printf("\nOs numeros %d e %d sao amigos.", n1, n2);
+    else
+        printf("\nOs numeros %d e %d nao sao amigos.", n1, n2);
+}
+
+
+
+/*Lista de exercícios I:
+56. Um número se diz perfeito se é igual à soma de seus divisores próprios. Divisores próprios de um número positivo N são todos os divisores inteiros positivos de N exceto o próprio N. Por exemplo, o número 6, seus divisores próprios são 1, 2 e 3, cuja soma é igual à 6 (1 + 2 + 3 = 6). Outro exemplo é o número 28, cujos divisores próprios são 1, 2, 4, 7 e 14, e a soma dos seus divisores próprios é 28 (1 + 2 + 4 + 7 + 14 = 28).*/
+
+#include <stdio.h>
+
+int main() {
+
+    int n, soma, cont;
+    
+    printf("\nInforme um numero maior que 0: ");
+    scanf("%d", &n);
+    
+    if (n <= 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+    
+    soma = 0;
+    
+    for (cont = 1; cont <= n/2; cont++){
+        if (n%cont == 0)
+            soma += cont;}
+            
+    if (n == soma)
+        printf("\nO numero %d e perfeito.", n);
+    else
+        printf("\nO numero %d, nao e perfeito.", n);
+}
+
+
+
+/*Lista de exercícios I:
+57.*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+
+    int n, cont;
+    double soma;
+
+    printf("\nInforme um numero maior que 0: ");
+    scanf("%d", &n);
+    
+    if (n <= 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+        
+    //Inicialização
+    cont = 1;
+    soma = 0.0;
+        
+    do{
+        soma += 1/(pow(cont,cont));
+        cont++;
+    }
+    while(cont <= n);
+    
+    printf("\nA soma e: %.2f", soma);
+
+}
+
+
+
+/*Lista de exercícios I:
+58. O valor aproximado do número π pode ser calculado usando-se a série:
+
+    S = 1 - 1/3^3 + 1/5^3 - 1/7^3 + 1/9^3... 
+    
+    Faça um programa que calcule e imprima o valor de π usando
+    os N primeiros termos da série (N sendo informado durante a
+    execução do algoritmo).*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+
+    //"n" é a quantidade de termos da série
+    int n, cont1, denominador;
+    double soma = 0, pi;
+
+    printf("\nInforme um numero maior que 0: ");
+    scanf("%d", &n);
+    
+    if (n <= 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+
+    //Inicializações
+    denominador = 1;
+    
+    for (cont1 = 1; cont1 <= n; cont1++){
+        
+        if (cont1%2 != 0) //Ímpar
+            soma += 1/(pow(denominador,3));
+        else //Par
+            soma -= 1/(pow(denominador,3));
+        
+        denominador += 2;
+    }
+        
+    pi = pow(32*soma,1.0/3.0);
+    
+    printf("\nO valor de pi e %.10f.", pi);
+}
+
+
+
+/*Lista de exercícios I:
+59. O número e (número de Euler) pode ser representado e calculado por meio da utilização da série de Taylor para e quando x=1, como a soma da seguinte série infinita:
+
+    e = 1 + 1/(1!) + 1/(2!) + 1/(3!)... + 1/(n!)
+    
+    Escreva um programa, que leia o número de termos da série (
+    ) e imprima como saída, o cálculo do número de Euler para
+    cada um dos n primeiros elementos da série.*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    
+    //Declarações
+    int n, cont1, cont2, denominador;
+    double e;
+
+    //Entrada de dados
+    printf("\nInforme um numero maior que 0: ");
+    scanf("%d", &n);
+    
+    //Tratamento de erro
+    if (n <= 0){
+        printf("\nNumero informado invalido.");
+        return 1;}
+    
+    //Inicializações
+    e = 0;
+    
+    //Cálculo da série de Taylor para e
+    for (cont1 = 1; cont1 <= n; cont1++){
+        
+        denominador = 1;
+        
+        //Cálculo do denominador (fatorial)
+        for (cont2 = 1; cont2 <= cont1; cont2++)
+            denominador *= cont2;
+        
+        //Cálculo do número de Euler
+        e += 1.0/denominador;
+    }
+    
+    //Exibição do resultado
+    printf("\nO numero de Euler para %d termos e: %.10f", n, e);
+}
+
+
+
+/*Lista de exercícios I:
+60. A famosa conjectura de Goldbach diz que todo inteiro par maior que 2 é soma de dois
+números primos. Testes foram feitos, mas ainda não se achou um contra-exemplo.
+Escreva um programa mostrando que a afirmação é verdadeira para todo número par
+entre 500 e 1000. O programa deve imprimir o número par e os dois primos que somados
+dão o número par.*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    
+    int cont1, cont2, cont3, primo1, primo2, ehPrimo1, ehPrimo2;
+
+    //Loop para todos os números pares entre 500 e 1000
+    //cont1 += 2 para percorrer apenas números pares
+    for (cont1 = 500; cont1 <= 1000; cont1 += 2){
+
+        //Testa todos os números menores que cont1
+        for (cont2 = 2; cont2 < cont1; cont2++){
+            
+            //Verificação da primalidade de cont2
+            ehPrimo1 = 1;
+            for (cont3 = 2; cont3 <= sqrt(cont2); cont3++){
+                if (cont2 % cont3 == 0) {
+                    ehPrimo1 = 0;
+                    break;
+                }
+            }
+            
+            //Se cont2 é primo, verificamos o segundo número
+            if (ehPrimo1 == 1){ 
+                primo1 = cont2;
+                
+                //Calcula o segundo número primo
+                primo2 = cont1 - primo1; 
+                
+                //Verificação da primalidade de primo2
+                ehPrimo2 = 1;
+                for (cont3 = 2; cont3 <= sqrt(primo2); cont3++){
+                    if (primo2 % cont3 == 0) {
+                        ehPrimo2 = 0;
+                        break;
+                    }
+                }
+
+                //Exibição do resultado para ehPrimo1 e ehPrimo2 iguais a 1 (são primos)
+                if (ehPrimo2 == 1) {
+                    printf("\n%d = %d + %d", cont1, primo1, primo2);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+
+/*Lista de exercícios I:
+61. Faça um programa em C que crie e inicialize um array de 20 posições de inteiros com 0 para cada elemento. Imprima o vetor em seguida, indicando a posição e o valor na posição (um por linha).*/
+
+#include <stdio.h>
+#include <math.h>
+
+#define tamanho 20
+
+int main() {
+    
+    //Declarações
+    int cont;
+    int vetor[tamanho];
+    
+    for (cont = 0; cont < tamanho; cont++){
+        vetor[cont] = 0;
+        printf("\nPosição %d, Vetor[%d] = %d", cont+1, cont, vetor[cont]);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+62. Faça um programa em C que leia um array de 10 posições e conte quantos números pares
+são elementos do array. Imprima esta quantidade.*/
+
+#include <stdio.h>
+#include <math.h>
+
+#define tamanho 10
+
+int main() {
+    
+    //Declarações
+    int numero, cont, par = 0;
+    int vetor[tamanho];
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nDigite um numero inteiro positivo: ");
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1) {
+            printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+            
+            /*
+            1. O usuário digita algo e pressiona Enter.
+            2. Se a entrada for inválida (scanf falha), os caracteres permanecem no buffer de entrada.
+            3. O while (getchar() != '\n'); começa a ler e descartar um caractere por vez.
+            4. Quando encontra '\n' (Enter), para de ler e o código continua para a próxima linha.
+            */
+            
+            while (getchar() != '\n'); // Limpa o buffer de entrada para evitar o loop infinito
+            cont--; //Mantém o loop na mesma posição
+            continue;
+        }
+        
+        //Verifica se a entrada é válida e armazena no vetor
+        if (numero >= 0){
+            vetor[cont] = numero;
+            
+            //Verifica se a entrada é par
+            if (numero%2 == 0)
+                par += 1; 
+        }
+        
+        //Tratamento de erros
+        //cont-- mantém o loop na mesma posição caso um número negativo seja digitado
+        else{
+            printf("\nO numero informado deve ser maior ou igual a 0.\n");
+            cont--;
+        }
+    }
+    
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < tamanho; cont++){
+        if (cont < tamanho - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+    printf("\nPares = %d", par);
+}
+
+
+
+/*Lista de exercícios I:
+63. Escreva um programa que leia dois vetores de números reais de mesma dimensão (10 posições), e imprima o vetor resultante da soma destes vetores.*/
+
+#include <stdio.h>
+#include <math.h>
+
+#define tamanho 10
+
+int main(){
+
+    //Declarações
+    int cont;
+    float numero, v1[tamanho], v2[tamanho], vr[tamanho];
+    
+    //Entrada de dados (vetor 1)
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nVetor 1 - Digite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%f", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        v1[cont] = numero;}
+    
+    //Entrada de dados (vetor 2)
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nVetor 2 - Digite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%f", &numero) != 1) {
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        v2[cont] = numero;}
+    
+    for (cont = 0; cont < tamanho; cont++){
+        vr[cont] = v1[cont]+v2[cont];
+        printf("\nv1[%d] + v2[%d] = vr[%d]: %.2f + %.2f = %.2f", cont, cont, cont, v1[cont], v2[cont], vr[cont]);}
+}
+
+
+
+/*Lista de exercícios I:
+63. Escreva um programa que leia dois vetores de números reais de mesma dimensão (10 posições), e imprima o vetor resultante da soma destes vetores.
+
+Solução 2*/
+
+#include <stdio.h>
+
+#define TAMANHO 10 // Tamanho dos vetores
+
+int main() {
+    // Declarações
+    int cont;
+    float numero, v1[TAMANHO], v2[TAMANHO], vr[TAMANHO];
+
+    // Entrada de dados para ambos os vetores
+    for (cont = 0; cont < TAMANHO; cont++) {
+        // Entrada para v1
+        while (1) { // Loop para validação de entrada
+            printf("\nVetor 1 - Digite o %dº número: ", cont + 1);
+            if (scanf("%f", &numero) == 1) break; // Se for válido, sai do loop
+            
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            while (getchar() != '\n'); // Limpa o buffer de entrada
+        }
+        v1[cont] = numero;
+
+        // Entrada para v2
+        while (1) { // Loop para validação de entrada
+            printf("\nVetor 2 - Digite o %dº número: ", cont + 1);
+            if (scanf("%f", &numero) == 1) break; // Se for válido, sai do loop
+            
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            while (getchar() != '\n'); // Limpa o buffer de entrada
+        }
+        v2[cont] = numero;
+    }
+
+    // Cálculo da soma dos vetores e exibição do resultado
+    printf("\nSoma dos vetores:\n");
+    for (cont = 0; cont < TAMANHO; cont++) {
+        vr[cont] = v1[cont] + v2[cont];
+        printf("v1[%d] + v2[%d] = vr[%d]: %.2f + %.2f = %.2f\n",
+               cont, cont, cont, v1[cont], v2[cont], vr[cont]);
+    }
+
+    printf("\n"); // Adiciona uma quebra de linha no final
+
+    return 0;
+}
+
+
+
+/*Lista de exercícios I:
+64. Faça um programa em C que leia um array de 20 inteiros e imprima o menor e o maior valor dentre os elementos do array.*/
+
+#include <stdio.h>
+
+#define tamanho 20
+
+int main(){
+
+    int numero, maior, menor, cont, vetor[tamanho];
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nDigite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        vetor[cont] = numero;}
+
+    //Inicialização
+    menor = vetor[0];
+    maior = vetor[0];
+    
+    for (cont = 1; cont < tamanho; cont++){
+        if (vetor[cont] < menor)
+            menor = vetor[cont];
+        
+        if (vetor[cont] > maior)
+            maior = vetor[cont];
+    }
+    
+    printf("\nO menor valor e %d, e o maior, %d.", menor, maior);
+}
+
+
+
+/*Lista de exercícios I:
+65. Faça um programa em C que leia um array de 20 inteiros e imprima o menor e o maior valor dentre os elementos do array, bem como suas respectivas posições.*/
+
+#include <stdio.h>
+
+#define tamanho 20
+
+int main(){
+
+    int numero, menor, posMenor, maior, posMaior, cont, vetor[tamanho];
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nDigite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        vetor[cont] = numero;}
+
+    //Inicialização
+    menor = vetor[0];
+    maior = vetor[0];
+    posMenor = 0;
+    posMaior = 0;
+    
+    //Verificação do menor e maior e suas posições
+    for (cont = 1; cont < tamanho; cont++){
+        if (vetor[cont] < menor){
+            menor = vetor[cont];
+            posMenor = cont;}
+        
+        if (vetor[cont] > maior){
+            maior = vetor[cont];
+            posMaior = cont;}
+    }
+    
+    printf("\nMenor valor: v[%d] = %d", posMenor, menor);
+    printf("\nMaior valor: v[%d] = %d", posMaior, maior);
+}
+
+
+
+/*Lista de exercícios I:
+66. Faça um programa em C que copie o conteúdo de um vetor de 10 posições de inteiro em um segundo vetor e imprima este último.*/
+
+#include <stdio.h>
+
+#define tamanho 10
+
+int main(){
+
+    int numero, cont, vetor[tamanho], vetor2[tamanho];
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nDigite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        vetor[cont] = numero;
+        vetor2[cont] = vetor[cont];
+    }
+    
+    printf("\nVetor 2 = [");
+    
+    for (cont = 0; cont < tamanho; cont++){
+        if (cont < tamanho - 1)
+            printf("%d, ", vetor2[cont]);
+        else
+            printf("%d", vetor2[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Lista de exercícios I:
+67. Faça um programa em C que leia dois vetores de 10 posições de inteiros e copie o maior valor dos dois em cada posição em um terceiro vetor. Em seguida, imprima este terceiro vetor.*/
+
+#include <stdio.h>
+
+#define tamanho 10
+
+int main(){
+
+    //Declarações
+    int cont, numero, v1[tamanho], v2[tamanho], vr[tamanho];
+    
+    //Entrada de dados (vetor 1)
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nVetor 1 - Digite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        v1[cont] = numero;}
+    
+    //Entrada de dados (vetor 2)
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nVetor 2 - Digite o %dº numero: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1) {
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        v2[cont] = numero;}
+    
+    for (cont = 0; cont < tamanho; cont++){
+        vr[cont] = v1[cont];
+        
+        if (v2[cont] > v1[cont])
+            vr[cont] = v2[cont];
+        
+        printf("\nv1[%d] | v2[%d] > vr[%d] = %d", cont, cont, cont, vr[cont]);}
+}
+
+
+
+/*Lista de exercícios I:
+68. Escreva um programa que leia o índice pluviométrico de cada dia do mês de junho e informe o dia que mais choveu, o dia que menos choveu e as médias pluviométricas de cada uma das duas quinzenas.*/
+
+#include <stdio.h>
+
+#define tamanho 30
+
+int main(){
+
+    //Declarações
+    int cont, diaMenos1, diaMais1, diaMenos2, diaMais2;
+    float numero, chuva[tamanho], menor1, maior1, soma1, media1, menor2, maior2, soma2, media2;
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nInforme a leitura do dia %d/06: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%f", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números reais.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        chuva[cont] = numero;
+    }
+    
+    menor1 = maior1 = chuva[0];
+    menor2 = maior2 = chuva[15];
+    diaMenos1 = diaMais1 = 1;
+    diaMenos2 = diaMais2 = 16;
+    soma1 = soma2 = 0;
+    
+    for (cont = 0; cont < tamanho; cont++){
+        
+        //Primeira quinzena
+        if (cont <= 14){ //Conta = 14 > dia 15/06
+            if (chuva[cont] < menor1){
+                menor1 = chuva[cont];
+                diaMenos1 = cont+1;}
+                
+            if (chuva[cont] > maior1){
+                maior1 = chuva[cont];
+                diaMais1 = cont+1;}
+            
+            soma1 += chuva[cont];
+        }
+        
+        //Segunda quinzena
+        else{
+            if (chuva[cont] < menor2){
+                menor2 = chuva[cont];
+                diaMenos2 = cont+1;}
+                
+            if (chuva[cont] > maior2){
+                maior2 = chuva[cont];
+                diaMais2 = cont+1;}
+            
+            soma2 += chuva[cont];
+        } 
+    }
+    
+    media1 = soma1/15.0;
+    media2 = soma2/15.0;
+    
+    printf("\n--- Primeira quinzena ---\n");
+    printf("\nDia mais chuvoso: %d/06", diaMais1);
+    printf("\nDia menos chuvoso: %d/06", diaMenos1);
+    printf("\nMedia: %.2f\n", media1);
+    
+    printf("--- Segunda quinzena ---\n");
+    printf("\nDia mais chuvoso: %d/06", diaMais2);
+    printf("\nDia menos chuvoso: %d/06", diaMenos2);
+    printf("\nMedia: %.2f", media2);
+}
+
+
+
+/*Lista de exercícios I:
+69. Escreva um programa que leia um vetor de 15 posições de inteiros. Em seguida, o
+programa deve ler um valor inteiro e imprimir o número de vezes que este valor ocorre
+no vetor.*/
+
+#include <stdio.h>
+
+#define tamanho 3
+
+int main(){
+
+    //Declarações
+    int numero, cont, vetor[tamanho], busca, soma;
+    
+    //Entrada de dados: vetor
+    for (cont = 0; cont < tamanho; cont++){
+        
+        printf("\nInforme o %dº numero inteiro: ", cont+1);
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+            
+            //Limpa o buffer de entrada para evitar o loop infinito
+            while (getchar() != '\n'); 
+            cont--; //Mantém o loop na mesma posição
+            continue;}
+        
+        vetor[cont] = numero;
+    }
+    
+    //Entrada de dados: número a ser buscado
+    
+    while (1){  
+        printf("\nInforme o número a ser buscado: ");
+        
+        //Validação de entrada
+        //Evita que caracteres inválidos sejam inseridos
+        if (scanf("%d", &busca) == 1) break;
+
+        printf("\nEntrada inválida. Digite apenas números inteiros.\n");
+        while (getchar() != '\n');  // Limpa o buffer de entrada
+    }
+    
+    //Inicialização
+    soma = 0;
+    
+    //Pesquisa
+    for (cont = 0; cont < tamanho; cont++){
+        
+        if (vetor[cont] == busca)
+            soma += 1;
+    }
+    
+    printf("\nO numero %d aparece %d vezes.", busca, soma);
+}
+
+
+
+/*Lista de exercícios I:
+70. Escreva um programa que carregue um array com tamanho variável. O tamanho máximo do array é de 100 posições (carga de array com sentinela).
+
+Solução 1
+*/
+
+#include <stdio.h>
+#define tamanho 100
+
+int main() {
+    
+    int numero, cont, vetor[tamanho], dimensao;
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        printf("\nInforme o %dº numero (digite -1 para sair e exibir os valores inseridos): ", cont+1);
+        
+        //Validação de entrada: caracteres não numéricos
+        if (scanf("%d", &numero) != 1){
+            printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+            
+            //Limpa o buffer
+            while (getchar() != '\n');
+            cont--;
+            continue;
+        }
+        
+        //Para sair do laço
+        if (numero == -1){
+            dimensao = cont;
+            break;
+        }
+        
+        //Validação de dados: números negativos 
+        if (numero < 0){
+            printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+            cont--;
+            continue;
+        }
+    
+        vetor[cont] = numero;
+    }
+    
+    printf("\n--- Resultado ---");
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < dimensao; cont++){
+        if (cont < dimensao - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Lista de exercícios I:
+70. Escreva um programa que carregue um array com tamanho variável. O tamanho máximo do array é de 100 posições (carga de array com sentinela).
+
+Solução 2
+*/
+
+#include <stdio.h>
+#define tamanho 100
+
+int main() {
+    
+    int numero, cont, vetor[tamanho], dimensao = 0;
+    
+    //Entrada de dados
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero (digite -1 para sair e exibir os valores inseridos): ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            
+            //Validação de entrada: parada
+            if (numero == -1)
+                break; //Para sair do while (loop interno)
+            
+            //Validação de entrada: números negativos   
+            if (numero < 0) {
+                printf("\nEntrada inválida. Digite apenas números positivos.\n");
+                continue;
+            }
+            vetor[cont] = numero;
+            break; //Para sair do while (loop interno) caso o número seja válido e ir para loop externo, incrementando o cont
+        }
+        //Validação de entrada: parada
+            if (numero == -1){
+                dimensao = cont;
+                break; //Para sair do for (loop externo)
+            }
+    }
+    
+    printf("\n--- Resultado ---");
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < dimensao; cont++){
+        if (cont < dimensao - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Lista de exercícios I:
+71. Escreva um programa que leia um vetor de 10 posições de inteiros e um inteiro. O programa deve informar a primeira posição onde este inteiro ocorre no vetor ou -1 caso o valor não ocorra no vetor (Busca Sequencial).*/
+
+#include <stdio.h>
+#define tamanho 10
+
+int main() {
+
+int numero, cont, vetor[tamanho], nBuscado, pBuscado;
+    
+    //Entrada de dados: vetor
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero: ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            break; //Para sair do while (loop interno)
+        }
+    }
+
+    //Entrada de dados: número buscado
+    while (1){
+        printf("\nInforme o numero buscado: ");
+        
+        //Validação de entrada: caracteres não numéricos
+        if (scanf("%d", &nBuscado) != 1){
+            printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+            
+            //Limpa o buffer
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    
+    //Busca do número
+    pBuscado = -1; //Assumindo que o número não consta no vetor
+    for (cont = 0; cont < tamanho; cont++){
+        if (vetor[cont] == nBuscado){
+            pBuscado = cont;
+            break;
+        }
+    }
+    
+    //Exibição dos dados informados
+    printf("\n--- Resultado ---");
+    printf("\nNumero buscado = %d", nBuscado);
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < tamanho; cont++){
+        if (cont < tamanho - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+    
+    //Exibição do resultado
+    if (pBuscado == -1)
+        printf("\nO numero buscado nao foi encontrado.");
+    else
+        printf("\nO numero %d e o %dº numero do vetor (indice %d).", nBuscado, pBuscado+1, pBuscado);
+}
+
+
+
+/*Lista de exercícios I:
+72. Escreva um programa que leia um vetor de 10 posições ordenados de inteiros e um inteiro. O programa deve informar a primeira posição onde este inteiro ocorre no vetor ou -1 caso o valor não ocorra no vetor (Busca Binária).*/
+
+#include <stdio.h>
+#define tamanho 10
+
+int main() {
+
+int numero, cont, vetor[tamanho], nBuscado, pBuscado;
+int inicio, fim, meio;
+    
+    //Entrada de dados: vetor ordenado
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero (ordem crescente): ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            break; //Para sair do while (loop interno)
+        }
+    }
+
+    //Entrada de dados: número buscado
+    while (1){
+        printf("\nInforme o numero buscado: ");
+        
+        //Validação de entrada: caracteres não numéricos
+        if (scanf("%d", &nBuscado) != 1){
+            printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+            
+            //Limpa o buffer
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    
+    //Inicialização
+    inicio = 0;
+    fim = tamanho - 1;
+    pBuscado = -1; //Assumindo que o número buscado não consta no vetor
+    
+    //Busca binária
+    while (inicio <= fim){
+        meio = (inicio + fim)/2;
+        
+        if (vetor[meio] == nBuscado){
+            pBuscado = meio;
+            
+            //Verifica se há alguma ocorrência anterior
+            //pBuscado > 0, pois se pBuscado = 0, vetor[-1]
+            //O loop percorre o vetor e decrementa o pBuscado cada vez que ele acha um valor igual ao nBuscado
+            while (pBuscado > 0 && vetor[pBuscado - 1] == nBuscado)
+                pBuscado--;
+            
+            //Encerra a busca, pois a primeira ocorrência já foi encontrada
+            break;
+        }
+        
+        //Efetua a busca na metade direita do vetor
+        else if (vetor[meio] < nBuscado)
+            inicio = meio + 1;
+            
+        //Efetua a busca na metade esquerda do vetor
+        else
+            fim = meio - 1;
+    }
+    
+//Exibição do resultado
+    if (pBuscado == -1)
+        printf("\nO numero buscado nao foi encontrado.");
+    else
+        printf("\nO numero %d e o %dº numero do vetor (indice %d).", nBuscado, pBuscado+1, pBuscado);
+}
+
+
+
+/*Lista de exercícios I:
+73. Escreva um programa em C que leia um array de 20 inteiros, calcule e imprima:
+    a. A moda dos elementos no array (elemento mais freqüente).
+    b. A mediana dos elementos no array (elemento central)
+    c. A média.
+    
+    Solução 1
+    */
+
+#include <stdio.h>
+#define tamanho 20
+
+int main() {
+
+int numero, cont, cont2, vetor[tamanho], soma = 0, freq1, freq2 , moda;
+float media, mediana;
+    
+    //Entrada de dados: vetor ordenado
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero (ordem crescente): ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            soma += vetor[cont];
+            break; //Para sair do while (loop interno)
+        }
+    }
+
+    //Calculando a média
+    media = (float)soma/tamanho;
+    
+    //Calculando a mediana
+    if (tamanho%2 == 0) //Par
+        mediana = (float)(vetor[tamanho/2 - 1] + vetor[tamanho/2])/2;   
+    else //Ímpar
+        mediana = vetor[tamanho/2];
+        
+    //Calculando a moda
+    freq1 = 0;
+    moda = vetor[0];
+    
+    for (cont = 0; cont < tamanho; cont++){
+        
+        freq2 = 0;
+        for (cont2 = 0; cont2 < tamanho; cont2++){
+            if (vetor[cont] == vetor[cont2])
+                freq2++;
+        }
+        
+        if (freq2 > freq1){
+            freq1 = freq2;
+            moda = vetor[cont];
+        }
+    }
+
+    if (freq1 == 1)
+        printf("\nNao ha moda (todos os numeros aparecem com a mesma frequencia).");
+        else
+            printf("\nModa = %d", moda);
+            
+    printf("\nMediana = %.2f", mediana);
+    printf("\nMedia = %.2f", media);
+}
+
+
+
+/*Lista de exercícios I:
+73. Escreva um programa em C que leia um array de 20 inteiros, calcule e imprima:
+    a. A moda dos elementos no array (elemento mais freqüente).
+    b. A mediana dos elementos no array (elemento central)
+    c. A média.
+    
+    Solução 2: múltiplas modas
+    */
+
+#include <stdio.h>
+#define tamanho 20
+
+int main() {
+
+int numero, cont, cont2, vetor[tamanho], soma = 0, freq1, freq2 , moda[tamanho], nModas;
+float media, mediana;
+    
+    //Entrada de dados: vetor ordenado
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero (ordem crescente): ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros positivos.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            soma += vetor[cont];
+            break; //Para sair do while (loop interno)
+        }
+    }
+
+    //Calculando a média
+    media = (float)soma/tamanho;
+    
+    //Calculando a mediana
+    if (tamanho%2 == 0) //Par
+        mediana = (float)(vetor[tamanho/2 - 1] + vetor[tamanho/2])/2;   
+    else //Ímpar
+        mediana = vetor[tamanho/2];
+        
+    //Calculando a moda
+    freq1 = 0;
+    nModas = 0; //Quantidade de modas
+    
+    for (cont = 0; cont < tamanho; cont++){
+        
+        freq2 = 0;
+        for (cont2 = 0; cont2 < tamanho; cont2++){
+            if (vetor[cont] == vetor[cont2])
+                freq2++;
+        }
+        
+        //Frequência maior
+        if (freq2 > freq1){
+            freq1 = freq2;
+            nModas = 0;
+            moda[nModas] = vetor[cont];
+            nModas++;
+        }
+        
+        //Frequências iguais
+        else if (freq2 == freq1){
+            moda[nModas] = vetor[cont];
+            nModas++;
+        }   
+    }
+
+    if (freq1 == 1) {
+        printf("\nNao ha moda (todos os numeros aparecem com a mesma frequencia).");
+    } else {
+        printf("\nModa(s): ");
+        for (cont = 0; cont < nModas; cont++) {
+            
+            if (cont > 0){
+                if (moda[cont] == moda[cont-1])
+                    continue;
+                else
+                    printf("%d ", moda[cont]);
+            }
+            else
+                printf("%d ", moda[cont]);
+        }
+    }
+    
+    printf("\nMediana = %.2f", mediana);
+    printf("\nMedia = %.2f", media);
+}
+
+
+
+/*Lista de exercícios I:
+74. Escreva um programa em C que armazene um vetor de até 30 inteiros. O programa deve fornecer as seguintes operações:
+    a. Inserir um elemento no final do vetor
+    b. Inserir um elemento em uma dada posição
+    c. Remover um elemento de uma posição indicada
+    d. Remover todos elementos iguais a um valor indicadoe. Gerar um novo array sem duplicidades a partir deste array
+    */
+#include <stdio.h>
+#include <stdlib.h>
+#define TAM 5
+
+int main() {
+    
+    //Declarações
+    int numero, cont, cont2, cont3, vetor[TAM], opcao;
+    int tamanho = TAM, indice;
+    
+    //Entrada de dados: vetor
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %do numero: ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            break; //Para sair do while (loop interno)
+        }
+    }
+    
+    //Limpar a tela
+    system("cls");
+    
+    //Menu de funções
+	while (1){
+	    
+		printf("\nInforme a operacao desejada: ");
+	    printf("\n");
+	    printf("\n1 - Inserir um elemento no final do vetor;");
+	    printf("\n2 - Inserir um elemento em uma dada posicao;");
+	    printf("\n3 - Remover um elemento de uma posicao indicada;");
+	    printf("\n4 - Remover todos elementos iguais a um valor indicado;");
+	    printf("\n5 - Gerar um novo array sem duplicidades a partir deste array.");
+	    printf("\n");
+	    printf("\nOpcao desejada: ");
+    
+    	//Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &opcao) != 1){
+            	system("cls");
+                printf("\nEntrada invalida. Informe uma opcao entre 1 e 5.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+			}	
+		break;
+	}
+	
+	system("cls");
+	
+	//Operação 1: inserir um elemento no final do vetor
+	if (opcao == 1){
+	
+		//Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o numero a ser inserido no final do vetor: ");
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                system("cls");
+				printf("\nEntrada invalida. Digite apenas numeros inteiros.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[tamanho - 1] = numero;	    
+            break; //Para sair do while
+		}
+	}	
+	
+	//Operação 2: inserir um elemento em uma dada posição
+	else if (opcao == 2){
+	
+		//Loop infinito para validar entrada: índice
+        while (1){
+            printf("\nInforme o indice do vetor (0 a %d): ", tamanho - 1);
+            
+            //Validação de entrada: índice, caracteres não numéricos
+            if (scanf("%d", &indice) != 1){
+                system("cls");
+				printf("\nEntrada invalida. Digite apenas numeros inteiros entre 0 e %d.\n", tamanho - 1);
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            
+            //Validação do intervalo do vetor
+            if (indice < 0 || indice > tamanho - 1){
+            	system("cls");
+				printf("\nIndice invalida. Digite apenas numeros inteiros entre 0 e %d.\n", tamanho - 1);
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+        	}
+            
+            break; //Para sair do while
+		}
+		
+		//Loop infinito para validar entrada: valor
+        system("cls");
+		while (1){
+            printf("\nInforme o valor a ser inserido no indice %d: ", indice);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                system("cls");
+				printf("\nEntrada invalida. Digite apenas numeros inteiros.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[indice] = numero;         
+            break; //Para sair do while (loop interno)
+		}	
+	}
+	
+	//Operação 3: remover um elemento de uma posição indicada
+	else if (opcao == 3){
+		
+		//Loop infinito para validar entrada: índice
+        while (1){
+            printf("\nInforme o indice do vetor cuja posicao sera removida (0 a %d): ", tamanho - 1);
+            
+            //Validação de entrada: índice, caracteres não numéricos
+            if (scanf("%d", &indice) != 1){
+                system("cls");
+				printf("\nEntrada invalida. Digite apenas numeros inteiros entre 0 e %d.\n", tamanho - 1);
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            
+            //Validação do intervalo do vetor
+            if (indice < 0 || indice > tamanho - 1){
+            	system("cls");
+				printf("\nIndice invalido. Digite apenas numeros inteiros entre 0 e %d.\n", tamanho - 1);
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+        	}
+            break; //Para sair do while
+		}
+		
+		//Removendo valor
+		//Desloca todos os elementos para a esquerda
+		for (cont = indice; cont < tamanho - 1; cont++){
+        	vetor[cont] = vetor[cont + 1];
+    	}
+    	
+    	tamanho--;	
+	}
+	
+	//Operação 4: remover todos elementos iguais a um valor indicado
+	else if (opcao == 4){
+		
+		//Loop infinito para validar entrada: valor
+        while (1){
+            printf("\nInforme o valor a ser removido: ");
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                system("cls");
+				printf("\nEntrada invalida. Digite apenas numeros inteiros.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }            
+            break; //Para sair do while
+		}	
+
+		//Removendo valor
+		for (cont = 0; cont < tamanho; cont++){
+        	
+			if (vetor[cont] == numero){
+				
+				for (cont2 = cont; cont2 < tamanho - 1; cont2++)
+					vetor[cont2] = vetor[cont2 + 1];
+			
+			tamanho--; //Reduz o tamanho do vetor
+			cont--; //Volta um índice para verificar a nova posição
+			}
+			
+		/*Loop externo até tamanho. Se fosse tamanho - 1, 
+		após o decremento tamanho --, a última posição nunca
+		seria verificada*/
+    	}	
+	}
+	
+	//Operação 5: gerar um novo array sem duplicidades a partir deste array
+	else if (opcao == 5){
+	    
+		for (cont = 0; cont < tamanho; cont++){
+	        
+			int numero = vetor[cont];
+	
+	        for (cont2 = cont + 1; cont2 < tamanho; ){
+	            
+				if (vetor[cont2] == numero){
+	                
+					//Desloca os elementos para a esquerda
+	                for (cont3 = cont2; cont3 < tamanho - 1; cont3++)
+	                    vetor[cont3] = vetor[cont3 + 1];
+	                
+					tamanho--;  //Reduz o tamanho do vetor
+	            } 
+				
+				else 
+	                cont2++;  //Apenas avança se NÃO remover nada
+	            
+	        }
+	    }
+	}
+	
+	//Exibição do vetor final
+    printf("\n--- Resultado ---");
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < tamanho; cont++){
+        if (cont < tamanho - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Lista de exercícios I:
+75. Escreva um programa que ordene um array de inteiros de 15 posições utilizando o método da bolha (bubble sort).*/
+
+#include <stdio.h>
+#define tamanho 5
+
+int main() {
+
+int numero, vetor[tamanho], aux, trocou, cont, cont2;
+    
+    //Entrada de dados: vetor ordenado
+    for (cont = 0; cont < tamanho; cont++){
+        //Loop infinito para validar entrada
+        while (1){
+            printf("\nInforme o %dº numero: ", cont+1);
+            
+            //Validação de entrada: caracteres não numéricos
+            if (scanf("%d", &numero) != 1){
+                printf("\nEntrada invalida. Digite apenas numeros inteiros.\n");
+                
+                //Limpa o buffer
+                while (getchar() != '\n');
+                continue;
+            }
+            vetor[cont] = numero;
+            break; //Para sair do while (loop interno)
+        }
+    }
+    
+    //Bubble sort
+    //Os dois loops garantem que as comparações sejam feitas para cada cont
+    for (cont = 0; cont < tamanho - 1; cont++){
+        trocou = 0;
+
+        for (cont2 = 0; cont2 < tamanho - 1 - cont; cont2++){
+            if (vetor[cont2] > vetor[cont2 + 1]){
+                aux = vetor[cont2];
+                vetor[cont2] = vetor[cont2 + 1];
+                vetor[cont2 + 1] = aux;
+                trocou = 1;  //Indica que houve troca
+            }
+        }
+
+        //Se não houve trocas, o vetor já está ordenado
+        //Antecipa a saída do loop externo caso o vetor já esteja ordenado
+        if (trocou == 0) {
+            break;
+        }
+    }
+    
+    /*cont2 < tamanho - 1 - cont, pois cada passagem do
+        algoritmo Bubble Sort, o k-ésimo maior elemento é
+        "empurrado" para sua posição correta.
+        
+        Por exemplo, seja o vetor {5,4,3,2,1}.
+        Na 1ª passagem, 5 é empurrado para o índice 4.
+        Na 2ª, 4 é empurrado para o índice 3, e assim
+        sucessivamente.
+        
+        Portanto, na 2ª passagem, quando cont = 1, não é preciso
+        comparar os índices 3 e 4, pois o índice 4 já está
+        correto. 
+        
+        Assim, cont2 < tamanho - 1 - cont se torna cont2 < 3. Ou
+        seja, a última comparação feita para cont = 1 será entre
+        os índices 2 e 3.
+        */
+    
+    //Exibição do vetor final
+    printf("\n--- Resultado ---");
+    printf("\nVetor = [");
+    
+    for (cont = 0; cont < tamanho; cont++){
+        if (cont < tamanho - 1)
+            printf("%d, ", vetor[cont]);
+        else
+            printf("%d", vetor[cont]);
+    }
+    printf("]");
+}
+
+
+
+/*Lista de exercícios I:
+76. Escreva um programa em C, que leia uma string e conte quantas ocorrências de vogais existem nesta string.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho];
+    int cont, vogal = 0;
+    
+    //Entrada de dados
+    printf("\nEscreva uma palavra ou frase: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Convertendo para minúsculas 
+    for (cont = 0; cont < strlen(palavra); cont++){
+        //Convertendo para minúsculas
+        if (isupper(palavra[cont]) == 1)
+            palavra[cont] = tolower(palavra[cont]);
+        
+        //Contando as vogais
+        if (palavra[cont] == 'a' || palavra[cont] == 'e' || palavra[cont] == 'i' || palavra[cont] == 'o' || palavra[cont] == 'u')
+            vogal++;
+    }
+    
+    printf("\nO numero de vogais na palavra e: %d.", vogal);
+}
+
+
+
+/*Lista de exercícios I:
+77. Escreva um programa em C, que leia uma string, gere uma nova string com o texto invertido e imprima esta nova string.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char frase[tamanho], invertida[tamanho];
+    int len, cont, cont2 = 0;
+    
+    //Entrada de dados
+    printf("\nEscreva uma palavra ou frase: ");
+    fgets(frase, sizeof(frase), stdin);  
+    frase[strcspn(frase, "\n")] = '\0';
+    
+    len = strlen(frase);
+    
+    //Invertendo a string
+    for (cont = len - 1; cont >= 0; cont--){
+        invertida[cont2] = frase[cont];
+        cont2++;
+    }
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    invertida[len] = '\0';
+    
+    printf("\nA frase/palavra invertida e: %s.", invertida);
+}
+
+
+
+/*Lista de exercícios I:
+78. Escreva um programa em C, que leia uma string e um caracter e conte o número de ocorrências do caracter lido na string.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho], caractere;
+    int len, cont, freq = 0;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Caractere
+    printf("\nEscreva um caractere: ");
+    caractere = getchar();
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Calculando a frequência
+    for (cont = 0; cont < len; cont++){
+        if (tolower(palavra[cont]) == tolower(caractere))
+            freq++;
+    }
+    
+    printf("\nO caractere '%c' aparece %d vezes na palavra '%s'.", caractere, freq, palavra);
+}
+
+
+
+/*Lista de exercícios I:
+79. Escreva um programa em C, que gere a substring de uma string original, dado a posição inicial e a final da substring.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho], subpalavra[tamanho];
+    int len, cont, cont2 = 0, pInicio, pFinal;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Posição inicial
+    printf("\nInforme a posicao inicial (apenas numeros inteiros de 0 a %d): ", len - 1);
+    scanf("%d", &pInicio);
+    
+    //Tratamento de erros
+    if (pInicio < 0 || pInicio >= len){
+        printf("\nIndice invalido.");
+        return 1;
+    }
+    
+    //Posição final
+    printf("\nInforme a posicao final (apenas numeros inteiros de %d a %d): ", pInicio, len - 1);
+    scanf("%d", &pFinal);
+    
+    //Tratamento de erros
+    if (pFinal < pInicio || pFinal >= len){
+        printf("\nIndice invalido.");
+        return 1;
+    }
+    
+    //Armazenando a substring
+    for (cont = pInicio; cont <= pFinal; cont++){
+        subpalavra[cont2] = palavra[cont];
+        cont2++;
+    }
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    subpalavra[cont2] = '\0';
+    
+    printf("\nA substring da string %s, considerando os indices %d a %d, e: %s.", palavra, pInicio, pFinal, subpalavra);
+}
+
+
+
+/*Lista de exercícios I:
+80. Escreva um programa em C que leia duas string e informe se a primeira contém a segunda.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra1[tamanho], palavra2[tamanho], minus1[tamanho], minus2[tamanho];
+    int cont, cont2, len1, len2;
+    
+    //Entrada de dados
+    //Palavra 1
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra1, sizeof(palavra1), stdin);  
+    palavra1[strcspn(palavra1, "\n")] = '\0';
+    
+    //Palavra 2
+    printf("\nEscreva outra palavra: ");
+    fgets(palavra2, sizeof(palavra2), stdin);  
+    palavra2[strcspn(palavra2, "\n")] = '\0';
+    
+    len1 = strlen(palavra1);
+    len2 = strlen(palavra2);
+    
+    if (len2 > len1){
+        printf("\nA palavra '%s' nao pode conter '%s' pois e menor.", palavra1, palavra2);
+        return 1;
+    }
+    
+    //Convertendo para minúsculas
+    for (cont = 0; cont < len1; cont++){
+        minus1[cont] = tolower(palavra1[cont]);
+    }
+    
+    for (cont2 = 0; cont2 < len2; cont2++){
+        minus2[cont2] = tolower(palavra2[cont2]);
+    }
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    minus1[cont] = '\0';
+    minus2[cont2] = '\0';
+    
+    //printf("\n %s \n %s \n", minus1, minus2);
+    
+    if (strstr(minus1, minus2) != NULL)
+        printf("\nA palavra %s contem a palavra %s.", palavra1, palavra2);
+    else
+        printf("\nA palavra %s nao contem a palavra %s.", palavra1, palavra2);
+}
+
+
+
+/*Lista de exercícios I:
+81. Escreva um programa em C que normalize uma string lida, em uma nova string. Normalizar uma string é o processo de remover os espaços excedentes que separam as palavras.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho];
+    int len, cont, cont2;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Remove espaços excedentes
+    for (cont = 0; cont < len; cont++){
+        if (palavra[cont] == ' ' && palavra[cont+1] == ' '){
+            
+            //Desloca os caracteres para a esquerda
+            for (cont2 = cont; cont2 < len; cont2++){
+                palavra[cont2] = palavra[cont2+1];
+            }
+            len--; //Atualiza o tamanho
+            cont--; //Decrementa o cont para verificar o novo caractere na mesma posição
+        }
+    }
+    
+    //Remover espaços antes de pontuação
+    for (cont = 0; cont < len; cont++) {
+        if (strchr(",.!?)]}", palavra[cont]) && cont > 0 && palavra[cont - 1] == ' ') {
+            for (cont2 = cont - 1; cont2 < len; cont2++) {
+                palavra[cont2] = palavra[cont2 + 1];
+            }
+            len--;
+            cont--; 
+        }
+    }
+    
+    // Remover espaços no final da string
+    while (len > 0 && palavra[len - 1] == ' ') {
+        palavra[len - 1] = '\0';
+        len--;
+    }
+    
+    printf("\nPalavra normalizada: %s", palavra);
+}
+
+
+
+/*Lista de exercícios I:
+82. Escreva um programa em C, que dada uma string (normalizada), imprima a maior palavra dela.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho];
+    int len, len2 = 0, maior = 0, cont, contInicio = 0;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Inclui '\0' para processar a última palavra
+    for (cont = 0; cont <= len; cont++){
+        
+        if (palavra[cont] != ' ' && palavra[cont] != '\0')
+            len2++;
+            
+        else{
+            if (len2 > maior){
+                //Guarda o tamanho da maior palavra
+                maior = len2;
+                //Marca o início da maior palavra
+                contInicio = (cont - 1) - (len2 - 1);
+            }
+            //Zera len2 para a contagem da próxima palavra
+            len2 = 0;
+        }
+            
+    }
+    
+    //Exibindo o resultado
+    printf("\nA maior palavra, com %d caracteres, e: ", maior);
+    for (cont = contInicio; cont <= contInicio + (maior-1); cont++){
+        printf("%c", palavra[cont]);
+    }
+
+}
+
+
+
+/*Lista de exercícios I:
+83. Escreva um programa em C, que gere a substring de uma string original, dado a posição inicial e a final da substring.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho], subpalavra[tamanho];
+    int len, cont, cont2 = 0, pInicio, pFinal;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Posição inicial
+    printf("\nInforme a posicao inicial (apenas numeros inteiros de 0 a %d): ", len - 1);
+    scanf("%d", &pInicio);
+    
+    //Tratamento de erros
+    if (pInicio < 0 || pInicio >= len){
+        printf("\nIndice invalido.");
+        return 1;
+    }
+    
+    //Posição final
+    printf("\nInforme a posicao final (apenas numeros inteiros de %d a %d): ", pInicio, len - 1);
+    scanf("%d", &pFinal);
+    
+    //Tratamento de erros
+    if (pFinal < pInicio || pFinal >= len){
+        printf("\nIndice invalido.");
+        return 1;
+    }
+    
+    //Armazenando a substring
+    for (cont = pInicio; cont <= pFinal; cont++){
+        subpalavra[cont2] = palavra[cont];
+        cont2++;
+    }
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    subpalavra[cont2] = '\0';
+    
+    printf("\nA substring da string %s, considerando os indices %d a %d, e: %s.", palavra, pInicio, pFinal, subpalavra);
+}
+
+
+
+/*Lista de exercícios I:
+84. Escreva um programa em C que verifique se uma string normalizada é palíndrome (os mesmos caracteres quando lida da direita para a esquerda).*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho], invertida[tamanho], palavraMinus[tamanho];
+    int len, cont = 0;
+    
+    //Entrada de dados
+    //Palavra
+    printf("\nEscreva uma palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Convertendo em minúsculas
+    for (cont = 0; cont < len; cont++){
+			palavraMinus[cont] = tolower(palavra[cont]);
+	}
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    palavraMinus[cont] = '\0';
+   
+    //Copia a string para invertida
+    strcpy(invertida, palavraMinus);
+    
+    //Inverte a string
+    strrev(invertida);
+    
+    if (strcmp(palavraMinus, invertida) == 0)
+        printf("\nA palavra %s e palindrome, pois seu inverso, %s, e igual.", palavraMinus, invertida);
+    else
+        printf("\nA palavra %s nao e palindrome, pois seu inverso, %s, nao e igual.", palavraMinus, invertida);
+}
+
+
+
+/*Lista de exercícios I:
+85. Escreva um programa que leia uma string representando um número hexadecimal (base 16) e imprima sua representação em decimal (base 10).*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char hexadecimal[tamanho];
+    int len, decimal = 0, n = 0, expoente, cont;
+    
+    //Entrada de dados
+    printf("\nInforme um numero na base hexadecimal: ");
+    fgets(hexadecimal, sizeof(hexadecimal), stdin);  
+    hexadecimal[strcspn(hexadecimal, "\n")] = '\0';
+    
+    //Comprimento do número hexadecimal
+    len = strlen(hexadecimal);
+    
+    //Calculando o expoente máximo
+    expoente = len - 1;
+    
+    //Convertendo de hexadecimal para decimal
+    for (cont = 0; cont < len; cont++){
+        
+        //Convertendo de char para int
+        //Caracteres de 0 a 9
+        if (hexadecimal[cont] >= '0' && hexadecimal[cont] <= '9')
+            n = hexadecimal[cont] - '0';
+        
+        //Caracteres de A a F  
+        else if (hexadecimal[cont] >= 'A' && hexadecimal[cont] <= 'F')
+            //'A' é 65 na tabela ASCII
+            n = hexadecimal[cont] - 'A' + 10;
+        
+        //Caracteres de a a f
+        else if (hexadecimal[cont] >= 'a' && hexadecimal[cont] <= 'f')
+            //'a' é 97 na tabela ASCII
+            n = hexadecimal[cont] - 'a' + 10;
+        
+        //Convertendo para decimal e somando
+        decimal += n * pow(16, expoente);
+        //Decrementando o expoente
+        expoente--;
+        }
+    
+    printf("\n O numero hexadecimal %s e %d na base decimal.", hexadecimal, decimal);
+}
+
+
+
+/*Lista de exercícios I:
+86. Escreva um número que leia um número em Romano e imprima o equivalente em decimal (base 10).*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char romano[tamanho], algarismos[] = {'M','D','C','L','X','V','I'}; //Total = 7 algarimos diferentes
+    
+    int len, n = 0, n2 = 0, decimal = 0;
+    int cont, cont2;
+    int numero[] = {1000,500,100,50,10,5,1};
+    
+    //Entrada de dados
+    printf("\nInforme um numero romano: ");
+    fgets(romano, sizeof(romano), stdin);  
+    romano[strcspn(romano, "\n")] = '\0';
+    
+    //Comprimento do número romano
+    len = strlen(romano);
+    
+    //Calculando o número decimal
+    for (cont = 0; cont < len; cont++){
+        
+        //Tratamento de erros: número 0
+        if (romano[cont] == '0'){
+            printf("\nO numero '0' nao existe em algarismos romanos.");
+            return 1;}
+        
+        //Convertendo o algarismo atual para decimal
+        for (cont2 = 0; cont2 < 7; cont2++){
+            if (romano[cont] == algarismos[cont2]){
+                n = numero[cont2];
+                break;
+            }
+        }
+        
+        //Verificando se o próximo algarismo existe
+        if (cont < len - 1){
+            //Convertendo o próximo algarismo para decimal
+            for (cont2 = 0; cont2 < 7; cont2++){
+                if (romano[cont+1] == algarismos[cont2]){
+                    n2 = numero[cont2];
+                    break;
+                }
+            }    
+        }
+        
+        //Somando o número atual
+        if (n >= n2){
+            decimal += n;
+            n = 0;
+            n2 = 0;
+        }
+        //Subtraindo o número atual
+        else{
+            decimal -= n;
+            n = 0;
+            n2 = 0;
+        }
+    }
+    
+    printf("\nO numero romando %s em decimal e %d.", romano, decimal);
+}
+
+
+
+/*Lista de exercícios I:
+87. Escreva um programa em C, que verifique se duas strings são iguais, independente da caixa das letras. Por exemplo, este programa deve dizer que “Teste”é igual a “TeStE”.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho], palavra2[tamanho], plvMinus[tamanho], plvMinus2[tamanho];
+    int len, len2, cont;
+    
+    //Entrada de dados
+    printf("\nInforme a primeira palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Entrada de dados
+    printf("\nInforme a segunda palavra: ");
+    fgets(palavra2, sizeof(palavra2), stdin);  
+    palavra2[strcspn(palavra2, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    len2 = strlen(palavra2);
+    
+    //Convertendo para minúsculas
+    for (cont = 0; cont < len; cont++){
+        plvMinus[cont] = tolower(palavra[cont]);
+    }
+    //Adiciona caracter nulo para tornar uma string válida
+    plvMinus[cont] = '\0';
+    
+    for (cont = 0; cont < len2; cont++){
+        plvMinus2[cont] = tolower(palavra[cont]);
+    }
+    //Adiciona caracter nulo para tornar uma string válida
+    plvMinus2[cont] = '\0';
+    
+    if (strcmp(plvMinus, plvMinus2) == 0)
+        printf("\nAs palavras %s e %s sao iguais.", palavra, palavra2);
+    else
+        printf("\nAs palavras %s e %s nao sao iguais.", palavra, palavra2);
+}
+
+
+
+/*Lista de exercícios I:
+88. Escreva um programa em C, que coloque a string lida toda em caixa alta.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char palavra[tamanho];
+    int len, cont;
+    
+    //Entrada de dados
+    printf("\nInforme a primeira palavra: ");
+    fgets(palavra, sizeof(palavra), stdin);  
+    palavra[strcspn(palavra, "\n")] = '\0';
+    
+    //Comprimento da palavra
+    len = strlen(palavra);
+    
+    //Convertendo para maiúsculas
+    for (cont = 0; cont < len; cont++){
+        palavra[cont] = toupper(palavra[cont]);
+    }
+    
+    printf("\nA palavra e: %s", palavra);
+
+}
+
+
+
+/*Lista de exercícios I:
+89. Escreva um programa em C, que gere uma string composta pelo último nome, seguido de virgula e as iniciais dos demais nomes (em ordem), seguida de ponto. Por exemplo, se a string entrada for “Gabriel Garcia Marquez”, a string gerada deve ser “Marquez, G. G.”.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char nome[tamanho], ultimo[100], iniciais[100], letra;
+    int len, cont, cont2, contIniciais, fimUlt, inicioUlt;
+    
+    //Entrada de dados
+    printf("\nInforme o nome completo: ");
+    fgets(nome, sizeof(nome), stdin);  
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    //Comprimento do nome
+    len = strlen(nome);
+
+    //Guardando o último nome
+    cont2 = 0;
+    for (cont = len - 1; cont >= 0; cont--){
+        if (nome[cont] != ' '){
+            //Guarda de trás para frente
+            ultimo[cont2] = nome[cont];
+            cont2++;
+        }
+        else
+            break;
+    }
+    
+    //Adiciona caracter nulo para tornar uma string válida
+    //Guarda na posição do caractere ' '
+    ultimo[cont2] = '\0';
+    
+    //Guardando as posições inicial e final do último nome
+    inicioUlt = cont + 1;
+    fimUlt = cont2 - 1;
+    
+    //Invertendo o último nome
+    for (cont = 0; cont < (fimUlt + 1) / 2; cont++){
+        letra = ultimo[cont];
+        ultimo[cont] = ultimo[fimUlt - cont];
+        ultimo[fimUlt - cont] = letra;
+    }
+    
+    //printf("\n%s", ultimo);
+
+    //Formatando o último nome
+    for (cont = 0; cont <= fimUlt; cont++){
+        //Primeira letra maiúscula
+        if (cont == 0)
+            ultimo[cont] = toupper(ultimo[cont]);
+        //Demais letras minúsculas
+        else
+            ultimo[cont] = tolower(ultimo[cont]);
+    }
+    
+    //printf("\n%s", ultimo);
+    
+    //Guardando a primeira inicial
+    iniciais[0] = nome[0];
+    
+    //Buscando e guardando as iniciais
+    contIniciais = 1;
+    for (cont = 0; cont < inicioUlt - 2; cont++){
+        if (nome[cont] == ' '){
+            iniciais[contIniciais] = nome[cont + 1];
+            contIniciais++;
+        }
+    }
+    
+    //Formatando as iniciais e exibindo o resultado
+    //Último nome
+    printf("\nO nome e: %s, ", ultimo);
+    
+    //Formatando as iniciais
+    for (cont = 0; cont < contIniciais; cont++){
+        iniciais[cont] = toupper(iniciais[cont]);
+        printf("%c. ", iniciais[cont]);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+89. Escreva um programa em C, que gere uma string composta pelo último nome, seguido de virgula e as iniciais dos demais nomes (em ordem), seguida de ponto. Por exemplo, se a string entrada for “Gabriel Garcia Marquez”, a string gerada deve ser “Marquez, G. G.”.
+
+Solução 2
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char nome[tamanho], ultimo[100], iniciais[100];
+    
+    //Marcadores
+    int inicioUlt;
+    
+    //Contadores
+    int cont, contIniciais;
+    
+    //Demais variáveis
+    int len;
+    
+    //Entrada de dados
+    printf("\nInforme o nome completo: ");
+    fgets(nome, sizeof(nome), stdin);  
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    //Comprimento do nome
+    len = strlen(nome);
+    
+    //Marcando o início do último nome
+    for (cont = len - 1; cont >= 0; cont--){
+        if (nome[cont] == ' '){
+            inicioUlt = cont + 1;
+            break;
+        }
+    }
+        
+    //Guardando o último nome
+    //Da esq para dir, começando do índice 0
+    for (cont = inicioUlt; cont < len; cont++){
+        ultimo[cont - inicioUlt] = nome[cont];
+    }
+    
+    //Adicionando caractere nulo ao final
+    //((len - 1) - inicioUlt + 1) = quat. letras do último nome
+    ultimo[len - inicioUlt] = '\0';
+    
+    //Formatando o último nome
+    //Primeira letra
+    ultimo[0] = toupper(ultimo[0]);
+    
+    //Demais letras
+    cont = 1;
+    while (ultimo[cont] != '\0'){
+        ultimo[cont] = tolower(ultimo[cont]);
+        cont++;
+    }
+
+    //Guardando a primeira inicial
+    iniciais[0] = nome[0];
+    
+    //Buscando e guardando as demais iniciais
+    contIniciais = 1;
+    for (cont = 1; cont < inicioUlt - 1; cont++){
+        if (nome[cont] == ' '){
+            iniciais[contIniciais] = nome[cont + 1];
+            contIniciais++;
+        }
+    }
+    
+    //Adicionando caractere nulo ao final
+    iniciais[contIniciais] = '\0';
+    
+    //Formatando as iniciais e exibindo o resultado
+    //Último nome
+    printf("\nO nome e: %s, ", ultimo);
+    
+    //Formatando as iniciais
+    for (cont = 0; cont < contIniciais; cont++){
+        iniciais[cont] = toupper(iniciais[cont]);
+        printf("%c.", iniciais[cont]);
+        
+        //Adicionar espaço apenas se não for a última inicial
+        if (cont < contIniciais - 1)
+            printf(" ");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+90. Escreva um programa em C, que dado uma string, crie uma nova string contendo na ordem em que aparecem no string dado, as vogais no começo e as consoantes no final.
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define tamanho 1000
+
+int main() {
+
+    //Declarações
+    char nome[tamanho], novoNome[tamanho];
+    
+    //Contadores
+    int cont, cont2;
+    
+    //Demais variáveis
+    int len;
+    
+    //Entrada de dados
+    printf("\nInforme uma string: ");
+    fgets(nome, sizeof(nome), stdin);  
+    nome[strcspn(nome, "\n")] = '\0';
+    
+    //Comprimento do nome
+    len = strlen(nome);
+
+    //Guardando as vogais
+    cont2 = 0;
+    for (cont = 0; cont < len; cont++){
+        if (strchr("AEIOUaeiou", nome[cont])){
+            novoNome[cont2] = nome[cont];
+            cont2++;
+        }
+    }
+    
+    //Guardando as consoantes e evitando espaços
+    for (cont = 0; cont < len; cont++){
+        if (!strchr("AEIOUaeiou ", nome[cont])){
+            novoNome[cont2] = nome[cont];
+            cont2++;
+        }
+    }
+    
+    //Adicionando o terminador nulo
+    novoNome[cont2] = '\0';
+
+    printf("\nA nova string e: %s.", novoNome);
+}
+
+
+
+/*Lista de exercícios I:
+91. Elabore um programa em C que leia valores inteiros para preencher uma matriz A 5 x 5. Você deverá criar adicionalmente dois vetores de 5 elementos: somaLinhas e somaColunas. Em cada posição do vetor somaLinhas deverá ser armazenada a soma da linha correspondente na matriz A. Da mesma forma, em cada posição do vetor somaColunas deverá ser armazenada a soma da coluna correspondente na matriz A.
+*/
+
+#include <stdio.h>
+#define linhas 5
+#define colunas 5
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas], somaLinhas[linhas] = {0}, somaColunas[colunas] = {0};
+    
+    int i, j;
+    
+    //Entrada de dados
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d: ", i, j);
+            scanf("%d", &matriz[i][j]);
+            
+            //Calculando as somas
+            somaLinhas[i] += matriz[i][j];
+            somaColunas[j] += matriz[i][j];
+        }
+    }
+    
+    //Exibindo a matriz
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    
+    //Exibindo os resultados
+    //Linhas
+    printf("\nSoma das linhas (indice x resultado):\n");
+    for (i = 0; i < linhas; i++){
+        printf("\n%8d %8d", i, somaLinhas[i]);
+    }
+    printf("\n");
+    
+    printf("\nSoma das colunas (indice x resultado):\n");
+    
+    //Colunas
+    printf("\n");
+    for (j = 0; j < colunas; j++){
+        printf("%8d", j);
+    }
+    printf("\n");  
+    for (j = 0; j < colunas; j++){
+        printf("%8d", somaColunas[j]);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+92. Elabore um programa em C, para ler valores e armazená-los em uma matriz 5 x 5. Após o programa deverá responder se a matriz é ou não uma matriz simétrica. Uma matriz simétrica possui a mesma composição de valores abaixo e acima da diagonal principal.
+*/
+
+#include <stdio.h>
+#define linhas 3
+#define colunas 2
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas];
+    
+    int i, j, teste;
+    
+    //Entrada de dados
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d: ", i, j);
+            scanf("%d", &matriz[i][j]);
+        }
+    }
+    
+    //Exibindo a matriz
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    
+    //Verificando se a matriz é simétrica
+    teste = 1; //É igual
+
+    for (i = 0; i < linhas; i++){
+        //j = i + 1 para pegar apenas os elementos na diagonal superior
+        for (j = i + 1; j < colunas; j++){
+            if (i != j){
+                if (matriz[i][j] != matriz[j][i]){
+                    teste = 0;
+                    break;
+                }
+            }
+        }
+    }
+    
+    //Exibindo o resultado
+    if (linhas != colunas)
+        printf("\nNao e possivel verificar a simetria de uma matriz nao quadrada.");
+    else if (teste == 1)
+        printf("\nA matriz e simetrica.");
+    else
+        printf("\nA matriz nao e simetrica.");
+}
+
+
+
+/*Lista de exercícios I:
+93. Faça um programa em C para ler valores e armazená-los em uma matriz D 5 x 5. A seguir o programa deverá calcular a soma dos valores que compõem a diagonal principal e a diagonal secundária da matriz. */
+
+#include <stdio.h>
+#define linhas 5
+#define colunas 5
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas];
+    
+    int i, j, principal = 0, secundaria = 0;
+    
+    //Entrada de dados
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d: ", i, j);
+            scanf("%d", &matriz[i][j]);
+            
+            //Calculando a soma dos elementos das diagonais principal e secundária
+            if (i == j) //Diagonal principal
+                principal += matriz[i][j];
+            if ((i + j) == (linhas - 1)) //Diagonal secundária
+                secundaria += matriz[i][j];
+        }
+    }
+    
+    //Exibindo a matriz
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    
+    //Exibindo o resultado
+    if (linhas != colunas)
+        printf("\nA matriz nao e quadrada.");
+    else
+        printf("\nA soma dos elementos da diagonal principal e %d, e da secundaria, %d.", principal, secundaria);
+}
+
+
+
+/*Lista de exercícios I:
+94. Escrever um algoritmo e implementá-lo em linguagem C que leia uma matriz de valores inteiros 6 por 6 e um valor inteiro qualquer, posteriormente multiplicar a matriz pelo valor lido e colocar o resultado na própria matriz.*/
+
+#include <stdio.h>
+#define linhas 6
+#define colunas 6
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas];
+    
+    int n, i, j;
+    
+    //Entrada de dados: inteiro
+    printf("\nInforme um valor inteiro: ");
+    scanf("%d", &n);
+    
+    //Entrada de dados: matriz
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d: ", i, j);
+            scanf("%d", &matriz[i][j]);
+            
+            //Multiplicando n pela matriz e guardando
+            matriz[i][j] *= n;
+        }
+    }
+    
+    //Exibindo a matriz
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+95. Escrever um algoritmo e implementá-lo em linguagem C que linearize uma matriz de 6 por 6, colocando os valores contidos nela em um vetor de 36 elementos e mostrar o conteúdo do vetor.*/
+
+#include <stdio.h>
+#define linhas 6
+#define colunas 6
+#define tamanho (linhas  * colunas)
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas], vetor[tamanho];
+    
+    int i, j, k = 0;
+    
+    //Entrada de dados: matriz
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d: ", i, j);
+            scanf("%d", &matriz[i][j]);
+            
+            //Linearizando a matriz
+            vetor[k] = matriz[i][j];
+            k++;
+        }
+    }
+    
+    //Exibindo a matriz
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo o vetor linearizado
+    for (k = 0; k < tamanho; k++){
+        printf("%d ", vetor[k]);
+    }
+}
+
+
+
+/*Lista de exercícios I:
+96. Escrever um algoritmo e implementá-lo em linguagem C que leia duas matrizes de valores inteiros 3 por 4 e crie uma terceira matriz, que seja a soma das duas primeiras, e uma quarta, que seja a diferença entre a primeira e a segunda. Mostrar as matrizes lidas e calculadas.*/
+
+#include <stdio.h>
+#define linhas 3
+#define colunas 4
+
+int main() {
+
+    //Declarações
+    int matriz1[linhas][colunas], matriz2[linhas][colunas], matriz3[linhas][colunas], matriz4[linhas][colunas];
+    
+    int i, j;
+    
+    //Entrada de dados: matriz 1
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz 1: ", i, j);
+            scanf("%d", &matriz1[i][j]);
+        }
+    }
+    
+    //Entrada de dados: matriz 2
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz 2: ", i, j);
+            scanf("%d", &matriz2[i][j]);
+        }
+    }
+    
+    //Calculando a matriz 3 (matriz soma)
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            matriz3[i][j] = matriz1[i][j] + matriz2[i][j];
+        }
+    }
+    
+    //Calculando a matriz 4 (matriz diferença)
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            matriz4[i][j] = matriz1[i][j] - matriz2[i][j];
+        }
+    }
+    
+    //Exibindo a matriz 1
+    printf("\nMatriz 1: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz1[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo a matriz 2
+    printf("\nMatriz 2: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz2[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo a matriz 3
+    printf("\nMatriz 3: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz3[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo a matriz 4
+    printf("\nMatriz 4: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz4[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+97. Escrever um algoritmo e implementá-lo em linguagem C que leia uma matriz de valores inteiros 5 por 5 e a exiba. A seguir, leia dois números x e y e em seguida troque a x- ésima linha pela y-ésima linha, a x-ésima coluna com a y-ésima coluna, a diagonal principal com a secundária e, por fim mostre a matriz assim modificada.*/
+
+#include <stdio.h>
+#define linhas 3
+#define colunas 3
+
+int main() {
+
+    //Declarações
+    int matriz[linhas][colunas];
+
+    int i, j, x, y, n, k;
+    
+    //Entrada de dados: matriz 1
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz 1: ", i, j);
+            scanf("%d", &matriz[i][j]);
+        }
+    }
+    
+    //Exibindo a matriz 1
+    printf("\nMatriz 1: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    //Entrada de dados: x e y
+    printf("\nInforme dois numeros inteiros: ");
+    scanf("%d %d", &x, &y);
+    
+    //Trocando a linha x por y
+    for (j = 0; j < colunas; j++){
+        n = matriz[x][j];
+        matriz[x][j] = matriz[y][j];
+        matriz[y][j] = n;
+    }
+    //Trocando a coluna x por y
+    for (i = 0; i < linhas; i++){
+        n = matriz[i][x];
+        matriz[i][x] = matriz[i][y];
+        matriz[i][y] = n;
+    }
+    
+    //Marca a coluna da diagonal secundária
+    k = colunas - 1;
+    
+    //Trocando a diagonal principal pela diagonal secundária
+    for (i = 0; i < linhas; i++){
+        n = matriz[i][i];
+        matriz[i][i] = matriz[i][k];
+        matriz[i][k] = n;
+        k--;
+    }
+    
+    //Exibindo a matriz 1
+    printf("\nMatriz 1: \n");
+    for (i = 0; i < linhas; i++){
+        printf("\n");
+        for (j = 0; j < colunas; j++){
+            printf("%8d", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+98. Escrever um algoritmo e implementá-lo em linguagem C que leia duas matrizes (4x3 e 3x2), calcule e imprima a matriz que representa o produto entre as duas matrizes lidas.*/
+
+#include <stdio.h>
+#define linhas1 2
+#define colunas1 3
+#define linhas2 3
+#define colunas2 2
+
+/*O número de colunas da matriz 1 deve ser igual ao número de linhas da matriz 2.
+O resultado do produto é uma matriz com o número de linhas da matriz 1 e o número de colunas da matriz 2.
+*/
+
+int main() {
+
+    //Declarações
+    int m1[linhas1][colunas1];
+    int m2[linhas2][colunas2];
+    int m3[linhas1][colunas2] = {0};
+
+    int i, j, l, c, n;
+    
+    //Entrada de dados: matriz 1
+    for (i = 0; i < linhas1; i++){
+        for (j = 0; j < colunas1; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz 1: ", i, j);
+            scanf("%d", &m1[i][j]);
+        }
+    }
+    
+    //Entrada de dados: matriz 2
+    for (i = 0; i < linhas2; i++){
+        for (j = 0; j < colunas2; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz 2: ", i, j);
+            scanf("%d", &m2[i][j]);
+        }
+    }
+    
+    //Exibindo a matriz 1
+    printf("\nMatriz 1: \n");
+    for (i = 0; i < linhas1; i++){
+        printf("\n");
+        for (j = 0; j < colunas1; j++){
+            printf("%8d", m1[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo a matriz 2
+    printf("\nMatriz 2: \n");
+    for (i = 0; i < linhas2; i++){
+        printf("\n");
+        for (j = 0; j < colunas2; j++){
+            printf("%8d", m2[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Calculando o produto entre as duas matrizes
+    //Matriz 3
+    for (l = 0; l < linhas1; l++){
+        for (c = 0; c < colunas2; c++){
+            //Matriz 1
+            for (j = 0; j < colunas1; j++){
+                m3[l][c] += m1[l][j]*m2[j][c];
+            }
+        }
+    }
+ 
+    //Exibindo a matriz 3
+    printf("\nMatriz 3: \n");
+    for (l = 0; l < linhas1; l++){
+        printf("\n");
+        for (c = 0; c < colunas2; c++){
+            printf("%8d", m3[l][c]);
+        }
+        printf("\n");
+    }
+}
+
+
+
+/*Lista de exercícios I:
+99. Escrever um algoritmo e implementá-lo em linguagem C que dada uma matriz N X N, contendo, em cada linha, as idades do homem e da mulher no casamento, criar uma matriz de freqüência de idade de casamento, com as contagens para cada combinação de idades. As idades variam de 18 até 30. Os pares de idade devem ser lidos até que se informe um valor inválido para a idade de qualquer dos dois nubentes. Em seguida, o programa deverá informar:
+    (1) Qual a idade mais freqüente de casamento dos homens
+    (2) Qual a idade mais freqüente de casamento das mulheres
+    (3) Qual a combinação mais freqüente de idades de casamento*/
+
+#include <stdio.h>
+#define I 4
+#define J 4
+#define L 13
+#define C 13
+
+/*Obs. 1: Para que a matriz seja formada por pares de idades de homens e mulheres, N deve sempre ser um número par.
+
+Obs. 2: os homens sempre ocuparação a coluna 0 e as colunas pares. As mulheres, sempre as colunas ímpares.
+
+Obs. 3: na matriz frequência, os homens são as colunas, e as mulheres, as linhas.
+*/
+
+int main() {
+
+    //Declarações
+    //Matriz de entrada
+    int m[I][J] = {0};
+    int i, j, j2, iFinal, jFinal;
+    
+    //Matriz de frequência
+    int mf[L][C] = {0};
+    int l, c;
+    
+    //Outras variáveis
+    int n, t = 1, maiorH, maiorM, maiorHM, iHomem, iMulher, iHomem2, iMulher2, soma;
+    
+    //Entrada de dados
+    for (i = 0; i < I; i++){
+        for (j = 0; j < J; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz: ", i, j);
+            scanf("%d", &n);
+            if (n >= 18 && n <= 30)
+                m[i][j] = n;
+            else{
+                t = 0;
+                break; //Sai do laço interno
+            }
+        }
+        if (t == 0)
+            break; //Sai do laço externo
+    }
+    
+    //Guardando os índices da matriz de entrada
+    //Caso 1: linha 0, coluna 0 ou 1
+    if (i == 0 && (j == 0 || j == 1)){
+        iFinal = 0;
+        jFinal = 0;
+    }
+    //Caso 2: linha > 0, coluna 0 ou 1
+    else if (i > 0 && (j == 0 || j == 1)){
+        iFinal = i - 1;
+        jFinal = J - 1;
+    }
+    //Caso 3: i >= 0 e j > 1
+    else{
+        iFinal = i;
+        //Se o último j for par
+        if (j % 2 == 0)
+            jFinal = j - 1;
+        //Se o último j for ímpar
+        else
+            jFinal = j - 2;
+    }
+
+    //Exibindo a matriz 1 e contabilizando a frequência
+    j2 = J - 1;
+    printf("\nMatriz: \n");
+    for (i = 0; i <= iFinal; i++){
+        printf("\n");
+        
+        //Na última linha não se deve percorrer necessariamente todas as colunas
+        if (i == iFinal)
+            j2 = jFinal;
+        
+        for (j = 0; j <= j2; j++){
+            //Exibe a matriz
+            printf("%8d", m[i][j]);
+            
+            //Contabiliza a frequência
+            //Se j for ímpar (mulher), j-1 é par (homem)
+            //Só contabiliza após preencher um par
+            if (j % 2 != 0){
+                int idadeMulher = m[i][j];
+                int idadeHomem = m[i][j-1];
+                
+                mf[idadeMulher - 18][idadeHomem - 18] += 1;
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+    
+    //Exibindo a matriz frequência e calculando o par mais frequente
+    maiorHM = 0;
+    
+    printf("\nMatriz frequencia: \n");
+    for (l = 0; l < L; l++){
+        printf("\n");
+        
+        //Exibe a matriz
+        for (c = 0; c < C; c++){
+            printf("%8d", mf[l][c]);
+            
+            //Par mais frequente
+            if (mf[l][c] > maiorHM){
+                maiorHM = mf[l][c];
+                iHomem2 = c + 18;
+                iMulher2 = l + 18;
+            }
+        }
+        printf("\n");
+    }
+    
+    //Determinando as idades mais frequentes
+    //Inicializações
+    maiorH = 0;
+    
+    //Idade mais frequente dos homens
+    for (c = 0; c < C; c++){
+        soma = 0; //Zera cada vez que entra numa nova coluna
+        for (l = 0; l < L; l++){
+            soma += mf[l][c];
+        }
+        if (soma > maiorH){
+            maiorH = soma;
+            iHomem = c + 18; //Idade mais frequente
+        }
+    }
+    //Idade mais frequente das mulheres
+    //Inicializações
+    maiorM = 0;
+
+    for (l = 0; l < L; l++){
+        soma = 0; //Zera cada vez que entra numa nova linha
+        for (c = 0; c < C; c++){
+            soma += mf[l][c];
+        }
+        if (soma > maiorM){
+            maiorM = soma;
+            iMulher = l + 18; //Idade mais frequente
+        }
+    }
+    
+    //Exibindo as idades mais frequentes
+    printf("\nA idade mais frequentes dos homens e %d anos.", iHomem);
+    printf("\nA idade mais frequentes das mulheres e %d anos.", iMulher);
+    printf("\nO par mais frequente e %d anos para os homens e %d anos para as mulheres.", iHomem2, iMulher2);
+}
+
+
+
+/*Lista de exercícios I:
+100. Verificar se uma matriz dada forma um Quadrado Latino de ordem N, no qual em cada linha e em cada coluna aparecem todos os inteiros 1,2,3, ... N, ou seja, cada linha ou coluna é permutação dos N primeiros números inteiros.*/
+
+#include <stdio.h>
+#define N 3
+
+//Obs.: o quadrado latino é uma matriz quadrada de ordem N
+
+int main() {
+
+    //Declarações
+    int m[N][N], v[N] = {0};
+
+    int i, j, teste = 1;
+    
+    //Entrada de dados
+    for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+            printf("\nInforme um numero inteiro para a posicao %d x %d da matriz: ", i, j);
+            scanf("%d", &m[i][j]);
+        }
+    }
+    
+    //Verificando as linhas
+    for (i = 0; i < N; i++){
+        //Zerando o vetor
+        for (j = 0; j < N; j++){
+            v[j] = 0;
+        }
+        
+        //Verifica se a linha contém os números 1 a N
+        for (j = 0; j < N; j++){
+            //Verifica se o número está fora do intervalo
+            if (m[i][j] < 1 || m[i][j] > N){
+                teste = 0;
+                break; //Sai do loop interno
+            }
+            //Contabilizando o número
+            v[m[i][j] - 1] += 1;  
+        }
+        //Se algum elemento da matriz estiver fora do intervalo 1 a N, sai do loop externo
+        if (teste == 0)
+            break;
+        
+        //Verifica se todos os elementos foram contabilizados uma única vez
+        for (j = 0; j < N; j++){
+            if (v[j] != 1){
+                teste = 0;
+                break; //Sai do loop interno
+            }
+        
+        //Se algum elemento da matriz não foi contabilizado ou foi contabilizado mais de uma vez, sai do loop externo
+        if (teste == 0)
+            break;
+        }
+    }
+    
+    //Verificando as colunas
+    for (j = 0; j < N; j++){
+        //Zerando o vetor
+        for (i = 0; i < N; i++){
+            v[i] = 0;
+        }
+        
+        //Verifica se a coluna contém os números 1 a N
+        for (i = 0; i < N; i++){
+            //Verifica se o número está fora do intervalo
+            if (m[i][j] < 1 || m[i][j] > N){
+                teste = 0;
+                break; //Sai do loop interno
+            }
+            //Contabilizando o número
+            v[m[i][j] - 1] += 1;  
+        }
+        //Se algum elemento da matriz estiver fora do intervalo 1 a N, sai do loop externo
+        if (teste == 0)
+            break;
+        
+        //Verifica se todos os elementos foram contabilizados uma única vez
+        for (i = 0; i < N; i++){
+            if (v[i] != 1){
+                teste = 0;
+                break; //Sai do loop interno
+            }
+        
+        //Se algum elemento da matriz não foi contabilizado ou foi contabilizado mais de uma vez, sai do loop externo
+        if (teste == 0)
+            break;
+        }
+    }
+    
+    if (teste == 0)
+        printf("\nA matriz nao e um quadrado latino.");
+    else
+        printf("\nA matriz e um quadrado latino.");
+}
