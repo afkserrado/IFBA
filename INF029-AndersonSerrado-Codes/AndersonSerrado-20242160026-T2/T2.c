@@ -256,7 +256,7 @@ void menu() {
     printf("\n7 - Sair\n");
 }
 
-// Inserir número
+// Case 1: Inserir número
 void inserir_numero (node *edp[], int tam[], int cont[], ldll *numeros) {
     
     // Solicitação do index
