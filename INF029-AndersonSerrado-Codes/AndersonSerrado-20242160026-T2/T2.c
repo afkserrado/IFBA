@@ -174,7 +174,7 @@ void inserir_node_ordenado (ldll *lista, node *nvNode) {
 }
 
 // Remover um nó qualquer da lista
-void remover_node (ldll *lista, int chave, int index) {
+void remover_node (ldll *lista, int chave) {
     // Lista vazia
     if (lista->cabeca == NULL) { 
         printf("A lista não contém elementos cadastrados.\n");
@@ -256,14 +256,103 @@ void menu() {
     printf("\n7 - Sair\n");
 }
 
-// Funções do programa
-void funcoes(int *edp[], int tam[], int cont[], ldll *numeros) {
-
-    // Declarações e inicializações
-    int opcao;
+// Inserir número
+void inserir_numero (node *edp[], int tam[], int cont[], ldll *numeros) {
+    
+    // Solicitação do index
     int index;
     int posMin = 1;
     int posMax = 10;
+    printf("### Inserir número ###");
+    printf("\nInforme a posição da estrutura principal: ");
+
+    // index não é um número inteiro
+    if (scanf("%d", &index) != 1) {
+        printf("\nErro: a posição deve ser um número inteiro. Retornando ao menu inicial.\n");
+        return;
+    }
+
+    // index > 10 ou index < 1
+    if (index > posMax || index < posMin) {
+        printf("\nErro: a posição deve ser um número entre 1 e 10. Retornando ao menu inicial.\n");
+        return;
+    }
+
+    // index válido: 1 <= index <= 10
+    index--; // Converte o index para base 0
+
+    // Criação da estrutura auxiliar
+    if (tam[index] == 0) {
+        printf("Informe o tamanho inicial da estrutura auxiliar: ");
+        int tamAux;
+
+        // tamAux não é um número inteiro
+        if (scanf("%d", &tamAux) != 1) {
+            printf("\nErro: o tamanho deve ser um número inteiro. Retornando ao menu inicial.\n");
+            return;
+        }
+
+        if (tamAux <= 0) {
+            printf("\nErro: o tamanho deve ser um número inteiro maior que 0. Retornando ao menu inicial.\n");
+            return;
+        }
+
+        // tamAux válido: número inteiro maior que 0
+        tam[index] = tamAux;
+        printf("Estrutura auxiliar criada com tamanho %d.\n", tam[index]);
+    }
+
+    // Solicitação do número
+    if (tam[index] > 0) {
+        
+        // Estrutura auxiliar cheia
+        if (cont[index] >= tam[index]) {
+            printf("\nEstrutura auxiliar cheia. Retornando ao menu inicial.\n");
+            return;
+        }
+
+        // Estrutura auxiliar não cheia
+        int chave;
+        printf("Informe o número a ser inserido: ");
+        
+        // chave não é um número inteiro
+        if (scanf("%d", &chave) != 1) {
+            printf("\nErro: o número deve ser um número inteiro. Retornando ao menu inicial.\n");
+            return;
+        }
+
+        // chave válida: número inteiro
+        cont[index]++; // Incrementa o contador
+
+        // Insere o número na estrutura auxiliar
+        node *temp = init_node(chave, index);
+        inserir_node_ordenado(numeros, temp);
+        edp[index] = temp;
+        printf("Número %d inserido na estrutura auxiliar de posição %d.\n", chave, index + 1);
+    } 
+}
+
+void imprimir_vetor (int v[]) {
+    int tamanho = 10;
+    
+    printf("[");
+    int primeiro = 0;
+    for (int i = 0; i < tamanho; i++){
+        if (primeiro == 0){
+            printf("%d", v[i]);
+            primeiro = 1;
+        }
+        else 
+            printf(", %d", v[i]);
+    }
+    printf("]");
+}
+
+// Funções do programa
+void funcoes(node *edp[], int tam[], int cont[], ldll *numeros) {
+
+    // Declarações e inicializações
+    int opcao;
 
     limparTela();
 
@@ -286,60 +375,29 @@ void funcoes(int *edp[], int tam[], int cont[], ldll *numeros) {
 
             // Inserir número
             case 1: {
-                printf("### Inserir número ###");
-                printf("\nInforme a posição da estrutura principal: ");
+                inserir_numero(edp, tam, cont, numeros);
+                printf("Vetor tam: ");
+                imprimir_vetor(tam);
+                printf("\n");
+                printf("Vetor cont: ");
+                imprimir_vetor(cont);  
+                printf("\n");
+                printf("Lista: ");
+                imprimir_lista(numeros);
+                printf("\n");
+                                    
+                // Transição de tela
+                limparBuffer();
+                pausarTela();
+                limparTela(); 
+                break;
+            }
 
-                // index não é um número inteiro
-                if (scanf("%d",&index) != 1) {
-                    printf("\nErro: a posição deve ser um número inteiro. Retornando ao menu inicial.\n");
-                }
-
-                // index > 10 ou index < 1
-                else if (index > posMax || index < posMin) {
-                    printf("\nErro: a posição deve ser um número entre 1 e 10. Retornando ao menu inicial.\n");
-                }
-
-                // 1 <= index <= 10
-                else {
-                    // Converte o index para base 0
-                    index--;
-
-                    // Cria a estrutura auxiliar
-                    if (tam[index] == 0) {
-                        printf("Informe o tamanho inicial da estrutura auxiliar: ");
-                        int tamAux;
-
-                        // tamAux não é um número inteiro
-                        if (scanf("%d", &tamAux) != 1) {
-                            printf("\nErro: o tamanho deve ser um número inteiro. Retornando ao menu inicial.\n");
-                        }
-                        else if (tamAux <= 0) {
-                            printf("\nErro: o tamanho deve ser um número inteiro maior que 0. Retornando ao menu inicial.\n");
-                        }
-                        // tamAux é um número inteiro maior que 0
-                        else {
-                            tam[index] = tamAux;
-                        }
-                    }
-
-                    // Estrutura auxiliar já existe
-                    else {
-                        printf("Informe o número a ser inserido: ");
-                        int numAux;
-                        
-                        // numAux não é um número inteiro
-                        if (scanf("%d", &numAux) != 1) {
-                            printf("\nErro: o número deve ser um número inteiro. Retornando ao menu inicial.\n");
-                        }
-                        else {
-                            
-                        }
-                    }
-                }
-
-                limparBuffer(); // Consome o enter deixado no buffer pelo scanf
-                limparTela(); // Transição de tela
-
+            // Sair
+            case 7: {
+                printf("Programa encerrado.\n");
+                pausarTela();
+                limparTela();
                 break;
             }
 
@@ -349,10 +407,11 @@ void funcoes(int *edp[], int tam[], int cont[], ldll *numeros) {
                 // Transição de tela
                 pausarTela();
                 limparTela();
-
                 break;
             } // Fim do default
+
         } // Fim do switch
+
     } while (opcao != 7);
 }
 
@@ -362,7 +421,7 @@ void funcoes(int *edp[], int tam[], int cont[], ldll *numeros) {
 int main() {
 
     // Inicializando a EDP e o tam
-    int *edp[10]; // Guarda os endereços relativos às estruturas auxiliares
+    node *edp[10]; // Guarda os endereços relativos às estruturas auxiliares
     int tam[10] = {0}; // Guarda os tamanhos relativos às estruturas auxiliares
     int cont[10] = {0}; // Guarda a quantidade de números cadastrados nas estruturas auxiliares
 
