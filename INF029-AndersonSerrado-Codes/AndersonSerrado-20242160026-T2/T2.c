@@ -215,17 +215,6 @@ void remover_node (ldll *lista, int chave) {
     }
 }
 
-// Imprime a lista
-void imprimir_lista (ldll *lista) {
-    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
-    printf("\n(NULL)"); // Início da lista
-    while (x != NULL) {
-        printf("<- (%d) ->", x->chave);
-        x = x->prox;
-    }
-    printf(" (NULL)\n\n"); // Fim da lista
-}
-
 // Função para liberar todos os nós da lista
 void liberar_lista(ldll *lista) {
     node *x = lista->cabeca;
@@ -332,6 +321,51 @@ void inserir_numero (node *edp[], int tam[], int cont[], ldll *numeros) {
     } 
 }
 
+// Case 2: Listar todos os números
+/*void imprimir_lista (ldll *lista) {
+    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+    printf("\n(NULL)"); // Início da lista
+    while (x != NULL) {
+        printf("<- (%d) ->", x->chave);
+        x = x->prox;
+    }
+    printf(" (NULL)\n\n"); // Fim da lista
+}*/
+void imprimir_lista (ldll *lista) {
+    
+    printf("### Listar números ###");
+
+    // Verifica se a lista está vazia
+    if (lista->cabeca == NULL) {
+        printf("\n\nA lista está vazia.\n");
+        return;
+    }
+    
+    printf("\n\n");
+
+    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+
+    while (x != NULL) {
+        int pos = x->index;
+        
+        printf("Posição %d: ", pos + 1);
+
+        int primeiro = 0;
+        while (x != NULL && x->index == pos) {
+            if (primeiro == 0) {
+                printf("(%d)", x->chave);
+            }
+            else {
+                printf(" (%d)", x->chave);
+            }
+            
+            x = x->prox;
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 void imprimir_vetor (int v[]) {
     int tamanho = 10;
     
@@ -376,7 +410,7 @@ void funcoes(node *edp[], int tam[], int cont[], ldll *numeros) {
             // Inserir número
             case 1: {
                 inserir_numero(edp, tam, cont, numeros);
-                printf("Vetor tam: ");
+                /*printf("Vetor tam: ");
                 imprimir_vetor(tam);
                 printf("\n");
                 printf("Vetor cont: ");
@@ -384,12 +418,21 @@ void funcoes(node *edp[], int tam[], int cont[], ldll *numeros) {
                 printf("\n");
                 printf("Lista: ");
                 imprimir_lista(numeros);
-                printf("\n");
+                printf("\n");*/
                                     
                 // Transição de tela
                 limparBuffer();
                 pausarTela();
                 limparTela(); 
+                break;
+            }
+
+            // Listar todos os números
+            case 2: {
+                imprimir_lista(numeros);
+
+                pausarTela();
+                limparTela();
                 break;
             }
 
