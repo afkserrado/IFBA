@@ -322,15 +322,6 @@ void inserir_numero (node *edp[], int tam[], int cont[], ldll *numeros) {
 }
 
 // Case 2: Listar todos os números
-/*void imprimir_lista (ldll *lista) {
-    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
-    printf("\n(NULL)"); // Início da lista
-    while (x != NULL) {
-        printf("<- (%d) ->", x->chave);
-        x = x->prox;
-    }
-    printf(" (NULL)\n\n"); // Fim da lista
-}*/
 void imprimir_lista (ldll *lista) {
     
     printf("### Listar números ###");
@@ -340,14 +331,17 @@ void imprimir_lista (ldll *lista) {
         printf("\n\nA lista está vazia.\n");
         return;
     }
-    
+
+    // Pula duas linhas para começar a exibir a lista
     printf("\n\n");
 
-    node *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+    // Inicializa x com a "cabeca" da lista
+    node *x = lista->cabeca; 
 
+    // Imprime os números da lista
     while (x != NULL) {
         int pos = x->index;
-        
+
         printf("Posição %d: ", pos + 1);
 
         int primeiro = 0;
