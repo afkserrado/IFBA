@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "EstruturaVetores.h"
 
 // Guarda o endereço das estruturas auxiliares
@@ -113,19 +114,47 @@ Rertono (int)
     TAMANHO_INVALIDO - o tamanho deve ser maior ou igual a 1
 */
 int criarEstruturaAuxiliar(int posicao, int tamanho) {
-
     int retorno = 0;
-    // Posição já possui uma estrutura auxiliar
-    retorno = JA_TEM_ESTRUTURA_AUXILIAR;
-    // Posição inválida
-    retorno = POSICAO_INVALIDA;
-    // o tamanho ser muito grande
-    retorno = SEM_ESPACO_DE_MEMORIA;
-    // o tamanho nao pode ser menor que 1
-    retorno = TAMANHO_INVALIDO;
-    // deu tudo certo, crie
-    retorno = SUCESSO;
 
+    // Converte a posição para base 0
+    int index = posicao - 1;
+
+    // Posição já possui uma estrutura auxiliar
+    if (ehEstruturaAuxiliarExistente(index) == JA_TEM_ESTRUTURA_AUXILIAR) {
+        retorno = JA_TEM_ESTRUTURA_AUXILIAR;
+    }
+
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        retorno = POSICAO_INVALIDA;
+    }
+
+    // O tamanho é menor que 1
+    if (tamanho < 1) {
+        retorno = TAMANHO_INVALIDO;
+    }
+
+    // Criar um vetor auxiliar, alocando memória dinamicamente
+    int *vetorAuxiliar;
+    vetorAuxiliar = (int *)malloc(tamanho * sizeof(int));
+
+    // O tamanho é muito grande
+    if (vetorAuxiliar == NULL) {
+        /*
+        Inclui:
+        - Falta de memória;
+        - Tentar alocar mais memória do que o sistema pode endereçar;
+        - Tamanho maior que INT_MAX ou o limite do sistema.
+        */
+        retorno = SEM_ESPACO_DE_MEMORIA;
+    }
+
+    // Deu tudo certo, crie
+    if (vetorAuxiliar != NULL) {
+        vetorPrincipal[index] = vetorAuxiliar;
+        retorno = SUCESSO;
+    }
+    
     return retorno;
 }
 
@@ -310,6 +339,12 @@ Objetivo: finaliza o programa. deve ser chamado ao final do programa
 para poder liberar todos os espaços de memória das estruturas auxiliares.
 */
 void finalizar() {
-
-    return;
+    
+    // Libera a memória alocada para as estruturas auxiliares
+    for (int i = 0; i < TAM; i++) {
+        if (vetorPrincipal[i] != NULL) {
+            free(vetorPrincipal[i]);
+            vetorPrincipal[i] = NULL; // Reinicializa
+        }
+    }
 }

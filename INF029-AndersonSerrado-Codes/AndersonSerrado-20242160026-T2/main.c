@@ -21,7 +21,7 @@ int menu() {
 
 int main() {
 
-    //inicializar();
+    inicializar();
     int op;
     int sair = 0;
     int ret;
@@ -34,7 +34,7 @@ int main() {
             // Sai do programa e libera a memória alocada
             case 0: {
                 sair = 1;
-                //finalizar();
+                finalizar();
                 break;
 
                 // Obs.: lembrar que se não tiver memória alocada, não pode dar free
@@ -61,6 +61,7 @@ int main() {
                 else if (ret == SEM_ESTRUTURA_AUXILIAR) {
                     printf("Sem estrutura Auxiliar");
                 }
+                
                 break;
             }
 
