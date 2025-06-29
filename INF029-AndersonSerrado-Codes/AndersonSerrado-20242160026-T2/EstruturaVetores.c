@@ -11,6 +11,20 @@ int *vetorPrincipal[TAM] = {NULL};
 int tamAuxiliar[TAM] = {0};
 int contAuxiliar[TAM] = {0};
 
+void imprimeVetor(int v[]) {
+    printf("[");
+    int primeiro = 0;
+    for (int i = 0; i < TAM; i++){
+        if (primeiro == 0){
+            printf("%d", v[i]);
+            primeiro = 1;
+        }
+        else 
+            printf(", %d", v[i]);
+    }
+    printf("]");
+}
+
 // Verifica se a posição é um número válido (entre 1 e 10)
 int ehPosicaoValida(int posicao) {
     int retorno = 0;
@@ -85,6 +99,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor) {
                 vetorAuxiliar[contAuxiliar[index]] = valor;
                 contAuxiliar[index] += 1;
 
+                //imprimeVetor(contAuxiliar);
                 retorno = SUCESSO;
             }
 
@@ -122,16 +137,19 @@ int criarEstruturaAuxiliar(int posicao, int tamanho) {
     // Posição já possui uma estrutura auxiliar
     if (ehEstruturaAuxiliarExistente(index) == JA_TEM_ESTRUTURA_AUXILIAR) {
         retorno = JA_TEM_ESTRUTURA_AUXILIAR;
+        return retorno;
     }
 
     // Posição inválida
     if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
         retorno = POSICAO_INVALIDA;
+        return retorno;
     }
 
     // O tamanho é menor que 1
     if (tamanho < 1) {
         retorno = TAMANHO_INVALIDO;
+        return retorno;
     }
 
     // Criar um vetor auxiliar, alocando memória dinamicamente
@@ -147,11 +165,15 @@ int criarEstruturaAuxiliar(int posicao, int tamanho) {
         - Tamanho maior que INT_MAX ou o limite do sistema.
         */
         retorno = SEM_ESPACO_DE_MEMORIA;
+        return retorno;
     }
 
     // Deu tudo certo, crie
     if (vetorAuxiliar != NULL) {
         vetorPrincipal[index] = vetorAuxiliar;
+        tamAuxiliar[index] = tamanho;
+        
+        //imprimeVetor(tamAuxiliar);
         retorno = SUCESSO;
     }
     
