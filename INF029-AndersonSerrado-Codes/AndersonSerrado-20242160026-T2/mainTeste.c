@@ -6,8 +6,8 @@
 void show_log(char *str);
 
 void testeInserirSemNada(); // TESTE OK
-void testeCriarEstrutura();
-void testeInserirComEstrutura();
+void testeCriarEstrutura(); // TESTE OK
+void testeInserirComEstrutura(); // TESTE OK
 void testeExcluir();
 void testeExcluirNumeroEspecifico();
 void testeListar();
@@ -18,10 +18,10 @@ void testeListaEncadeada();
 int main()
 {
     inicializar();
-    testeInserirSemNada();
-    /*testeCriarEstrutura();
-    testeInserirComEstrutura();
-    testeExcluir();
+    testeInserirSemNada(); // TESTE OK
+    testeCriarEstrutura(); // TESTE OK
+    testeInserirComEstrutura(); // TESTE OK
+    /*testeExcluir();
     testeExcluirNumeroEspecifico();
     testeListar();
     testeRetornarTodosNumeros();
@@ -36,19 +36,22 @@ void show_log(char *str)
         printf("###%s###\n", str);
 }
 
-// TESTE OK
-void testeInserirSemNada()
+
+void testeInserirSemNada() // TESTE OK
 {
     show_log("testeInserirSemNada()");
+    printf("testeInserirSemNada\n");
     printf("%d\n", inserirNumeroEmEstrutura(2, 2) == SEM_ESTRUTURA_AUXILIAR);
     printf("%d\n", inserirNumeroEmEstrutura(-2, 2) == POSICAO_INVALIDA);
     printf("%d\n", inserirNumeroEmEstrutura(0, 2) == POSICAO_INVALIDA);
     printf("%d\n", inserirNumeroEmEstrutura(11, 2) == POSICAO_INVALIDA);
+    printf("\n");
 }
 
-void testeCriarEstrutura()
+void testeCriarEstrutura() // TESTE OK
 {
     show_log("testeCriarEstrutura()");
+    printf("testeCriarEstrutura\n");
     printf("%d\n", criarEstruturaAuxiliar(-2, 5) == POSICAO_INVALIDA);
     printf("%d\n", criarEstruturaAuxiliar(0, 5) == POSICAO_INVALIDA);
     printf("%d\n", criarEstruturaAuxiliar(11, 5) == POSICAO_INVALIDA);
@@ -56,23 +59,36 @@ void testeCriarEstrutura()
     printf("%d\n", criarEstruturaAuxiliar(2, 0) == TAMANHO_INVALIDO);
     printf("%d\n", criarEstruturaAuxiliar(2, 3) == SUCESSO);
     printf("%d\n", criarEstruturaAuxiliar(2, 6) == JA_TEM_ESTRUTURA_AUXILIAR);
+    printf("\n");
+
+    /*printf("\n------\n");
+    printf("%d\n", criarEstruturaAuxiliar(-2, 5));
+    printf("%d\n", criarEstruturaAuxiliar(0, 5));
+    printf("%d\n", criarEstruturaAuxiliar(11, 5));
+    printf("%d\n", criarEstruturaAuxiliar(2, -5));
+    printf("%d\n", criarEstruturaAuxiliar(2, 0));
+    printf("%d\n", criarEstruturaAuxiliar(2, 3));
+    printf("%d\n", criarEstruturaAuxiliar(2, 6));*/
 }
 /*
 2 [ , , ]
 */
 
-void testeInserirComEstrutura()
+void testeInserirComEstrutura() // TESTE OK
 {
     show_log("testeInserirComEstrutura()");
     //###  int inserirNumeroEmEstrutura(int valor, int posicao); ###
+    printf("testeInserirComEstrutura\n");
     printf("%d\n", inserirNumeroEmEstrutura(2, 4) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, -2) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, 6) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, 5) == SEM_ESPACO);
+    printf("\n");
 }
 /*
 2 [4,-2,6]
 */
+
 void testeExcluir()
 {
     show_log("testeExcluir()");
