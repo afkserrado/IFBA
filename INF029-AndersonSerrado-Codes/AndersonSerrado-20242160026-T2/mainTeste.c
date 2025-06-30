@@ -167,6 +167,8 @@ void testeListar()
 
     exibirVetor();
 
+    // TESTE OK ATÉ AQUI
+
     /*
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
