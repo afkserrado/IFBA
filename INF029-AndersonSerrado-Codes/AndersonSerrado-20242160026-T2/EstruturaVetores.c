@@ -96,10 +96,14 @@ int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
                 int *vetorAuxiliar = vetorPrincipal[index];
                 
                 // Insere o valor no vetor auxiliar
-                vetorAuxiliar[contAuxiliar[index]] = valor;
+                int i = contAuxiliar[index];
+                vetorAuxiliar[i] = valor;
                 contAuxiliar[index] += 1;
 
-                //imprimeVetor(contAuxiliar);
+                /*printf("contAuxiliar: ");
+                imprimeVetor(contAuxiliar);
+                printf("\n");*/
+                
                 retorno = SUCESSO;
             }
 
@@ -173,7 +177,10 @@ int criarEstruturaAuxiliar(int posicao, int tamanho) { // OK
         vetorPrincipal[index] = vetorAuxiliar;
         tamAuxiliar[index] = tamanho;
         
-        //imprimeVetor(tamAuxiliar);
+        /*printf("tamAuxiliar: ");
+        imprimeVetor(tamAuxiliar);
+        printf("\n");*/
+
         retorno = SUCESSO;
     }
     
@@ -192,8 +199,6 @@ Rertono (int)
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
 int excluirNumeroDoFinaldaEstrutura(int posicao) { // OK
-
-    int retorno = 0;
 
     // Converte a posição para base 0
     int index = posicao - 1;
@@ -214,7 +219,17 @@ int excluirNumeroDoFinaldaEstrutura(int posicao) { // OK
     }
 
     // Remove o último elemento da estrutura auxiliar (exclusão lógica)
+    
+    /*printf("contAuxiliar: ");
+    imprimeVetor(contAuxiliar);
+    printf("\n");*/
+
     contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos da estrutura
+    
+    /*printf("contAuxiliar: ");
+    imprimeVetor(contAuxiliar);
+    printf("\n");*/
+
     return SUCESSO;
 }
 
@@ -248,10 +263,32 @@ Retorno (int)
 */
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) {
 
+    // Converte a posição para base 0
+    int index = posicao - 1;
 
-    int retorno = 0;
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA; // Retorno imediato
+    }
 
-    return retorno;
+    // Estrutura auxiliar não existe
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR; // Retorno imediato
+    }
+
+    // Estrutura auxiliar vazia
+    int cont = contAuxiliar[index];
+    if (cont == 0) {
+        return SUCESSO; // Estrutura vazia, mas evitar copiar dados
+    }
+
+    // Copia os dados para o vetorAux
+    int *x = vetorPrincipal[index];
+    for (int i = 0; i < cont; i++) {
+        vetorAux[i] = x[i];
+    }
+
+    return SUCESSO;
 }
 
 /*
