@@ -26,7 +26,7 @@ void imprimeVetor(int v[]) {
 }
 
 // Verifica se a posição é um número válido (entre 1 e 10)
-int ehPosicaoValida(int posicao) {
+int ehPosicaoValida(int posicao) { // OK
     int retorno = 0;
     if (posicao < 1 || posicao > 10) {
         retorno = POSICAO_INVALIDA;
@@ -36,7 +36,7 @@ int ehPosicaoValida(int posicao) {
 }
 
 // Verifica se existe estrutura auxiliar
-int ehEstruturaAuxiliarExistente(int index) {
+int ehEstruturaAuxiliarExistente(int index) { // OK
     int retorno = 0;
     if (vetorPrincipal[index] == NULL) {
         retorno = SEM_ESTRUTURA_AUXILIAR;
@@ -46,7 +46,7 @@ int ehEstruturaAuxiliarExistente(int index) {
 }
 
 // Verifica se a estrutura auxiliar tem espaço
-int estruturaAuxiliarTemEspaco(int index) {
+int estruturaAuxiliarTemEspaco(int index) { // OK
     int retorno = 0;
     if (contAuxiliar[index] >= tamAuxiliar[index]) {
         retorno = SEM_ESPACO;
@@ -64,7 +64,7 @@ Rertono (int)
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 CONSTANTES
 */
-int inserirNumeroEmEstrutura(int posicao, int valor) {
+int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
 
     int retorno = 0; // OK
     int existeEstruturaAuxiliar = 0; // OK
@@ -128,7 +128,7 @@ Rertono (int)
     SEM_ESPACO_DE_MEMORIA - Sem espaço de memória
     TAMANHO_INVALIDO - o tamanho deve ser maior ou igual a 1
 */
-int criarEstruturaAuxiliar(int posicao, int tamanho) {
+int criarEstruturaAuxiliar(int posicao, int tamanho) { // OK
     int retorno = 0;
 
     // Converte a posição para base 0
@@ -191,10 +191,31 @@ Rertono (int)
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
-int excluirNumeroDoFinaldaEstrutura(int posicao) {
+int excluirNumeroDoFinaldaEstrutura(int posicao) { // OK
 
-    int retorno = SUCESSO;
-    return retorno;
+    int retorno = 0;
+
+    // Converte a posição para base 0
+    int index = posicao - 1;
+    
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA; // Retorno imediato
+    }
+
+    // Estrutura auxiliar não existe
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR; // Retorno imediato
+    }
+
+    // Estrutura auxiliar vazia
+    if (contAuxiliar[index] == 0) {
+        return ESTRUTURA_AUXILIAR_VAZIA; // Retorno imediato
+    }
+
+    // Remove o último elemento da estrutura auxiliar (exclusão lógica)
+    contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos da estrutura
+    return SUCESSO;
 }
 
 /*

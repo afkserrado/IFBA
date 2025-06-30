@@ -3,7 +3,6 @@
 #include "EstruturaVetores.h"
 
 /*int menu();
-
 void dobrar(int *x);*/
 
 int menu() {
@@ -61,7 +60,7 @@ int main() {
                 else if (ret == SEM_ESTRUTURA_AUXILIAR) {
                     printf("Sem estrutura Auxiliar");
                 }
-                
+
                 break;
             }
 
