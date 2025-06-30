@@ -261,7 +261,7 @@ Retorno (int)
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
-int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) {
+int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
     // Converte a posição para base 0
     int index = posicao - 1;
