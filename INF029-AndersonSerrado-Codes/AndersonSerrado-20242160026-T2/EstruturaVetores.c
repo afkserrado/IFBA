@@ -103,7 +103,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
                 /*printf("contAuxiliar: ");
                 imprimeVetor(contAuxiliar);
                 printf("\n");*/
-                
+
                 retorno = SUCESSO;
             }
 
@@ -304,8 +304,6 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) {
 
 
     int retorno = 0;
-
-    
     return retorno;
 }
 
