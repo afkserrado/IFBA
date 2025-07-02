@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <stdbool.h>
 #include "EstruturaVetores.h"
 
 // #########################################################################//
@@ -443,15 +444,35 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 Objetivo: retorna os números de todas as estruturas auxiliares.
 os números devem ser armazenados em vetorAux
 
-Rertono (int)
+Retorno (int)
     SUCESSO - recuperado com sucesso os valores da estrutura na posição 'posicao'
     TODAS_ESTRUTURAS_AUXILIARES_VAZIAS - todas as estruturas auxiliares estão vazias
 */
 int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
 
+    bool estAuxVazias = true; // Assumindo que todas as est. aux. estão vazias
+    int k = 0; // Para percorrer o vetorAux
 
-    int retorno = 0;
-    return retorno;
+    // Verifica se todas as estruturas estão vazias
+    for (int i = 0; i < TAM; i++) { // Percorre o vetorPrincipal e o contAuxiliar
+        
+        // Estrutura auxiliar não vazia
+        if (contAuxiliar[i] != 0) {
+            estAuxVazias = false;
+            int *x = vetorPrincipal[i];
+            int cont = contAuxiliar[i];
+            
+            for (int j = 0; j < cont; j++) { // Percorre a estrutura auxiliar
+                vetorAux[k] = x[j];
+                k++;
+            }
+        }
+    }
+
+    if (estAuxVazias == true) {
+        return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    }
+    else {return SUCESSO;}
 }
 
 /*

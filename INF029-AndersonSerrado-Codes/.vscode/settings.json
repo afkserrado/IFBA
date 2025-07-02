@@ -3,6 +3,7 @@
     "files.associations": {
         "AndersonSerrado-20242160026-T1.C": "cpp",
         "andersonserrado-20242160026-t1.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "limits.h": "c"
     }
 }
