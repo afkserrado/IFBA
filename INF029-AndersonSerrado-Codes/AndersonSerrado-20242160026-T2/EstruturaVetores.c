@@ -545,7 +545,7 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho) {
     int *estAuxiliar = vetorPrincipal[index];
     estAuxiliar = realloc(estAuxiliar, tamAtt * sizeof(int));
 
-    // O tamanho é muito grande
+    // Alocação falhou
     if (estAuxiliar == NULL) {
         /*
         Inclui:
