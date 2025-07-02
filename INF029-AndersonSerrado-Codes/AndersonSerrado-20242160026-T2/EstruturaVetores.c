@@ -484,9 +484,6 @@ Retorno (int)
     TODAS_ESTRUTURAS_AUXILIARES_VAZIAS - todas as estruturas auxiliares estão vazias
 */
 int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
-
-    // Converte a posição para base 0
-    int index = posicao - 1;
     
     // Copia os números para o vetorAux
     int retorno = getDadosDeTodasEstruturasAuxiliares(vetorAux);

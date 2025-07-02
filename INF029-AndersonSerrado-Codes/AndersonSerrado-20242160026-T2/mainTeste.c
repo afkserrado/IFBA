@@ -256,6 +256,8 @@ void testeRetornarTodosNumeros()
     printf("%d\n", vet[7] == 27);
     printf("%d\n", vet[8] == -6);
 
+    printf("\n");
+
     printf("getDadosOrdenadosDeTodasEstruturasAuxiliares\n");
     int vet2[9];
     printf("%d\n", getDadosOrdenadosDeTodasEstruturasAuxiliares(vet2) == SUCESSO);
@@ -269,6 +271,8 @@ void testeRetornarTodosNumeros()
     printf("%d\n", vet2[6] == 12);
     printf("%d\n", vet2[7] == 27);
     printf("%d\n", vet2[8] == 34);
+
+    printf("\n");
 
     printf("getDadosDeTodasEstruturasAuxiliares\n");
     printf("%d\n", getDadosDeTodasEstruturasAuxiliares(vet) == SUCESSO);
