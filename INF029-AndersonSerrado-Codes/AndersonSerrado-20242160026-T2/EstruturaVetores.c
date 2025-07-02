@@ -55,6 +55,39 @@ int estruturaAuxiliarTemEspaco(int index) { // OK
     return retorno;
 }
 
+// Busca binária
+int buscaBinaria(int valor, int index) {
+
+    int tam = contAuxiliar[index]; // "tam" é quantidade de elementos
+    int esq = 0;
+    int dir = tam - 1;
+    int *vetorAuxiliar = vetorPrincipal[index];
+
+    // Busca o "valor" e, se existir, retorna um índice referente à sua posição
+    while (esq <= dir) {
+        // Inicializa o índice "meio"
+        int meio = (esq + dir) / 2;
+
+        // Verifica se o valor procurado é o meio
+        if (vetorAuxiliar[meio] == valor) {
+            return meio;
+        } 
+        
+        // Ajusta o "dir" para buscar na metade esquerda
+        if (vetorAuxiliar[meio] > valor) {
+            dir = meio - 1;
+        }
+
+        // Ajusta o "esq" para buscar na metade direita
+        else {
+            esq = meio + 1;
+        }
+    }
+
+    // Valor não encontrado
+    return NUMERO_INEXISTENTE;
+}
+
 /*
 Objetivo: inserir número 'valor' em estrutura auxiliar da posição 'posicao'
 Rertono (int)
@@ -238,15 +271,34 @@ Objetivo: excluir o numero 'valor' da estrutura auxiliar da posição 'posicao'.
 Caso seja excluido, os números posteriores devem ser movidos para as posições anteriores
 ex: suponha os valores [3, 8, 7, 9,  ,  ] onde deve ser excluido o valor 8. A estrutura deve ficar da seguinte forma [3, 7, 9,  ,  ,  ]
 Obs. Esta é uma exclusão lógica
-Rertono (int)
+Retorno (int)
     SUCESSO - excluido com sucesso 'valor' da estrutura na posição 'posicao'
     ESTRUTURA_AUXILIAR_VAZIA - estrutura vazia
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     NUMERO_INEXISTENTE - Número não existe
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
-
 */
 int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) {
+
+    // Converte a posição para base 0
+    int index = posicao - 1;
+    
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA; // Retorno imediato
+    }
+
+    // Estrutura auxiliar não existe
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR; // Retorno imediato
+    }
+
+    // Estrutura auxiliar vazia
+    if (contAuxiliar[index] == 0) {
+        return ESTRUTURA_AUXILIAR_VAZIA; // Retorno imediato
+    }
+
+    
 
     int retorno = SUCESSO;
     return retorno;
@@ -279,7 +331,7 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
     // Estrutura auxiliar vazia
     int cont = contAuxiliar[index];
     if (cont == 0) {
-        return SUCESSO; // Estrutura vazia, mas evitar copiar dados
+        return SUCESSO; // Estrutura vazia, mas evita copiar dados
     }
 
     // Copia os dados para o vetorAux
@@ -302,6 +354,24 @@ Rertono (int)
 */
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) {
 
+    // Converte a posição para base 0
+    int index = posicao - 1;
+
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA; // Retorno imediato
+    }
+
+    // Estrutura auxiliar não existe
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR; // Retorno imediato
+    }
+
+    // Estrutura auxiliar vazia
+    int cont = contAuxiliar[index];
+    if (cont == 0) {
+        return SUCESSO; // Estrutura vazia, mas evita copiar dados
+    }
 
     int retorno = 0;
     return retorno;
