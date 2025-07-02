@@ -9,7 +9,7 @@ void testeInserirSemNada(); // TESTE OK
 void testeCriarEstrutura(); // TESTE OK
 void testeInserirComEstrutura(); // TESTE OK
 void testeExcluir(); // TESTE OK
-void testeExcluirNumeroEspecifico();
+void testeExcluirNumeroEspecifico(); // TESTE OK
 void testeListar();
 void testeRetornarTodosNumeros();
 void testeMudarTamanhoEstrutura();
@@ -32,7 +32,7 @@ int main()
     testeCriarEstrutura(); // TESTE OK
     testeInserirComEstrutura(); // TESTE OK
     testeExcluir(); // TESTE OK
-    testeExcluirNumeroEspecifico();
+    testeExcluirNumeroEspecifico(); // TESTE OK
     testeListar();
     /*testeRetornarTodosNumeros();
     testeMudarTamanhoEstrutura();
@@ -119,7 +119,7 @@ void testeExcluir() // TESTE OK
 2 [ , , ]
 */
 
-void testeExcluirNumeroEspecifico()
+void testeExcluirNumeroEspecifico() // TESTE OK
 {
     show_log("testeExcluirNumeroEspecifico()");
     //###  int excluirNumeroEspecificoDeEstrutura(int posicao, int valor); ###
@@ -127,6 +127,9 @@ void testeExcluirNumeroEspecifico()
     printf("%d\n", criarEstruturaAuxiliar(9, 3) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(9, 7) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(9, 4) == SUCESSO);
+
+    exibirVetor();
+
     printf("%d\n", excluirNumeroEspecificoDeEstrutura(9, 12) == NUMERO_INEXISTENTE);
     printf("%d\n", excluirNumeroEspecificoDeEstrutura(9, 7) == SUCESSO);
     printf("%d\n", excluirNumeroEspecificoDeEstrutura(9, 4) == SUCESSO);
