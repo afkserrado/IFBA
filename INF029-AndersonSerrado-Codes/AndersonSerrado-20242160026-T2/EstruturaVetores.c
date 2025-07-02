@@ -488,6 +488,11 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
     // Copia os números para o vetorAux
     int retorno = getDadosDeTodasEstruturasAuxiliares(vetorAux);
 
+    // Todas as estruturas auxiliares vazias
+    if (retorno == TODAS_ESTRUTURAS_AUXILIARES_VAZIAS) {
+        return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS; // Retorno imediato
+    }
+
     // Calcula a quantidade total de elementos
     int cont = 0;
     for (int i = 0; i < TAM; i++) {
