@@ -32,7 +32,7 @@ void inicializar();
 void finalizar();
 void dobrar(int *x);
 
-// Adicionais
+// Funções extras
 void imprimeVetor(int v[]);
 
 #endif  // TRABALHO2_ESTRUTURAVETORES_H
