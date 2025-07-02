@@ -1,7 +1,13 @@
+// #########################################################################//
+// BIBLIOTECAS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include "EstruturaVetores.h"
+
+// #########################################################################//
+// ESTRUTURAS DE DADOS PRINCIPAL E AUXILIARES
 
 // Guarda o endereço das estruturas auxiliares
 #define TAM 10
@@ -10,6 +16,9 @@ int *vetorPrincipal[TAM] = {NULL};
 // Guarda o tamanho e a quantidade de itens das estruturas auxiliares
 int tamAuxiliar[TAM] = {0};
 int contAuxiliar[TAM] = {0};
+
+// #########################################################################//
+// FUNÇÕES AUXILIARES
 
 void imprimeVetor(int v[]) {
     printf("[");
@@ -89,7 +98,7 @@ int buscaBinaria(int valor, int index) {
 }
 */
 
-/*// Exclusão lógica com shift
+/*// Exclusão lógica com Shift
 void shift(int achou, int index) {
     
     int *vetorAuxiliar = vetorPrincipal[index];
@@ -103,20 +112,20 @@ void shift(int achou, int index) {
 }
 */
 
-// Exclusão lógica com shift
+// Exclusão lógica com Shift
 int shift(int valor, int index) {
     
     int *vetorAuxiliar = vetorPrincipal[index];
-    int tam = contAuxiliar[index];
+    int cont = contAuxiliar[index]; // Quantidade de elementos
 
     // Busca linear para vetores desordenados
-    for (int i = 0; i < tam; i++) {
+    for (int i = 0; i < cont; i++) {
         
         // Número encontrado
         if (valor == vetorAuxiliar[i]) {
             
             // Shift
-            for (int k = i; k < tam - 1; k++) {
+            for (int k = i; k < cont - 1; k++) {
                 vetorAuxiliar[k] = vetorAuxiliar[k+1];
             }
 
@@ -128,6 +137,25 @@ int shift(int valor, int index) {
     // Número não encontrado
     return NUMERO_INEXISTENTE;
 }
+
+// Ordenação de elementos com Insertion Sort
+void insertionSort(int vetorAux[], int cont) {
+
+    int i, j, temp;
+    for (j = 1; j < cont; j++){
+        temp = vetorAux[j];
+        i = j - 1;
+        
+        while (i >= 0 && vetorAux[i] > temp){
+            vetorAux[i + 1] = vetorAux[i];
+            i--;
+        }
+        vetorAux[i + 1] = temp;
+    }
+}
+
+// #########################################################################//
+// FUNÇÕES PRINCIPAIS
 
 /*
 Objetivo: inserir número 'valor' em estrutura auxiliar da posição 'posicao'
@@ -319,7 +347,7 @@ Retorno (int)
     NUMERO_INEXISTENTE - Número não existe
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
-int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) {
+int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) { // OK
 
     // Converte a posição para base 0
     int index = posicao - 1;
@@ -373,7 +401,7 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
     }
 
     // Estrutura auxiliar vazia
-    int cont = contAuxiliar[index];
+    int cont = contAuxiliar[index]; // Quantidade de elementos
     if (cont == 0) {
         return SUCESSO; // Estrutura vazia, mas evita copiar dados
     }
@@ -396,28 +424,18 @@ Rertono (int)
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
 */
-int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) {
+int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
     // Converte a posição para base 0
     int index = posicao - 1;
+    
+    // Copia os números para o vetorAux
+    int retorno = getDadosEstruturaAuxiliar(posicao, vetorAux);
 
-    // Posição inválida
-    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
-        return POSICAO_INVALIDA; // Retorno imediato
-    }
-
-    // Estrutura auxiliar não existe
-    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
-        return SEM_ESTRUTURA_AUXILIAR; // Retorno imediato
-    }
-
-    // Estrutura auxiliar vazia
+    // Ordena o vetorAux
     int cont = contAuxiliar[index];
-    if (cont == 0) {
-        return SUCESSO; // Estrutura vazia, mas evita copiar dados
-    }
-
-    int retorno = 0;
+    if (retorno == SUCESSO) {insertionSort(vetorAux, cont);}
+    
     return retorno;
 }
 
