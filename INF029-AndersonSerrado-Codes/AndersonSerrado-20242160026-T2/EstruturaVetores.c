@@ -203,9 +203,11 @@ int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
                 vetorAuxiliar[i] = valor;
                 contAuxiliar[index] += 1;
 
-                /*printf("contAuxiliar: ");
+                /*
+                printf("contAuxiliar: ");
                 imprimeVetor(contAuxiliar);
-                printf("\n");*/
+                printf("\n");
+                */
 
                 retorno = SUCESSO;
             }
@@ -448,7 +450,7 @@ Retorno (int)
     SUCESSO - recuperado com sucesso os valores da estrutura na posição 'posicao'
     TODAS_ESTRUTURAS_AUXILIARES_VAZIAS - todas as estruturas auxiliares estão vazias
 */
-int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
+int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
 
     bool estAuxVazias = true; // Assumindo que todas as est. aux. estão vazias
     int k = 0; // Para percorrer o vetorAux
@@ -483,7 +485,7 @@ Retorno (int)
     SUCESSO - recuperado com sucesso os valores da estrutura na posição 'posicao'
     TODAS_ESTRUTURAS_AUXILIARES_VAZIAS - todas as estruturas auxiliares estão vazias
 */
-int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
+int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
     
     // Copia os números para o vetorAux
     int retorno = getDadosDeTodasEstruturasAuxiliares(vetorAux);
@@ -502,14 +504,14 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
     // Ordena o vetorAux
     if (retorno == SUCESSO) {insertionSort(vetorAux, cont);}
     
-    return retorno;
+    return SUCESSO;
 }
 
 /*
 Objetivo: modificar o tamanho da estrutura auxiliar da posição 'posicao' para o novo tamanho 'novoTamanho' + tamanho atual
 Suponha o tamanho inicial = x, e novo tamanho = n. O tamanho resultante deve ser x + n. Sendo que x + n deve ser sempre >= 1
 
-Rertono (int)
+Retorno (int)
     SUCESSO - foi modificado corretamente o tamanho da estrutura auxiliar
     SEM_ESTRUTURA_AUXILIAR - Não tem estrutura auxiliar
     POSICAO_INVALIDA - Posição inválida para estrutura auxiliar
@@ -518,9 +520,64 @@ Rertono (int)
 */
 int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho) {
 
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA;
+    }
 
-    int retorno = 0;
-    return retorno;
+    // Converte a posição para base 0
+    int index = posicao - 1;
+
+    // Não existe estrutura auxiliar na posição
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR;
+    }
+    
+    // Calcula o novo tamanho
+    int tamAtt = tamAuxiliar[index] + novoTamanho;
+
+    // Tamanho atualizado é zero ou negativo
+    if (tamAtt < 1) {
+        return NOVO_TAMANHO_INVALIDO;
+    }
+    
+    // Modifica o tamanho da estrutura auxiliar
+    int *estAuxiliar = vetorPrincipal[index];
+    estAuxiliar = realloc(estAuxiliar, tamAtt * sizeof(int));
+
+    // O tamanho é muito grande
+    if (estAuxiliar == NULL) {
+        /*
+        Inclui:
+        - Falta de memória;
+        - Tentar alocar mais memória do que o sistema pode endereçar;
+        - Tamanho maior que INT_MAX ou o limite do sistema.
+        */
+        return SEM_ESPACO_DE_MEMORIA;
+    }
+
+    // Exclusão lógica dos elementos
+    if (tamAuxiliar[index] < contAuxiliar[index]) {
+        contAuxiliar[index] = tamAuxiliar[index];
+    }
+    
+    // Atualiza o endereço e o tamanho da estrutura auxiliar
+    vetorPrincipal[index] = estAuxiliar;
+    tamAuxiliar[index] = tamAtt;
+
+    /*
+    printf("tamAuxiliar: ");
+    imprimeVetor(tamAuxiliar);
+    printf("\n");
+    */
+
+    /*
+    printf("contAuxiliar: ");
+    imprimeVetor(contAuxiliar);
+    printf("\n");
+    */
+
+    return SUCESSO;
 }
 
 /*
