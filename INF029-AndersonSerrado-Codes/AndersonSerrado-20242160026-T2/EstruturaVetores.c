@@ -55,7 +55,7 @@ int estruturaAuxiliarTemEspaco(int index) { // OK
     return retorno;
 }
 
-// Busca binária
+/*// Busca binária
 int buscaBinaria(int valor, int index) {
 
     int tam = contAuxiliar[index]; // "tam" é quantidade de elementos
@@ -85,6 +85,47 @@ int buscaBinaria(int valor, int index) {
     }
 
     // Valor não encontrado
+    return NUMERO_INEXISTENTE;
+}
+*/
+
+/*// Exclusão lógica com shift
+void shift(int achou, int index) {
+    
+    int *vetorAuxiliar = vetorPrincipal[index];
+    int tam = contAuxiliar[index];
+
+    // Shift
+    for (int i = achou; i < tam - 1; i++) {
+        vetorAuxiliar[i] = vetorAuxiliar[i+1];
+    }
+    contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos
+}
+*/
+
+// Exclusão lógica com shift
+int shift(int valor, int index) {
+    
+    int *vetorAuxiliar = vetorPrincipal[index];
+    int tam = contAuxiliar[index];
+
+    // Busca linear para vetores desordenados
+    for (int i = 0; i < tam; i++) {
+        
+        // Número encontrado
+        if (valor == vetorAuxiliar[i]) {
+            
+            // Shift
+            for (int k = i; k < tam - 1; k++) {
+                vetorAuxiliar[k] = vetorAuxiliar[k+1];
+            }
+
+            contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos
+            return SUCESSO; // Encerra a busca 
+        }
+    }
+
+    // Número não encontrado
     return NUMERO_INEXISTENTE;
 }
 
@@ -298,10 +339,13 @@ int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) {
         return ESTRUTURA_AUXILIAR_VAZIA; // Retorno imediato
     }
 
-    
+    // Número inexistente
+    if (shift(valor, index) == NUMERO_INEXISTENTE) {
+        return NUMERO_INEXISTENTE;
+    }
 
-    int retorno = SUCESSO;
-    return retorno;
+    // Número encontrado
+    else {return SUCESSO;}
 }
 
 /*
