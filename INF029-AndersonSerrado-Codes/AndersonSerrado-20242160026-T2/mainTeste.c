@@ -10,7 +10,7 @@ void testeCriarEstrutura(); // TESTE OK
 void testeInserirComEstrutura(); // TESTE OK
 void testeExcluir(); // TESTE OK
 void testeExcluirNumeroEspecifico(); // TESTE OK
-void testeListar();
+void testeListar(); // TESTE OK
 void testeRetornarTodosNumeros();
 void testeMudarTamanhoEstrutura();
 void testeListaEncadeada();
@@ -33,7 +33,7 @@ int main()
     testeInserirComEstrutura(); // TESTE OK
     testeExcluir(); // TESTE OK
     testeExcluirNumeroEspecifico(); // TESTE OK
-    testeListar();
+    testeListar(); // TESTE OK
     /*testeRetornarTodosNumeros();
     testeMudarTamanhoEstrutura();
     testeListaEncadeada();*/
@@ -143,7 +143,7 @@ void testeExcluirNumeroEspecifico() // TESTE OK
 9 [ 4, , ] 
 */
 
-void testeListar()
+void testeListar() // TESTE OK
 {
     show_log("testeListar()");
     //###  int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]); ###
@@ -164,10 +164,9 @@ void testeListar()
     printf("%d\n", vet[1] == -9);
 
     exibirVetor();
+    printf("\n");
 
-    // TESTE OK ATÉ AQUI
-
-    /*
+    printf("getDadosOrdenadosEstruturaAuxiliar\n");
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO);
@@ -175,14 +174,23 @@ void testeListar()
     printf("%d\n", vet[0] == -9);
     printf("%d\n", vet[1] == 7);
 
+    exibirVetor();
+    printf("\n");
+
+    printf("getDadosEstruturaAuxiliar\n");
     printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
     printf("%d\n", vet[0] == 7);
     printf("%d\n", vet[1] == -9);
 
+    exibirVetor();
+    printf("\n");
+
+    printf("excluirNumeroDoFinaldaEstrutura\n");
     printf("%d\n", excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
     printf("%d\n", excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    */
+    exibirVetor();
+    printf("\n");
 }
 /*
 2 [ , , ]
@@ -199,7 +207,7 @@ void testeRetornarTodosNumeros()
     printf("%d\n", inserirNumeroEmEstrutura(2, 3) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, 8) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, 0) == SUCESSO);
-    /*
+/*
 2 [3,8,0]
 */
 
