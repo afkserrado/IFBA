@@ -479,14 +479,27 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
 Objetivo: retorna os números ordenados de todas as estruturas auxiliares.
 os números devem ser armazenados em vetorAux
 
-Rertono (int)
+Retorno (int)
     SUCESSO - recuperado com sucesso os valores da estrutura na posição 'posicao'
     TODAS_ESTRUTURAS_AUXILIARES_VAZIAS - todas as estruturas auxiliares estão vazias
 */
 int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) {
 
+    // Converte a posição para base 0
+    int index = posicao - 1;
+    
+    // Copia os números para o vetorAux
+    int retorno = getDadosDeTodasEstruturasAuxiliares(vetorAux);
 
-    int retorno = 0;
+    // Calcula a quantidade total de elementos
+    int cont = 0;
+    for (int i = 0; i < TAM; i++) {
+        cont += contAuxiliar[i];
+    }
+
+    // Ordena o vetorAux
+    if (retorno == SUCESSO) {insertionSort(vetorAux, cont);}
+    
     return retorno;
 }
 
