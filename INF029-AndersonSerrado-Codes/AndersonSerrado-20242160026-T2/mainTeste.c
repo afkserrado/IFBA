@@ -12,7 +12,7 @@ void testeExcluirNumeroEspecifico(); // TESTE OK
 void testeListar(); // TESTE OK
 void testeRetornarTodosNumeros(); // TESTE OK
 void testeMudarTamanhoEstrutura(); // TESTE OK
-void testeListaEncadeada();
+void testeListaEncadeada(); // TESTE OK
 
 void exibirVetor() {
     for (int i = 1; i <= 10; i++) {
@@ -26,7 +26,7 @@ void exibirVetor() {
 
 int main()
 {
-    inicializar();
+    inicializar(); // TESTE OK
     testeInserirSemNada(); // TESTE OK
     testeCriarEstrutura(); // TESTE OK
     testeInserirComEstrutura(); // TESTE OK
@@ -35,8 +35,8 @@ int main()
     testeListar(); // TESTE OK
     testeRetornarTodosNumeros(); // TESTE OK
     testeMudarTamanhoEstrutura(); // TESTE OK
-    testeListaEncadeada();
-    finalizar();
+    testeListaEncadeada(); // TESTE OK
+    finalizar(); // TESTE OK
 }
 
 int ligado = 0;
@@ -345,13 +345,12 @@ void testeMudarTamanhoEstrutura() // TESTE OK
     printf("%d\n", inserirNumeroEmEstrutura(2, 5) == SEM_ESPACO);
     printf("\n");
 }
-
 /*
 2 [3,4,-2,6]
 5 [1,34,12,6,27,-6, , , , ]
 */
 
-void testeListaEncadeada()
+void testeListaEncadeada() // TESTE OK
 {
     show_log("testeListaEncadeada()");
     printf("montarListaEncadeadaComCabecote\n");
