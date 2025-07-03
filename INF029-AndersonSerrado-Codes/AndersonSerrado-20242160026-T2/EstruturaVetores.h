@@ -9,9 +9,11 @@ enum {TODAS_ESTRUTURAS_AUXILIARES_VAZIAS = -11, NOVO_TAMANHO_INVALIDO, NUMERO_IN
        ESTRUTURA_AUXILIAR_VAZIA, TAMANHO_INVALIDO, SEM_ESPACO_DE_MEMORIA, POSICAO_INVALIDA,
        JA_TEM_ESTRUTURA_AUXILIAR, SEM_ESTRUTURA_AUXILIAR, SEM_ESPACO, SUCESSO};
 
-typedef struct reg {
-    int conteudo;
-    struct reg *prox;
+// Define a estrutura de um nó da lista
+typedef struct No {
+    int chave;
+    struct No *ante; 
+    struct No *prox;
 } No;
 
 int criarEstruturaAuxiliar(int posicao, int tamanho);
