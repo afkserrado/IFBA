@@ -556,27 +556,25 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho) {
         return SEM_ESPACO_DE_MEMORIA;
     }
 
+    // Atualiza o endereço e o tamanho da estrutura auxiliar
+    vetorPrincipal[index] = estAuxiliar;
+    tamAuxiliar[index] = tamAtt;
+
     // Exclusão lógica dos elementos
     if (tamAuxiliar[index] < contAuxiliar[index]) {
         contAuxiliar[index] = tamAuxiliar[index];
     }
-    
-    // Atualiza o endereço e o tamanho da estrutura auxiliar
-    vetorPrincipal[index] = estAuxiliar;
-    tamAuxiliar[index] = tamAtt;
 
     /*
     printf("tamAuxiliar: ");
     imprimeVetor(tamAuxiliar);
     printf("\n");
-    */
-
-    /*
+    
     printf("contAuxiliar: ");
     imprimeVetor(contAuxiliar);
     printf("\n");
     */
-
+    
     return SUCESSO;
 }
 
@@ -591,10 +589,26 @@ Retorno (int)
 */
 int getQuantidadeElementosEstruturaAuxiliar(int posicao) {
 
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA;
+    }
 
-    int retorno = 0;
+    // Converte a posição para base 0
+    int index = posicao - 1;
 
-    return retorno;
+    // Não existe estrutura auxiliar na posição
+    if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
+        return SEM_ESTRUTURA_AUXILIAR;
+    }
+
+    // Estrutura auxiliar vazia
+    if (contAuxiliar[index] == 0) {
+        return ESTRUTURA_AUXILIAR_VAZIA;
+    }
+
+    // Estrutura auxiliar não vazia
+    return contAuxiliar[index];    
 }
 
 /*

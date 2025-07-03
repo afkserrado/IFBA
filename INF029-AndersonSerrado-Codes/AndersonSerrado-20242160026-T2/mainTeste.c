@@ -323,7 +323,7 @@ void testeMudarTamanhoEstrutura()
     printf("modificar para tamanho de 3 para 1\n");
     //modificar para tamanho de 3 para 1
     printf("%d\n", modificarTamanhoEstruturaAuxiliar(2, -2) == SUCESSO);
-    //printf("%d\n", getQuantidadeElementosEstruturaAuxiliar(2) == 1);
+    printf("%d\n", getQuantidadeElementosEstruturaAuxiliar(2) == 1);
     printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
     printf("%d\n", vet[0] == 3);
 
@@ -333,7 +333,7 @@ void testeMudarTamanhoEstrutura()
     printf("modificar para tamanho de 1 para 4\n");
     //modificar para tamanho de 1 para 4
     printf("%d\n", modificarTamanhoEstruturaAuxiliar(2, 3) == SUCESSO);
-    //printf("%d\n", getQuantidadeElementosEstruturaAuxiliar(2) == 1);
+    printf("%d\n", getQuantidadeElementosEstruturaAuxiliar(2) == 1);
     printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
     printf("%d\n", vet[0] == 3);
 
