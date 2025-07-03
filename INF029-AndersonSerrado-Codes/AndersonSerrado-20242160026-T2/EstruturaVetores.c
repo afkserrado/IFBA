@@ -181,7 +181,7 @@ No *init_No(int chave) {
 }
 
 // Declaração da lista
-ldll *lista;
+ldll *lista = NULL;
 
 // Cria e inicializa uma nova lista, configurando seus ponteiros para NULL (lista vazia)
 ldll *init_lista() {
@@ -199,7 +199,7 @@ ldll *init_lista() {
 }
 
 // Insere um novo nó no início da lista
-void inserir_No (ldll *lista, No *novo) {
+void inserir_No (No *novo) {
     if (lista->cabeca == NULL) { // Lista vazia
         lista->cabeca = novo; // Insere o primeiro elemento na cabeça da lista
         lista->cauda = novo; // Insere o primeiro elemento na cauda da lista
@@ -215,6 +215,12 @@ void inserir_No (ldll *lista, No *novo) {
 
 // Imprime a lista
 void imprimir_lista () {
+
+    if (lista == NULL) {
+        printf("Lista vazia\n");
+        return;
+    }
+
     No *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
     printf("\n(NULL)"); // Início da lista
     while (x != NULL) {
@@ -702,7 +708,7 @@ No *montarListaEncadeadaComCabecote() {
             // Percorre a estrutura auxiliar
             for (int j = 0; j < cont; j++) { 
                 No *novo = init_No(estAuxiliar[j]); // Inicializa o nó
-                inserir_No(lista, novo); // Insere o nó na lista
+                inserir_No(novo); // Insere o nó na lista
             }
         }
     }  
@@ -737,7 +743,18 @@ Retorno
     void.
 */
 void destruirListaEncadeadaComCabecote(No **inicio) {
+    // Libera a memória alocada para a lista
+    No *x = *inicio; // Copia o conteúdo de inicio, que é a cabeça da lista
+    while (x != NULL) {
+        No *temp = x;
+        x = x->prox;
+        free(temp); // Libera a memória de cada nó
+    }
+    free(lista); // Libera a memória da lista
+    lista = NULL;
+    *inicio = NULL;
 
+    imprimir_lista();
 }
 
 /*
@@ -761,14 +778,4 @@ void finalizar() {
             vetorPrincipal[i] = NULL; // Reinicializa
         }
     }
-
-    // Libera a memória alocada para a lista
-    No *x = lista->cabeca;
-    while (x != NULL) {
-        No *temp = x;
-        x = x->prox;
-        free(temp); // Libera a memória de cada nó
-    }
-    free(lista); // Libera a memória da lista
-    lista = NULL;
 }

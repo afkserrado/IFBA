@@ -354,7 +354,7 @@ void testeMudarTamanhoEstrutura() // TESTE OK
 void testeListaEncadeada()
 {
     show_log("testeListaEncadeada()");
-    printf("testeListaEncadeada\n");
+    printf("montarListaEncadeadaComCabecote\n");
     int vet[10];
     No *inicio = montarListaEncadeadaComCabecote();
     getDadosListaEncadeadaComCabecote(inicio, vet);
@@ -370,7 +370,10 @@ void testeListaEncadeada()
     printf("%d\n", vet[8] == 27);
     printf("%d\n", vet[9] == -6);
 
-    //destruirListaEncadeadaComCabecote(&inicio);
+    printf("\n");
 
-    //printf("%d\n", inicio == NULL);
+    printf("destruirListaEncadeadaComCabecote\n");
+    destruirListaEncadeadaComCabecote(&inicio);
+
+    printf("%d\n", inicio == NULL);
 }
