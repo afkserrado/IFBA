@@ -65,69 +65,21 @@ int estruturaAuxiliarTemEspaco(int index) { // OK
     return retorno;
 }
 
-/*// Busca binária
-int buscaBinaria(int valor, int index) {
-
-    int tam = contAuxiliar[index]; // "tam" é quantidade de elementos
-    int esq = 0;
-    int dir = tam - 1;
-    int *vetorAuxiliar = vetorPrincipal[index];
-
-    // Busca o "valor" e, se existir, retorna um índice referente à sua posição
-    while (esq <= dir) {
-        // Inicializa o índice "meio"
-        int meio = (esq + dir) / 2;
-
-        // Verifica se o valor procurado é o meio
-        if (vetorAuxiliar[meio] == valor) {
-            return meio;
-        } 
-        
-        // Ajusta o "dir" para buscar na metade esquerda
-        if (vetorAuxiliar[meio] > valor) {
-            dir = meio - 1;
-        }
-
-        // Ajusta o "esq" para buscar na metade direita
-        else {
-            esq = meio + 1;
-        }
-    }
-
-    // Valor não encontrado
-    return NUMERO_INEXISTENTE;
-}
-*/
-
-/*// Exclusão lógica com Shift
-void shift(int achou, int index) {
-    
-    int *vetorAuxiliar = vetorPrincipal[index];
-    int tam = contAuxiliar[index];
-
-    // Shift
-    for (int i = achou; i < tam - 1; i++) {
-        vetorAuxiliar[i] = vetorAuxiliar[i+1];
-    }
-    contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos
-}
-*/
-
 // Exclusão lógica com Shift
 int shift(int valor, int index) {
     
-    int *vetorAuxiliar = vetorPrincipal[index];
+    int *estAuxiliar = vetorPrincipal[index];
     int cont = contAuxiliar[index]; // Quantidade de elementos
 
     // Busca linear para vetores desordenados
     for (int i = 0; i < cont; i++) {
         
         // Número encontrado
-        if (valor == vetorAuxiliar[i]) {
+        if (valor == estAuxiliar[i]) {
             
             // Shift
             for (int k = i; k < cont - 1; k++) {
-                vetorAuxiliar[k] = vetorAuxiliar[k+1];
+                estAuxiliar[k] = estAuxiliar[k+1];
             }
 
             contAuxiliar[index] -= 1; // Decrementa a quantidade de elementos
@@ -271,11 +223,11 @@ int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
             
             // Existe espaço na estrutura auxiliar
             if (temEspaco == SUCESSO) {
-                int *vetorAuxiliar = vetorPrincipal[index];
+                int *estAuxiliar = vetorPrincipal[index];
                 
                 // Insere o valor no vetor auxiliar
                 int i = contAuxiliar[index];
-                vetorAuxiliar[i] = valor;
+                estAuxiliar[i] = valor;
                 contAuxiliar[index] += 1;
 
                 /*
@@ -313,58 +265,50 @@ Rertono (int)
     TAMANHO_INVALIDO - o tamanho deve ser maior ou igual a 1
 */
 int criarEstruturaAuxiliar(int posicao, int tamanho) { // OK
-    int retorno = 0;
+
+    // Posição inválida
+    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
+        return POSICAO_INVALIDA;
+    }
 
     // Converte a posição para base 0
     int index = posicao - 1;
 
     // Posição já possui uma estrutura auxiliar
     if (ehEstruturaAuxiliarExistente(index) == JA_TEM_ESTRUTURA_AUXILIAR) {
-        retorno = JA_TEM_ESTRUTURA_AUXILIAR;
-        return retorno;
-    }
-
-    // Posição inválida
-    if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
-        retorno = POSICAO_INVALIDA;
-        return retorno;
+        return JA_TEM_ESTRUTURA_AUXILIAR;
     }
 
     // O tamanho é menor que 1
     if (tamanho < 1) {
-        retorno = TAMANHO_INVALIDO;
-        return retorno;
+        return TAMANHO_INVALIDO;
     }
 
     // Criar um vetor auxiliar, alocando memória dinamicamente
-    int *vetorAuxiliar;
-    vetorAuxiliar = (int *)malloc(tamanho * sizeof(int));
+    int *estAuxiliar;
+    estAuxiliar = (int *)malloc(tamanho * sizeof(int));
 
-    // O tamanho é muito grande
-    if (vetorAuxiliar == NULL) {
+    // Falha na alocação de memória
+    if (estAuxiliar == NULL) {
         /*
         Inclui:
         - Falta de memória;
         - Tentar alocar mais memória do que o sistema pode endereçar;
         - Tamanho maior que INT_MAX ou o limite do sistema.
         */
-        retorno = SEM_ESPACO_DE_MEMORIA;
-        return retorno;
+        return SEM_ESPACO_DE_MEMORIA;
     }
 
-    // Deu tudo certo, crie
-    if (vetorAuxiliar != NULL) {
-        vetorPrincipal[index] = vetorAuxiliar;
+    // Cria a estrutura auxiliar
+    if (estAuxiliar != NULL) {
+        vetorPrincipal[index] = estAuxiliar;
         tamAuxiliar[index] = tamanho;
         
         /*printf("tamAuxiliar: ");
         imprimeVetor(tamAuxiliar);
         printf("\n");*/
-
-        retorno = SUCESSO;
     }
-    
-    return retorno;
+    return SUCESSO;
 }
 
 /*
@@ -717,7 +661,7 @@ No *montarListaEncadeadaComCabecote() {
         return NULL;
     }
 
-    imprimir_lista();
+    //imprimir_lista();
     return lista->cabeca;
 }
 
@@ -754,7 +698,7 @@ void destruirListaEncadeadaComCabecote(No **inicio) {
     lista = NULL;
     *inicio = NULL;
 
-    imprimir_lista();
+    //imprimir_lista();
 }
 
 /*
