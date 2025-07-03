@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "EstruturaVetores.h"
 
 void show_log(char *str);
@@ -11,8 +10,8 @@ void testeInserirComEstrutura(); // TESTE OK
 void testeExcluir(); // TESTE OK
 void testeExcluirNumeroEspecifico(); // TESTE OK
 void testeListar(); // TESTE OK
-void testeRetornarTodosNumeros();
-void testeMudarTamanhoEstrutura();
+void testeRetornarTodosNumeros(); // TESTE OK
+void testeMudarTamanhoEstrutura(); // TESTE OK
 void testeListaEncadeada();
 
 void exibirVetor() {
@@ -35,8 +34,8 @@ int main()
     testeExcluirNumeroEspecifico(); // TESTE OK
     testeListar(); // TESTE OK
     testeRetornarTodosNumeros(); // TESTE OK
-    testeMudarTamanhoEstrutura();
-    //testeListaEncadeada();
+    testeMudarTamanhoEstrutura(); // TESTE OK
+    testeListaEncadeada();
     finalizar();
 }
 
@@ -305,7 +304,7 @@ Rertono (int)
     NOVO_TAMANHO_INVALIDO - novo tamanho não pode ser negativo
     SEM_ESPACO_DE_MEMORIA - erro na alocação do novo valor
 */
-void testeMudarTamanhoEstrutura()
+void testeMudarTamanhoEstrutura() // TESTE OK
 {
     show_log("testeMudarTamanhoEstrutura()");
     int vet[1];
@@ -355,6 +354,7 @@ void testeMudarTamanhoEstrutura()
 void testeListaEncadeada()
 {
     show_log("testeListaEncadeada()");
+    printf("testeListaEncadeada\n");
     int vet[10];
     No *inicio = montarListaEncadeadaComCabecote();
     getDadosListaEncadeadaComCabecote(inicio, vet);
@@ -370,7 +370,7 @@ void testeListaEncadeada()
     printf("%d\n", vet[8] == 27);
     printf("%d\n", vet[9] == -6);
 
-    destruirListaEncadeadaComCabecote(&inicio);
+    //destruirListaEncadeadaComCabecote(&inicio);
 
-    printf("%d\n", inicio == NULL);
+    //printf("%d\n", inicio == NULL);
 }

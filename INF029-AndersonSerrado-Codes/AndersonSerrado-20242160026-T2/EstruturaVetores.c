@@ -156,6 +156,75 @@ void insertionSort(int vetorAux[], int cont) {
 }
 
 // #########################################################################//
+// LISTA DUPLAMENTE LIGADA LINEAR (LDLL)
+
+// Define a estrutura de uma LDLL
+typedef struct ldll {
+    No *cabeca;
+    No *cauda;
+} ldll;
+
+// Cria e inicializa um novo nó
+No *init_No(int chave) {
+    No *No_novo = malloc(sizeof(No)); // Aloca memória para o novo nó
+    
+    // Falha de alocação de memória
+    if (No_novo == NULL) {
+        printf("Erro ao alocar memória para o nó.\n");
+        return NULL;
+    }
+
+    No_novo->chave = chave;
+    No_novo->ante = NULL;
+    No_novo->prox = NULL;
+    return No_novo;
+}
+
+// Declaração da lista
+ldll *lista;
+
+// Cria e inicializa uma nova lista, configurando seus ponteiros para NULL (lista vazia)
+ldll *init_lista() {
+    lista = malloc(sizeof(ldll));
+    
+    // Falha de alocação de memória
+    if (lista == NULL) {
+        printf("Erro ao alocar memória para a estrutura da lista.\n");
+        return NULL;
+    }
+
+    lista->cabeca = NULL;
+    lista->cauda = NULL;
+    return lista;
+}
+
+// Insere um novo nó no início da lista
+void inserir_No (ldll *lista, No *novo) {
+    if (lista->cabeca == NULL) { // Lista vazia
+        lista->cabeca = novo; // Insere o primeiro elemento na cabeça da lista
+        lista->cauda = novo; // Insere o primeiro elemento na cauda da lista
+    }
+
+    else { // Lista não vazia  
+        // Insere o novo nó no final da lista
+        lista->cauda->prox = novo;
+        novo->ante = lista->cauda;
+        lista->cauda = novo;
+    }
+}
+
+// Imprime a lista
+void imprimir_lista () {
+    No *x = lista->cabeca; // Inicializa x com a "cabeca" da lista
+    printf("\n(NULL)"); // Início da lista
+    while (x != NULL) {
+        printf("<- (%d) ->", x->chave);
+        x = x->prox;
+    }
+    printf(" (NULL)\n\n"); // Fim da lista
+}
+
+// #########################################################################//
 // FUNÇÕES PRINCIPAIS
 
 /*
@@ -461,11 +530,11 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
         // Estrutura auxiliar não vazia
         if (contAuxiliar[i] != 0) {
             estAuxVazias = false;
-            int *x = vetorPrincipal[i];
+            int *estAuxiliar = vetorPrincipal[i];
             int cont = contAuxiliar[i];
             
             for (int j = 0; j < cont; j++) { // Percorre a estrutura auxiliar
-                vetorAux[k] = x[j];
+                vetorAux[k] = estAuxiliar[j];
                 k++;
             }
         }
@@ -619,9 +688,31 @@ Retorno (No*)
     No*, ponteiro para o início da lista com cabeçote
 */
 No *montarListaEncadeadaComCabecote() {
+  
+    // Percorre o vetorPrincipal e o contAuxiliar
+    for (int i = 0; i < TAM; i++) { 
+        
+        // Estrutura auxiliar existe e é não vazia
+        if (contAuxiliar[i] != 0) {
 
+            // Copia o endereço e a quant. de elementos da estrutura auxiliar
+            int *estAuxiliar = vetorPrincipal[i]; 
+            int cont = contAuxiliar[i];
+        
+            // Percorre a estrutura auxiliar
+            for (int j = 0; j < cont; j++) { 
+                No *novo = init_No(estAuxiliar[j]); // Inicializa o nó
+                inserir_No(lista, novo); // Insere o nó na lista
+            }
+        }
+    }  
 
-    return NULL;
+    if (lista->cabeca == NULL) {
+        return NULL;
+    }
+
+    imprimir_lista();
+    return lista->cabeca;
 }
 
 /*
@@ -629,7 +720,13 @@ Objetivo: retorna os números da lista enceada com cabeçote armazenando em veto
 Retorno void
 */
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[]) {
-
+    No* x = inicio;
+    int k = 0;
+    while (x != NULL) {
+        vetorAux[k] = x->chave;
+        k++;
+        x = x->prox;
+    }
 }
 
 /*
@@ -647,8 +744,8 @@ void destruirListaEncadeadaComCabecote(No **inicio) {
 Objetivo: inicializa o programa. deve ser chamado ao inicio do programa 
 */
 void inicializar() {
-
-    return;
+    // Inicializa a lista
+    lista = init_lista();
 }
 
 /*
@@ -664,4 +761,14 @@ void finalizar() {
             vetorPrincipal[i] = NULL; // Reinicializa
         }
     }
+
+    // Libera a memória alocada para a lista
+    No *x = lista->cabeca;
+    while (x != NULL) {
+        No *temp = x;
+        x = x->prox;
+        free(temp); // Libera a memória de cada nó
+    }
+    free(lista); // Libera a memória da lista
+    lista = NULL;
 }
