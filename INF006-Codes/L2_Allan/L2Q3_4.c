@@ -171,16 +171,46 @@ void buscaSequencial (lsll *lista, int chave) {
 
     // Busca a chave
     node *atual = lista->cabeca;
-    do {
+    while (atual != NULL) {
         // Chave encontrada
         if (atual->chave == chave) {
             printf("Chave: %d\n", atual->chave);
             return;
         }
+
         atual = atual->prox;
-    } while (atual != NULL);
+    }
 
     // Chave não encontrada
+    printf("Chave não encontrada.\n");
+}
+
+// Busca sequencial
+void buscaSequencialOrdenada (lsll *lista, int chave) {
+
+    // Lista vazia
+    if (lista->cabeca == NULL) { 
+        printf("Lista vazia.\n");
+        return;
+    }
+
+    // Busca a chave
+    node *atual = lista->cabeca;
+    while (atual != NULL) {
+        // Chave encontrada
+        if (atual->chave == chave) {
+            printf("Chave: %d\n", atual->chave);
+            return;
+        }
+
+        // Chaves restantes são maiores que a chave buscada
+        if (atual->chave > chave) {
+            break;
+        }
+
+        atual = atual->prox;
+    }
+
     printf("Chave não encontrada.\n");
 }
 
@@ -259,9 +289,9 @@ int main(){
     printf("Depois\n");
     imprimir_lista(lista2);
 
-    buscaSequencial(lista2, 18);
-    buscaSequencial(lista2, 37);
-    buscaSequencial(lista2, 40);
+    buscaSequencialOrdenada(lista2, 18);
+    buscaSequencialOrdenada(lista2, 37);
+    buscaSequencialOrdenada(lista2, 40);
 
     // Libera a memória alocada para todos os nós e para as listas
     liberar_lista(lista1);
