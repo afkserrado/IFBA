@@ -127,7 +127,7 @@ void mergePilha (estPilha *pilha1, estPilha *pilha2, estPilha *pilha3) {
         
         // Compara as chaves nos topos das pilhas
         // Retira do topo da pilha1 e coloca no topo da pilha3
-        if (pilha1->topo->chave <= pilha2->topo->chave) {
+        if (pilha1->topo->chave < pilha2->topo->chave) {
             node *novo = init_node(pop(pilha1));
             push(pilha3, novo);
         }
