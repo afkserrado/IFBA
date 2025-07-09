@@ -185,7 +185,7 @@ void buscaSequencial (lsll *lista, int chave) {
     printf("Chave não encontrada.\n");
 }
 
-// Busca sequencial
+// Busca sequencial ordenada
 void buscaSequencialOrdenada (lsll *lista, int chave) {
 
     // Lista vazia
@@ -196,18 +196,12 @@ void buscaSequencialOrdenada (lsll *lista, int chave) {
 
     // Busca a chave
     node *atual = lista->cabeca;
-    while (atual != NULL) {
+    while (atual != NULL && chave >= atual->chave) {
         // Chave encontrada
         if (atual->chave == chave) {
             printf("Chave: %d\n", atual->chave);
             return;
         }
-
-        // Chaves restantes são maiores que a chave buscada
-        if (atual->chave > chave) {
-            break;
-        }
-
         atual = atual->prox;
     }
 
