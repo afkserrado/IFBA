@@ -583,6 +583,7 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho) {
     tamAuxiliar[index] = tamAtt;
 
     // Exclusão lógica dos elementos
+    // Ou if (novoTamanho < 0)
     if (tamAuxiliar[index] < contAuxiliar[index]) {
         contAuxiliar[index] = tamAuxiliar[index];
     }
