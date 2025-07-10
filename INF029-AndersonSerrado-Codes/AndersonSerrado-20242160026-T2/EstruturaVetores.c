@@ -407,13 +407,13 @@ Retorno (int)
 */
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
-    // Converte a posição para base 0
-    int index = posicao - 1;
-
     // Posição inválida
     if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
         return POSICAO_INVALIDA; // Retorno imediato
     }
+    
+    // Converte a posição para base 0
+    int index = posicao - 1;
 
     // Estrutura auxiliar não existe
     if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
@@ -422,7 +422,7 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
     // Estrutura auxiliar vazia
     int cont = contAuxiliar[index]; // Quantidade de elementos
-    if (cont == 0) {
+    if (contAuxiliar[index] == 0) {
         return SUCESSO; // Estrutura vazia, mas evita copiar dados
     }
 
