@@ -422,7 +422,7 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
     // Estrutura auxiliar vazia
     int cont = contAuxiliar[index]; // Quantidade de elementos
-    if (contAuxiliar[index] == 0) {
+    if (cont == 0) {
         return SUCESSO; // Estrutura vazia, mas evita copiar dados
     }
 
