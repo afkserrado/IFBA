@@ -496,7 +496,7 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
     if (estAuxVazias == true) {
         return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
     }
-    
+
     return SUCESSO;
 }
 
@@ -525,8 +525,7 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
     }
 
     // Ordena o vetorAux
-    if (retorno == SUCESSO) {insertionSort(vetorAux, cont);}
-    
+    insertionSort(vetorAux, cont);
     return SUCESSO;
 }
 
