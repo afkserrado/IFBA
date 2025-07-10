@@ -496,7 +496,8 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]) { // OK
     if (estAuxVazias == true) {
         return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
     }
-    else {return SUCESSO;}
+    
+    return SUCESSO;
 }
 
 /*
