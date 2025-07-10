@@ -111,24 +111,24 @@ void insertionSort(int vetorAux[], int cont) {
 
 // Define a estrutura de uma LDLL
 typedef struct ldll {
-    No *cabeca;
-    No *cauda;
+    No *cabeca; // Ponteiro para o nó cabeçote
+    No *cauda; // Ponteiro para o nó cauda
 } ldll;
 
 // Cria e inicializa um novo nó
 No *init_No(int chave) {
-    No *No_novo = malloc(sizeof(No)); // Aloca memória para o novo nó
+    No *novo = malloc(sizeof(No)); // Aloca memória para o novo nó
     
     // Falha de alocação de memória
-    if (No_novo == NULL) {
+    if (novo == NULL) {
         printf("Erro ao alocar memória para o nó.\n");
         return NULL;
     }
 
-    No_novo->chave = chave;
-    No_novo->ante = NULL;
-    No_novo->prox = NULL;
-    return No_novo;
+    novo->chave = chave;
+    novo->ante = NULL;
+    novo->prox = NULL;
+    return novo;
 }
 
 // Declaração da lista
@@ -144,16 +144,24 @@ ldll *init_lista() {
         return NULL;
     }
 
-    lista->cabeca = NULL;
+    lista->cabeca = init_No(INT_MAX);
     lista->cauda = NULL;
     return lista;
 }
 
 // Insere um novo nó no início da lista
 void inserir_No (No *novo) {
-    if (lista->cabeca == NULL) { // Lista vazia
-        lista->cabeca = novo; // Insere o primeiro elemento na cabeça da lista
-        lista->cauda = novo; // Insere o primeiro elemento na cauda da lista
+    
+    // Falha de alocação de memória
+    if (novo == NULL) {
+        printf("Erro ao alocar memória para a estrutura da lista.\n");
+        return;
+    }
+    
+    if (lista->cabeca->prox == NULL) { // Lista vazia
+        lista->cabeca->prox = novo; // O prox do cabeçote aponta para o novo nó
+        novo->ante = lista->cabeca; // O ante do novo nó aponta para o cabeçote
+        lista->cauda = novo; // Cauda recebe o novo nó
     }
 
     else { // Lista não vazia  
@@ -655,18 +663,20 @@ No *montarListaEncadeadaComCabecote() {
         
             // Percorre a estrutura auxiliar
             for (int j = 0; j < cont; j++) { 
-                No *novo = init_No(estAuxiliar[j]); // Inicializa o nó
+                No *novo = init_No(estAuxiliar[j]); // Inicializa o nó              
                 inserir_No(novo); // Insere o nó na lista
             }
         }
     }  
 
-    if (lista->cabeca == NULL) {
+    // Lista vazia
+    if (lista->cabeca->prox == NULL) {
         return NULL;
     }
 
+    // Lista não vazia
     //imprimir_lista();
-    return lista->cabeca;
+    return lista->cabeca;// Retorna o cabeçote
 }
 
 /*
@@ -674,8 +684,18 @@ Objetivo: retorna os números da lista enceada com cabeçote armazenando em veto
 Retorno void
 */
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[]) {
-    No* x = inicio;
+    
+     // Lista não inicializada corretamente
+    if (inicio == NULL) {
+        printf("Falha de alocação.\n");
+        return;
+    }
+    
+    No *x = inicio->prox; // Começa do primeiro nó após o cabeçote
     int k = 0;
+
+    // tamVetor = sizeof(vetorAux) / sizeof(vetorAux[0]);
+
     while (x != NULL) {
         vetorAux[k] = x->chave;
         k++;
@@ -691,14 +711,22 @@ Retorno
     void.
 */
 void destruirListaEncadeadaComCabecote(No **inicio) {
+    
+    // Lista não inicializada corretamente
+    if (*inicio == NULL) {
+        printf("Falha de alocação.\n");
+        return;
+    }
+    
     // Libera a memória alocada para a lista
-    No *x = *inicio; // Copia o conteúdo de inicio, que é a cabeça da lista
+    No *x = *inicio; // Copia o cabeçote para x
     while (x != NULL) {
         No *temp = x;
         x = x->prox;
         free(temp); // Libera a memória de cada nó
     }
-    free(lista); // Libera a memória da lista
+
+    free(lista); 
     lista = NULL;
     *inicio = NULL;
 
