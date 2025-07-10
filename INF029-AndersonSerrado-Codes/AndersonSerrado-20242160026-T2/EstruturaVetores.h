@@ -12,7 +12,7 @@ enum {TODAS_ESTRUTURAS_AUXILIARES_VAZIAS = -11, NOVO_TAMANHO_INVALIDO, NUMERO_IN
 // Define a estrutura de um nó da lista
 typedef struct No {
     int chave;
-    struct No *ante; 
+    struct No *ante; // struct No porque é um tipo recursivo
     struct No *prox;
 } No;
 
