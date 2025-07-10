@@ -392,7 +392,7 @@ int excluirNumeroEspecificoDeEstrutura(int posicao, int valor) { // OK
     }
 
     // Número encontrado
-    else {return SUCESSO;}
+    return SUCESSO;
 }
 
 /*
