@@ -304,7 +304,7 @@ int criarEstruturaAuxiliar(int posicao, int tamanho) { // OK
     /*printf("tamAuxiliar: ");
     imprimeVetor(tamAuxiliar);
     printf("\n");*/
-    
+
     return SUCESSO;
 }
 
@@ -321,13 +321,13 @@ Rertono (int)
 */
 int excluirNumeroDoFinaldaEstrutura(int posicao) { // OK
 
-    // Converte a posição para base 0
-    int index = posicao - 1;
-    
     // Posição inválida
     if (ehPosicaoValida(posicao) == POSICAO_INVALIDA) {
         return POSICAO_INVALIDA; // Retorno imediato
     }
+
+    // Converte a posição para base 0
+    int index = posicao - 1;
 
     // Estrutura auxiliar não existe
     if (ehEstruturaAuxiliarExistente(index) == SEM_ESTRUTURA_AUXILIAR) {
