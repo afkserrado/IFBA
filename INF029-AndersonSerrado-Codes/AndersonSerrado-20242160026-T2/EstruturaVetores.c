@@ -10,13 +10,11 @@
 // #########################################################################//
 // ESTRUTURAS DE DADOS PRINCIPAL E AUXILIARES
 
-// Guarda o endereço das estruturas auxiliares
 #define TAM 10
-int *vetorPrincipal[TAM] = {NULL}; 
 
-// Guarda o tamanho e a quantidade de itens das estruturas auxiliares
-int tamAuxiliar[TAM] = {0};
-int contAuxiliar[TAM] = {0};
+int *vetorPrincipal[TAM] = {NULL}; // Endereço de cada estrutura auxiliar
+int tamAuxiliar[TAM] = {0}; // Tamanho de cada estrutura auxiliar
+int contAuxiliar[TAM] = {0}; // Quantidade de elementos de cada estrutura auxiliar
 
 // #########################################################################//
 // FUNÇÕES AUXILIARES
@@ -196,10 +194,10 @@ CONSTANTES
 */
 int inserirNumeroEmEstrutura(int posicao, int valor) { // OK
 
-    int retorno = 0; // OK
-    int existeEstruturaAuxiliar = 0; // OK
-    int temEspaco = 0; // OK
-    int posicao_invalida = 0; // OK
+    int retorno = 0;
+    int existeEstruturaAuxiliar = 0;
+    int temEspaco = 0;
+    int posicao_invalida = 0;
 
     // Posição inválida
     posicao_invalida = ehPosicaoValida(posicao);
@@ -300,14 +298,13 @@ int criarEstruturaAuxiliar(int posicao, int tamanho) { // OK
     }
 
     // Cria a estrutura auxiliar
-    if (estAuxiliar != NULL) {
-        vetorPrincipal[index] = estAuxiliar;
-        tamAuxiliar[index] = tamanho;
-        
-        /*printf("tamAuxiliar: ");
-        imprimeVetor(tamAuxiliar);
-        printf("\n");*/
-    }
+    vetorPrincipal[index] = estAuxiliar;
+    tamAuxiliar[index] = tamanho;
+    
+    /*printf("tamAuxiliar: ");
+    imprimeVetor(tamAuxiliar);
+    printf("\n");*/
+    
     return SUCESSO;
 }
 
