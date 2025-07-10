@@ -427,9 +427,9 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
     }
 
     // Copia os dados para o vetorAux
-    int *x = vetorPrincipal[index];
+    int *estAuxiliar = vetorPrincipal[index];
     for (int i = 0; i < cont; i++) {
-        vetorAux[i] = x[i];
+        vetorAux[i] = estAuxiliar[i];
     }
 
     return SUCESSO;
