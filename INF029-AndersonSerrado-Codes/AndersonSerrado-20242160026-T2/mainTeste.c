@@ -167,7 +167,7 @@ void testeListar() // TESTE OK
 
     printf("getDadosOrdenadosEstruturaAuxiliar\n");
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-    printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
+    printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(-1, vet) == POSICAO_INVALIDA);
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
     printf("%d\n", vet[0] == -9);

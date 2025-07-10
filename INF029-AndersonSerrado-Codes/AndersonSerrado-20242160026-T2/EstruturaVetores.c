@@ -446,15 +446,20 @@ Rertono (int)
 */
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]) { // OK
 
+    // Copia os números para o vetorAux
+    int retorno = getDadosEstruturaAuxiliar(posicao, vetorAux);
+    
+    // Posição inválida ou sem estrutura auxiliar
+    if (retorno != SUCESSO) {
+        return retorno;
+    }
+
     // Converte a posição para base 0
     int index = posicao - 1;
     
-    // Copia os números para o vetorAux
-    int retorno = getDadosEstruturaAuxiliar(posicao, vetorAux);
-
     // Ordena o vetorAux
     int cont = contAuxiliar[index];
-    if (retorno == SUCESSO) {insertionSort(vetorAux, cont);}
+    insertionSort(vetorAux, cont);
     
     return retorno;
 }
