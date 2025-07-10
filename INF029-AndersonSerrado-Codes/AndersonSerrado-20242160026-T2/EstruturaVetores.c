@@ -76,6 +76,7 @@ int shift(int valor, int index) {
         if (valor == estAuxiliar[i]) {
             
             // Shift
+            // Até o penúltimo elemento para evitar acessar espaço inválido
             for (int k = i; k < cont - 1; k++) {
                 estAuxiliar[k] = estAuxiliar[k+1];
             }
