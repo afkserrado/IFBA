@@ -41,7 +41,7 @@ node *init_node (int chave) {
 lsll *init_lista () {
     lsll *lista = malloc(sizeof(lsll));
 
-
+    // Falha de alocação
     if (lista == NULL) {
         printf("Erro ao alocar memória para a estrutura da lista.\n");
         return NULL;
@@ -98,7 +98,6 @@ void inserir_node_ordenado (lsll *lista, node *novo) {
 
         // Caso 2: o novo é o último item da lista
         else if (atual == NULL) {
-            novo->prox = NULL;
             lista->cauda->prox = novo;
             lista->cauda = novo;
         }
