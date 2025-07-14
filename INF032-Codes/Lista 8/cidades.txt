@@ -1,0 +1,9 @@
+Curitiba                                1.963.726
+Recife                                  1.661.017
+Fortaleza                               2.428.678
+Porto Alegre                            1.332.570
+Rio de Janeiro                          6.747.815
+Salvador                                2.418.005
+Belo Horizonte                          2.530.701
+Manaus                                  2.063.547
+Brasília                                3.094.325
