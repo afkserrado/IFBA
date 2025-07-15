@@ -1,8 +1,5 @@
 '''
-11. Abra um arquivo texto, calcule e escreva o numero de caracteres, o numero de linhas e
-o numero de palavras neste arquivo. Escreva também quantas vezes cada letra ocorre
-no arquivo (ignorando letras com acento). Obs.: palavras são separadas por um ou mais
-caracteres espaco, tabulação ou nova linha.
+11. Abra um arquivo texto, calcule e escreva o numero de caracteres, o numero de linhas e o numero de palavras neste arquivo. Escreva também quantas vezes cada letra ocorre no arquivo (ignorando letras com acento). Obs.: palavras são separadas por um ou mais caracteres espaco, tabulação ou nova linha.
 '''
 
 # Pré-definições
