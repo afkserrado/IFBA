@@ -2,11 +2,10 @@
 7. Desenvolver um programa que leia o conteúdo de um arquivo e cria um arquivo com o mesmo conteúdo, mas com todas as letras minúsculas convertidas para maiúsculas. Os nomes dos arquivos serão fornecidos, via teclado, pelo usuário.
 '''
 
-caminho = input("Informe o caminho, com nome, do arquivo entrada: ")
-caminho = caminho.replace("\\", "/")
+nomeArq = input("Informe o nome do arquivo de entrada: ")
 
 try: 
-    arquivo = open(caminho, "r", encoding="utf-8")
+    arquivo = open(nomeArq, "r", encoding="utf-8")
     conteudo = arquivo.read()
 
     caminho2 = input("Informe o caminho, com nome, do arquivo de saída: ")

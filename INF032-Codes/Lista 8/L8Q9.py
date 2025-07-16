@@ -3,12 +3,8 @@
 '''
 
 # Obtém os caminhos
-entrada = input("Informe o caminho de entrada, incluindo nome do arquivo: ")
-saida = input("Informe o caminho de saída, incluindo nome do arquivo: ")
-
-# Ajustando caminhos
-entrada = entrada.replace("\\", "/")
-saida = saida.replace("\\", "/")
+entrada = input("Informe o nome do arquivo de entrada: ")
+saida = input("Informe o nome do arquivo de saída: ")
 
 try: 
     # Abrindo arquivos
