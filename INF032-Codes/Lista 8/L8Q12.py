@@ -4,14 +4,14 @@
 
 try: 
     
-    while True:
-        nome = input("Informe um nome: ")
-        tel = input("Informe o número de telefone (XXXXX-XXXX) ou digite '0' para sair: ")
+    with open("cadastro.txt", "a+") as arq:
+        while True:
+            nome = input("Informe um nome: ").strip()
+            tel = input("Informe o número de telefone (XXXXX-XXXX) ou digite '0' para sair: ")
 
-        if tel == '0':
-            break
+            if tel == '0':
+                break
 
-        with open("cadastro.txt", "a+") as arq:
             arq.write(f"Nome: {nome} | Telefone: {tel}\n")
 
 # Erro ao ler arquivo ou arquivo não encontrado
