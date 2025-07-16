@@ -20,7 +20,7 @@ try:
         else:
             conteudo2 += char
 
-    arquivo2 = open("Lista de compras 2.txt", "w", encoding="utf-8")
+    arquivo2 = open("L8Q6_saida.txt", "w", encoding="utf-8")
     arquivo2.write(conteudo2)
 
     arquivo.close()
