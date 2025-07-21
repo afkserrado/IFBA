@@ -80,6 +80,12 @@ void inserir_no (abb *arv, no *novo) {
     no *mae = NULL;
     no *atual = arv->raiz;
 
+    // Falha de alocação
+    if (arv == NULL || novo == NULL) {
+        printf("Erro: árvore ou nó inválidos.\n");
+        return;
+    }
+
     // Busca a posição do novo nó na árvore
     while (atual != NULL) {
         mae = atual; // Salva a mãe
@@ -121,6 +127,8 @@ void inserir_no (abb *arv, no *novo) {
 
 // Busca o nó com maior chave
 no *maximo (no *x) {
+    if (x == NULL) return NULL;
+
     while (x->dir != NULL) {
         x = x->dir;
     }
@@ -202,6 +210,12 @@ int main () {
             int chave = atoi(token);
             novo = init_no(chave);
 
+            // Falha de alocação
+            if (novo == NULL) {
+                fprintf(arqSaida, " ");
+                continue; // Passa para o próximo número
+            }
+
             // Insere o nó
             inserir_no(arvore, novo);
             
@@ -216,16 +230,21 @@ int main () {
         // Recupera o nó com a chave máxima
         no* max = maximo(arvore->raiz);
 
-        // Imprime a chave máxima e seus dados
-        fprintf(arqSaida, " max %d alt %d pred ", max->chave, max->nivel);
-
-        if (max->mae == NULL) {
-            fprintf(arqSaida, "NaN");
+        if (max == NULL) {
+            fprintf(arqSaida, " max NaN alt NaN pred NaN");
         }
         else {
-            fprintf(arqSaida, "%d", max->mae->chave);
-        }
+            // Imprime a chave máxima e seus dados
+            fprintf(arqSaida, " max %d alt %d pred ", max->chave, max->nivel);
 
+            if (max->mae == NULL) {
+                fprintf(arqSaida, "NaN");
+            }
+            else {
+                fprintf(arqSaida, "%d", max->mae->chave);
+            }
+        }       
+    
         // Impede a quebra de linha após a última linha do arquivo
         flag = 1;
 
