@@ -1,19 +1,9 @@
-/*
-Instituto Federal da Bahia (IFBA)
-Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)
-Semestre 2025.1
-INF006 - Estrutura de Dados e Algoritmos
-Professor: José Dihego
-Aluno: Anderson Serrado
-T3Q1
-*/
-
-
 // ##################################################### //
 // OBSERVAÇÕES
-// - As entradas são números naturais.
+// - As entradas são números inteiros.
 // - Cada linha do arquivo de entrada é uma entrada.
-// - O número mı́nimo de arestas de um nó a raiz define a altura deste nó. 
+// - A árvore não admite nós duplicados.
+// - Saída em pré-ordem.
 
 // ##################################################### //
 // BIBLIOTECAS
@@ -34,6 +24,7 @@ T3Q1
 typedef struct no {
     int chave;
     int nivel;
+    int index;
     struct no *esq;
     struct no *dir;
     struct no *mae;
