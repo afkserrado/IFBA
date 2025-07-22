@@ -1,3 +1,14 @@
+/*
+Instituto Federal da Bahia (IFBA)
+Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)
+Semestre 2025.1
+INF006 - Estrutura de Dados e Algoritmos
+Professor: José Dihego
+Aluno: Anderson Serrado
+T3Q1
+*/
+
+
 // ##################################################### //
 // OBSERVAÇÕES
 // - As entradas são números inteiros.
