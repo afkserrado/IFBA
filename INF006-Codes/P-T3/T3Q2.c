@@ -20,11 +20,12 @@
 
 // ##################################################### //
 // ÁRVORE BINÁRIA DE BUSCA (ABB)
+
 // Estrutura do nó da árvore
 typedef struct no {
     int chave;
-    int nivel;
-    int index;
+    int sEsq; // Soma das chaves dos nós da subárvore esquerda
+    int sDir; // Soma das chaves dos nós da subárvore direita
     struct no *esq;
     struct no *dir;
     struct no *mae;
@@ -48,7 +49,6 @@ no *init_no (int chave) {
 
     // Inicializações
     novo->chave = chave;
-    novo->nivel = 0;
     novo->esq = NULL;
     novo->dir = NULL;
     novo->mae = NULL;
@@ -76,26 +76,26 @@ abb *init_arvore () {
 }
 
 // Insere um novo nó na árvore
-void inserir_no (abb *arv, no *novo) {
+void inserir_no (abb *arv, no *novo, int *flagDup) {
     // Inicializações
     no *mae = NULL;
     no *atual = arv->raiz;
-
-    // Falha de alocação
-    if (arv == NULL || novo == NULL) {
-        printf("Erro: árvore ou nó inválidos.\n");
-        return;
-    }
 
     // Busca a posição do novo nó na árvore
     while (atual != NULL) {
         mae = atual; // Salva a mãe
 
-        if (novo->chave < atual->chave) { // Anda para a esquerda do atual nó
+        // Caminha para a esquerda
+        if (novo->chave < atual->chave) {
             atual = atual->esq;
         }
+        // Caminha para a direita
+        else if (novo->chave > atual->chave) {
+            atual = atual->dir;
+        }
+        // Número duplicado
         else {
-            atual = atual->dir; // Anda para a direita do atual nó
+            return; 
         }
     }
 
@@ -115,29 +115,41 @@ void inserir_no (abb *arv, no *novo) {
         mae->dir = novo;
     }
 
-    // Calcula o nível do novo nó
-    // Nó novo é a raiz
-    if (novo->mae == NULL) {
-        novo->nivel = 0;
-    }
-    // Nó novo não é a raiz
-    else {
-        novo->nivel = novo->mae->nivel + 1;
-    }
+    *flagDup = 1; // Nó inserido com sucesso
 }
 
-// Busca o nó com maior chave
-no *maximo (no *x) {
-    if (x == NULL) return NULL;
+// Calcula a soma das subárvores à direita e esquerda
+int soma_subarvore (no *x) {
+    if (x == NULL) {return 0;}
+    return x->chave + soma_subarvore(x->esq) + soma_subarvore(x->dir);
+}
 
-    while (x->dir != NULL) {
-        x = x->dir;
+// Calcula a soma das subárvores de todos os nós
+void calc_somas (no *x) {
+    if (x == NULL) {return;}
+
+    x->sEsq = soma_subarvore(x->esq);
+    x->sDir = soma_subarvore(x->dir);
+
+    calc_somas(x->esq);
+    calc_somas(x->dir);
+}
+
+// Impressão dos nós em pré-ordem: raiz, esquerda, direita
+void imprimir_preordem (no *x, FILE *arqSaida) {
+    if (x != NULL) {
+        // Delimitador
+        if (x->mae != NULL) {fprintf(arqSaida, " ");}
+
+        // Imprime em pré-ordem
+        fprintf(arqSaida, "%d (%d)", x->chave, x->sDir - x->sEsq);
+        imprimir_preordem(x->esq, arqSaida);
+        imprimir_preordem(x->dir, arqSaida);
     }
-    return x; // Nó correspondente à chave máxima
 }
 
 // Libera a memória dos nós
-void liberar_no(no *x) {
+void liberar_no (no *x) {
     if (x != NULL) {
         liberar_no(x->esq);
         liberar_no(x->dir);
@@ -146,7 +158,7 @@ void liberar_no(no *x) {
 }
 
 // Libera a memória dos nós e atribui NULL à raiz
-void destruir_arvore(abb *arv) {
+void destruir_arvore (abb *arv) {
     if (arv != NULL) {
         liberar_no(arv->raiz);
         arv->raiz = NULL;
@@ -159,8 +171,8 @@ void destruir_arvore(abb *arv) {
 int main () {
 
     // Abre o arquivo e retorna um endereço de memória
-    FILE *arqEntrada = fopen("L2Q1.in", "r"); // Ponteiro para o tipo FILE
-    FILE *arqSaida = fopen("L2Q1.out", "w"); // Cria o arquivo se não existir
+    FILE *arqEntrada = fopen("L2Q2.in", "r"); // Ponteiro para o tipo FILE
+    FILE *arqSaida = fopen("L2Q2.out", "w"); // Cria o arquivo se não existir
 
     // Se o arquivo não puder ser aberto, fopen retorna NULL
     if (arqEntrada == NULL || arqSaida == NULL) {
@@ -179,7 +191,6 @@ int main () {
 
         // Inicialização da árvore
         abb *arvore = init_arvore();
-        no *novo = NULL;
 
         // Verificar se a alocação de memória falhou
         if (arvore == NULL) {
@@ -209,7 +220,7 @@ int main () {
         // Percorre uma linha
         while (token != NULL) {
             int chave = atoi(token);
-            novo = init_no(chave);
+            no *novo = init_no(chave);
 
             // Falha de alocação
             if (novo == NULL) {
@@ -218,33 +229,22 @@ int main () {
             }
 
             // Insere o nó
-            inserir_no(arvore, novo);
+            int flagDup = 0;
+            inserir_no(arvore, novo, &flagDup);
             
-            // Imprime o nível do nó
-            if (novo->mae != NULL) {fprintf(arqSaida, " ");}
-            fprintf(arqSaida, "%d", novo->nivel);
+            // Chave duplicada
+            if (flagDup == 0) {
+                free(novo); // Desaloca o nó
+            }
 
             // Pega o próximo número
             token = strtok(NULL, del1);
         }
-        
-        // Recupera o nó com a chave máxima
-        no* max = maximo(arvore->raiz);
 
-        if (max == NULL) {
-            fprintf(arqSaida, " max NaN alt NaN pred NaN");
-        }
-        else {
-            // Imprime a chave máxima e seus dados
-            fprintf(arqSaida, " max %d alt %d pred ", max->chave, max->nivel);
-
-            if (max->mae == NULL) {
-                fprintf(arqSaida, "NaN");
-            }
-            else {
-                fprintf(arqSaida, "%d", max->mae->chave);
-            }
-        }       
+        if (arvore->raiz != NULL) {
+            calc_somas(arvore->raiz); // Calcula a soma das subárvores à esquerda e direita
+            imprimir_preordem(arvore->raiz, arqSaida); 
+        }        
     
         // Impede a quebra de linha após a última linha do arquivo
         flag = 1;
