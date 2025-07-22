@@ -87,7 +87,7 @@ abb *init_arvore () {
 }
 
 // Insere um novo nó na árvore
-void inserir_no (abb *arv, no *novo, int *flagDup) {
+void inserir_no (abb *arv, no *novo) {
     // Inicializações
     no *mae = NULL;
     no *atual = arv->raiz;
@@ -106,6 +106,7 @@ void inserir_no (abb *arv, no *novo, int *flagDup) {
         }
         // Número duplicado
         else {
+            free(novo); // Desaloca memória, pois o nó não será inserido
             return; 
         }
     }
@@ -125,8 +126,6 @@ void inserir_no (abb *arv, no *novo, int *flagDup) {
     else {
         mae->dir = novo;
     }
-
-    *flagDup = 1; // Nó inserido com sucesso
 }
 
 // Calcula a soma das subárvores à direita e esquerda
@@ -235,18 +234,11 @@ int main () {
 
             // Falha de alocação
             if (novo == NULL) {
-                fprintf(arqSaida, " ");
                 continue; // Passa para o próximo número
             }
 
             // Insere o nó
-            int flagDup = 0;
-            inserir_no(arvore, novo, &flagDup);
-            
-            // Chave duplicada
-            if (flagDup == 0) {
-                free(novo); // Desaloca o nó
-            }
+            inserir_no(arvore, novo);
 
             // Pega o próximo número
             token = strtok(NULL, del1);
