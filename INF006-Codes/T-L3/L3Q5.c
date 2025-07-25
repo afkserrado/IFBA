@@ -14,11 +14,6 @@ int comparaArvores (no *x1, no *x2) {
         return 0; // Árvores diferentes
     }
     
-    // Chaves diferentes
-    if (x1->chave != x2->chave) {
-        return 0; // Árvores diferentes
-    }
-    
     // Recurssão
     int esq = comparaArvores(x1->esq, x2->esq); // Subárvore esquerda
     int dir = comparaArvores(x1->dir, x2->dir); // Subárvore direita
