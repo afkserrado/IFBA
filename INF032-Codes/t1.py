@@ -138,5 +138,21 @@ for dirResumo in cmResumos:
 # Abre e lê todos os resumos encontrados
 docxResumos = lerResumos(cmResumos)
 
+'''
 for paragrafo in docxResumos[0].paragraphs:
     print(paragrafo.text)
+'''
+
+# Define a estrutura do dicionário
+dados = {
+    "Cliente": [],
+    "Data_hora": [],
+    "Orgao": [],
+    "Objeto": [],
+    "Modalidade": [],
+    "Modo_disputa": [],
+    "Critério_julgamento": [],
+    "Fim_acolhimento": [],
+    "Sistema": [],
+    "Valor_referencial": [],
+}
