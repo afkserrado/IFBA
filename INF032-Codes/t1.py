@@ -23,44 +23,80 @@ logging.basicConfig(
 # Funções
 
 # Guarda o diretório das subpastas de uma pasta em uma lista
-def pegarSubpastas(dirPasta):
-    
-    # Verifica se a pasta existe e se corresponde a um diretório
-    if dirPasta.exists() and dirPasta.is_dir():
-        itens = dirPasta.iterdir() # Guarda o caminho de todos os arquivos e subpastas
+def pegarSubpastas(cmPasta):
+    cmSubpastas = []
+
+    # Tenta acessar o caminho da pasta principal
+    try:
         
-        # Percorre todos os caminhos dentro de pasta
-        dirSubpastas = []
-        for item in itens:
-            if item.is_dir(): # Verifica se o caminho é um diretório
-                nome = item.name[:8] 
-                partes = nome.split()
+        # Verifica se a pasta existe e se corresponde a um diretório
+        if cmPasta.exists() and cmPasta.is_dir():
+            
+            # Guarda o caminho de todos os arquivos e subpastas
+            itens = cmPasta.iterdir() 
+            
+            # Percorre todos os caminhos dentro da pasta principal
+            for item in itens:
+                
+                # Tenta acessar o caminho de uma subpasta ou arquivo
+                try:
+                    
+                    # Verifica se o caminho corresponde a uma pasta
+                    if item.is_dir(): 
+                        nome = item.name[:8] 
+                        partes = nome.split()
 
-                # Verifica se os oito primeiros caracteres do nome da subpasta correspondem ao padrão AA MM DD
-                if len(partes) == 3 and all(parte.isdigit() for parte in partes):
-                    dirSubpastas.append(item)
+                        # Verifica se os oito primeiros caracteres do nome da subpasta correspondem ao padrão AA MM DD
+                        if len(partes) == 3 and all(parte.isdigit() for parte in partes):
+                            cmSubpastas.append(item)
 
-        return dirSubpastas
+                # Em caso de qualquer erro, registra no log
+                except Exception as erro:
+                    logging.error(f"Erro ao acessar a subpasta {item}: {erro}")
+                    continue
+ 
+        else:
+            print("O caminho não existe ou não é uma pasta.")
+        
+    # Em caso de qualquer erro, registra no log
+    except Exception as erro:
+        logging.error(f"Erro ao acessar a pasta principal: {erro}")
 
-    else:
-        print("O caminho não existe ou não é uma pasta.")
-        return []
+    return cmSubpastas
 
 # Guarda o diretório dos resumos em uma lista
-def pegarResumos(dirSubpastas):
-    dirResumos = []
-    for dirSubpasta in dirSubpastas:
-        itens = dirSubpasta.iterdir()
-        for item in itens:
-            if item.is_file() and item.name.upper().startswith("RESUMO") and item.suffix == ".docx":
-                dirResumos.append(item)
+def pegarResumos(cmSubpastas):
+    cmResumos = []
 
-    return dirResumos       
+    for cmSubpasta in cmSubpastas:
+        
+        # Tenta acessar o caminho de uma subpasta
+        try:
+            itens = cmSubpasta.iterdir()
+
+        # Em caso de qualquer erro, registra no log
+        except Exception as erro:
+            logging.error(f"Erro ao acessar {cmSubpasta}: {erro}")
+            continue
+
+        for item in itens:
+            
+            # Tenta acessar um caminho que está dentro de uma subpasta
+            try:
+                if item.is_file() and item.name.upper().startswith("RESUMO") and item.suffix == ".docx":
+                    cmResumos.append(item)
+
+            # Em caso de qualquer erro, registra no log
+            except Exception as erro:
+                logging.error(f"Erro ao acessar {item}: {erro}")
+                continue
+
+    return cmResumos       
 
 # Abre os resumos
-def lerResumos(dirResumos):
+def lerResumos(cmResumos):
     docxResumos = []
-    for dir in dirResumos:
+    for dir in cmResumos:
         try:
             docxResumos.append(Document(dir))
         except Exception as erro:
@@ -75,34 +111,34 @@ def lerResumos(dirResumos):
 
 # Cria um objeto (home) da classe Path para armazenar o diretório do usuário atual
 home = Path.home() # Por exemplo C:\Users\fulano
-dirPasta = home / "OneDrive" / "APS_DEMANDAS"
+cmPasta = home / "OneDrive" / "APS_DEMANDAS"
 
 # Pega o caminho das subpastas dentro da pasta
-dirSubpastas = pegarSubpastas(dirPasta)
+cmSubpastas = pegarSubpastas(cmPasta)
 
 # Verifica se a lista de subpastas está vazia
-if not dirSubpastas:
+if not cmSubpastas:
     print("A pasta não contém subpastas.")
 
 '''
-for dirSubpasta in dirSubpastas:
-    print(dirSubpasta.name)
+for cmSubpasta in cmSubpastas:
+    print(cmSubpasta.name)
 '''
 
 # Pega o caminho de um resumo dentro de uma subpasta
-dirResumos = pegarResumos(dirSubpastas)
+cmResumos = pegarResumos(cmSubpastas)
 
 # Verifica se a lista de resumos está vazia
-if not dirResumos:
+if not cmResumos:
     print("Não foram encontrados resumos.")
 
 '''
-for dirResumo in dirResumos:
+for dirResumo in cmResumos:
     print(dirResumo.name)
 '''
 
 # Abre e lê todos os resumos encontrados
-docxResumos = lerResumos(dirResumos)
+docxResumos = lerResumos(cmResumos)
 
 for paragrafo in docxResumos[0].paragraphs:
     print(paragrafo.text)
