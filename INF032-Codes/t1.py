@@ -2,11 +2,27 @@
 # Bibliotecas
 from pathlib import Path # Biblioteca para manipulação de caminhos
 from docx import Document # Biblioteca para manipulação de documentos no formato .docx
+import logging
+
+# Configuração básica do logging
+logging.basicConfig(
+    # Nome do arquivo de log
+    filename = 'erros_resumos.log',  
+    
+    # 'a' para acrescentar ao final da linha
+    filemode = 'a', 
+    
+    # Data e hora - Nível do log - Mensagem do log
+    format = '%(asctime)s - %(levelname)s - %(message)s', 
+    
+    # Define o nível mínimo de severidade do erro para ser registrado no arquivo
+    level = logging.ERROR # Registra apenas erros do tipo ERROR e CRITICAL
+)
 
 ######################################################################
 # Funções
 
-# Armazena as subpastas de uma pasta em uma lista
+# Guarda o diretório das subpastas de uma pasta em uma lista
 def pegarSubpastas(dirPasta):
     
     # Verifica se a pasta existe e se corresponde a um diretório
@@ -30,6 +46,7 @@ def pegarSubpastas(dirPasta):
         print("O caminho não existe ou não é uma pasta.")
         return []
 
+# Guarda o diretório dos resumos em uma lista
 def pegarResumos(dirSubpastas):
     dirResumos = []
     for dirSubpasta in dirSubpastas:
@@ -40,10 +57,16 @@ def pegarResumos(dirSubpastas):
 
     return dirResumos       
 
+# Abre os resumos
 def lerResumos(dirResumos):
     docxResumos = []
     for dir in dirResumos:
-        docxResumos.append(Document(dir))
+        try:
+            docxResumos.append(Document(dir))
+        except Exception as erro:
+            # Registra a mensagem de erro no arquivo de log
+            logging.error(f"Erro ao abrir {dir.name}: {erro}")
+            continue
 
     return docxResumos
 
