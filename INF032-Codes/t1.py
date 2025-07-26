@@ -28,18 +28,14 @@ def pegarSubpastas(cmPasta):
 
     # Tenta acessar o caminho da pasta principal
     try:
-        
         # Verifica se a pasta existe e se corresponde a um diretório
         if cmPasta.exists() and cmPasta.is_dir():
-            
             # Guarda o caminho de todos os arquivos e subpastas
             itens = cmPasta.iterdir() 
-            
             # Percorre todos os caminhos dentro da pasta principal
             for item in itens:
-                
                 # Tenta acessar o caminho de uma subpasta ou arquivo
-                try:
+                try: 
                     
                     # Verifica se o caminho corresponde a uma pasta
                     if item.is_dir(): 
@@ -69,7 +65,6 @@ def pegarResumos(cmSubpastas):
     cmResumos = []
 
     for cmSubpasta in cmSubpastas:
-        
         # Tenta acessar o caminho de uma subpasta
         try:
             itens = cmSubpasta.iterdir()
@@ -80,7 +75,6 @@ def pegarResumos(cmSubpastas):
             continue
 
         for item in itens:
-            
             # Tenta acessar um caminho que está dentro de uma subpasta
             try:
                 if item.is_file() and item.name.upper().startswith("RESUMO") and item.suffix == ".docx":
@@ -96,11 +90,15 @@ def pegarResumos(cmSubpastas):
 # Abre os resumos
 def lerResumos(cmResumos):
     docxResumos = []
+    
     for dir in cmResumos:
+        
+        # Tenta acessar o caminho de um resumo
         try:
             docxResumos.append(Document(dir))
+
+        # Em caso de qualquer erro, registra no log
         except Exception as erro:
-            # Registra a mensagem de erro no arquivo de log
             logging.error(f"Erro ao abrir {dir.name}: {erro}")
             continue
 
