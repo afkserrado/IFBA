@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <limits.h>
 #include <stdbool.h>
 #include "EstruturaVetores.h"
@@ -15,6 +16,7 @@
 int *vetorPrincipal[TAM] = {NULL}; // Endereço de cada estrutura auxiliar
 int tamAuxiliar[TAM] = {0}; // Tamanho de cada estrutura auxiliar
 int contAuxiliar[TAM] = {0}; // Quantidade de elementos de cada estrutura auxiliar
+FILE *arqDados;
 
 // #########################################################################//
 // FUNÇÕES AUXILIARES
@@ -733,15 +735,80 @@ void destruirListaEncadeadaComCabecote(No **inicio) {
     //imprimir_lista();
 }
 
+// Lê os dados do arquivo e grava na memória
+void leArquivo(FILE *arqDados) {
+    
+    int tamLinha = 100;
+    char *linha = (char *)malloc(tamLinha * sizeof(char));
+    char *token;
+
+    if (linha == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return;
+    }
+
+    // Configurações
+    int posicao; // Corresponde à linha[0]
+    int tamanho; // Corresponde à linha[2]
+    char del[] = ";"; // Delimitador
+
+    // Lê o arquivo até o final
+    while (fgets(linha, tamLinha, arqDados) != NULL) {
+        
+        // Remove o \n (caso exista)
+        linha[strcspn(linha, "\n")] = '\0';
+        
+        token = strtok(linha, del); // Pega o primeiro token
+        int cont = 0; // Contador de tokens
+
+        // Lê a linha até o final
+        while (token != NULL) {
+            // Pega a posição
+            if (cont == 0) {
+                posicao = atoi(token);
+            }
+            // Pega o tamanho
+            else if (cont == 1) {
+                tamanho = atoi(token);
+
+                // Cria a estrutura auxiliar
+                criarEstruturaAuxiliar(posicao, tamanho);
+            }
+            
+            else {
+                int valor = atoi(token); // Converte o token de char para int
+                inserirNumeroEmEstrutura(posicao, valor);
+            }
+    
+            token = strtok(NULL, del); // Pega o próximo token
+            cont++;
+        }
+    }
+    free(linha);
+}
+
 /*
 Objetivo: inicializa o programa. deve ser chamado ao inicio do programa 
 */
 void inicializar() {
     // Abre o arquivo
-    fopen("dados.txt", "r");
-    
-    
-    
+    arqDados = fopen("dados.txt", "r");
+
+    // Arquivo existe
+    if (arqDados != NULL) {
+        leArquivo(arqDados); // Processa os dados do arquivo
+        fclose(arqDados); // Fecha o arquivo
+    }
+
+    // Abre o arquivo novamente, agora em modo escrita
+    arqDados = fopen("dados.txt", "w");
+
+    // Erro ao criar arquivo
+    if (arqDados == NULL) {
+        printf("Erro ao abrir o arquivo para escrita.\n");
+        return;
+    }
+
     // Inicializa a lista
     lista = init_lista();
 }
@@ -752,6 +819,28 @@ para poder liberar todos os espaços de memória das estruturas auxiliares.
 */
 void finalizar() {
     
+    // Percorre a estrutura principal
+    for (int index = 0; index < TAM; index++) {
+        if (vetorPrincipal[index] != NULL) {
+            int *estAuxiliar = vetorPrincipal[index];
+            int tam = tamAuxiliar[index];
+            int cont = contAuxiliar[index];
+            int posicao = index + 1;
+    
+            // Imprime a posição e o tamanho da estrutura auxiliar
+            fprintf(arqDados, "%d;%d;", posicao, tam);
+    
+            // Percorre a estrutura auxiliar
+            for (int j = 0; j < cont; j++) {
+                fprintf(arqDados, "%d;", estAuxiliar[j]);
+            }
+            fprintf(arqDados, "\n");
+        } 
+    }
+
+    // Fecha o arquivo
+    fclose(arqDados);
+
     // Libera a memória alocada para as estruturas auxiliares
     for (int i = 0; i < TAM; i++) {
         if (vetorPrincipal[i] != NULL) {
