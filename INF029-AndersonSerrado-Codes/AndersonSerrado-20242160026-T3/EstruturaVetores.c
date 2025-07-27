@@ -737,6 +737,11 @@ void destruirListaEncadeadaComCabecote(No **inicio) {
 Objetivo: inicializa o programa. deve ser chamado ao inicio do programa 
 */
 void inicializar() {
+    // Abre o arquivo
+    fopen("dados.txt", "r");
+    
+    
+    
     // Inicializa a lista
     lista = init_lista();
 }
