@@ -32,6 +32,7 @@ int main()
     testeListaEncadeada();*/
     finalizar();
 }
+
 int ligado = 0;
 void show_log(char *str)
 {
