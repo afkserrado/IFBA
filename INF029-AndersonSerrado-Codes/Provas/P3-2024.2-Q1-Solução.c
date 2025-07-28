@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Estrutura do nó da lista principal
 typedef struct no1 {
@@ -91,4 +92,13 @@ l2 *init_l2 () {
 int main () {
     l1 *lista1 = init_l1();
     l2 *lista2 = init_l2();
+}
+
+void lerArquivo (FILE *arqEntrada, int *vetor[100]) {
+    
+    int tamLinha = 100;
+    char linha[tamLinha];
+
+    linha = fgets(linha, tamLinha, arqEntrada);
+    linha[strcspn(linha, "\n")] = '\0';
 }
