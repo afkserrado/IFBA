@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 // Estrutura do nó da lista principal
 typedef struct no1 {
@@ -85,4 +86,9 @@ l2 *init_l2 () {
     lista->cabeca = NULL; // Inicialização da lista
 
     return lista; // Retorna a lista
+}
+
+int main () {
+    l1 *lista1 = init_l1();
+    l2 *lista2 = init_l2();
 }
