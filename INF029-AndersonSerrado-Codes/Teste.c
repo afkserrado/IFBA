@@ -1,36 +1,34 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void fb(int *a){
-    *a = *a + 1;
-    if (*a > 1) {
-        printf("a1: %d\n", *a);
+void lerArquivo(FILE *entrada) {
+    char *linha = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    // Lê o arquivo linha por linha
+    while ((read = getline(&linha, &len, entrada)) != -1) {
+        printf("Dado: %s", linha);
     }
-    printf("a2: %d\n", *a);
+
+    // Libera a memória alocada
+    free(linha);
 }
 
-void fa(int *b){ 
-    int *c = b;
-    int *d;
-    
-    if (*c > 0){
-        *c = *c - 1;
-        fa(c);
-        *b = *b - 1;
-        fa(b);
-        d = c;
-        if (*d % 2 != 0){
-            fb(d);
-            printf("d: %d\n", *d);
-        }
-        *d = *d - 1;
-        fa(d);
-        printf("c: %d\n", *c);
-        printf("b: %d\n", *b);
-    }
-}
+int main() {
+    FILE *entrada;
 
-int main(){
-    int i = 3;
-    int *a = &i;
-    fa(a);
+    // Abre o arquivo para leitura
+    if ((entrada = fopen("P3-2023.1-Q3-Resposta-Dados.txt", "r")) == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return 1;
+    }
+
+    // Chama a função recursiva para começar a ler o arquivo
+    //lerArquivo(entrada);
+
+    // Fecha o arquivo após a leitura
+    fclose(entrada);
+
+    return 0;
 }
