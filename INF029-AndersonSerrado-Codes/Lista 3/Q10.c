@@ -1,26 +1,29 @@
+/*
+10) Escreva uma função recursiva que determine quantas vezes um dígito K ocorre em um número natural N. Por exemplo, o dígito 2 ocorre 3 vezes em 762021192.
+*/
+
 #include <stdio.h>
 
-// Q10
-
-int mult(int n1, int n2) {
-	
-	if (n2 == 0) {
-		return 0;
+void contar(int n, int k, int *contk) {
+	// Caso base
+	if (n == 0) {
+		return;
 	}
 	
-	return n1 + mult(n1, n2 - 1);	
+	if (n % 10 == k) {
+		(*contk)++;
+	}
+	
+	contar(n / 10, k, contk);
 }
 
-
-
 int main () {
+	int n = 111111111;
+	int k = 1;
+	int contk = 0;
 	
-	int n1 = 5;
-	int n2 = 3;
-	
-	int resultado = mult(n1, n2);
-	
-	printf("Resultado = %d", resultado);
+	contar(n, k, &contk);
+	printf("contk = %d\n", contk);
 	
 	return 0;
 }
