@@ -1,36 +1,24 @@
+/*
+11) A multiplicação de dois números inteiros pode ser feita através de somas sucessivas. Proponha um algoritmo recursivo Multip_Rec(n1,n2) que calcule a multiplicação de dois inteiros.
+*/
+
 #include <stdio.h>
 
-// Q11
-
-void contar(int n, int k, int *contk) {
-	// Caso base
-	if (n == 0) {
-		return;
+int mult(int n1, int n2) {
+	if (n2 == 0) {
+		return 0;
 	}
 	
-	//printf("n % 10 = %d\n", temp);
-	
-	if (n % 10 == k) {
-		(*contk)++;
-	}
-	
-	//printf("n / 10 = %d\n", n / 10);
-	
-	contar(n / 10, k, contk);
+	return n1 + mult(n1, n2 - 1);	
 }
 
-
-
-
 int main () {
+	int n1 = 5;
+	int n2 = 3;
 	
-	int n = 111111111;
-	int k = 1;
-	int contk = 0;
+	int resultado = mult(n1, n2);
 	
-	contar(n, k, &contk);
-	
-	printf("contk = %d\n", contk);
+	printf("Resultado = %d\n", resultado);
 	
 	return 0;
 }
