@@ -6,11 +6,6 @@ n^(n-1)^(n-2)...
 Faça uma função recursiva que receba um número inteiro positivo N e retorne o fatorial exponencial desse número.
 */
 
-/*
-19) O hiperfatorial de um número N, escrito H(n), é definido por ...
-Faça uma função recursiva que receba um número inteiro positivo N e retorne o hiperfatorial desse número.
-*/
-
 #include <stdio.h>
 
 // Calcula a potência
