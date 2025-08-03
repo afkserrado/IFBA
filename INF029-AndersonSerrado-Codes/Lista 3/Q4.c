@@ -1,28 +1,26 @@
 /*
-3) Faça uma função recursiva que permita inverter um número inteiro N. Ex: 123 - 321
+4) Faça uma função recursiva que permita somar os elementos de um vetor de inteiros.
 */
 
 #include <stdio.h>
 
-void inverte (int n, int *inv);
-
-int main () {
-    int n = 123456789;
-    int inv = 0;
-    inverte(n, &inv);
-    printf("Resultado = %d\n", inv);
-
-    return 0;
-}
-
-void inverte (int n, int *inv) {
-    if (n == 0) {
+void somarVetor (int vetor[], int inicio, int final, int *resultado) {
+    if (inicio > final) {
         return;
     }
 
-    int temp = n % 10; // Obtém o último dígito
-    n /= 10; // Remove o último dígito
-    *inv = *inv * 10 + temp;
+    *resultado += vetor[inicio];
+    somarVetor(vetor, inicio + 1, final, resultado);
+}
 
-    inverte(n, inv);
+
+int main () {
+    int vetor[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    int tam = sizeof(vetor) / sizeof(vetor[0]);
+    int resultado = 0;
+
+    somarVetor(vetor, 0, tam - 1, &resultado);
+    printf("Resultado = %d\n", resultado);
+
+    return 0;
 }
