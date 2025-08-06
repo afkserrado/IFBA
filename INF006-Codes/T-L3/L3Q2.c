@@ -1,6 +1,5 @@
 /*
-2) Considere o exemplo abaixo de rotação simples a direita, apresente um trecho de código que 
-dado o nó com FB=-2 efetue uma rotação simples a direita deste nó.
+2) Considere o exemplo abaixo de rotação simples a direita, apresente um trecho de código que dado o nó com FB=-2 efetue uma rotação simples a direita deste nó.
 */
 
 void rot_dir (arvore *arv, no *v) {
