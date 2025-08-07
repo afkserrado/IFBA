@@ -111,7 +111,7 @@ def extrairDados(docxResumos):
     for resumo in docxResumos:
         # Tenta abrir o resumo
         try:
-            
+
             # Define a estrutura do dicionário
             dados = {
                 "Cliente": [],
@@ -130,7 +130,7 @@ def extrairDados(docxResumos):
             for paragrafo in resumo.paragraphs:
                 if "CLIENTE: " in paragrafo.text:
                     dados["Cliente"] = paragrafo.text.split("CLIENTE: ")[1].strip().upper()
-                '''if "DATA E HORA: " in paragrafo.text:
+                if "DATA E HORA: " in paragrafo.text:
                     dados["Data_hora"] = paragrafo.text.split("DATA E HORA: ")[1].strip()
                 if "ÓRGÃO: " in paragrafo.text:
                     dados["Orgao"] = paragrafo.text.split("ÓRGÃO: ")[1].strip().upper()
@@ -147,7 +147,7 @@ def extrairDados(docxResumos):
                 if "SISTEMA: " in paragrafo.text:
                     dados["Sistema"] = paragrafo.text.split("SISTEMA: ")[1].strip().upper()
                 if "VALOR REFERENCIAL: " in paragrafo.text:
-                    dados["Valor_referencial"] = paragrafo.text.split("VALOR REFERENCIAL: ")[1].strip().upper()'''
+                    dados["Valor_referencial"] = paragrafo.text.split("VALOR REFERENCIAL: ")[1].strip().upper()
 
         # Em caso de qualquer erro, registra no log
         except Exception as erro:
@@ -199,5 +199,9 @@ for paragrafo in docxResumos[0].paragraphs:
 
 dadosResumos = extrairDados(docxResumos)
 
+'''
 for dados in dadosResumos:
-    print(dados)
+    for chave, valor in dados.items():
+        print(f"{chave}:{valor}")
+    print("\n")
+'''
