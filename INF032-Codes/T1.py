@@ -4,8 +4,7 @@ from pathlib import Path # Biblioteca para manipulação de caminhos
 from docx import Document # Biblioteca para manipulação de documentos no formato .docx
 import pandas as pd
 from openpyxl import load_workbook
-from openpyxl.styles import Alignment, Border, Side
-from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Alignment, Border, Side, PatternFill, Font
 import logging
 
 # Configuração básica do logging
@@ -215,10 +214,6 @@ def formatarPlanilha(planilha):
         'A': 10, 'B': 20, 'C': 30, 'D': 60, 'E': 60, 'F': 30, 'G': 30, 'H': 30, 'I': 30, 'J': 30, 'K': 30
     }
 
-    # Ajusta a largura das colunas
-    for col, largura in largColunas.items():
-        pl.column_dimensions[col].width = largura
-
     # Define o estilo das bordas
     bordas = Border(
         left=Side(border_style="thin"),
@@ -227,15 +222,34 @@ def formatarPlanilha(planilha):
         bottom=Side(border_style="thin")
     )
 
-    # Alinhamento (centralizar horizontal, centralizar vertical)
-    for row in ws.iter_rows():
-        for cell in row:
-            cell.border = border  # Adiciona borda
-            if cell.row == 1:  # Alinhamento para o cabeçalho
-                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-            else:  # Alinhamento para as células de dados
-                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    # Define o estilo para o cabeçalho
+    fundoCab = PatternFill(start_color="000000", end_color="000000", fill_type="solid")  # Cor do fundo em preto
+    fonteCab = Font(color="FFFFFF", bold=True)  # Cor do texto em branco
 
+    # Ajusta a largura das colunas
+    for col, largura in largColunas.items():
+        pl.column_dimensions[col].width = largura
+
+    # Alinhamento (centralizar horizontal, centralizar vertical)
+    for linha in pl.iter_rows():
+        for celula in linha:
+            celula.border = bordas  # Adiciona borda
+            
+            # Alinhamento das colunas Órgão e Objeto
+            if (celula.column == 4 or celula.column == 5) and celula.row != 1:
+                celula.alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
+            
+            # Alinhamento do cabeçalho e demais dados
+            else:
+                celula.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
+            # Cor de fundo e texto do cabeçalho
+            if celula.row == 1:
+                celula.fill = fundoCab
+                celula.font = fonteCab
+
+    # Salva o arquivo com as formatações
+    pt.save(planilha)
 
 ######################################################################
 # Main
