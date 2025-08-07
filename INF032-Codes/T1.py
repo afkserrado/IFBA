@@ -2,6 +2,10 @@
 # Bibliotecas
 from pathlib import Path # Biblioteca para manipulação de caminhos
 from docx import Document # Biblioteca para manipulação de documentos no formato .docx
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment, Border, Side
+from openpyxl.utils.dataframe import dataframe_to_rows
 import logging
 
 # Configuração básica do logging
@@ -120,7 +124,7 @@ def extrairDados(docxResumos):
                 "Objeto": [],
                 "Modalidade": [],
                 "Modo_disputa": [],
-                "Critério_julgamento": [],
+                "Criterio_julgamento": [],
                 "Fim_acolhimento": [],
                 "Sistema": [],
                 "Valor_referencial": []
@@ -141,7 +145,7 @@ def extrairDados(docxResumos):
                 if "MODO DE DISPUTA: " in paragrafo.text:
                     dados["Modo_disputa"] = paragrafo.text.split("MODO DE DISPUTA: ")[1].strip().upper()
                 if "CRITÉRIO DE JULGAMENTO: " in paragrafo.text:
-                    dados["Critério_julgamento"] = paragrafo.text.split("CRITÉRIO DE JULGAMENTO: ")[1].strip().upper()
+                    dados["Criterio_julgamento"] = paragrafo.text.split("CRITÉRIO DE JULGAMENTO: ")[1].strip().upper()
                 if "FIM DO ACOLHIMENTO DE PROPOSTA: " in paragrafo.text:
                     dados["Fim_acolhimento"] = paragrafo.text.split("FIM DO ACOLHIMENTO DE PROPOSTA: ")[1].strip().upper()
                 if "SISTEMA: " in paragrafo.text:
@@ -157,6 +161,46 @@ def extrairDados(docxResumos):
         dadosResumos.append(dados)
 
     return dadosResumos
+
+# Exportar dados para um arquivo Excel
+def exportarExcel(dadosResumos, nome_arquivo = "dados_resumos.xlsx"):
+    # Linhas do DataFrame, que contém os dados dos resumos
+    linhas = []
+
+    # Caminho do diretório onde o programa é executado
+    caminho_arquivo = Path.cwd() / nome_arquivo  
+
+    # Percorre 
+    index = 1
+    for dadosResumo in dadosResumos:
+        linha = [
+            index,
+            dadosResumo["Cliente"],
+            dadosResumo["Data_hora"],
+            dadosResumo["Orgao"],
+            dadosResumo["Objeto"],
+            dadosResumo["Modalidade"],
+            dadosResumo["Modo_disputa"],
+            dadosResumo["Criterio_julgamento"],
+            dadosResumo["Fim_acolhimento"],
+            dadosResumo["Sistema"],
+            dadosResumo["Valor_referencial"]
+        ]
+        linhas.append(linha)
+        index = index + 1
+
+    # Colunas do DataFrame, que contém o cabeçalho
+    colunas = [
+        "ITEM", "CLIENTE", "DATA E HORA", "ÓRGÃO", "OBJETO", "MODALIDADE", "MODO DE DISPUTA", "CRITÉRIO DE JULGAMENTO", "FIM DO ACOLHIMENTO DE PROPOSTA", "SISTEMA", "VALOR REFERENCIAL"
+    ]
+
+    # Cria o DataFrame
+    df = pd.DataFrame(linhas, columns = colunas)
+
+    # Salva o DataFrame no arquivo Excel
+    df.to_excel(caminho_arquivo, index=False, engine='openpyxl')
+
+    print(f"Dados exportados para o arquivo {nome_arquivo} com sucesso!")
 
 ######################################################################
 # Main
@@ -205,3 +249,6 @@ for dados in dadosResumos:
         print(f"{chave}:{valor}")
     print("\n")
 '''
+
+# Exporta os dados para uma planilha no formato .xlsx
+exportarExcel(dadosResumos)
