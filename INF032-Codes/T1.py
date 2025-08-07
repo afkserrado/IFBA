@@ -1,5 +1,5 @@
 ######################################################################
-# Bibliotecas
+# BIBLIOTECAS
 from pathlib import Path # Biblioteca para manipulação de caminhos
 from docx import Document # Biblioteca para manipulação de documentos no formato .docx
 import pandas as pd
@@ -23,7 +23,7 @@ logging.basicConfig(
 )
 
 ######################################################################
-# Funções
+# FUNÇÕES
 
 # Guarda o caminho das subpastas de uma pasta em uma lista
 def pegarSubpastas(cmPasta):
@@ -252,7 +252,7 @@ def formatarPlanilha(planilha):
     pt.save(planilha)
 
 ######################################################################
-# Main
+# MAIN
 
 # Cria um objeto (home) da classe Path para armazenar o diretório do usuário atual
 home = Path.home() # Por exemplo C:\Users\fulano
@@ -290,6 +290,7 @@ for paragrafo in docxResumos[0].paragraphs:
     print(paragrafo.text)
 '''
 
+# Extrai os dados dos resumos
 dadosResumos = extrairDados(docxResumos)
 
 '''
