@@ -87,7 +87,7 @@ def pegarResumos(cmSubpastas):
 
     return cmResumos       
 
-# Abre os resumos
+# Abre os resumos e armazena seu conteúdo em uma lista
 def lerResumos(cmResumos):
     docxResumos = []
     
@@ -103,6 +103,59 @@ def lerResumos(cmResumos):
             continue
 
     return docxResumos
+
+# Cria um dicionário com as principais informações dos resumos
+def extrairDados(docxResumos):
+    dadosResumos = []
+
+    for docxResumo in docxResumos:
+        # Tenta abrir o resumo
+        try:
+            resumo = Document(docxResumo)
+
+            # Define a estrutura do dicionário
+            dados = {
+                "Cliente": [],
+                "Data_hora": [],
+                "Orgao": [],
+                "Objeto": [],
+                "Modalidade": [],
+                "Modo_disputa": [],
+                "Critério_julgamento": [],
+                "Fim_acolhimento": [],
+                "Sistema": [],
+                "Valor_referencial": []
+            }
+
+            # Percorre os parágrafos de um resumo
+            for paragrafo in resumo.paragraphs:
+                if "CLIENTE: " in paragrafo.text:
+                    dados["Cliente"] = paragrafo.text.split("CLIENTE: ")[1].strip().upper()
+                if "DATA E HORA: " in paragrafo.text:
+                    dados["Data_hora"] = paragrafo.text.split("DATA E HORA: ")[1].strip()
+                if "ÓRGÃO: " in paragrafo.text:
+                    dados["Orgao"] = paragrafo.text.split("ÓRGÃO: ")[1].strip().upper()
+                if "OBJETO: " in paragrafo.text:
+                    dados["Objeto"] = paragrafo.text.split("OBJETO: ")[1].strip().upper()
+                if "MODALIDADE: " in paragrafo.text:
+                    dados["Modalidade"] = paragrafo.text.split("MODALIDADE: ")[1].strip().upper()
+                if "MODO DE DISPUTA: " in paragrafo.text:
+                    dados["Modo_disputa"] = paragrafo.text.split("MODO DE DISPUTA: ")[1].strip().upper()
+                if "CRITÉRIO DE JULGAMENTO: " in paragrafo.text:
+                    dados["Critério_julgamento"] = paragrafo.text.split("CRITÉRIO DE JULGAMENTO: ")[1].strip().upper()
+                if "FIM DO ACOLHIMENTO DE PROPOSTA: " in paragrafo.text:
+                    dados["Fim_acolhimento"] = paragrafo.text.split("FIM DO ACOLHIMENTO DE PROPOSTA: ")[1].strip().upper()
+                if "SISTEMA: " in paragrafo.text:
+                    dados["Sistema"] = paragrafo.text.split("SISTEMA: ")[1].strip().upper()
+                if "VALOR REFERENCIAL: " in paragrafo.text:
+                    dados["Valor_referencial"] = paragrafo.text.split("VALOR REFERENCIAL: ")[1].strip().upper()
+
+        # Em caso de qualquer erro, registra no log
+        except Exception as erro:
+            logging.error(f"Erro ao ler arquivo: {erro}")
+            continue
+
+        return dados
 
 ######################################################################
 # Main
@@ -143,16 +196,7 @@ for paragrafo in docxResumos[0].paragraphs:
     print(paragrafo.text)
 '''
 
-# Define a estrutura do dicionário
-dados = {
-    "Cliente": [],
-    "Data_hora": [],
-    "Orgao": [],
-    "Objeto": [],
-    "Modalidade": [],
-    "Modo_disputa": [],
-    "Critério_julgamento": [],
-    "Fim_acolhimento": [],
-    "Sistema": [],
-    "Valor_referencial": []
-}
+dados = extrairDados(docxResumos)
+
+for chave, valor in dados.items():
+    print(f"{chave} -> {valor}\n")
