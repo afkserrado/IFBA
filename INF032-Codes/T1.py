@@ -104,7 +104,7 @@ def lerResumos(cmResumos):
 
     return docxResumos
 
-# Cria um dicionário com as principais informações dos resumos
+# Cria uma lista de dicionários com as principais informações dos resumos
 def extrairDados(docxResumos):
     dadosResumos = []
 
@@ -155,7 +155,9 @@ def extrairDados(docxResumos):
             logging.error(f"Erro ao ler arquivo: {erro}")
             continue
 
-        return dados
+        dadosResumos.append(dados)
+
+    return dadosResumos
 
 ######################################################################
 # Main
@@ -196,7 +198,7 @@ for paragrafo in docxResumos[0].paragraphs:
     print(paragrafo.text)
 '''
 
-dados = extrairDados(docxResumos)
+dadosResumos = extrairDados(docxResumos)
 
-for chave, valor in dados.items():
-    print(f"{chave} -> {valor}\n")
+for dados in dadosResumos:
+    print(dados)
