@@ -94,8 +94,7 @@ def pegarResumos(cmSubpastas):
 def lerResumos(cmResumos):
     docxResumos = []
     
-    for cmResumo in cmResumos:
-        
+    for cmResumo in cmResumos:  
         # Tenta acessar o caminho de um resumo
         try:
             docxResumos.append(Document(cmResumo))
@@ -110,47 +109,47 @@ def lerResumos(cmResumos):
 # Cria uma lista de dicionários com as principais informações dos resumos
 def extrairDados(docxResumos):
     dadosResumos = []
+    titulos = [
+        "CLIENTE: ", 
+        "DATA E HORA: ", 
+        "ÓRGÃO: ", 
+        "OBJETO: ", 
+        "MODALIDADE: ", 
+        "MODO DE DISPUTA: ", 
+        "CRITÉRIO DE JULGAMENTO: ", 
+        "FIM DO ACOLHIMENTO DE PROPOSTA: ", 
+        "SISTEMA: ", 
+        "VALOR REFERENCIAL: "
+    ]
 
     for resumo in docxResumos:
         # Tenta abrir o resumo
         try:
-
-            # Define a estrutura do dicionário
+            # Define a estrutura do dicionário e inicializa
             dados = {
-                "Cliente": [],
-                "Data_hora": [],
-                "Orgao": [],
-                "Objeto": [],
-                "Modalidade": [],
-                "Modo_disputa": [],
-                "Criterio_julgamento": [],
-                "Fim_acolhimento": [],
-                "Sistema": [],
-                "Valor_referencial": []
+                "Cliente": "Cabeçalho não encontrado",
+                "Data_hora": "Cabeçalho não encontrado",
+                "Orgao": "Cabeçalho não encontrado",
+                "Objeto": "Cabeçalho não encontrado",
+                "Modalidade": "Cabeçalho não encontrado",
+                "Modo_disputa": "Cabeçalho não encontrado",
+                "Criterio_julgamento": "Cabeçalho não encontrado",
+                "Fim_acolhimento": "Cabeçalho não encontrado",
+                "Sistema": "Cabeçalho não encontrado",
+                "Valor_referencial": "Cabeçalho não encontrado"
             }
 
             # Percorre os parágrafos de um resumo
             for paragrafo in resumo.paragraphs:
-                if "CLIENTE: " in paragrafo.text:
-                    dados["Cliente"] = paragrafo.text.split("CLIENTE: ")[1].strip().upper()
-                if "DATA E HORA: " in paragrafo.text:
-                    dados["Data_hora"] = paragrafo.text.split("DATA E HORA: ")[1].strip()
-                if "ÓRGÃO: " in paragrafo.text:
-                    dados["Orgao"] = paragrafo.text.split("ÓRGÃO: ")[1].strip().upper()
-                if "OBJETO: " in paragrafo.text:
-                    dados["Objeto"] = paragrafo.text.split("OBJETO: ")[1].strip().upper()
-                if "MODALIDADE: " in paragrafo.text:
-                    dados["Modalidade"] = paragrafo.text.split("MODALIDADE: ")[1].strip().upper()
-                if "MODO DE DISPUTA: " in paragrafo.text:
-                    dados["Modo_disputa"] = paragrafo.text.split("MODO DE DISPUTA: ")[1].strip().upper()
-                if "CRITÉRIO DE JULGAMENTO: " in paragrafo.text:
-                    dados["Criterio_julgamento"] = paragrafo.text.split("CRITÉRIO DE JULGAMENTO: ")[1].strip().upper()
-                if "FIM DO ACOLHIMENTO DE PROPOSTA: " in paragrafo.text:
-                    dados["Fim_acolhimento"] = paragrafo.text.split("FIM DO ACOLHIMENTO DE PROPOSTA: ")[1].strip().upper()
-                if "SISTEMA: " in paragrafo.text:
-                    dados["Sistema"] = paragrafo.text.split("SISTEMA: ")[1].strip().upper()
-                if "VALOR REFERENCIAL: " in paragrafo.text:
-                    dados["Valor_referencial"] = paragrafo.text.split("VALOR REFERENCIAL: ")[1].strip().upper()
+                # Percorre a lista de títulos
+                for chave, titulo in zip(dados.keys(), titulos):
+                    # Título existe
+                    if titulo in paragrafo.text and dados[chave] == "Cabeçalho não encontrado":
+                        # Extrai a string após o título
+                        dados[chave] = paragrafo.text.split(titulo)[1].strip().upper()
+                        # Verifica se a string está vazia
+                        if dados[chave] == "":
+                            dados[chave] = "Sem informação"     
 
         # Em caso de qualquer erro, registra no log
         except Exception as erro:
