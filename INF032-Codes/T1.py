@@ -163,12 +163,12 @@ def extrairDados(docxResumos):
     return dadosResumos
 
 # Exportar dados para um arquivo Excel
-def exportarExcel(dadosResumos, nome_arquivo = "dados_resumos.xlsx"):
+def exportarExcel(dadosResumos, planilha = "dados_resumos.xlsx"):
     # Linhas do DataFrame, que contém os dados dos resumos
     linhas = []
 
     # Caminho do diretório onde o programa é executado
-    caminho_arquivo = Path.cwd() / nome_arquivo  
+    caminho_arquivo = Path.cwd() / planilha  
 
     # Percorre 
     index = 1
@@ -200,7 +200,42 @@ def exportarExcel(dadosResumos, nome_arquivo = "dados_resumos.xlsx"):
     # Salva o DataFrame no arquivo Excel
     df.to_excel(caminho_arquivo, index=False, engine='openpyxl')
 
-    print(f"Dados exportados para o arquivo {nome_arquivo} com sucesso!")
+    # Formata a planilha
+    formatarPlanilha(planilha)
+
+    print(f"Dados exportados para o arquivo {planilha} com sucesso!")
+
+# Formata a planilha
+def formatarPlanilha(planilha):
+    pt = load_workbook(planilha) # Abre a pasta de trabalho
+    pl = pt.active # Obtém a planilha ativa
+
+    # Cria um dicionário de larguras
+    largColunas = {
+        'A': 10, 'B': 20, 'C': 30, 'D': 60, 'E': 60, 'F': 30, 'G': 30, 'H': 30, 'I': 30, 'J': 30, 'K': 30
+    }
+
+    # Ajusta a largura das colunas
+    for col, largura in largColunas.items():
+        pl.column_dimensions[col].width = largura
+
+    # Define o estilo das bordas
+    bordas = Border(
+        left=Side(border_style="thin"),
+        right=Side(border_style="thin"),
+        top=Side(border_style="thin"),
+        bottom=Side(border_style="thin")
+    )
+
+    # Alinhamento (centralizar horizontal, centralizar vertical)
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.border = border  # Adiciona borda
+            if cell.row == 1:  # Alinhamento para o cabeçalho
+                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            else:  # Alinhamento para as células de dados
+                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
 
 ######################################################################
 # Main
