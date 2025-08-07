@@ -40,6 +40,6 @@ int main () {
     printf("\n");
 
     // Inverte e imprime
-    inverter(vetor, tam - 1, tam);
+    inverter(vetor, tam, tam);
     imprimir(vetor, tam);
 }
