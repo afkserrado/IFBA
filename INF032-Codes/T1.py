@@ -249,6 +249,7 @@ def formatarPlanilha(planilha):
 
     # Salva o arquivo com as formatações
     pt.save(planilha)
+    pt.close()
 
 ######################################################################
 # MAIN
