@@ -99,4 +99,3 @@ void philosopher(int i) {
         put_forks(i);   // O filósofo devolveu os garfos
     }
 }
-
