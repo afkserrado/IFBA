@@ -34,6 +34,7 @@ int state[N]; // Array para controlar os estados (um por filósofo)
 // Garante que apenas um filósofo altere o seu estado ou de um outro filósofo por vez
 // Evita problemas de sincronização em função do acesso simultâneo
 // Ou seja, mesmo que dois filósofos possam comer ao mesmo tempo, apenas um pode modificar o estado de um filósofo por vez
+// Exemplo: o dedo do meio e o polegar podem executar ao mesmo tempo porque não compartilham recursos. Entretanto, eles possuem um vizinho em comum: o dedo indicador. O mutex, portanto, garantem que o dedo do meio e o polegar não tentem, ao mesmo tempo, modificar o estado do indicador quando put_forks for chamada em cada um
 semaphore mutex = 1; 
 
 // Array de semáforos (um por filósofo)
@@ -68,24 +69,24 @@ void test(int i) {
 
 // Pega os garfos
 void take_forks(int i) {
-    down(&mutex); // Entra na região crítica
+    down(&mutex); // Entra na região crítica, impedindo outros filósofos de acessá-la
     state[i] = hungry; // Filósofo quer comer
     test(i); // Tenta pegar os garfos
-    up(&mutex); // Sai da região crítica
+    up(&mutex); // Sai da região crítica, permitindo que outro filósofos a acessem
     
     // Bloqueia o filósofo
-    // Se acessou os recursos, permite que os vizinhos acessem para evitar inanição
-    // Se não acessou, é porque os recursos não estão liberados
-    down(&s[i]); 
+    // Se acessou os recursos, decrementa o semáforo
+    // Se não acessou, fica bloqueado
+    down(&s[i]);
 }
 
 // Devolve os garfos
 void put_forks(int i) {
-    down(&mutex); // Entra na região crítica
+    down(&mutex); // Entra na região crítica, impedindo outros filósofos de acessá-la
     state[i] = thinking; // Filósofo acabou de comer
     test(left(i)); // Verifica se o vizinho da esquerda pode comer
     test(right(i)); // Verifica se o vizinho da direita pode comer
-    up(&mutex); // Sai da região crítica
+    up(&mutex); // Sai da região crítica, permitindo que outro filósofos a acessem
 }
 
 // Cria o filósofo (processo), onde i, de 0 a N-1, é o número do filósofo
@@ -93,9 +94,9 @@ void philosopher(int i) {
     // Loop infinito
     while(1) {
         think(i);       // O filósofo está pensando
-        take_forks(i); // Pega dois garfos ou bloqueia
+        take_forks(i);  // Pega dois garfos ou bloqueia
         eat(i);         // O filósofo está comendo (garfos bloquados)
-        put_forks(i);  // O filósofo devolveu os garfos
+        put_forks(i);   // O filósofo devolveu os garfos
     }
 }
 
