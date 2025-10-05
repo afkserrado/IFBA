@@ -1,4 +1,4 @@
-package lista1;
+package com.ifba.lista1;
 
 public class Main {
     public static void main(String[] args) {
