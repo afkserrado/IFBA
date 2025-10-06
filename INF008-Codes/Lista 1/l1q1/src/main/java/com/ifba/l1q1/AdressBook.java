@@ -36,12 +36,12 @@ class AdressBook {
         System.out.println("Contato não encontrado."); // Não encontrado
     }
 
-    // Listar contatos
+    // Listar contatos (usando enchanced for loop)
     public void listContacts() {
-        for(int i = 0; i < contacts.length; i++) {
-            if (contacts[i] == null) break;
+        for(Contact contact : contacts) {
+            if (contact == null) break;
 
-            System.out.println("Nome: " + contacts[i].getName() + " | Telefone: " + contacts[i].getPhone() + " | E-mail: " + contacts[i].getEmail());
+            System.out.println("Nome: " + contact.getName() + " | Telefone: " + contact.getPhone() + " | E-mail: " + contact.getEmail());
         }
     }
 }
