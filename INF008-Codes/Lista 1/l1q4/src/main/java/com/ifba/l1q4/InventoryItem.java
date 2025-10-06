@@ -22,6 +22,27 @@ class InventoryItem {
         setDescription(description);
     }
 
+    // Getters
+    public String getItemCode() {
+        return this.itemCode;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public double getUnitPrice() {
+        return this.unitPrice;
+    }
+
+    public int getQuantityInStock() {
+        return this.quantityInStock;
+    }
+
+    public int getMinimumStockLevel() {
+        return this.minimumStockLevel;
+    }
+
     // Setters
     private void setItemCode(String itemCode) {
         this.itemCode = itemCode;
@@ -64,7 +85,7 @@ class InventoryItem {
 
     // Public methods
     public void applyDiscount(double percentage) {
-        if(this.unitPrice > 0) {
+        if(this.unitPrice > 0 && percentage > 0) {
             this.unitPrice *= (100 - percentage) / 100;
         }
     }
@@ -94,6 +115,9 @@ class InventoryItem {
     public void isBelowMinimumStock() {
         if(this.quantityInStock < this.minimumStockLevel) {
             System.out.println("Quantity in stock is below the minimum stock level.");
+        }
+        else {
+            System.out.println("Quantity in stock is above the minimum stock level.");
         }
     }
 }
