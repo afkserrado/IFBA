@@ -14,9 +14,13 @@ class Contact {
     }
 
     public Contact(String name, String phone, String email) {
-        this.name = name;
+        /*this.name = name;
         this.phone = phone;
-        this.email = email;
+        this.email = email;*/
+
+        setName(name);
+        setPhone(phone);
+        setEmail(email);
     }
 
     // Getters: retorna o valor do atributo
@@ -64,5 +68,4 @@ class Contact {
         this.phone = phone;
         this.email = email;
     }
-
 }
