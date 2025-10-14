@@ -42,13 +42,7 @@ public class ContaBancaria {
     }
 
     public void depositar(double valor, String descricao) {
-        if (validarValor(valor)) {
-            saldo += valor;
-            System.out.println("Depósito realizado: R$ " + valor + " - " + descricao);
-        }
-        else {
-            System.out.println("Valor inválido.");
-        }
+        depositar(valor);
     }
 
     public String getNumero() {
