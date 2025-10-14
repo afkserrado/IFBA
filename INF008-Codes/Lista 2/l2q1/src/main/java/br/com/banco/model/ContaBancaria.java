@@ -21,7 +21,7 @@ public class ContaBancaria {
             saldo = saldoInicial; // 'this' não é obrigatório aqui            
         }
         else {
-            saldo = 0;
+            saldo = 0.0;
         }
     }
 
@@ -31,7 +31,37 @@ public class ContaBancaria {
         return valor > 0;
     }
 
-    
+    public void depositar(double valor) {
+        if (validarValor(valor)) {
+            saldo += valor;
+            System.out.println("Depósito realizado: R$ " + valor);
+        }
+        else {
+            System.out.println("Valor inválido.");
+        }
+    }
+
+    public void depositar(double valor, String descricao) {
+        if (validarValor(valor)) {
+            saldo += valor;
+            System.out.println("Depósito realizado: R$ " + valor + " - " + descricao);
+        }
+        else {
+            System.out.println("Valor inválido.");
+        }
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public String tipo() {
+        return tipo;
+    }
 
     // TODO: Criar getters APENAS para os atributos necessários
 }
