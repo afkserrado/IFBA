@@ -1,4 +1,4 @@
-//package com.ifba.l1q1;
+package com.ifba.l1q1;
 
 // Declaração da classe acessível apenas no package de origem
 class Contact {
