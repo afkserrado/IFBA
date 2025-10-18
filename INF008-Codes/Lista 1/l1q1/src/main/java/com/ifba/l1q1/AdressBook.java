@@ -7,8 +7,7 @@ class AdressBook {
     // Contador de contatos
     private int count = 0;
 
-    // Construtor padrão vazio
-    public AdressBook() {}
+    // Construtor padrão
 
     // Adicionar contato
     public void addContact(Contact contact) {
