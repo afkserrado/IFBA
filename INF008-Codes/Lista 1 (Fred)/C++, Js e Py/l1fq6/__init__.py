@@ -1,0 +1,1 @@
+# Sinaliza para o interpretador que a pasta l1fq4 é um pacote Python.
