@@ -49,8 +49,8 @@ class Country:
         self.__code = code.upper()
 
     def setName(self, name):
-        if not isinstance(name, str) or not name.isalpha():
-            raise TypeError("Name must be a string with only alphabetic characters.")
+        if not isinstance(name, str) or not all(c.isalpha() or c.isspace() for c in name) or name.strip() == "":
+            raise TypeError("Name must be a string containing only alphabetic characters and spaces, and cannot be only spaces.")
         
         self.__name = name.title()
 
