@@ -1,0 +1,1 @@
+import { Pessoa } from './Person.js'
