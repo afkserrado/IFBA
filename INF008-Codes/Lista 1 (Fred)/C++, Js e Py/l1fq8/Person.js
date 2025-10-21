@@ -17,6 +17,9 @@ d) Um método que verifique se uma pessoa é antecessora da pessoa que recebeu a
 (ou seja, é seu pai, sua mãe, ou antecessor do pai ou da mãe).
 */
 
+// Revisar
+// Verificar se otherIndividual é Person
+
 class Person {
     // Atributos privados
     #name
@@ -29,7 +32,6 @@ class Person {
         this.#setMother(mother)
     }
 
-    // Verificar se otherIndividual é Person
     areEquals(otherIndividual) {
         if (this.getName() === otherIndividual.getName() && this.getMother() === otherIndividual.getMother()) {
             console.log("Both individuals are the same.")
