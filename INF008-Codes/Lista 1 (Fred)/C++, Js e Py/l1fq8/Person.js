@@ -17,45 +17,58 @@ d) Um método que verifique se uma pessoa é antecessora da pessoa que recebeu a
 (ou seja, é seu pai, sua mãe, ou antecessor do pai ou da mãe).
 */
 
-// Revisar
-// Verificar se otherIndividual é Person
-
 class Person {
-    // Atributos privados
+    // Private attributes
     #name
     #father
     #mother
     
+    // Constructor
     constructor(name, father = null, mother = null) {
         this.#setName(name)
         this.#setFather(father)
         this.#setMother(mother)
     }
 
-    areEquals(otherIndividual) {
-        if (this.getName() === otherIndividual.getName() && this.getMother() === otherIndividual.getMother()) {
-            console.log("Both individuals are the same.")
-        }
-        else {console.log("The individuals are differents.")}
-    }
-
-    areSiblings(otherIndividual) {
-        if (this.getFather() === otherIndividual.getFather() || this.getMother() === otherIndividual.getMother()) {
-            console.log("The individuals are siblings.")
-        }
-        else {console.log("The individuals aren't siblings.")}
-    }
-
-    isAncestor(otherIndividual) {
-        if (
-            this.getFather().getName() === otherIndividual.getName() ||             // Father
-            this.getMother().getName() === otherIndividual.getName() ||             // Mother
-            this.getFather().getFather().getName() === otherIndividual.getName() || // Grandfather
-            this.getMother().getMother().getName() === otherIndividual.getName()    // Grandmother
-        ) {
-            console.log(`${otherIndividual.getName()} is ancestor of ${this.getName()}`)
-        }
+    // Public methods
+    // Checks if another Person object is semantically equal to this one
+    areEquals(otherIndividual) {        
+        // Check if the argument is a Person object
+        if(!this.#isPerson(otherIndividual)) return false
         
+        return this.getName() === otherIndividual.getName() && this.getMother() === otherIndividual.getMother()
+    }
+
+    // Checks if another Person object is a sibling of this one
+    areSiblings(otherIndividual) {
+        // Check if the argument is a Person object
+        if(!this.#isPerson(otherIndividual)) return false
+
+        // Check if this object and otherIndividual are the same
+        if(this === otherIndividual) return false
+        
+        return this.getFather() === otherIndividual.getFather() || this.getMother() === otherIndividual.getMother()
+    }
+
+    // Checks if another Person object is an ancestor of this one
+    isAncestor(otherIndividual) {
+        // Check if the argument is a Person object
+        if(!this.#isPerson(otherIndividual)) return false
+
+        // Check father's ancestry recursively
+        if (this.#father) {
+            if(this.#father === otherIndividual) return true
+            if(this.#father.isAncestor(otherIndividual)) return true
+        }
+
+        // Check mother's ancestry recursively
+        if (this.#mother) {
+            if(this.#mother === otherIndividual) return true
+            if(this.#mother.isAncestor(otherIndividual)) return true
+        }
+
+        // If not found, return false
+        return false
     }
 
     // Getters
@@ -80,18 +93,18 @@ class Person {
             throw new Error("The name must be a string and can only have alphabetical characters and spaces.")
         }
         
-        this.name = name
+        this.#name = name
     }
 
     #setFather(father) {
-        if (!this.#isPerson(father) || father !== null) {
+        if (!this.#isPerson(father) && father !== null) {
             throw new Error("Father's type must be 'Person'.")
         }
         this.#father = father // father is an object
     }
 
     #setMother(mother) {
-        if (!this.#isPerson(mother) || mother !== null) {
+        if (!this.#isPerson(mother) && mother !== null) {
             throw new Error("Mother's type must be 'Person'.")
         }
         this.#mother = mother // mother is an object
