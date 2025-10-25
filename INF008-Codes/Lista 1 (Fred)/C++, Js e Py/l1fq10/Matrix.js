@@ -41,9 +41,12 @@ class Matrix {
     #matrix
 
     // Construtores
-    constructor(lin, col) {
+    constructor(lin, col, initialMatrix = null) {
         this.#setSize(lin, col)
-        this.#matrix = Array.from(Array(lin), () => Array(col).fill(0))
+
+        this.#matrix = initialMatrix ? 
+        initialMatrix.map(row => [...row]) : 
+        Array.from(Array(lin), () => Array(col).fill(0))
     }
 
     // Public methods
@@ -158,6 +161,79 @@ class Matrix {
         const oppMatrix = this.opposite()
         const transMatrix = this.transpose()
         return oppMatrix.areEquals(transMatrix)
+    }
+
+    #checkOperation(matrix, operator) {
+        if(!this.#isMatrix(matrix)) {
+            throw new Error("The paramater must be an object from 'Matrix' class.")
+        }
+
+        if(this.#lin !== matrix.#lin || this.#col !== matrix.#col) {
+            throw new Error("Both matrices must have the same number of rows and columns.")
+        }
+
+        for(let i = 0; i < this.#lin; i++) {
+            for(let j = 0; j < this.#col; j++) {
+                if(operator === '+') {
+                   this.#matrix[i][j] += matrix.#matrix[i][j] 
+                }
+                else if(operator === '-') {
+                    this.#matrix[i][j] -= matrix.#matrix[i][j]
+                }
+                else {
+                    throw new Error("Operator must be '+', '-' or '*'.")
+                }        
+            }
+        }
+    }
+
+    sum(matrix) {
+        this.#checkOperation(matrix, '+')
+    }
+
+    sub(matrix) {
+        this.#checkOperation(matrix, '-')
+    }
+
+    prod(matrix) {
+        if(!this.#isMatrix(matrix)) {
+            throw new Error("The paramater must be an object from 'Matrix' class.")
+        }
+
+        // Since the exercise requires modifying the original matrix, both matrices must have the same dimensions
+        if(this.#lin !== matrix.#lin || this.#col !== matrix.#col || this.#col !== matrix.#lin) {
+            throw new Error("Both matrices must have the same dimensions and be compatible for multiplication.")
+        }
+
+        const tempMatrix = new Matrix(this.#lin, this.#col)
+        for(let i = 0; i < this.#lin; i++) {
+            for(let j = 0; j < this.#col; j++) {
+                // Getting the row of matrix A as an array
+                const vRow = this.#matrix[i]
+
+                // Getting the column of matrix B as an array
+                const vColumn = matrix.#matrix.map(row => row[j])
+
+                // Calculating the product of the row and column
+                const product = vRow.map((val, index) => val * vColumn[index]).reduce((sum, val) => sum + val, 0)
+
+                tempMatrix.setElement(i, j, product)
+            }
+        }
+        
+        for (let i = 0; i < this.#lin; i++) {
+            for (let j = 0; j < this.#col; j++) {
+                this.#matrix[i][j] = tempMatrix.getElement(i, j);
+            }
+        }
+    }
+
+    copy() {
+        return new Matrix(this.#lin, this.#col, this.#matrix)
+    }
+
+    print() {
+        console.log(this.#matrix.map(row => row.join('\t')).join('\n'));
     }
 
     // ####################################################################
