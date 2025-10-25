@@ -13,7 +13,7 @@ i) Um método que retorne o país de menor dimensão territorial no continente;
 j) Um método que retorne a razão territorial do maior pais em relação ao menor país.
 '''
 
-from ..l1fq6 import Country
+from l1fq6.country import Country
 
 class Continent:
     
