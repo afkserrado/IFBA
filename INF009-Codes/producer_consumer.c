@@ -5,6 +5,9 @@
 #include <semaphore.h>  // For semaphore creation and management
 #include <unistd.h>     // For sleep/usleep functions
 
+// pthread allows both threads, producer and consumer, to work asynchronously inside the same process. 
+// They share resources, like the buffer and other variables, but they are also independent
+
 // Global constants and variables
 #define TRUE 1
 #define TAM 100     // Size of the shared buffer
@@ -28,6 +31,7 @@ void consume_item(int);
 
 // Producer thread function
 void* producer(void* arg) {
+    (void)arg; // Avoid the unused warning
     int item;
 
     // Infinite loop
@@ -51,6 +55,7 @@ void* producer(void* arg) {
         sem_post(&full);
         
         // Simulating production time (100 ms)
+        // Pauses the producer for 0,1 s
         usleep(100000);
     }
 
@@ -59,7 +64,10 @@ void* producer(void* arg) {
 
 // Generates a random item to be produced
 int produce_item(void) {
-    return rand() % 1000; // Generates a random number between 0 and 999
+    int item = rand() % 1000; // Generates a random number between 0 and 999
+    printf("Product produced: %d\n", item);
+    fflush(stdout); // Forces the print immediately
+    return item;
 }
 
 // Inserts the item into the circular shared buffer
@@ -70,6 +78,7 @@ void insert_item(int item) {
 
 // Consumer thread function
 void* consumer(void* arg) {
+    (void)arg; // Avoid the unused warning
     int item;
 
     while(TRUE) {
@@ -92,6 +101,7 @@ void* consumer(void* arg) {
         consume_item(item);
 
         // Simulating consumption time (1 s)
+        // Pauses the consumer for 1 s
         usleep(1000000);
     }
 
@@ -108,6 +118,7 @@ int remove_item(void) {
 // Prints the consumed item
 void consume_item(int item) {
     printf("Product consumed: %d\n", item);
+    fflush(stdout); // Forces the print immediatly
 }
 
 // Standard semaphore function signature:
@@ -153,6 +164,10 @@ int main() {
 
     // Create consumer thread
     pthread_create(&cons_tid, NULL, consumer, NULL);
+
+    // Wait for threads (they never end, but this keeps main alive)
+    pthread_join(prod_tid, NULL);
+    pthread_join(cons_tid, NULL);
 
     return 0;
 }
