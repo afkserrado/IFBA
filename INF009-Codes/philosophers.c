@@ -47,8 +47,6 @@ int pthread_join(pthread_t thread, void **retval);
 // General
 #define TRUE 1
 #define N 5     // Number of philosophers
-#define UNBLOCKED 1
-#define BLOCKED 0
 
 // Philosophers' states
 #define THINKING 0      // Philosopher is thinking          
