@@ -5,7 +5,7 @@ public class NeuralNetworkAnalyzer implements IDataAnalyzer {
     // Implements 'analyze'
     @Override
     public IDataSource analyze(IDataSource data) {
-        // ML regression logic
+        // Anaylis logic
         
         // Returns processed data
         return data;
