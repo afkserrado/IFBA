@@ -2,7 +2,7 @@ package br.ifba.l3q1;
 
 // 'Data' as abstract class to avoid instantiation
 // 'T' is a generic type parameter that represents the type of the stored data
-abstract class Data<T> {
+public abstract class Data<T> {
     protected T data;
 
     // Constructor
