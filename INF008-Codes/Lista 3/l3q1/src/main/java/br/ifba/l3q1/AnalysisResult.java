@@ -2,7 +2,7 @@ package br.ifba.l3q1;
 
 public class AnalysisResult {
     
-    // 'processedData' stores the output of the analysis.
+    // 'processedData' stores the output of the analysis
     // It is final because the analysis result should be immutable 
     private final IDataSource processedData;
 
@@ -13,7 +13,7 @@ public class AnalysisResult {
 
     // Getters
 
-    // Returns the processed data
+    // Returns the analysis result
     public IDataSource getProcessedData() {
         return processedData;
     }

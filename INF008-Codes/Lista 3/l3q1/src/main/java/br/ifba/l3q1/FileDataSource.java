@@ -1,9 +1,16 @@
 package br.ifba.l3q1;
 
-public class FileDataSource extends IDataSource {
+public class FileDataSource implements IDataSource {
     
+    private final String data;
+
     // Constructor
     public FileDataSource(String data) {
-        super(data);
+        this.data = data;
+    }
+
+    @Override 
+    public String getData() {
+        return data;
     }
 }

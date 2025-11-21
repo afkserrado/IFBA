@@ -14,7 +14,7 @@ public class ComparativeReport {
 
     // Getters
 
-     // Returns the list of analysis results contained in this comparative report
+    // Returns the analysis results
     public List<AnalysisResult> getComparativeReport() {
         return analysisList;
     }
