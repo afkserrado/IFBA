@@ -7,8 +7,7 @@ import java.util.LinkedHashMap;
 // Concrete class
 public class AnalyticsPipeline {
     // Default constructor
-    //
-
+    
     // Executes a single analysis
     public AnalysisResult executeAnalysis(IDataAnalyzer analyzer, IDataSource data) {
         
@@ -23,7 +22,7 @@ public class AnalyticsPipeline {
     public List<AnalysisResult> executeBatchAnalysis(Map<IDataAnalyzer, IDataSource> jobs) {
         List<AnalysisResult> results = new ArrayList<>();
 
-        // Go through the Map and analyse each pair of analyzer and data
+        // Go through the Map and analyze each analyzer-data pair
         for(Map.Entry<IDataAnalyzer, IDataSource> entry: jobs.entrySet()) {
             results.add(executeAnalysis(entry.getKey(), entry.getValue()));
         }

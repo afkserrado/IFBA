@@ -7,7 +7,7 @@ public class MLRegressionAnalyzer implements IDataAnalyzer {
     public IDataSource analyze(IDataSource data) {
         // ML regression logic
 
-        // Returnes processed data
+        // Returns processed data
         return data;
     }
 }
