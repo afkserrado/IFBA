@@ -1,10 +1,10 @@
 package br.ifba.l3q1;
 
-public class MLRegressionAnalyzer implements Analyzer {
+public class MLRegressionAnalyzer implements IDataAnalyzer {
     
     // Implements 'analyze'
     @Override
-    public Data<?> analyze(Data<?> data) {
+    public IDataSource analyze(IDataSource data) {
         // ML regression logic
 
         // Returnes processed data

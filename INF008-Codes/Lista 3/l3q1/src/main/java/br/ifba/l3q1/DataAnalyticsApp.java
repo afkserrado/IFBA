@@ -5,6 +5,10 @@ Implemente um framework de análise de dados que suporte diferentes algoritmos e
 */
 
 package br.ifba.l3q1;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Arrays;
 
 public class DataAnalyticsApp {
     public static void main(String[] args) {
@@ -37,8 +41,7 @@ public class DataAnalyticsApp {
             new FileDataSource("file1.csv")
         );
         
-        List<AnalysisResult> batchResults =
-            pipeline.executeBatchAnalysis(analysisJobs);
+        List<AnalysisResult> batchResults = pipeline.executeBatchAnalysis(analysisJobs);
         
         // Análise comparativa
         ComparativeReport report = pipeline.generateComparativeReport(

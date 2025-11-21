@@ -4,17 +4,17 @@ public class AnalysisResult {
     
     // 'processedData' stores the output of the analysis.
     // It is final because the analysis result should be immutable 
-    private final Data<?> processedData;
+    private final IDataSource processedData;
 
     // Constructor
-    public AnalysisResult(Data<?> processedData) {
+    public AnalysisResult(IDataSource processedData) {
         this.processedData = processedData;
     }
 
     // Getters
 
     // Returns the processed data
-    public Data<?> getProcessedData() {
+    public IDataSource getProcessedData() {
         return processedData;
     }
 }
