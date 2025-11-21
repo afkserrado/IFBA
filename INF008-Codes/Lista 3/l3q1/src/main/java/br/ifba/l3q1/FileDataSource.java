@@ -6,10 +6,4 @@ public class FileDataSource extends Data<String> {
     public FileDataSource(String data) {
         super(data);
     }
-
-    // Overrided methods
-    @Override
-    public String getData() {
-        return this.data;
-    }
 }

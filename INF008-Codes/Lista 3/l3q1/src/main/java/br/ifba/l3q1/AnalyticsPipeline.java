@@ -5,8 +5,13 @@ public class AnalyticsPipeline {
     // Default constructor
     //
 
-    public Collection executeAnalysis(Object analyzer, Object data) {
+    // Execute a single analysis
+    public AnalysisResult executeAnalysis(Analyzer analyzer, Data<?> data) {
+        
+        // Returns processed data
+        Data<?> processed = analyzer.analyze(data);
 
+        // Wraps the processed Data in an AnalysisResult instance
+        return new AnalysisResult(processed);
     }
-
 }
