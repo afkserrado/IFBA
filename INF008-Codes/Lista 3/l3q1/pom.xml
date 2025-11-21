@@ -20,7 +20,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>br.ifba.l3q1.Main</mainClass>
+                    <mainClass>br.ifba.l3q1.DataAnalyticsApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
