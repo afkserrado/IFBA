@@ -6,7 +6,7 @@ public class InternationalOrder extends Order {
     //
     // Constructor
     //
-    public InternationalOrder(List<Product> items, String customer) {
+    public InternationalOrder(List<Product> items, Customer customer) {
         super(items, customer);
     }
 

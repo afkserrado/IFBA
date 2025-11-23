@@ -6,7 +6,7 @@ public class ExpressOrder extends Order {
     //
     // Constructor
     //
-    public ExpressOrder(List<Product> items, String customer) {
+    public ExpressOrder(List<Product> items, Customer customer) {
         super(items, customer);
     }
 

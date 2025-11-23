@@ -6,7 +6,7 @@ public class StandardOrder extends Order {
     //
     // Constructor
     //
-    public StandardOrder(List<Product> items, String customer) {
+    public StandardOrder(List<Product> items, Customer customer) {
         super(items, customer);
     }
 
