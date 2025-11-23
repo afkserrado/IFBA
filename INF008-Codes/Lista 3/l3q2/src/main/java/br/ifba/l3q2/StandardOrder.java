@@ -1,13 +1,12 @@
 package br.ifba.l3q2;
-
-import java.util.Map;
+import java.util.List;
 
 public class StandardOrder extends Order {
 
     //
     // Constructor
     //
-    public StandardOrder(Map<String, Integer> items, String customer) {
+    public StandardOrder(List<Product> items, String customer) {
         super(items, customer);
     }
 }

@@ -1,13 +1,12 @@
 package br.ifba.l3q2;
-
-import java.util.Map;
+import java.util.List;
 
 public class ExpressOrder extends Order {
 
     //
     // Constructor
     //
-    public ExpressOrder(Map<String, Integer> items, String customer) {
+    public ExpressOrder(List<Product> items, String customer) {
         super(items, customer);
     }
 }
