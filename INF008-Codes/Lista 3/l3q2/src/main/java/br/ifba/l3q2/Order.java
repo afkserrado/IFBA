@@ -1,5 +1,5 @@
 package br.ifba.l3q2;
-import java.util.Map;
+import java.util.List;
 
 // Abastract class: it can't be instantieded
 public abstract class Order {
@@ -7,22 +7,22 @@ public abstract class Order {
     //
     // Fields
     //
-    // Key: product or productID; Value: quantity of items
-    private Map<String, Integer> items; 
+    private List<Product> items; 
     private String customer;
 
     //
     // Constructor
     //
-    public Order(Map<String, Integer> items, String customer) {
+    public Order(List<Product> items, String customer) {
         this.items = items;
         this.customer = customer;
     }
 
     //
-    // Methods: getters
+    // Methods
     //
-    public Map<String, Integer> getItems() {
+    // Getters
+    public List<Product> getItems() {
         return items;
     }
 

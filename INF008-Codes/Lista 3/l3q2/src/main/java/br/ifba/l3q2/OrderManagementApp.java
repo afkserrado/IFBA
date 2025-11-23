@@ -5,6 +5,10 @@ Desenvolva um sistema de processamento de pedidos que utilize hierarquias parale
 */
 
 package br.ifba.l3q2;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Arrays;
 
 public class OrderManagementApp {
     public static void main(String[] args) {
