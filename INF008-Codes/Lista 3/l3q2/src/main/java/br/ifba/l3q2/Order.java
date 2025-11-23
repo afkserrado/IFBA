@@ -1,14 +1,14 @@
 package br.ifba.l3q2;
 import java.util.List;
 
-// Abastract class: it can't be instantieded
+// Abstract class: it can't be instantiated
 public abstract class Order {
     
     //
     // Fields
     //
-    private List<Product> items; 
-    private String customer;
+    private final List<Product> items; 
+    private final String customer;
 
     //
     // Constructor
@@ -29,4 +29,7 @@ public abstract class Order {
     public String getCustomer() {
         return customer;
     }
+
+    // Processing strategy type
+    public abstract IProcessingStrategy defaultProcessingStrategy();
 }

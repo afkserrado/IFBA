@@ -4,7 +4,7 @@ public class DomesticShippingCalculator implements IShippingCalculator {
     //
     // Fields
     //
-    private final double shippingTax = 10.0;
+    private final double shipping = 10.0;
     
     //
     // Constructor
@@ -18,6 +18,6 @@ public class DomesticShippingCalculator implements IShippingCalculator {
     // Processes the shipping by using this strategy
     @Override
     public double calculateShipping(Order order) {
-        return calculateProducts(order) * shippingTax;
+        return calculateProducts(order) * shipping;
     }
 }
