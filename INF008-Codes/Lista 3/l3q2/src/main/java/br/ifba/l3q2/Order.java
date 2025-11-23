@@ -8,12 +8,12 @@ public abstract class Order {
     // Fields
     //
     private final List<Product> items; 
-    private final String customer;
+    private final Customer customer;
 
     //
     // Constructor
     //
-    public Order(List<Product> items, String customer) {
+    public Order(List<Product> items, Customer customer) {
         this.items = items;
         this.customer = customer;
     }
@@ -26,7 +26,7 @@ public abstract class Order {
         return items;
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 

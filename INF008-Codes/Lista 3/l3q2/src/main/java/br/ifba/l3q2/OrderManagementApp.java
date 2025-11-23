@@ -13,8 +13,22 @@ import java.util.Arrays;
 public class OrderManagementApp {
     public static void main(String[] args) {
         
-        // 
         OrderProcessor processor = new OrderProcessor();
+
+        //
+        // Criando produtos
+        //
+        Product p1 = new Product("P001", "Notebook", 1, 3500.00);
+        Product p2 = new Product("P002", "Mouse", 2, 80.00);
+        Product p3 = new Product("P003", "Headset", 1, 250.00);
+
+        // Lista de produtos
+        List<Product> items = Arrays.asList(p1, p2, p3);
+
+        //
+        // Criando consumidores
+        //
+        Customer customer = new Customer("11144455546", "Fulano de Tal");
         
         
         // Diferentes tipos de pedidos com estratégias específicas
