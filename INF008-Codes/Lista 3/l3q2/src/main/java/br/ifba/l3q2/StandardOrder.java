@@ -9,4 +9,13 @@ public class StandardOrder extends Order {
     public StandardOrder(List<Product> items, String customer) {
         super(items, customer);
     }
+
+    //
+    // Methods
+    //
+    // Returns the default processing strategy for this type of order
+    @Override
+    public IProcessingStrategy defaultProcessingStrategy() {
+        return new StandardProcessingStrategy();
+    }
 }
