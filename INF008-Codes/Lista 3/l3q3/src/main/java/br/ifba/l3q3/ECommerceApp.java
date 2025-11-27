@@ -1,3 +1,9 @@
+/*
+Questão 3: Sistema de Processamento de Pagamentos para E-commerce 
+
+Implemente um sistema de pagamentos que suporte múltiplas formas de pagamento através de hierarquias paralelas. O sistema deve utilizar um registro dinâmico de processadores de pagamento e analisadores de risco. O código cliente deve demonstrar o uso de classes concretas específicas. 
+*/
+
 package br.ifba.l3q3;
 
 public class ECommerceApp {
