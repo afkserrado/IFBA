@@ -5,9 +5,10 @@ public class CreditCardPayment extends Payment {
     
     private final String cardNumber;
     private final String expirationDate;
+    private final String riskAnalyzerKey;
 
     // Constructor
-    public CreditCardPayment(double value, String cardNumber, String expirationDate) {
+    public CreditCardPayment(double value, String cardNumber, String expirationDate, String riskAnalyzerKey) {
         super(value);
 
         // Normalizes card number and validates it
@@ -21,6 +22,7 @@ public class CreditCardPayment extends Payment {
         // If no exception was thrown, construct the object
         this.cardNumber = normalizedCard;
         this.expirationDate = normalizedExp;
+        this.riskAnalyzerKey = riskAnalyzerKey;
     }
 
     // Utilities
