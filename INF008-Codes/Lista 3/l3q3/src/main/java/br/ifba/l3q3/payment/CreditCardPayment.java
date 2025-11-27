@@ -14,18 +14,18 @@ public class CreditCardPayment extends Payment {
         String normalizedCard = normalizeDigits(cardNumber);
         validateCardNumber(normalizedCard);
 
-        // Normalized expiration date and validates it
+        // Normalizes expiration date and validates it
         String normalizedExp = normalizeDigits(expirationDate);
         validateExpirationDate(normalizedExp);
 
-        // If any exception was found, constructs the object
-        this.cardNumber = cardNumber;
-        this.expirationDate = expirationDate;
+        // If no exception was thrown, construct the object
+        this.cardNumber = normalizedCard;
+        this.expirationDate = normalizedExp;
     }
 
     // Utilities
     //
-    // Normalizes a string, removing any non-digit character
+    // Normalizes a string, by removing any non-digit characters
     private static String normalizeDigits(String s) {
         if(s == null) {
             return "";
@@ -35,9 +35,11 @@ public class CreditCardPayment extends Payment {
     }
 
     // Private methods
+    //
+    // Validates card number
     private void validateCardNumber(String normalizedCardNumber) {
         
-        // Check if normalizedCardNumber is empty or null
+        // Check if normalizedCardNumber is null or empty
         if(normalizedCardNumber == null || normalizedCardNumber.isEmpty()) {
             throw new IllegalArgumentException("Invalid card number: empty or null after normalization.");
         }
@@ -50,13 +52,12 @@ public class CreditCardPayment extends Payment {
 
         // Checks if all digits are the same
         //
-
-        // Returns the first digit of the normalized card number
+        // Gets the first digit of the normalized card number
         char firstDigit = normalizedCardNumber.charAt(0);
 
         boolean testAllEquals = true;
 
-        // Searchs for digits different from the first digit
+        // Searches for digits different from the first digit
         for(int i = 1; i < len; i++) {
             if(firstDigit != normalizedCardNumber.charAt(i)) {
                 testAllEquals = false;
@@ -71,17 +72,17 @@ public class CreditCardPayment extends Payment {
 
     private void validateExpirationDate(String normalizedExpirationDate) {
 
-        // Check if normalizedExpirationDate is empty or null
+        // Check if normalizedExpirationDate is null or empty
         if(normalizedExpirationDate == null || normalizedExpirationDate.isEmpty()) {
             throw new IllegalArgumentException("Invalid expiration date: empty or null after normalization.");
         }
 
-        // Checks if the expirationDate lenght is less or greater than four digits
+        // Checks if the expiration date length is different from 4 digits (MMYY pattern)
         if(normalizedExpirationDate.length() != 4) {
             throw new IllegalArgumentException("Invalid expiration date: must contain 4 digits in MMYY format.");
         }
 
-        // Expiration date month and year
+        // Extracts the month and year from the expiration date
         int month = Integer.parseInt(normalizedExpirationDate.substring(0,2));
         int year = Integer.parseInt(normalizedExpirationDate.substring(2));
         int fullYear = 2000 + year; // Converts YY to YYYY
@@ -91,12 +92,12 @@ public class CreditCardPayment extends Payment {
            throw new IllegalArgumentException("Invalid expiration date: month must be 01-12.");
         }
 
-        // Gets the currents year and month
+        // Gets the current year and month
         LocalDate now = LocalDate.now();
         int currentYear = now.getYear();
         int currentMonth = now.getMonthValue(); 
 
-        // Checks if the expiration date is expired
+        // Checks if the expiration date is already passed
         if(fullYear < currentYear || (fullYear == currentYear && month < currentMonth)) {
             throw new IllegalArgumentException("Invalid expiration date: card is already expired.");
         }
