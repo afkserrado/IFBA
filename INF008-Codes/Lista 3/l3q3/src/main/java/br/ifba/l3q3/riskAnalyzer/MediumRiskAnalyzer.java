@@ -13,6 +13,6 @@ public class MediumRiskAnalyzer implements IRiskAnalyzer {
     @Override
     public boolean analyzeRisk(IPayment payment) {
         double value = payment.getValue();
-        return value > 1000; // Risky if true
+        return !(value > 1000); // Risky if false
     }
 }
