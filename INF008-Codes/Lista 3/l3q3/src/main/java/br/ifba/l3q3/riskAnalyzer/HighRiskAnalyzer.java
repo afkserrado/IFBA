@@ -13,6 +13,6 @@ public class HighRiskAnalyzer implements IRiskAnalyzer {
     @Override
     public boolean analyzeRisk(IPayment payment) {
         double value = payment.getValue();
-        return value > 5000; // Risky if true
+        return !(value > 5000); // Risky if false
     }
 }

@@ -9,10 +9,10 @@ public class LowRiskAnalyzer implements IRiskAnalyzer {
 
     // Public methods
     //
-    // Analyze the risk of the transaction based on its value
+    // Analyzes the risk of the transaction based on its value
     @Override
     public boolean analyzeRisk(IPayment payment) {
         double value = payment.getValue();
-        return value > 100; // Risky if true
+        return !(value > 100); // Risky if false
     }
 }

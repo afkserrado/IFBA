@@ -5,5 +5,6 @@ import br.ifba.l3q3.payment.*;
 
 public interface IPaymentProcessor {
     
-    public boolean processor(IPayment payment, boolean risk);
+    // Processes the payment and returns true if is ok
+    public boolean processor(IPayment payment, boolean riskAnalyzed);
 }

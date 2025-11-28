@@ -9,9 +9,10 @@ public class CreditCardProcessor implements IPaymentProcessor {
 
     // Public methods
     //
-    // Process payment
+    // Processes payment
     @Override
-    public boolean processor(IPayment payment, boolean risk) {
-        return payment instanceof CreditCardPayment || risk == true;
+    public boolean processor(IPayment payment, boolean riskAnalyzed) {
+        // Returns true if 'payment' matches the expected type and is considered safe (riskAnalyzed = true)
+        return (payment instanceof CreditCardPayment && riskAnalyzed);
     }
 }

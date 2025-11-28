@@ -9,9 +9,10 @@ public class PIXProcessor implements IPaymentProcessor {
 
     // Public methods
     //
-    // Process payment
+    // Processes payment
     @Override
-    public boolean processor(IPayment payment, boolean risk) {
-        return payment instanceof PIXPayment || risk == true;
+    public boolean processor(IPayment payment, boolean riskAnalyzed) {
+        // Returns true if 'payment' matches the expected type and is considered safe (riskAnalyzed = true)
+        return (payment instanceof PIXPayment && riskAnalyzed);
     }
 }

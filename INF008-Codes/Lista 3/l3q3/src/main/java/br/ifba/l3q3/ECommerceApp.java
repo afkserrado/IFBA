@@ -9,6 +9,7 @@ package br.ifba.l3q3;
 // Imports
 import br.ifba.l3q3.payment.*;
 import br.ifba.l3q3.riskAnalyzer.*;
+import br.ifba.l3q3.paymentProcessor.*;
 
 public class ECommerceApp {
     public static void main(String[] args) {
