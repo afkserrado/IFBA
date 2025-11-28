@@ -1,15 +1,18 @@
 package br.ifba.l3q3.payment;
 import java.time.LocalDate;
 
-public class CreditCardPayment extends Payment {
+public class CreditCardPayment implements IPayment {
     
+    private final double value;
     private final String cardNumber;
     private final String expirationDate;
 
     // Constructor
     public CreditCardPayment(double value, String cardNumber, String expirationDate) {
-        super(value);
-        
+        if(value <= 0) {
+            throw new IllegalArgumentException("Invalid value: must be greater than zero.");
+        }
+
         // Normalizes data
         String normalizedCard = normalizeDigits(cardNumber);
         String normalizedExp  = normalizeDigits(expirationDate);
@@ -18,13 +21,21 @@ public class CreditCardPayment extends Payment {
         validateCardNumber(normalizedCard);
         validateExpirationDate(normalizedExp);
 
-        // assign normalized values
+        // Assign normalized values
+        this.value = value;
         this.cardNumber = normalizedCard;
         this.expirationDate = normalizedExp;
     }
 
     // Getters
     //
+
+    // Gets value
+    @Override
+    public double getValue() {
+        return value;
+    }
+
     // Gets card number
     public String getCardNumber() {
         return cardNumber;
