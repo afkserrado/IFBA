@@ -5,6 +5,7 @@ Implemente um sistema de pagamentos que suporte múltiplas formas de pagamento a
 */
 
 package br.ifba.l3q3;
+import br.ifba.l3q3.payment.*;
 
 public class ECommerceApp {
     public static void main(String[] args) {
