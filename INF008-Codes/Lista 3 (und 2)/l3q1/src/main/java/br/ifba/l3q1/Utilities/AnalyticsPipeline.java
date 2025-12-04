@@ -1,5 +1,9 @@
-package br.ifba.l3q1;
+package br.ifba.l3q1.Utilities;
 import java.util.Map;
+
+import br.ifba.l3q1.DataAnalyzer.IDataAnalyzer;
+import br.ifba.l3q1.DataSource.IDataSource;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

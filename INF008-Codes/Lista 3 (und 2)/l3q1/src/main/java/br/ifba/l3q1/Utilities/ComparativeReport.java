@@ -1,4 +1,4 @@
-package br.ifba.l3q1;
+package br.ifba.l3q1.Utilities;
 
 import java.util.List;
 
