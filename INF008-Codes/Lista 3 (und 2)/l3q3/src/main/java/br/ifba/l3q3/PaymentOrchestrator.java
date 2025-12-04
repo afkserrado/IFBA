@@ -11,8 +11,8 @@ import java.util.LinkedList;
 
 public class PaymentOrchestrator {
     
-    private Map<String, IPaymentProcessor> paymentProcessors = new HashMap<>();
-    private Map<String, IRiskAnalyzer> riskAnalyzers = new HashMap<>();
+    private final Map<String, IPaymentProcessor> paymentProcessors = new HashMap<>();
+    private final Map<String, IRiskAnalyzer> riskAnalyzers = new HashMap<>();
 
     // Default constructor
 
