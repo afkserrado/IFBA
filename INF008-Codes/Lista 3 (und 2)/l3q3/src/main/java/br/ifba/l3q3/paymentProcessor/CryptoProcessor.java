@@ -13,6 +13,6 @@ public class CryptoProcessor implements IPaymentProcessor {
     @Override
     public boolean processor(IPayment payment, boolean riskAnalyzed) {
         // Returns true if 'payment' matches the expected type and is considered safe (riskAnalyzed = true)
-        return (payment instanceof CryptoProcessor && riskAnalyzed);
+        return (payment instanceof CryptoPayment && riskAnalyzed);
     }
 }
