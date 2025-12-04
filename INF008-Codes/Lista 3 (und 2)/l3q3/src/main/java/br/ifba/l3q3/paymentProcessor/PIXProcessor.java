@@ -4,7 +4,7 @@ package br.ifba.l3q3.paymentProcessor;
 import br.ifba.l3q3.payment.*;
 
 public class PIXProcessor implements IPaymentProcessor {
-    
+
     // Default constructor
 
     // Public methods
