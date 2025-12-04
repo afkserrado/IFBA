@@ -2,9 +2,10 @@ package br.ifba.l3q3.payment;
 
 public class CryptoPayment implements IPayment {
     
+    private final String paymentType = "crypto";
     private final double value;
-     private final String walletAddress;
-     private final String cryptoType;
+    private final String walletAddress;
+    private final String cryptoType;
 
     // Constructor
     public CryptoPayment(double value, String walletAddress, String cryptoType) {
@@ -33,5 +34,11 @@ public class CryptoPayment implements IPayment {
     // Gets the crypto type
     public String getCryptoType() {
         return cryptoType;
+    }
+
+    // Gets payment type
+    @Override
+    public String getPaymentType() {
+        return paymentType;
     }
 }

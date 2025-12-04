@@ -3,6 +3,7 @@ import java.time.LocalDate;
 
 public class CreditCardPayment implements IPayment {
     
+    private final String paymentType = "credit card";
     private final double value;
     private final String cardNumber;
     private final String expirationDate;
@@ -44,6 +45,12 @@ public class CreditCardPayment implements IPayment {
     // Gets expiration date
     public String getExpirationDate() {
         return expirationDate;
+    }
+
+    // Gets payment type
+    @Override
+    public String getPaymentType() {
+        return paymentType;
     }
 
     // Utilities

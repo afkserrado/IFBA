@@ -6,8 +6,8 @@ import br.ifba.l3q3.payment.*;
 public interface IPaymentProcessor {
     
     // Processes the payment and returns true if is ok
-    public boolean processor(IPayment payment, boolean riskAnalyzed);
+    public String processor(IPayment payment, boolean riskAnalyzed);
 
-    // Implementar futuramente
-    //Class<? extends IPayment> getAcceptedPaymentType();
+    // Gets payment type
+    public String getPaymentType();
 }
