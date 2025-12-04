@@ -1,11 +1,11 @@
-package br.ifba.l3q1;
+package br.ifba.l3q1.DataSource;
 
-public class FileDataSource implements IDataSource {
-    
+public class DatabaseDataSource implements IDataSource {
+
     private final String data;
 
     // Constructor
-    public FileDataSource(String data) {
+    public DatabaseDataSource(String data) {
         this.data = data;
     }
 

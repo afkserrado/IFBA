@@ -6,6 +6,13 @@ Implemente um framework de análise de dados que suporte diferentes algoritmos e
 
 package br.ifba.l3q1;
 import java.util.Map;
+
+// Imports de subpacotes do projeto
+import br.ifba.l3q1.DataAnalyzer.*;
+import br.ifba.l3q1.DataSource.*;
+import br.ifba.l3q1.Utilities.*;
+
+// Imports Java padrão
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Arrays;

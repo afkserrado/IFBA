@@ -1,4 +1,6 @@
-package br.ifba.l3q1;
+package br.ifba.l3q1.Utilities;
+
+import br.ifba.l3q1.DataSource.IDataSource;
 
 public class AnalysisResult {
     

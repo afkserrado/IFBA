@@ -1,7 +1,7 @@
-package br.ifba.l3q1;
+package br.ifba.l3q1.DataSource;
 
 // Interface representing a data source
-interface IDataSource {
+public interface IDataSource {
 
     // Returns the stored data
     public String getData();
