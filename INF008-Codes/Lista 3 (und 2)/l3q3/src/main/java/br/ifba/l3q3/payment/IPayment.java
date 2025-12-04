@@ -6,4 +6,7 @@ public interface IPayment {
     //
     // Gets value
     public double getValue();
+
+    // Gets payment type
+    public String getPaymentType();
 }

@@ -2,6 +2,7 @@ package br.ifba.l3q3.payment;
 
 public class PIXPayment implements IPayment {
     
+    private final String paymentType = "pix";
     private final double value;
     private final String key;
 
@@ -26,5 +27,11 @@ public class PIXPayment implements IPayment {
     // Gets key
     public String getKey() {
         return key;
+    }
+
+    // Gets payment type
+    @Override
+    public String getPaymentType() {
+        return paymentType;
     }
 }

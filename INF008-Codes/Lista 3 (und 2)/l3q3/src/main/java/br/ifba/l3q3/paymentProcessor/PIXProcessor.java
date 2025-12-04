@@ -5,14 +5,29 @@ import br.ifba.l3q3.payment.*;
 
 public class PIXProcessor implements IPaymentProcessor {
 
+    private final String paymentType = "pix";
+
     // Default constructor
 
     // Public methods
     //
     // Processes payment
     @Override
-    public boolean processor(IPayment payment, boolean riskAnalyzed) {
-        // Returns true if 'payment' matches the expected type and is considered safe (riskAnalyzed = true)
-        return (payment instanceof PIXPayment && riskAnalyzed);
+    public String processor(IPayment payment, boolean riskAnalyzed) {
+        if(!payment.getPaymentType().equals(paymentType)) {
+            return "Invalid payment type for PIXProcessor";
+        }
+
+        if(!riskAnalyzed) {
+            return "PIX process fail due to risk";
+        }
+        
+        return "PIX payment processed";
+    }
+
+    // Gets payment type
+    @Override
+    public String getPaymentType() {
+        return paymentType;
     }
 }

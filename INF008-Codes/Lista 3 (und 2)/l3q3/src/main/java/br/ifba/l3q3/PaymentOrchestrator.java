@@ -8,10 +8,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class PaymentOrchestrator {
     
-    private final Map<String, IPaymentProcessor> paymentProcessors = new HashMap<>();
+    private final List<IPaymentProcessor> paymentProcessors = new ArrayList<>();
     private final Map<String, IRiskAnalyzer> riskAnalyzers = new HashMap<>();
 
     // Default constructor
@@ -20,15 +21,9 @@ public class PaymentOrchestrator {
     //
     // Registers a payment processor
     public void registerPaymentProcessor(IPaymentProcessor paymentProcessor) {   
-        String processorName = paymentProcessor.getClass().getSimpleName();
-
-        if(!processorName.contains("Processor")) {
-            throw new IllegalArgumentException("Invalid processor: class name must contains 'Processor'.");
+        if(!paymentProcessors.contains(paymentProcessor)) {
+            paymentProcessors.add(paymentProcessor);
         }
-
-        processorName = processorName.replaceAll("Processor","").concat("Payment");
-        
-        paymentProcessors.put(processorName, paymentProcessor);
     }
 
     // Registers a risk analyzer
@@ -40,24 +35,19 @@ public class PaymentOrchestrator {
     public PaymentResult processPayment(IPayment payment, String risk) {
 
         IRiskAnalyzer riskAnalyzer = riskAnalyzers.get(risk);
-        if(riskAnalyzer == null) {
-            throw new IllegalArgumentException("Invalid risk: there's no risk analyzer compatible with the selected risk.");
+        boolean riskAnalyzed = false;
+
+        if(riskAnalyzer != null) {
+            riskAnalyzed = riskAnalyzer.analyzeRisk(payment);
         }
 
-        boolean riskAnalyzed = riskAnalyzer.analyzeRisk(payment);
-
-        String paymentName = payment.getClass().getSimpleName();
-
-        if(!paymentName.contains("Payment")) {
-            throw new IllegalArgumentException("Invalid payment: class name must contains 'Payment'.");
+        String paymentProcessed = "Payment unprocessed";
+        for(IPaymentProcessor paymentProcessor : paymentProcessors) {
+            if(paymentProcessor.getPaymentType().equals(payment.getPaymentType())) {
+                paymentProcessed = paymentProcessor.processor(payment, riskAnalyzed);
+                break;
+            }
         }
-
-        IPaymentProcessor paymentProcessor = paymentProcessors.get(paymentName);
-        if(paymentProcessor == null) {
-            throw new IllegalArgumentException("Invalid payment: there's no payment processor compatible with the selected payment.");
-        }
-
-        boolean paymentProcessed = paymentProcessor.processor(payment, riskAnalyzed);
 
         return new PaymentResult(payment, paymentProcessed);
     }
