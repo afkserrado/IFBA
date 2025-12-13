@@ -11,6 +11,7 @@
 */
 
 -- Evita criar a tabela se já existir, permitindo rodar o script mais de uma vez
+-- Destrói e recria as tabelas a cada execução
 DROP TABLE IF EXISTS TB_Livro_Autor;
 DROP TABLE IF EXISTS TB_Livro;
 DROP TABLE IF EXISTS TB_Autor;
@@ -233,42 +234,116 @@ FROM TB_Editora AS E INNER JOIN TB_Livro AS L
 	ON (LA.cod_autor = A.cod_autor);
 
 -- 12. Apresentar o título dos livros que começam a string ‘Banco’
-
+SELECT L.titulo
+FROM TB_Livro AS L
+WHERE L.titulo like 'Banco%';
 
 -- 13. Apresentar o título dos livros que tem a string ‘do’
-
+SELECT L.titulo
+FROM TB_Livro AS L
+WHERE L.titulo like '%do%';
 
 -- 14. Apresentar o nome de cada livro e seu preço reajustado em 5%
-
+SELECT L.titulo, L.preco*1.05 AS preco
+FROM TB_Livro AS L;
 
 -- 15. Apresentar o nome dos autores que nasceram no mês de outubro
-
+SELECT A.nome, A.data_nascimento
+FROM TB_Autor as A
+WHERE EXTRACT(MONTH FROM A.data_nascimento) = 10;
 
 -- 16. Apresentar o número de livros do acervo
-
+SELECT COUNT(*) AS Quantidade
+FROM TB_Livro AS L;
 
 -- 17. Apresentar o número de autores do livro ‘Banco de Dados’
-
+SELECT COUNT (*) AS Qtde_Autores
+FROM TB_Livro AS L INNER JOIN TB_Livro_Autor AS LA
+	ON (L.cod_livro = LA.cod_livro)
+WHERE L.cod_livro = 1;	
+	
 
 -- 18. Apresentar o somatório dos preços dos livros do acervo
-
+SELECT SUM(L.preco) AS Preco_total
+FROM TB_Livro AS L;
 
 -- 19. Apresentar a média de preços dos livros da editora Campus
-
+SELECT CAST(AVG(L.preco) AS FLOAT(2)) AS Media_Campus
+FROM TB_Livro AS L
+WHERE L.cod_editora = 1;
 
 -- 20. Apresentar o maior preço dentre todos os livros do acervo
-
+SELECT MAX(L.preco) AS Maior_Preco
+FROM TB_Livro AS L;
 
 -- 21. Apresentar a data de nascimento do autor mais velho
-
+SELECT A.nome, A.data_nascimento
+FROM TB_Autor AS A
+WHERE A.data_nascimento =
+	(SELECT MIN(A.data_nascimento)
+	FROM TB_Autor AS A);
 
 -- 22. Apresentar o número de livros por editora
-
+SELECT E.descricao, COUNT(L.ISBN) AS Qtde_Livro
+FROM TB_Editora AS E LEFT JOIN TB_Livro AS L
+	ON(E.cod_editora = L.cod_editora)
+GROUP BY E.descricao;
 
 -- 23. Apresentar o somatório e média de preço dos livros por editora
+SELECT E.descricao, SUM(L.preco) AS Soma_Preco, AVG(L.preco) AS Media_preco
+FROM TB_Editora AS E LEFT JOIN TB_Livro AS L
+	ON(E.cod_editora = L.cod_editora)
+GROUP BY E.descricao;
 
+-- 24. Apresentar o número de autores por livro, mas apenas dos livros que possuem mais de 1 autor
+SELECT L.titulo, COUNT(A.cod_autor) AS Qtde_Autores
+FROM TB_Autor AS A INNER JOIN TB_Livro_Autor AS LA
+	ON (A.cod_autor = LA.cod_autor)
+	INNER JOIN TB_Livro AS L
+	ON (LA.cod_livro = L.cod_livro)
+GROUP BY L.titulo
+HAVING COUNT(A.cod_autor) > 1;
 
+SELECT L.titulo, COUNT(*) AS Qtde_Autores
+FROM TB_Livro AS L INNER JOIN TB_Livro_Autor AS LA
+	ON (L.cod_livro = LA.cod_livro)
+GROUP BY L.titulo
+HAVING COUNT(LA.cod_autor) > 1;
 
+-- 25. Apresentar a média de preços geral por editora, mas apenas as editoras que possuem média maior que R$ 80,00
+SELECT E.descricao, AVG(L.preco) AS Media_Preco
+FROM TB_Editora AS E INNER JOIN TB_Livro AS L
+	ON (E.cod_editora = L.cod_editora)
+GROUP BY E.cod_editora
+HAVING AVG(L.preco) > 80;
 
+-- 26. Apresentar o nome dos autores que não são autores do livro Banco de Dados
+SELECT A.nome
+FROM TB_Autor AS A
+WHERE cod_autor NOT IN
+	(SELECT cod_autor
+	FROM TB_Livro_Autor AS LA
+	WHERE LA.cod_livro = 1);
 
-	
+-- 27. Apresentar a quantidade de livros da editora Campus e Abril em colunas diferentes
+SELECT
+(SELECT COUNT (*)
+FROM TB_Editora AS E INNER JOIN TB_Livro AS L
+	ON (E.cod_editora = L.cod_editora)
+WHERE E.descricao = 'Campus') AS Campus,
+
+(SELECT COUNT (*)
+FROM TB_Editora AS E INNER JOIN TB_Livro AS L
+	ON (E.cod_editora = L.cod_editora)
+WHERE E.descricao = 'Abril') AS Abril;
+
+SELECT
+(SELECT COUNT (*) AS CAMPUS
+FROM TB_Editora AS E INNER JOIN TB_Livro AS L
+	ON (E.cod_editora = L.cod_editora)
+WHERE E.descricao = 'Campus'),
+
+(SELECT COUNT (*) AS ABRIL
+FROM TB_Editora AS E INNER JOIN TB_Livro AS L
+	ON (E.cod_editora = L.cod_editora)
+WHERE E.descricao = 'Abril');
