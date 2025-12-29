@@ -1,45 +1,82 @@
 package br.edu.ifba.inf008.shell;
 
+// Importando bibliotecas internas
 import br.edu.ifba.inf008.App;
 import br.edu.ifba.inf008.interfaces.IPluginController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.ICore;
+
+// Importando bibliotecas do Java
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class PluginController implements IPluginController
-{
+// Classe responsável por carregar plugins dinamicamente em tempo de execução
+public class PluginController implements IPluginController {
+
+    // Carrega e inicializa dinamicamente todos os plugins da aplicação em tempo de execução
+    @Override
     public boolean init() {
         try {
+            // Diretório onde estão localizados os arquivos .jar dos plugins
             File currentDir = new File("./plugins");
 
-            // Define a FilenameFilter to include only .jar files
+            // Define um filtro de nomes de arquivo para aceitar apenas arquivos .jar
             FilenameFilter jarFilter = new FilenameFilter() {
+
+                // Método chamado para cada arquivo presente no diretório
+                // Retorna true apenas se o nome do arquivo terminar com ".jar" (ignorando maiúsculas/minúsculas)
                 @Override
                 public boolean accept(File dir, String name) {
                     return name.toLowerCase().endsWith(".jar");
                 }
             };
 
+            // Obtém um array com os nomes dos arquivos do diretório,
+            // considerando apenas aqueles aceitos pelo filtro acima
+            // Exemplo de resultado: ["MyPlugin.JAR", "test.jar", "PLUGIN.jar"]
             String []plugins = currentDir.list(jarFilter);
-            int i;
+
+            // Cria um array de URLs contendo o caminho completo para cada plugin
             URL[] jars = new URL[plugins.length];
+            int i;
             for (i = 0; i < plugins.length; i++)
             {
+                // Cria um objeto File apontando para o .jar do plugin
+                // e o converte para URL, que será usada pelo class loader
                 jars[i] = (new File("./plugins/" + plugins[i])).toURL();
             }
+
+            // Cria um carregador de classes capaz de carregar classes a partir dos arquivos .jar dos plugins
+            // O class loader pai é o class loader da aplicação, permitindo que os plugins acessem as classes do programa principal
             URLClassLoader ulc = new URLClassLoader(jars, App.class.getClassLoader());
             for (i = 0; i < plugins.length; i++)
             {
+                // Extrai o nome do plugin removendo a extensão ".jar"
+                // Exemplo: "MyPlugin.JAR" -> "MyPlugin"
                 String pluginName = plugins[i].split("\\.")[0];
-                IPlugin plugin = (IPlugin) Class.forName("br.edu.ifba.inf008.plugins." + pluginName, true, ulc).newInstance();
+
+                // Carrega dinamicamente a classe do plugin usando seu nome totalmente qualificado
+                // O carregamento é feito pelo class loader customizado (ulc),
+                // que busca a classe dentro do arquivo .jar correspondente
+                // Exemplo de nome resolvido: "br.edu.ifba.inf008.plugins.MyPlugin"
+                IPlugin plugin = (IPlugin) Class.forName(
+                        "br.edu.ifba.inf008.plugins." + pluginName,
+                        true,
+                        ulc
+                ).newInstance();
+
+                // Inicializa o plugin após ele ter sido carregado
                 plugin.init();
             }
 
             return true;
-        } catch (Exception e) {
+        }
+
+        catch (Exception e) {
+            // Em caso de erro durante o carregamento ou inicialização dos plugins,
+            // exibe o tipo da exceção e sua mensagem
             System.out.println("Error: " + e.getClass().getName() + " - " + e.getMessage());
 
             return false;
