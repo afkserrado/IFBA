@@ -28,9 +28,9 @@
                 <version>3.0.0</version>
                 <configuration>
                     <mainClass>br.edu.ifba.inf008.App</mainClass>
-		    <!--<arguments>
-                        <argument>arg1</argument>
-		    </arguments>-->
+                    <!--<arguments>
+                    <argument>arg1</argument>
+                    </arguments>-->
                 </configuration>
             </plugin>
         </plugins>
