@@ -1,13 +1,17 @@
 package br.edu.ifba.inf008.plugins;
 
+import java.sql.Connection;
+
 import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.interfaces.IDatabaseController;
+import br.edu.ifba.inf008.interfaces. IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
 
 public class MyPlugin implements IPlugin
 {
@@ -51,6 +55,18 @@ public class MyPlugin implements IPlugin
         });
 
         uiController.createTab("new tab", new Rectangle(200,200, Color.LIGHTSTEELBLUE));
+
+        // Tratando SQLException
+        try {
+            IDatabaseController db = ICore.getInstance().getDatabaseController();
+            Connection connection = db.getConnection();
+            System.out.println("Conexão estabelecida: " + connection);
+            db.closeConnection(connection);
+            System.out.println("Conexão fechada com sucesso!");
+        } catch (Exception ex) {
+            System.err.println("Erro ao conectar com banco: " + ex.getMessage());
+            ex.printStackTrace();
+        }
 
         return true;
     }

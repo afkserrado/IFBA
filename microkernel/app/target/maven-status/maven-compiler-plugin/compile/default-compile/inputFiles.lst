@@ -1,6 +1,7 @@
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/App.java
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/AuthenticationController.java
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/Core.java
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/DatabaseController.java
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/IOController.java
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/PluginController.java
 /mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/UIController.java
