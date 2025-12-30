@@ -19,7 +19,7 @@
     <modules>
         <module>interfaces</module>
         <module>app</module>
-        <module>plugins/myplugin</module>
+       <!-- <module>plugins/myplugin</module>-->
     </modules>
 
     <!-- 
