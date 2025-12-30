@@ -1,3 +1,7 @@
+<!-- 
+    Módulo pai (parent-project)
+    Responsável por centralizar configurações comuns e agregar os módulos do projeto
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,12 +12,20 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <!-- 
+        Lista de módulos que fazem parte do projeto multi-módulo
+        O Maven irá construir esses módulos na ordem declarada
+    -->
     <modules>
         <module>interfaces</module>
         <module>app</module>
         <module>plugins/myplugin</module>
     </modules>
 
+    <!-- 
+        Versão do Java usada para compilar o projeto
+        Aplica-se a todos os módulos que herdam deste POM
+    -->
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>

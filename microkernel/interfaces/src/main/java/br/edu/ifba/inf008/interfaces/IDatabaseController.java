@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.interfaces;
 
+// Importanto bibliotecas do Java
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -12,28 +12,29 @@ public abstract class IDatabaseController {
     private static String subprotocol;
     private static String port;
     private static String database;
-    private static String url; // Formato: jdbc:SUBPROTOCOLO://HOST:PORTA/BANCO
+    private static String url;
     private static String user;
     private static String password;
 
     // Configura as credenciais
+    // Evita que as credenciais precisem ser passadas via construtor no Core da aplicação
     public static void init(String subprotocol, String port, String database, String user, String password) {
         IDatabaseController.subprotocol = subprotocol;
         IDatabaseController.port = port;
         IDatabaseController.database = database;
         IDatabaseController.user = user;
         IDatabaseController.password = password;
-
-        createURL();
+        url = "jdbc:" + subprotocol + "://localhost:" + port + "/" + database;
     }
     
-    // Cria a URL
-    private static String createURL() {
-        return url = "jdbc:" + subprotocol + "://localhost:" + port + "/" + database;
+    // Cria a URL completa
+    // Formato: jdbc:subprotocolo://host:porta/banco
+    public static String getURL() {
+        return url;
     }
 
-    // Cria um objeto "Properties", que encapsula as credenciais
-    private static Properties createProps() {
+    // Cria um objeto "Properties" que encapsula as credenciais
+    public static Properties createProps() {
         Properties props = new Properties();
         props.setProperty("user", user);
         props.setProperty("password", password);
@@ -42,28 +43,9 @@ public abstract class IDatabaseController {
 
     // Estabelece conexão com a base de dados
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
-    public Connection getConnection() throws SQLException {
-        try {
-            Connection connection = DriverManager.getConnection(url, createProps());
-            System.out.println("Conexão estabelecida com o " + subprotocol + "!");
-            return connection;
-        }
-        catch (SQLException e) {
-            System.err.println("Não foi possível estabelecer a conexão com o banco de dados: " + e.getMessage());
-            throw e; // Relança a SQLException
-        }
-    }
+    public abstract Connection getConnection() throws SQLException;
 
     // Libera os recursos (base de dados)
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
-    public void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            }
-            catch (SQLException e) {
-                System.err.println("Não foi possível encerrar a conexão com a base de dados: " + e.getMessage());
-            }
-        }
-    }
+    public abstract void closeConnection(Connection connection);
 }
