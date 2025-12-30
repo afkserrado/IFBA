@@ -1,4 +1,5 @@
 br/edu/ifba/inf008/App.class
+br/edu/ifba/inf008/shell/DatabaseController.class
 br/edu/ifba/inf008/shell/AuthenticationController.class
 br/edu/ifba/inf008/shell/UIController.class
 br/edu/ifba/inf008/shell/Core.class

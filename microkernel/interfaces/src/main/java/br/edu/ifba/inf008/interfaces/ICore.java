@@ -23,4 +23,7 @@ public abstract class ICore
 
     // Retorna o controlador de plugins, responsável por carregar e gerenciar os plugins do sistema
     public abstract IPluginController getPluginController();
+
+    // Retorna o controlador responsável por estabelecer a conexão com a base de dados
+    public abstract IDatabaseController getDatabaseController();
 }

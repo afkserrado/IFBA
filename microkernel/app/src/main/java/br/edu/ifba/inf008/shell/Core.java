@@ -3,6 +3,7 @@ package br.edu.ifba.inf008.shell;
 // Importando bibliotecas internas
 import br.edu.ifba.inf008.interfaces.IAuthenticationController;
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IIOController;
 import br.edu.ifba.inf008.interfaces.IPluginController;
 import br.edu.ifba.inf008.interfaces.IUIController;
@@ -43,6 +44,7 @@ public class Core extends ICore {
     private final IAuthenticationController authenticationController = new AuthenticationController();
     private final IIOController ioController = new IOController();
     private final IPluginController pluginController = new PluginController();
+    private final IDatabaseController databaseController = new DatabaseController();
 
     // Getters
     //
@@ -68,5 +70,11 @@ public class Core extends ICore {
     @Override
     public IPluginController getPluginController() {
         return pluginController;
+    }
+
+    // Retorna o controlador responsável por estabelecer a conexão com a base de dados
+    @Override 
+    public IDatabaseController getDatabaseController() {
+        return databaseController;
     }
 }
