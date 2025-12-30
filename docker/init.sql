@@ -222,9 +222,9 @@ INSERT INTO rentals (customer_id, vehicle_id, rental_type, start_date, scheduled
                      actual_end_date, pickup_location, initial_mileage, final_mileage,
                      base_rate, insurance_fee, total_amount, rental_status, payment_status)
 SELECT
-    FLOOR(1 + RAND() * 5) AS customer_id,
-    FLOOR(1 + RAND() * 8) AS vehicle_id,
-    ELT(FLOOR(1 + RAND() * 4), 'DAILY', 'WEEKLY', 'MONTHLY', 'DAILY') AS rental_type,
+    FLOOR(1 + RAND() * 5) AS customer_id, -- Gera um customer_id aleatório, de 1 a 5
+    FLOOR(1 + RAND() * 8) AS vehicle_id, -- Gerar um vehicle_id aleatório, de 1 a 8
+    ELT(FLOOR(1 + RAND() * 4), 'DAILY', 'WEEKLY', 'MONTHLY', 'DAILY') AS rental_type, -- retorna o n-ésimo elemento da lista
     DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 365) DAY) AS start_date,
     DATE_ADD(DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 365) DAY),
             INTERVAL FLOOR(1 + RAND() * 30) DAY) AS scheduled_end_date,
