@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.interfaces;
 
-import javafx.scene.control.MenuItem; // Um item dentro de um menu gráfico
-import javafx.scene.Node; // Classe base para qualquer elemento gráfico
+import javafx.scene.Node; // Um item dentro de um menu gráfico
+import javafx.scene.control.MenuItem; // Classe base para qualquer elemento gráfico
 
 public interface IUIController
 {
