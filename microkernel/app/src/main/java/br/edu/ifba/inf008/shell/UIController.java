@@ -4,16 +4,13 @@ package br.edu.ifba.inf008.shell;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import javafx.application.Application;   // Classe base de qualquer aplicação JavaFX; define o ciclo de vida da aplicação
-import javafx.geometry.Side;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
-import javafx.scene.Node;                // Componente de interface que pode ser usado como conteúdo em layouts
-import javafx.scene.Scene;               // Representa um contêiner para todo o conteúdo visual
-import javafx.scene.control.Menu;        // Representa um menu suspenso que agrupa vários MenuItems
-import javafx.scene.control.MenuBar;     // Representa a barra de menu superior de uma janela
-import javafx.scene.control.MenuItem;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
-import javafx.scene.control.Tab;         // Representa uma aba individual; possui um título e um Node como conteúdo
-import javafx.scene.control.TabPane;     // Contêiner que gerencia múltiplas abas e permite alternar entre elas
-import javafx.scene.layout.VBox;         // Contêiner de layout que organiza os nós filhos verticalmente
-import javafx.stage.Stage;               // Contêiner de nível superior (janela) no JavaFX
+import javafx.scene.Node;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
+import javafx.scene.control.Menu;                // Componente de interface que pode ser usado como conteúdo em layouts
+import javafx.scene.control.MenuBar;               // Representa um contêiner para todo o conteúdo visual
+import javafx.scene.control.MenuItem;        // Representa um menu suspenso que agrupa vários MenuItems
+import javafx.scene.control.Tab;     // Representa a barra de menu superior de uma janela
+import javafx.scene.control.TabPane;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
+import javafx.stage.Stage;         // Representa uma aba individual; possui um título e um Node como conteúdo
 
 // Classe responsável por controlar a interface gráfica da aplicação
 // Atua como ponto de entrada para o JavaFX e como uma fachada entre o núcleo da aplicação e a interface gráfica gerenciada pelo JavaFX
@@ -43,47 +40,55 @@ public class UIController extends Application implements IUIController {
     // Método principal do ciclo de vida do JavaFX; responsável por construir e exibir a GUI
     @Override
     public void start(Stage primaryStage) {
+        
         // Define o título da janela, fornecido pelo sistema operacional
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("LokiCar");
 
-        // Cria a barra de menus que aparecerá no topo da janela
-        menuBar = new MenuBar();
+        VBox welcomeScreen = new VBox();
+        
 
-        // Cria um layout vertical
-        // Organiza a hierarquia visual
-            // VBox
-                // MenuBar
-                    // Menu
-                        // MenuItem
-                // TabPane
-                    // Tab
-                        // Node
-        VBox vBox = new VBox(menuBar); // Adiciona a barra de menus como o primeiro filho
+        
+        // // Define o título da janela, fornecido pelo sistema operacional
+        // primaryStage.setTitle("Hello World!");
 
-        // Cria o TabPane que conterá as principais visualizações da aplicação
-        tabPane = new TabPane();
+        // // Cria a barra de menus que aparecerá no topo da janela
+        // menuBar = new MenuBar();
 
-        // Posiciona as abas na parte inferior do TabPane
-        tabPane.setSide(Side.BOTTOM);
+        // // Cria um layout vertical
+        // // Organiza a hierarquia visual
+        //     // VBox
+        //         // MenuBar
+        //             // Menu
+        //                 // MenuItem
+        //         // TabPane
+        //             // Tab
+        //                 // Node
+        // VBox vBox = new VBox(menuBar); // Adiciona a barra de menus como o primeiro filho
 
-        // Adiciona o TabPane abaixo da barra de menus no layout vertical
-        vBox.getChildren().addAll(tabPane);
+        // // Cria o TabPane que conterá as principais visualizações da aplicação
+        // tabPane = new TabPane();
 
-        // Cria a Scene usando o VBox como nó raiz
-        // Contém cada conteúdo visual
-        Scene scene = new Scene(vBox, 960, 600);
+        // // Posiciona as abas na parte inferior do TabPane
+        // tabPane.setSide(Side.BOTTOM);
 
-        // Associa a Scene ao Stage (janela)
-        primaryStage.setScene(scene);
+        // // Adiciona o TabPane abaixo da barra de menus no layout vertical
+        // vBox.getChildren().addAll(tabPane);
 
-        // Exibe a janela na tela
-        primaryStage.show();
+        // // Cria a Scene usando o VBox como nó raiz
+        // // Contém cada conteúdo visual
+        // Scene scene = new Scene(vBox, 960, 600);
 
-        // Inicializa os plugins após a GUI ter sido criada e exibida
-            // Obtém a instância do Core em execução
-            // Obtém a instância do PluginController associada ao Core em execução
-            // Inicializa o PluginController
-        Core.getInstance().getPluginController().init();
+        // // Associa a Scene ao Stage (janela)
+        // primaryStage.setScene(scene);
+
+        // // Exibe a janela na tela
+        // primaryStage.show();
+
+        // // Inicializa os plugins após a GUI ter sido criada e exibida
+        //     // Obtém a instância do Core em execução
+        //     // Obtém a instância do PluginController associada ao Core em execução
+        //     // Inicializa o PluginController
+        // Core.getInstance().getPluginController().init();
     }
 
     // Cria (ou recupera) um menu e adiciona um novo item de menu a ele
