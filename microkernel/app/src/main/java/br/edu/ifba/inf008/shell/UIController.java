@@ -3,6 +3,8 @@ package br.edu.ifba.inf008.shell;
 // Importando bibliotecas internas
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.interfaces.IScreen;
+import br.edu.ifba.inf008.screens.*;
 import javafx.application.Application;   // Classe base de qualquer aplicação JavaFX; define o ciclo de vida da aplicação
 import javafx.scene.Node;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
 import javafx.scene.control.Menu;                // Componente de interface que pode ser usado como conteúdo em layouts
@@ -11,6 +13,8 @@ import javafx.scene.control.MenuItem;        // Representa um menu suspenso que 
 import javafx.scene.control.Tab;     // Representa a barra de menu superior de uma janela
 import javafx.scene.control.TabPane;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
 import javafx.stage.Stage;         // Representa uma aba individual; possui um título e um Node como conteúdo
+import javafx.scene.Scene;
+import javafx.scene.Parent;
 
 // Classe responsável por controlar a interface gráfica da aplicação
 // Atua como ponto de entrada para o JavaFX e como uma fachada entre o núcleo da aplicação e a interface gráfica gerenciada pelo JavaFX
@@ -20,6 +24,7 @@ public class UIController extends Application implements IUIController {
     private ICore core;                         // Referência para a camada do núcleo
     private MenuBar menuBar;                    // Barra de menu superior da janela da aplicação
     private TabPane tabPane;                    // Contêiner central que mantém múltiplas abas (área principal de conteúdo)
+    private Stage primaryStage;                 // Guardar a scene (tela em execução)
     private static UIController uiController;   // Referência estática usada para implementar acesso singleton ao UIController
 
     // Construtor padrão (exigido pelo JavaFX)
@@ -40,55 +45,49 @@ public class UIController extends Application implements IUIController {
     // Método principal do ciclo de vida do JavaFX; responsável por construir e exibir a GUI
     @Override
     public void start(Stage primaryStage) {
-        
+        uiController = this;
+        this.primaryStage = primaryStage;
+
         // Define o título da janela, fornecido pelo sistema operacional
         primaryStage.setTitle("LokiCar");
 
-        VBox welcomeScreen = new VBox();
-        
+        showWelcomeScreen();
+        primaryStage.show();
+    }
 
-        
-        // // Define o título da janela, fornecido pelo sistema operacional
-        // primaryStage.setTitle("Hello World!");
+    /**
+     *
+     * Exibe a tela de boas-vindas (WelcomeScreen)
+     */
+    private void showWelcomeScreen() {
+        // Cria a WelcomeScreen passando a ação: "quando o botão 'LOGAR' for clicado, mostre a MainScreen"
+        IScreen welcomeScreen = new WelcomeScreen(() -> showMainScreen());
+        showScreen(welcomeScreen);
+    }
 
-        // // Cria a barra de menus que aparecerá no topo da janela
-        // menuBar = new MenuBar();
+    /**
+     * Exibe a tela principal com menu e tabs (MainScreen)
+     */
+    private void showMainScreen() {
+        MainScreen mainScreen = new MainScreen();
+        showScreen(mainScreen);
 
-        // // Cria um layout vertical
-        // // Organiza a hierarquia visual
-        //     // VBox
-        //         // MenuBar
-        //             // Menu
-        //                 // MenuItem
-        //         // TabPane
-        //             // Tab
-        //                 // Node
-        // VBox vBox = new VBox(menuBar); // Adiciona a barra de menus como o primeiro filho
+        //Core.getInstance().getPluginController().init();
+        System.out.println("✅ MainScreen exibida! (teste)");
+    }
 
-        // // Cria o TabPane que conterá as principais visualizações da aplicação
-        // tabPane = new TabPane();
+    /**
+     * Método genérico para trocar a tela (Scene) exibida
+     *
+     * @param screen Tela a ser exibida
+     */
+    private void showScreen(IScreen screen) {
+        Node content = screen.create();
 
-        // // Posiciona as abas na parte inferior do TabPane
-        // tabPane.setSide(Side.BOTTOM);
-
-        // // Adiciona o TabPane abaixo da barra de menus no layout vertical
-        // vBox.getChildren().addAll(tabPane);
-
-        // // Cria a Scene usando o VBox como nó raiz
-        // // Contém cada conteúdo visual
-        // Scene scene = new Scene(vBox, 960, 600);
-
-        // // Associa a Scene ao Stage (janela)
-        // primaryStage.setScene(scene);
-
-        // // Exibe a janela na tela
-        // primaryStage.show();
-
-        // // Inicializa os plugins após a GUI ter sido criada e exibida
-        //     // Obtém a instância do Core em execução
-        //     // Obtém a instância do PluginController associada ao Core em execução
-        //     // Inicializa o PluginController
-        // Core.getInstance().getPluginController().init();
+        // Cria a Scene usando o VBox como nó raiz
+        // Contém cada conteúdo visual
+        Scene scene = new Scene((Parent) content, 960, 600);
+        primaryStage.setScene(scene);
     }
 
     // Cria (ou recupera) um menu e adiciona um novo item de menu a ele
