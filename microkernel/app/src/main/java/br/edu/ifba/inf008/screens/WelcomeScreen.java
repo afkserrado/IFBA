@@ -1,7 +1,6 @@
 package br.edu.ifba.inf008.screens;
 
 import br.edu.ifba.inf008.interfaces.IScreen;   // Interface para telas da aplicação
-
 import javafx.geometry.Insets;                  // Margens e padding (espaçamento interno/externo)
 import javafx.geometry.Pos;                     // Posicionamento/alinhamento de elementos
 import javafx.scene.Node;                       // Classe pai de todos elementos visuais do JavaFX

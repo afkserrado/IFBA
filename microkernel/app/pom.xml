@@ -43,6 +43,13 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>3.5.7</version>
         </dependency>
+
+        <!-- JavaFX Controls: MenuItem, Menu, Button, etc. -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>17</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -2,19 +2,20 @@ package br.edu.ifba.inf008.shell;
 
 // Importando bibliotecas internas
 import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.IScreen;
-import br.edu.ifba.inf008.screens.*;
-import javafx.application.Application;   // Classe base de qualquer aplicação JavaFX; define o ciclo de vida da aplicação
-import javafx.scene.Node;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
-import javafx.scene.control.Menu;                // Componente de interface que pode ser usado como conteúdo em layouts
-import javafx.scene.control.MenuBar;               // Representa um contêiner para todo o conteúdo visual
-import javafx.scene.control.MenuItem;        // Representa um menu suspenso que agrupa vários MenuItems
-import javafx.scene.control.Tab;     // Representa a barra de menu superior de uma janela
-import javafx.scene.control.TabPane;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
-import javafx.stage.Stage;         // Representa uma aba individual; possui um título e um Node como conteúdo
-import javafx.scene.Scene;
-import javafx.scene.Parent;
+import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.screens.MainScreen;
+import br.edu.ifba.inf008.screens.WelcomeScreen;   // Classe base de qualquer aplicação JavaFX; define o ciclo de vida da aplicação
+import javafx.application.Application;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
+import javafx.scene.Node;                // Componente de interface que pode ser usado como conteúdo em layouts
+import javafx.scene.Parent;               // Representa um contêiner para todo o conteúdo visual
+import javafx.scene.Scene;        // Representa um menu suspenso que agrupa vários MenuItems
+import javafx.scene.control.Menu;     // Representa a barra de menu superior de uma janela
+import javafx.scene.control.MenuBar;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
+import javafx.scene.control.MenuItem;         // Representa uma aba individual; possui um título e um Node como conteúdo
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
 
 // Classe responsável por controlar a interface gráfica da aplicação
 // Atua como ponto de entrada para o JavaFX e como uma fachada entre o núcleo da aplicação e a interface gráfica gerenciada pelo JavaFX
@@ -92,11 +93,12 @@ public class UIController extends Application implements IUIController {
 
     // Cria (ou recupera) um menu e adiciona um novo item de menu a ele
     // Retorna o MenuItem criado para que ações possam ser associadas
+    @Override
     public MenuItem createMenuItem(String menuText, String menuItemText) {
         // Tenta localizar um menu existente com o texto informado
         Menu newMenu = null;
         for (Menu menu : menuBar.getMenus()) {
-            if (menu.getText() == menuText) {
+            if (menu.getText().equals(menuText)) {
                 newMenu = menu;
                 break;
             }
@@ -116,6 +118,7 @@ public class UIController extends Application implements IUIController {
         return menuItem;
     }
 
+    @Override
     public boolean createTab(String tabText, Node contents) {
         // Cria uma nova instância de Tab
         Tab tab = new Tab();
