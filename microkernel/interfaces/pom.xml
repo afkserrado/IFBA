@@ -30,12 +30,5 @@
             <artifactId>javafx-controls</artifactId>
             <version>17</version>
         </dependency>
-
-        <!-- JavaFX Graphics: Node, Scene, Stage, etc. -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>17</version>
-        </dependency>
     </dependencies>
 </project>
