@@ -1,0 +1,13 @@
+microkernel/app/target/executable-1.0-SNAPSHOT.jar
+microkernel/app/target/classes/br/edu/ifba/inf008/App.class
+microkernel/app/target/classes/br/edu/ifba/inf008/screens/MainScreen.class
+microkernel/app/target/classes/br/edu/ifba/inf008/screens/WelcomeScreen.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/AuthenticationController.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/Core.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/DatabaseController.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/IOController.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/PluginController.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/PluginController$1.class
+microkernel/interfaces/target/interfaces-1.0-SNAPSHOT.jar
+microkernel/interfaces/target/classes/br/edu/ifba/inf008/interfaces/ICore.class
+microkernel/interfaces/target/classes/br/edu/ifba/inf008/interfaces/IDatabaseController.class
