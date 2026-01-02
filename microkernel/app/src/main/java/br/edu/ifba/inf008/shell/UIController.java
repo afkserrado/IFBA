@@ -5,19 +5,24 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IScreen;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.screens.MainScreen;
-import br.edu.ifba.inf008.screens.WelcomeScreen;   // Classe base de qualquer aplicação JavaFX; define o ciclo de vida da aplicação
-import javafx.application.Application;             // Enum que define posições laterais (TOP, BOTTOM, LEFT, RIGHT)
-import javafx.scene.Node;                // Componente de interface que pode ser usado como conteúdo em layouts
-import javafx.scene.Parent;               // Representa um contêiner para todo o conteúdo visual
-import javafx.scene.Scene;        // Representa um menu suspenso que agrupa vários MenuItems
-import javafx.scene.control.Menu;     // Representa a barra de menu superior de uma janela
-import javafx.scene.control.MenuBar;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
-import javafx.scene.control.MenuItem;         // Representa uma aba individual; possui um título e um Node como conteúdo
+import br.edu.ifba.inf008.screens.WelcomeScreen;
+import javafx.application.Application;      
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
-// Classe responsável por controlar a interface gráfica da aplicação
+/**
+ * Controlador principal da interface gráfica do sistema LokiCar.
+ * Gerencia a criação de telas, menus e abas, atuando como ponte
+ * entre o núcleo da aplicação e o JavaFX.
+ */
+
 // Atua como ponto de entrada para o JavaFX e como uma fachada entre o núcleo da aplicação e a interface gráfica gerenciada pelo JavaFX
 // UIController não é a interface gráfica em si: ele a constrói e controla
 public class UIController extends Application implements IUIController {
@@ -46,35 +51,41 @@ public class UIController extends Application implements IUIController {
     // Método principal do ciclo de vida do JavaFX; responsável por construir e exibir a GUI
     @Override
     public void start(Stage primaryStage) {
-        uiController = this;
         this.primaryStage = primaryStage;
 
-        // Define o título da janela, fornecido pelo sistema operacional
+        // Define o título da janela fornecida pelo sistema operacional
         primaryStage.setTitle("LokiCar");
 
-        showWelcomeScreen();
-        primaryStage.show();
+        createWelcomeScreen(); // Cria a tela de boas-vindas
+        primaryStage.show(); // Exibe a janela fornecida pelo SO
     }
 
     /**
-     *
-     * Exibe a tela de boas-vindas (WelcomeScreen)
+     * Cria a tela de boas-vindas (WelcomeScreen)
      */
-    private void showWelcomeScreen() {
+    private void createWelcomeScreen() {
         // Cria a WelcomeScreen passando a ação: "quando o botão 'LOGAR' for clicado, mostre a MainScreen"
-        IScreen welcomeScreen = new WelcomeScreen(() -> showMainScreen());
-        showScreen(welcomeScreen);
+        IScreen welcomeScreen = new WelcomeScreen(() -> createMainScreen());
+        setScreen(welcomeScreen);
     }
 
     /**
-     * Exibe a tela principal com menu e tabs (MainScreen)
+     * Cria a tela principal com menu e tabs (MainScreen)
      */
-    private void showMainScreen() {
-        MainScreen mainScreen = new MainScreen();
-        showScreen(mainScreen);
+    private void createMainScreen() {
+        
+        // Inicializa a barra de menus e o contêiner de abas
+        menuBar = new MenuBar();
+        tabPane = new TabPane();
+        
+        IScreen mainScreen = new MainScreen(menuBar, tabPane);
+        setScreen(mainScreen);
 
-        //Core.getInstance().getPluginController().init();
-        System.out.println("✅ MainScreen exibida! (teste)");
+        // Inicializa os plugins após a GUI ter sido criada e exibida
+            // Obtém a instância do Core em execução
+            // Obtém a instância do PluginController associada ao Core em execução
+            // Inicializa o PluginController
+        Core.getInstance().getPluginController().init();
     }
 
     /**
@@ -82,19 +93,24 @@ public class UIController extends Application implements IUIController {
      *
      * @param screen Tela a ser exibida
      */
-    private void showScreen(IScreen screen) {
-        Node content = screen.create();
+    private void setScreen(IScreen screen) {
+        Parent content = screen.createScreen(); // Obtém o conteúdo visual da tela criada
 
-        // Cria a Scene usando o VBox como nó raiz
-        // Contém cada conteúdo visual
-        Scene scene = new Scene((Parent) content, 960, 600);
+        // Cria uma Scene e passa para a janela do SO
+        Scene scene = new Scene(content, 960, 600);
         primaryStage.setScene(scene);
     }
 
-    // Cria (ou recupera) um menu e adiciona um novo item de menu a ele
-    // Retorna o MenuItem criado para que ações possam ser associadas
+    /**
+     * Cria um item de menu na barra de menus
+     * 
+     * @param menuText Texto do menu (ex: "Arquivo")
+     * @param menuItemText Texto do item (ex: "Abrir")
+     * @return MenuItem criado, permitindo adicionar ações
+     */
     @Override
     public MenuItem createMenuItem(String menuText, String menuItemText) {
+        
         // Tenta localizar um menu existente com o texto informado
         Menu newMenu = null;
         for (Menu menu : menuBar.getMenus()) {
@@ -118,8 +134,16 @@ public class UIController extends Application implements IUIController {
         return menuItem;
     }
 
+    /**
+     * Cria uma nova aba no TabPane
+     * 
+     * @param tabText Título da aba
+     * @param contents Conteúdo visual da aba
+     * @return true se a aba foi criada com sucesso
+     */
     @Override
     public boolean createTab(String tabText, Node contents) {
+        
         // Cria uma nova instância de Tab
         Tab tab = new Tab();
 

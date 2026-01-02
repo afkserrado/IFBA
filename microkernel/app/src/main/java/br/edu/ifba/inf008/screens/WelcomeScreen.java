@@ -3,7 +3,7 @@ package br.edu.ifba.inf008.screens;
 import br.edu.ifba.inf008.interfaces.IScreen;   // Interface para telas da aplicação
 import javafx.geometry.Insets;                  // Margens e padding (espaçamento interno/externo)
 import javafx.geometry.Pos;                     // Posicionamento/alinhamento de elementos
-import javafx.scene.Node;                       // Classe pai de todos elementos visuais do JavaFX
+import javafx.scene.Parent;                     // Representa um contêiner para todo o conteúdo visual
 import javafx.scene.control.Button;             // Botão
 import javafx.scene.control.Label;              // Texto/rótulo
 import javafx.scene.control.Separator;          // Linha separadora horizontal/vertical
@@ -32,10 +32,10 @@ public class WelcomeScreen implements IScreen {
     /**
      * Cria e retorna o conteúdo visual da tela de boas-vindas
      *
-     * @return Node contendo todos os elementos da tela
+     * @return Parent contendo todos os elementos da tela
      */
     @Override
-    public Node create() {
+    public Parent createScreen() {
 
         // Cria o contêiner principal com espaçamento de n píxeis entre os filhos
         VBox welcomeBox = new VBox(20);
