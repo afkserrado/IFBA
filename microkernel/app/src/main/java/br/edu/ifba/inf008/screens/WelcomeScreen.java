@@ -1,16 +1,20 @@
 package br.edu.ifba.inf008.screens;
 
-import br.edu.ifba.inf008.interfaces.IScreen;   // Interface para telas da aplicação
-import javafx.geometry.Insets;                  // Margens e padding (espaçamento interno/externo)
-import javafx.geometry.Pos;                     // Posicionamento/alinhamento de elementos
-import javafx.scene.Parent;                     // Representa um contêiner para todo o conteúdo visual
-import javafx.scene.control.Button;             // Botão
-import javafx.scene.control.Label;              // Texto/rótulo
-import javafx.scene.control.Separator;          // Linha separadora horizontal/vertical
-import javafx.scene.layout.HBox;                // Contêiner com layout horizontal
-import javafx.scene.layout.Priority;            // Prioridade de crescimento de elementos em layouts
-import javafx.scene.layout.Region;              // Região vazia (usada como espaçador)
-import javafx.scene.layout.VBox;                // Contêiner com layout vertical
+import java.util.Objects;
+
+import br.edu.ifba.inf008.interfaces.IScreen;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * Tela de boas-vindas do sistema LokiCar.
@@ -19,6 +23,19 @@ import javafx.scene.layout.VBox;                // Contêiner com layout vertica
 public class WelcomeScreen implements IScreen {
 
     private final Runnable onLoginClick; // Guarda a ação do botão de login
+
+    // ========== CONSTANTES DE ESTILO ==========
+    private static final String ICONS_PATH = "/icons/";
+    
+    // Tamanhos de fonte
+    private static final double TITLE_FONT_SIZE = 116.0;
+    private static final double SUBTITLE_FONT_SIZE = 96.0;
+    private static final double PATTERN_FONT_SIZE = 48.0;
+    private static final double FOOTER_FONT_SIZE = 36.0;
+
+    // Tamanhos de ícones (proporcionais às fontes)
+    private static final double TITLE_ICON_SIZE = TITLE_FONT_SIZE * 0.7;
+    private static final double SUBTITLE_ICON_SIZE = SUBTITLE_FONT_SIZE * 0.7;
 
     /**
      * Construtor da tela de boas-vindas
@@ -42,29 +59,66 @@ public class WelcomeScreen implements IScreen {
         welcomeBox.setAlignment(Pos.CENTER); // Alinha o conteúdo no centro
         welcomeBox.setStyle("-fx-background-color: black;"); // Define a cor do fundo
 
-        // Cria e formata os elementos visuais do contêiner principal
-        Label title = new Label("\uD83D\uDE97 Loki");
-        title.setStyle(
-            "-fx-font-size: 48px;" + 
-            "-fx-text-fill: white;");
+        // ========== TÍTULO ==========
 
-        Label subtitle = new Label("Você não precisa ser o Thor para voar! ⚡");
+        // Cria um ícone de carro
+        ImageView carIcon = createIcon("car.png", TITLE_ICON_SIZE);
+
+        // Cria e formata os elementos visuais do contêiner principal
+        Label title = new Label("LokiCar");
+        title.setStyle(
+            "-fx-font-size: " + TITLE_FONT_SIZE + "px;" + 
+            "-fx-text-fill: white;"
+        );
+
+        // Cria um contêiner para o título
+        HBox titleBox = new HBox(20, carIcon, title);
+        titleBox.setAlignment(Pos.BASELINE_CENTER);
+
+        // ========== SUBTÍTULO ==========
+
+        // Cria um ícone de raio
+        ImageView boltIcon = createIcon("bolt.png", SUBTITLE_ICON_SIZE);
+
+        Label subtitle = new Label("Você não precisa ser o Thor para voar!");
         subtitle.setStyle(
-            "-fx-font-size: 24px;" + 
-            "-fx-text-fill: white;");
+            "-fx-font-size: " + SUBTITLE_FONT_SIZE + "px;" + 
+            "-fx-text-fill: white;"
+        );
+
+        // Cria um contêiner para o subtítulo
+        HBox subtitleBox = new HBox(20, subtitle, boltIcon);
+        subtitleBox.setAlignment(Pos.BASELINE_CENTER);
+
+        // ========== APRESENTAÇÃO E BOTÃO DE LIGAR ==========
 
         Label presentation = new Label("Seja bem vindo(a) ao sistema LokiCar.");
         presentation.setStyle(
-            "-fx-font-size: 12px;" + 
-            "-fx-text-fill: white;");
+            "-fx-font-size: " + PATTERN_FONT_SIZE + "px;" + 
+            "-fx-text-fill: white;"
+        );
 
         Button loginButton = new Button("LOGAR");
         loginButton.setPadding(new Insets(10, 40, 10, 40));
+        loginButton.setStyle(
+            "-fx-font-size: " + PATTERN_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
         loginButton.setOnAction(e -> onLoginClick.run()); // Executa a ação ao clicar no botão
 
-        // Cria uma região vazia para preencher o espaço entre os elementos visuais do contêiner principal e o rodapé
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);  // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner, empurrando o rodapé para o fundo da VBox
+        VBox loginBox = new VBox(20, presentation, loginButton);
+        loginBox.setAlignment(Pos.CENTER);
+
+        // ========== SPACER ==========
+
+        // Cria uma região vazia para preencher o espaço entre os elementos visuais
+        Region spacerTop = new Region();
+        VBox.setVgrow(spacerTop, Priority.ALWAYS);  // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner
+
+        Region spacerBottom = new Region();
+        VBox.setVgrow(spacerBottom, Priority.ALWAYS);  // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner
+
+        // ========== RODAPÉ ==========
 
         // Linha para separar o rodapé
         Separator separator = new Separator();
@@ -77,15 +131,15 @@ public class WelcomeScreen implements IScreen {
         
         Label version = new Label("Versão 1.0");
         version.setStyle(
-            "-fx-font-size: 8px;" +
+            "-fx-font-size: " + FOOTER_FONT_SIZE + "px;" + 
             "-fx-text-fill: white;"
-            );
+        );
 
         Label footerText = new Label(" | INF008 | IFBA");
         footerText.setStyle(
-            "-fx-font-size: 8px;" +
+            "-fx-font-size: " + FOOTER_FONT_SIZE + "px;" +
             "-fx-text-fill: white;"
-            );
+        );
 
         // Adiciona os elementos ao contêiner do rodapé
         footerBox.getChildren().addAll(
@@ -93,17 +147,34 @@ public class WelcomeScreen implements IScreen {
             footerText
         );    
 
+        // ========== MONTAGEM DA TELA ==========
+
         // Adiciona os elementos ao contêiner principal
         welcomeBox.getChildren().addAll(
-            title,
-            subtitle,
-            presentation,
-            loginButton,
-            spacer,
+            titleBox,
+            subtitleBox,
+            spacerTop,
+            loginBox,
+            spacerBottom,
             separator,
             footerBox
         );
 
         return welcomeBox;
+    }
+
+    private ImageView createIcon(String iconName, double size) {
+        ImageView icon = new ImageView(
+            new Image(
+                Objects.requireNonNull(
+                    getClass().getResourceAsStream(ICONS_PATH + iconName)
+                )
+            )
+        );
+
+        icon.setFitWidth(size);
+        icon.setFitHeight(size);
+        icon.setPreserveRatio(true);
+        return icon;
     }
 }
