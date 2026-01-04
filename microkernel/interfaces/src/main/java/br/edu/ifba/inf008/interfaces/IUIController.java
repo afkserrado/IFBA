@@ -14,4 +14,6 @@ public interface IUIController
     // tabText = texto da nova aba
     // contents = qualquer elemento gráfico que será visível dentro da nova aba
     public abstract boolean createTab(String tabText, Node contents);
+
+    
 }

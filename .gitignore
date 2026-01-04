@@ -22,3 +22,7 @@ microkernel/app/target/classes/br/edu/ifba/inf008/shell/DatabaseController.class
 microkernel/app/target/classes/br/edu/ifba/inf008/shell/UIController.class
 microkernel/plugins/mainscreenplugin/target/classes/br/edu/ifba/inf008/plugins/MainScreenPlugin.class
 microkernel/plugins/mainscreenplugin/target/classes/br/edu/ifba/inf008/plugins/MainScreenPlugin$1.class
+microkernel/app/target/executable-1.0-SNAPSHOT.jar
+microkernel/interfaces/target/interfaces-1.0-SNAPSHOT.jar
+microkernel/plugins/MainScreenPlugin.jar
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/UIController.class
