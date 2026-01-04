@@ -48,7 +48,8 @@ public class UIController extends Application implements IUIController {
     }
 
     // Fornece acesso global à instância atual do UIController
-    public static UIController getInstance() {
+    // Visibilidade package-private para forçar os plugins a obterem o UIController via Core
+    static UIController getInstance() {
         return uiController;
     }
 

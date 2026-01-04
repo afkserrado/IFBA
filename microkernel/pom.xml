@@ -19,6 +19,7 @@
     <modules>
         <module>interfaces</module>
         <module>app</module>
+        <module>plugins/mainscreenplugin</module>
        <!-- <module>plugins/myplugin</module>-->
     </modules>
 
