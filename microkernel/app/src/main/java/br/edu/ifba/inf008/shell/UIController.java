@@ -34,10 +34,14 @@ public class UIController extends Application implements IUIController {
     private static UIController uiController;   // Referência estática usada para implementar acesso singleton ao UIController
 
     // Construtor padrão (exigido pelo JavaFX)
+    // Invocado pelo próprio JavaFX
+    // JavaFX exige que seja public
     public UIController() {
     }
 
-    // Método chamado antes de 'start()'; usado aqui para inicializar a instância singleton
+    // Inicializa a instância singleton
+    // Invocado pelo próprio JavaFX após o construtor e antes do start() 
+    // JavaFX exige que seja public
     @Override
     public void init() {
         uiController = this;
@@ -48,7 +52,9 @@ public class UIController extends Application implements IUIController {
         return uiController;
     }
 
-    // Método principal do ciclo de vida do JavaFX; responsável por construir e exibir a GUI
+    // Constrói e exibie a GUI
+    // Invocado pelo próprio JavaFX após o init()
+    // JavaFX exige que seja public
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
