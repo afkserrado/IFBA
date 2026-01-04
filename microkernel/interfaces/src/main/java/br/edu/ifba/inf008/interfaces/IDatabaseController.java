@@ -41,9 +41,13 @@ public abstract class IDatabaseController {
         return props;
     }
 
-    // Estabelece conexão com a base de dados
+    // Estabelece uma conexão read-only com a base de dados
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
-    public abstract Connection getConnection() throws SQLException;
+    public abstract Connection getConnectionReadOnly() throws SQLException;
+
+    // Estabelece uma conexão read-write com a base de dados
+    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
+    public abstract Connection getConnectionReadWrite() throws SQLException;
 
     // Libera os recursos (base de dados)
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core

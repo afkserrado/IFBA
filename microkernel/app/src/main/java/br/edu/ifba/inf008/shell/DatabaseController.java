@@ -15,21 +15,48 @@ public class DatabaseController extends IDatabaseController {
         IDatabaseController.init("mariadb", "3307", "car_rental_system", "root", "root");
     }
 
-    // Estabelece conexão com a base de dados
+    // Estabelece uma conexão read-only com a base de dados
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnectionReadOnly() throws SQLException {
         try {
             String url = IDatabaseController.getURL();
             Properties props = IDatabaseController.createProps();
 
             Connection connection = DriverManager.getConnection(url, props);
             System.out.println("Conexão estabelecida com sucesso!");
+
+            // Encerra automaticamente cada transação, evitando que uma leitura permença ativa por muito tempo, o que poderia impactar no controle de concorrência pelo SGBD
+            connection.setAutoCommit(true); 
+
+            // Impede transações de escrita
+            // Obs.: o modo read-only imposto no nível da conexão JDBC é apenas uma barreira lógica. O ideal seria criar um usuário no banco de dados com permissão exclusivamente de leitura
+            connection.setReadOnly(true); 
+
             return connection;
         }
         catch (SQLException e) {
             System.err.println("Não foi possível estabelecer a conexão com o banco de dados: " + e.getMessage());
-            throw e; // Relança a SQLException
+            throw e; // Relança a SQLException, desviando o tratamento da exceção para o responsável por tentar estabelecer a conexão
+        }
+    }
+
+    // Estabelece uma conexão read-write com a base de dados
+    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
+    @Override
+    public Connection getConnectionReadWrite() throws SQLException {
+        try {
+            String url = IDatabaseController.getURL();
+            Properties props = IDatabaseController.createProps();
+
+            Connection connection = DriverManager.getConnection(url, props);
+            System.out.println("Conexão estabelecida com sucesso!");
+            connection.setAutoCommit(true);
+            return connection;
+        }
+        catch (SQLException e) {
+            System.err.println("Não foi possível estabelecer a conexão com o banco de dados: " + e.getMessage());
+            throw e; 
         }
     }
 
