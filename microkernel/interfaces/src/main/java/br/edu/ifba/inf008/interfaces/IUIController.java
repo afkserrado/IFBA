@@ -5,8 +5,8 @@ import java.util.List; // Um item dentro de um menu gráfico
 import javafx.scene.Node; // Classe base para qualquer elemento gráfico
 import javafx.scene.control.MenuItem;
 
-public interface IUIController
-{
+public interface IUIController {
+    
     // Cria um novo item de menu
     // menuText = nome do menu onde o novo item será inserido
     // menuItemText = texto dentro do novo item de menu

@@ -2,7 +2,6 @@ package br.edu.ifba.inf008.shell;
 
 import java.util.List;
 
-import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IScreen;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.screens.MainScreen;
@@ -29,10 +28,10 @@ import javafx.stage.Stage;
 // UIController não é a interface gráfica em si: ele a constrói e controla
 public class UIController extends Application implements IUIController {
 
-    private ICore core;                         // Referência para a camada do núcleo
     private Parent content;                     // Contêiner que armazena o conteúdo visual da tela criada 
     private MenuBar menuBar;                    // Barra de menu superior da janela da aplicação
     private TabPane tabPane;                    // Contêiner central que mantém múltiplas abas (área principal de conteúdo)
+    private Scene scene;                        // Contêiner que contém o contêiner de elementos visuais
     private Stage primaryStage;                 // Guardar a scene (tela em execução)
     private static UIController uiController;   // Referência estática usada para implementar acesso singleton ao UIController
 
@@ -62,11 +61,17 @@ public class UIController extends Application implements IUIController {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
+        
         // Define o título da janela fornecida pelo sistema operacional
         primaryStage.setTitle("LokiCar");
 
-        createWelcomeScreen(); // Cria a tela de boas-vindas
+        // Cria a tela de boas-vindas
+        createWelcomeScreen();
+
+        // Cria uma Scene e passa para a janela do SO
+        scene = new Scene(content, 960, 600);
+        primaryStage.setScene(scene);
+
         primaryStage.show(); // Exibe a janela fornecida pelo SO
     }
 
@@ -104,11 +109,12 @@ public class UIController extends Application implements IUIController {
      * @param screen Tela a ser exibida
      */
     private void setScreen(IScreen screen) {
-        content = screen.createScreen(); 
-
-        // Cria uma Scene e passa para a janela do SO
-        Scene scene = new Scene(content, 960, 600);
-        primaryStage.setScene(scene);
+        content = screen.createScreen();
+        
+        // Se Scene já foi criada, atualiza o root
+        if (scene != null) {
+            scene.setRoot(content);
+        }
     }
 
     /**
