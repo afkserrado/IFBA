@@ -6,40 +6,33 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces. IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 
-public class MainScreenPlugin implements IPlugin
-{
+public class MainScreenPlugin implements IPlugin {
+
+    private IDatabaseController db;
+    private Connection connection;
+
     public boolean init() {
         
-        // Tratando SQLException
+        // Abre a conexão com o banco de dados
         try {
-            IDatabaseController db = ICore.getInstance().getDatabaseController();
-            Connection connection = db.getConnectionReadOnly();
+            // Obtém a instância do controlador da base de dados
+            db = ICore.getInstance().getDatabaseController();
+            connection = db.getConnectionReadOnly();
             System.out.println("Conexão estabelecida: " + connection);
-            db.closeConnection(connection);
-            System.out.println("Conexão fechada com sucesso!");
-        } catch (Exception ex) {
+        } 
+        
+        // Conexão falhou
+        catch (Exception ex) {
             System.err.println("Erro ao conectar com banco: " + ex.getMessage());
             ex.printStackTrace();
         }
 
-         /*
-        Obtém a instância do programa e, em seguida, a interface gráfica
-
-        getInstance() retorna a referência estática "instance", que aponta para o objeto Core que representa o programa
-
-        getUIController() chama UIController.getInstance(), que retorna a referência estática "uiController",
-        contendo o objeto que controla a interface gráfica
-        */
+        // Obtém a instância do controlador da interface gráfica
         IUIController uiController = ICore.getInstance().getUIController();
 
-        // Cria um novo item de menu
+        /*Cria um novo item de menu
         MenuItem menuItem = uiController.createMenuItem("Menu 1", "My Menu Item");
         
         /*
@@ -58,7 +51,7 @@ public class MainScreenPlugin implements IPlugin
 
         Portanto, quando o botão é clicado, o setOnAction registra um EventHandler que recebe
         o evento de clique e chama o método handle para executar a ação
-        */
+
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -67,8 +60,12 @@ public class MainScreenPlugin implements IPlugin
         });
 
         uiController.createTab("new tab", new Rectangle(200,200, Color.LIGHTSTEELBLUE));
-
         
+        */
+
+        // Fecha a conexão
+        db.closeConnection(connection);
+        System.out.println("Conexão fechada com sucesso!");
 
         return true;
     }

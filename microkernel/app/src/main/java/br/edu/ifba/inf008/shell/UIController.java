@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 public class UIController extends Application implements IUIController {
 
     private ICore core;                         // Referência para a camada do núcleo
+    private Parent content;                     // Contêiner que armazena o conteúdo visual da tela criada 
     private MenuBar menuBar;                    // Barra de menu superior da janela da aplicação
     private TabPane tabPane;                    // Contêiner central que mantém múltiplas abas (área principal de conteúdo)
     private Stage primaryStage;                 // Guardar a scene (tela em execução)
@@ -101,7 +102,7 @@ public class UIController extends Application implements IUIController {
      * @param screen Tela a ser exibida
      */
     private void setScreen(IScreen screen) {
-        Parent content = screen.createScreen(); // Obtém o conteúdo visual da tela criada
+        content = screen.createScreen(); 
 
         // Cria uma Scene e passa para a janela do SO
         Scene scene = new Scene(content, 960, 600);
@@ -166,4 +167,6 @@ public class UIController extends Application implements IUIController {
         // Indica que a aba foi criada com sucesso
         return true;
     }
+
+
 }
