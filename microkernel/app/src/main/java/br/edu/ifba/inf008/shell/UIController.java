@@ -1,6 +1,7 @@
 package br.edu.ifba.inf008.shell;
 
-// Importando bibliotecas internas
+import java.util.List;
+
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IScreen;
 import br.edu.ifba.inf008.interfaces.IUIController;
@@ -176,10 +177,11 @@ public class UIController extends Application implements IUIController {
      * @return true se os elementos visuais forem adicionados com sucesso
      */
     @Override
-    public boolean addMainNodes(Node ... nodes) {
+    public boolean addMainNodes(List<Node> nodes) {
         if(content instanceof VBox) {
             VBox mainBox = (VBox) content;
             mainBox.getChildren().addAll(nodes);
+           
             return true;
         }
 
