@@ -59,7 +59,7 @@ public class MyPlugin implements IPlugin
         // Tratando SQLException
         try {
             IDatabaseController db = ICore.getInstance().getDatabaseController();
-            Connection connection = db.getConnection();
+            Connection connection = db.getConnectionReadOnly();
             System.out.println("Conexão estabelecida: " + connection);
             db.closeConnection(connection);
             System.out.println("Conexão fechada com sucesso!");
