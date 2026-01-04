@@ -1,7 +1,9 @@
 package br.edu.ifba.inf008.interfaces;
 
-import javafx.scene.Node; // Um item dentro de um menu gráfico
-import javafx.scene.control.MenuItem; // Classe base para qualquer elemento gráfico
+import java.util.List; // Um item dentro de um menu gráfico
+
+import javafx.scene.Node; // Classe base para qualquer elemento gráfico
+import javafx.scene.control.MenuItem;
 
 public interface IUIController
 {
@@ -16,5 +18,5 @@ public interface IUIController
     public abstract boolean createTab(String tabText, Node contents);
 
     // Adiciona um ou mais elementos visuais à tela principal
-    public abstract boolean addMainNodes(Node ... nodes);
+    public abstract boolean addMainNodes(List<Node> nodes);
 }
