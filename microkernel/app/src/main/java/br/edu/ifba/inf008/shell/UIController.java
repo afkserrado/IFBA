@@ -15,6 +15,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -168,5 +169,21 @@ public class UIController extends Application implements IUIController {
         return true;
     }
 
+    /**
+     * Adiciona um ou mais elementos visuais à tela principal
+     * 
+     * @param node Elementos visuais
+     * @return true se os elementos visuais forem adicionados com sucesso
+     */
+    @Override
+    public boolean addMainNodes(Node ... node) {
+        if(content instanceof VBox) {
+            VBox mainBox = (VBox) content;
+            mainBox.getChildren().addAll(node);
+            return true;
+        }
 
+        System.err.println("Erro: content não é VBox. Não é possível adicionar os elementos.");
+        return false;
+    }
 }

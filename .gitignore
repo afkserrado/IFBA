@@ -26,3 +26,9 @@ microkernel/app/target/executable-1.0-SNAPSHOT.jar
 microkernel/interfaces/target/interfaces-1.0-SNAPSHOT.jar
 microkernel/plugins/MainScreenPlugin.jar
 microkernel/app/target/classes/br/edu/ifba/inf008/shell/UIController.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/Core.class
+microkernel/app/target/classes/br/edu/ifba/inf008/shell/UIController.class
+microkernel/interfaces/target/classes/br/edu/ifba/inf008/interfaces/ICore.class
+microkernel/interfaces/target/classes/br/edu/ifba/inf008/interfaces/IUIController.class
+microkernel/plugins/myplugin/target/classes/br/edu/ifba/inf008/plugins/MyPlugin.class
+microkernel/plugins/myplugin/target/classes/br/edu/ifba/inf008/plugins/MyPlugin$1.class

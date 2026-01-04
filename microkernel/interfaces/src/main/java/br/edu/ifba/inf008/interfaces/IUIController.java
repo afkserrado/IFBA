@@ -15,5 +15,6 @@ public interface IUIController
     // contents = qualquer elemento gráfico que será visível dentro da nova aba
     public abstract boolean createTab(String tabText, Node contents);
 
-    
+    // Adiciona um ou mais elementos visuais à tela principal
+    public abstract boolean addMainNodes(Node ... node);
 }
