@@ -16,5 +16,5 @@ public interface IUIController
     public abstract boolean createTab(String tabText, Node contents);
 
     // Adiciona um ou mais elementos visuais à tela principal
-    public abstract boolean addMainNodes(Node ... node);
+    public abstract boolean addMainNodes(Node ... nodes);
 }

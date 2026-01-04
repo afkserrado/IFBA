@@ -176,10 +176,10 @@ public class UIController extends Application implements IUIController {
      * @return true se os elementos visuais forem adicionados com sucesso
      */
     @Override
-    public boolean addMainNodes(Node ... node) {
+    public boolean addMainNodes(Node ... nodes) {
         if(content instanceof VBox) {
             VBox mainBox = (VBox) content;
-            mainBox.getChildren().addAll(node);
+            mainBox.getChildren().addAll(nodes);
             return true;
         }
 
