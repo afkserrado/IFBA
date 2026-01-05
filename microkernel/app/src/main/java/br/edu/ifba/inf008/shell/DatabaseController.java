@@ -3,6 +3,8 @@ package br.edu.ifba.inf008.shell;
 // Importanto bibliotecas internas
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -20,6 +22,7 @@ public class DatabaseController extends IDatabaseController {
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     @Override
     public Connection getConnectionReadOnly() throws SQLException {
+        
         try {
             String url = IDatabaseController.getURL();
             Properties props = IDatabaseController.createProps();
@@ -36,6 +39,7 @@ public class DatabaseController extends IDatabaseController {
 
             return connection;
         }
+
         catch (SQLException e) {
             System.err.println("Não foi possível estabelecer a conexão com o banco de dados: " + e.getMessage());
             throw e; // Relança a SQLException, desviando o tratamento da exceção para o responsável por tentar estabelecer a conexão
@@ -46,6 +50,7 @@ public class DatabaseController extends IDatabaseController {
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     @Override
     public Connection getConnectionReadWrite() throws SQLException {
+        
         try {
             String url = IDatabaseController.getURL();
             Properties props = IDatabaseController.createProps();
@@ -55,6 +60,7 @@ public class DatabaseController extends IDatabaseController {
             connection.setAutoCommit(true);
             return connection;
         }
+
         catch (SQLException e) {
             System.err.println("Não foi possível estabelecer a conexão com o banco de dados: " + e.getMessage());
             throw e; 
@@ -73,5 +79,16 @@ public class DatabaseController extends IDatabaseController {
                 System.err.println("Não foi possível encerrar a conexão com a base de dados: " + e.getMessage());
             }
         }
+    }
+
+    // Executa uma query para buscar dados do banco
+    @Override
+    public ResultSet executeQuery(Connection conn, String sql) throws SQLException {
+        if(!conn.isReadOnly()) {
+            throw new SQLException("Possível tentativa de comando não permitido em transação read-only.");
+        }
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        return ps.executeQuery();
     }
 }

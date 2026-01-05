@@ -2,6 +2,7 @@ package br.edu.ifba.inf008.interfaces;
 
 // Importanto bibliotecas do Java
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -52,4 +53,7 @@ public abstract class IDatabaseController {
     // Libera os recursos (base de dados)
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     public abstract void closeConnection(Connection connection);
+
+    // Executa uma query para buscar dados do banco
+    public abstract ResultSet executeQuery(Connection conn, String sql) throws SQLException;
 }
