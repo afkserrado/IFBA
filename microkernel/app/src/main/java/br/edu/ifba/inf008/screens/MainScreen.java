@@ -5,8 +5,7 @@ import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;     // Representa a barra de menu superior de uma janela
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;    // Representa um item de ação dentro de um Menu (não faz parte da Scene Graph)
+import javafx.scene.layout.VBox;
 
 /**
  * Tela principal do sistema LokiCar.
@@ -54,7 +53,7 @@ public class MainScreen implements IScreen {
         tabPane.setSide(Side.BOTTOM);
 
         // Faz TabPane crescer verticalmente para ocupar espaço disponível
-        VBox.setVgrow(tabPane, Priority.ALWAYS);
+        //VBox.setVgrow(tabPane, Priority.ALWAYS);
 
         // Adiciona a barra de menus e o contêiner de abas ao contêiner principal
         mainBox.getChildren().addAll(menuBar, tabPane);
