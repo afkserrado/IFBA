@@ -1,10 +1,11 @@
 package br.edu.ifba.inf008.plugins;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
@@ -17,6 +18,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 public class MainScreenPlugin implements IPlugin {
 
@@ -27,12 +31,12 @@ public class MainScreenPlugin implements IPlugin {
     // ========== CONSTANTES ==========
     
     // Querys
-    private static final String customersQuery = "SELECT customer_id, email FROM customers";
+    private static final String CUSTOMERS_QUERY = "SELECT customer_id, email FROM customers";
 
-    private static final String vehicle_typesQuery = "SELECT type_id, type_name, additional_fees FROM vehicle_types";
+    private static final String VEHICLES_QUERY = "SELECT type_id, vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
+
+    private static final String VEHICLE_TYPES_QUERY = "SELECT type_id, type_name, additional_fees FROM vehicle_types";
     
-    private static final String vehiclesQuery = "SELECT type_id, vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
-
     // Tamanhos de fonte
     private static final double LABEL_FONT_SIZE = 36.0;
 
@@ -83,84 +87,129 @@ public class MainScreenPlugin implements IPlugin {
     public void createContent(Connection conn, List<Node> mainNodes) {
 
         if (conn == null) {
-            System.err.println("Conexão não inicializada");
+            System.err.println("Connection conn não pode ser null.");
             return;
         }
 
-        // ========== QUERYS ==========
+        // ========== DADOS ==========
 
-        // Inicializações
-        ResultSet customers = null;
-        ResultSet vehicle_types = null;
-        ResultSet vehicles = null;
+        List<Map<String, Object>> customersData = new ArrayList<>();
+        List<Map<String, Object>> vehiclesData = new ArrayList<>();
+        List<Map<String, Object>> vehicleTypesData = new ArrayList<>();
 
-        // Comandos SQL
         try {
-            customers = db.executeQuery(conn,
-                "SELECT customer_id, email FROM customers"
-            );
-
-            vehicle_types = db.executeQuery(conn,
-                "SELECT type_id, type_name, additional_fees FROM vehicle_types"
-            );
-
-            vehicles = db.executeQuery(conn,
-                "SELECT type_id, vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles"
-             );
-
-            // ========== ELEMENTOS VISUAIS ==========
-
-            // Criação dos elementos visuais
-            try {
-                
-                // ========== E-MAILS ==========
-
-                Label lbEmail = new Label("Email:");
-                lbEmail.setStyle(
-                    "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-                    "-fx-text-fill: black;"
-                );
-                
-                ComboBox<String> cbEmail = new ComboBox<>();
-                cbEmail.setStyle(
-                    "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
-                );
-
-                // Popula a combobox de e-mails com o conteúdo do banco
-                while(customers.next()) {
-                    String email = customers.getString("email");
-                    cbEmail.getItems().add(email);
-                }
-                
-                // Cria um contêiner para o título
-                HBox hbEmail = new HBox(5, lbEmail, cbEmail);
-                hbEmail.setAlignment(Pos.CENTER_LEFT);
-                VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
-
-                mainNodes.add(hbEmail);
-            }
-            
-            catch(Exception e) {
-                System.err.println("Erro ao criar conteúdos visuais");
-                e.printStackTrace();
-            }
+            customersData = db.loadQuery(conn, CUSTOMERS_QUERY);
+            vehiclesData = db.loadQuery(conn, VEHICLES_QUERY);
+            vehicleTypesData = db.loadQuery(conn, VEHICLE_TYPES_QUERY);
         } 
-
+        
         catch (SQLException e) {
-            System.err.println("Erro ao executar queries");
+            System.err.println("Erro ao carregar dados.");
             e.printStackTrace();
-            return;
         }
- 
-        // ========== FECHA AS CONEXÕES ==========
-        finally {
-            try {
-                if (customers != null) customers.close();
-                if (vehicle_types != null) vehicle_types.close();
-                if (vehicles != null) vehicles.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+        // ========== ELEMENTOS VISUAIS ==========
+
+        // ========== E-MAILS ==========
+
+        Label lbEmail = new Label("Email:");
+        lbEmail.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
+        
+        ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
+        cbEmail.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
+        );
+
+        cbEmail.getItems().addAll(customersData);
+        configureComboBoxDisplayColumn(cbEmail, "email");
+
+        // Cria um contêiner para agrupar label e combobox
+        HBox hbEmail = new HBox(5, lbEmail, cbEmail);
+        hbEmail.setAlignment(Pos.CENTER_LEFT);
+        VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
+
+        // ========== TIPO DE VEÍCULOS ==========
+
+        Label lbVehicleType = new Label("Tipo de veículo:");
+        lbVehicleType.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
+        
+        ComboBox<Map<String, Object>> cbVehicleType = new ComboBox<>();
+        cbVehicleType.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
+        );
+
+        cbVehicleType.getItems().addAll(vehicleTypesData);
+        configureComboBoxDisplayColumn(cbVehicleType, "type_name");
+        
+        // Cria um contêiner para agrupar label e combobox
+        HBox hbVehicleType = new HBox(5, lbVehicleType, cbVehicleType);
+        hbVehicleType.setAlignment(Pos.CENTER_LEFT);
+        VBox.setMargin(hbVehicleType, new Insets(40, 0, 0, 20));
+        
+        // Adiciona os elementos visuais à lista de nodes
+        mainNodes.addAll(List.of(
+            hbEmail, 
+            hbVehicleType
+        ));
+    }
+
+    /**
+     * 
+     * @param cb ComboBox
+     * @param displayColumn Coluna a ser exibida
+     * 
+     * Ao optar pela abordagem de inserir um contêiner (Map) na combobox, faz-se 
+     * necessário definir o setConverter() da ComboBox, que é o método responsável
+     * configurar o que será exibido na tela.
+     * 
+     * Embora pareça mais verboso, essa abordagem foi escolhida para facilitar
+     * a inserção de dados no banco. Isso porque a tabela "rentals" requer os IDs
+     * (customer_id, vehicle_id) de outras tabelas para criar um novo registro.
+     * Como esses dados já estarão carregados em memória, basta um 
+     * data.get("columnID") para obtê-los.
+     * 
+     * Carregar apenas as strings (como email ou type_name) exigiria percorrer a
+     * lista de mapas, comparando o valor da chave correspondente com o valor
+     * selecionado na ComboBox. Isso teria um custo computacional maior.
+     * 
+     */
+    public void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
+
+        // Define como o JavaFX converte cada item (Map) em String
+        cb.setConverter(new StringConverter<Map<String, Object>>() {
+
+            // Define o que será exibido
+            @Override
+            public String toString(Map<String, Object> row) {
+
+                // Quando não há item selecionado
+                if (row == null) {
+                    return "";
+                }
+
+                Object value = row.get(displayColumn);
+
+                // Evita NullPointerException
+                if (value == null) {
+                    return "";
+                }
+
+                // Converte para texto (String) para mostrar na ComboBox
+                return value.toString();
             }
-        }
+
+            // Para comboboxes editáveis: converte o texto de volta para um item
+            // Sobrescrita necessária para instanciar StringConverter
+            @Override
+            public Map<String, Object> fromString(String string) {
+                return null;
+            }
+        });
     }
 }
