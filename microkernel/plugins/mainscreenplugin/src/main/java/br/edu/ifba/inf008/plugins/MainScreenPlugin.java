@@ -20,10 +20,23 @@ import javafx.scene.layout.VBox;
 
 public class MainScreenPlugin implements IPlugin {
 
+    // ========== ATRIBUTOS ==========
+
     private IDatabaseController db;
+
+    // ========== CONSTANTES ==========
+    
+    // Querys
+    private static final String customersQuery = "SELECT customer_id, email FROM customers";
+
+    private static final String vehicle_typesQuery = "SELECT type_id, type_name, additional_fees FROM vehicle_types";
+    
+    private static final String vehiclesQuery = "SELECT type_id, vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
 
     // Tamanhos de fonte
     private static final double LABEL_FONT_SIZE = 36.0;
+
+    // ========== MÉTODOS ==========
 
     // Obtém as instâncias do UIController e DatabaseController
     // Gerencia a conexão com o banco de dados
@@ -125,7 +138,7 @@ public class MainScreenPlugin implements IPlugin {
                 VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
 
                 mainNodes.add(hbEmail);
-            } 
+            }
             
             catch(Exception e) {
                 System.err.println("Erro ao criar conteúdos visuais");

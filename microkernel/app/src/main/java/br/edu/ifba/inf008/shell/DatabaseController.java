@@ -5,7 +5,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
@@ -81,14 +86,58 @@ public class DatabaseController extends IDatabaseController {
         }
     }
 
-    // Executa uma query para buscar dados do banco
+    // Executa uma query e carrega o resultado em memória
     @Override
-    public ResultSet executeQuery(Connection conn, String sql) throws SQLException {
-        if(!conn.isReadOnly()) {
-            throw new SQLException("Possível tentativa de comando não permitido em transação read-only.");
+    public List<Map<String, Object>> loadQuery(Connection conn, String sql) throws SQLException {
+        
+        // Evita NullPointerException e querys vazias
+        if(conn == null) {
+            throw new IllegalArgumentException("Connection conn não pode ser null.");
         }
 
-        PreparedStatement ps = conn.prepareStatement(sql);
-        return ps.executeQuery();
+        if(sql == null || sql.isBlank()) {
+            throw new IllegalArgumentException("String sql não pode ser null/vazia.");
+        }
+
+        // Lista para representar a "tabela" de dados
+        // Cada item da lista representa uma tupla da tabela do banco de dados
+        List<Map<String, Object>> rows = new ArrayList<>();
+
+        // try-with-resources
+        // Garante o fechamento automático dos recursos utilizados
+        try(
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
+
+            // Metadados
+            ResultSetMetaData meta = rs.getMetaData();
+            int columns = meta.getColumnCount();
+
+            // Percorre as tuplas de uma tabela no banco de dados
+            while(rs.next()) {
+
+                // Mapa para representar uma tupla
+                // Mantém a ordem de inserção
+                Map<String, Object> row = new LinkedHashMap<>();
+
+                // Percorre as colunas dos metadados
+                for(int i = 1; i <= columns; i++) {
+
+                    // Alias/nome da coluna
+                    String column = meta.getColumnLabel(i);
+
+                    // Valor da tupla para uma coluna específica
+                    Object value = rs.getObject(i);
+
+                    // Armazena a tupla no mapa
+                    row.put(column, value);
+                }
+
+                // Arnazena o mapa na lista
+                rows.add(row);
+            }
+        }
+        return rows;
     }
 }

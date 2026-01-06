@@ -2,8 +2,9 @@ package br.edu.ifba.inf008.interfaces;
 
 // Importanto bibliotecas do Java
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 // Classe responsável por controlar o acesso à base de dados
@@ -54,6 +55,6 @@ public abstract class IDatabaseController {
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     public abstract void closeConnection(Connection connection);
 
-    // Executa uma query para buscar dados do banco
-    public abstract ResultSet executeQuery(Connection conn, String sql) throws SQLException;
+    // Executa uma query e carrega o resultado em memória
+    public abstract List<Map<String, Object>> loadQuery(Connection conn, String sql) throws SQLException;
 }
