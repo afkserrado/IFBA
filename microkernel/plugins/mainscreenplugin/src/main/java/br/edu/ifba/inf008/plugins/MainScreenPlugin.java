@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Date;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,12 +22,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.SelectionMode;
+
+// Rever o fechamento da conexão
+// Refatorar: um método para cada elemento visual
 
 public class MainScreenPlugin implements IPlugin {
 
@@ -39,16 +43,23 @@ public class MainScreenPlugin implements IPlugin {
     // Querys
     // customer_id: entrada para a inserção na tabela rentals
     // email: conteúdo a ser exibido na tela
-    private static final String CUSTOMERS_QUERY = "SELECT customer_id, email FROM customers";
+    private static final String CUSTOMERS_QUERY = 
+        "SELECT customer_id, email " +
+        "FROM customers";
 
     // vehicle_id: entrada para a inserção na tabela rentals
     // demais itens: conteúdo a ser exibido na tela
-    private static final String VEHICLES_QUERY = "SELECT vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
+    private static final String VEHICLES_BY_TYPE_QUERY = 
+        "SELECT vehicle_id, make, model, year, fuel_type, transmission, mileage " + 
+        "FROM vehicles " +
+        "WHERE status = 'AVAILABLE' AND type_id = ";
 
     // type_id: entrada para a query que retornará os dados a serem exibidos na tabela
     // type_name: conteúdo a ser exibido na tela
     // additional_fees: utilizado para o cálculo do valor total da locação
-    private static final String VEHICLE_TYPES_QUERY = "SELECT type_id, type_name, additional_fees FROM vehicle_types";
+    private static final String VEHICLE_TYPES_QUERY = 
+        "SELECT type_id, type_name, additional_fees " + 
+        "FROM vehicle_types";
 
     // Tamanhos de fonte
     private static final double LABEL_FONT_SIZE = 36.0;
@@ -88,8 +99,8 @@ public class MainScreenPlugin implements IPlugin {
         uiController.addMainNodes(mainNodes);
 
         // Fecha a conexão
-        db.closeConnection(conn);
-        System.out.println("Conexão fechada com sucesso!");
+        //db.closeConnection(conn);
+        //System.out.println("Conexão fechada com sucesso!");
 
         return true;
     }
@@ -107,12 +118,12 @@ public class MainScreenPlugin implements IPlugin {
         // ========== DADOS ==========
 
         List<Map<String, Object>> customersData = new ArrayList<>();
-        List<Map<String, Object>> vehiclesData = new ArrayList<>();
+        //List<Map<String, Object>> vehiclesData = new ArrayList<>();
         List<Map<String, Object>> vehicleTypesData = new ArrayList<>();
 
         try {
             customersData = db.loadQuery(conn, CUSTOMERS_QUERY);
-            vehiclesData = db.loadQuery(conn, VEHICLES_QUERY);
+            //vehiclesData = db.loadQuery(conn, VEHICLES_BY_TYPE_QUERY);
             vehicleTypesData = db.loadQuery(conn, VEHICLE_TYPES_QUERY);
         } 
         
@@ -144,6 +155,65 @@ public class MainScreenPlugin implements IPlugin {
         hbEmail.setAlignment(Pos.CENTER_LEFT);
         VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
 
+        // ========== VEÍCULOS ==========
+
+        // Cria uma tabela em que cada linha é um VehicleTableItem
+        TableView<VehicleTableItem> tbVehicles = new TableView<>();
+
+        // Cria um ObservableList (internamente implementado como um ArrayList) de VehicleTableItem
+        // Analogamente, é como uma lista na qual cada elemento é um VehicleTableItem
+        // Um ObservableList permite refletir automaticamente na tela quaisquer alterações nos dados
+        ObservableList<VehicleTableItem> rows = FXCollections.observableArrayList();
+
+        // Cria as colunas da tabela
+        // TableColumn<S, T> onde,
+            // S é o tipo da linha
+            // T é o tipo das células da coluna
+        TableColumn<VehicleTableItem, String> colMake = new TableColumn<>("Marca");
+
+        // PropertyValueFactory usa reflexão para buscar um getter compatível com o parâmetro passado
+        // setCellValueFactory define a função que será chamada para obter o valor que deve aparecer na célula
+        // Obs.: os parâmetros passados para o construtor devem corresponder exatamente ao nome dos respectivos atributos da classe VehicleTableItem
+        colMake.setCellValueFactory(new PropertyValueFactory<>("make"));
+
+        TableColumn<VehicleTableItem, String> colModel = new TableColumn<>("Modelo");
+        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+
+        TableColumn<VehicleTableItem, Integer> colYear = new TableColumn<>("Ano");
+        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<VehicleTableItem, FuelType> colFuelType = new TableColumn<>("Tipo de combustível");
+        colFuelType.setCellValueFactory(new PropertyValueFactory<>("fuelType"));
+
+        TableColumn<VehicleTableItem, Transmission> colTransmission = new TableColumn<>("Tipo de câmbio");
+        colTransmission.setCellValueFactory(new PropertyValueFactory<>("transmission"));
+
+        TableColumn<VehicleTableItem, Double> colMileage = new TableColumn<>("Quilometragem");
+        colMileage.setCellValueFactory(new PropertyValueFactory<>("mileage"));
+
+        // Vincula as colunas à tabela
+        tbVehicles.getColumns().addAll(
+            List.of(
+            colMake,
+            colModel,
+            colYear,
+            colFuelType,
+            colTransmission,
+            colMileage
+            )
+        );        
+
+        // Vincula as linhas à tabela
+        tbVehicles.setItems(rows);
+
+        // Define o modo de seleção única
+        tbVehicles.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        // Autodimensiona as colunas
+        tbVehicles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        VBox.setMargin(tbVehicles, new Insets(60, 0, 0, 20));
+
         // ========== TIPO DE VEÍCULOS ==========
 
         Label lbVehicleType = new Label("Tipo de veículo:");
@@ -159,19 +229,66 @@ public class MainScreenPlugin implements IPlugin {
 
         cbVehicleType.getItems().addAll(vehicleTypesData);
         MainScreenPlugin.configureComboBoxDisplayColumn(cbVehicleType, "type_name");
+
+        cbVehicleType.setOnAction(event -> {
+
+            // Obtém o item selecionado na combobox (Map)
+            Map<String, Object> selected = cbVehicleType.getValue();
+
+            // Nada selecionado
+            if(selected == null) {
+                return;
+            }
+
+            // Extrai o type_id do map
+            int typeId = ((Number) selected.get("type_id")).intValue();
+
+            try {
+                
+                // Monta a query final
+                String sql = VEHICLES_BY_TYPE_QUERY + typeId;
+
+                // Executa a query
+                List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
+
+                // Limpa a tabela
+                rows.clear();
+
+                // Recria as linhas
+                for (Map<String, Object> row : filteredVehicles) {
+
+                    Object yearObj = row.get("year");
+                    int yearInt;
+                    yearInt = ((Date) yearObj).toLocalDate().getYear();
+
+                    VehicleTableItem item = new VehicleTableItem(
+                        (String) row.get("make"),
+                        (String) row.get("model"),
+                        yearInt,
+                        FuelType.valueOf((String) row.get("fuel_type")),
+                        Transmission.valueOf((String) row.get("transmission")),
+                        ((Number) row.get("mileage")).doubleValue()
+                    );
+
+                    rows.add(item);
+                }
+            } 
+            
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        });
         
         // Cria um contêiner para agrupar label e combobox
         HBox hbVehicleType = new HBox(5, lbVehicleType, cbVehicleType);
         hbVehicleType.setAlignment(Pos.CENTER_LEFT);
         VBox.setMargin(hbVehicleType, new Insets(40, 0, 0, 20));
 
-        // ========== VEÍCULOS ==========
-    
-                
         // Adiciona os elementos visuais à lista de nodes
         mainNodes.addAll(List.of(
             hbEmail, 
-            hbVehicleType
+            hbVehicleType,
+            tbVehicles
         ));
     }
 
