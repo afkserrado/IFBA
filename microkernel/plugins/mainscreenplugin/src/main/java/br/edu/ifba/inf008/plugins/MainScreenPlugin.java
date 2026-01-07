@@ -1,16 +1,18 @@
 package br.edu.ifba.inf008.plugins;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.IDatabaseController;
+import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.interfaces.IUIController;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
-import br.edu.ifba.inf008.interfaces.ICore;
-import br.edu.ifba.inf008.interfaces.IDatabaseController;
-import br.edu.ifba.inf008.interfaces.IPlugin;
-import br.edu.ifba.inf008.interfaces.IUIController;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,6 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class MainScreenPlugin implements IPlugin {
 
@@ -31,12 +37,19 @@ public class MainScreenPlugin implements IPlugin {
     // ========== CONSTANTES ==========
     
     // Querys
+    // customer_id: entrada para a inserção na tabela rentals
+    // email: conteúdo a ser exibido na tela
     private static final String CUSTOMERS_QUERY = "SELECT customer_id, email FROM customers";
 
-    private static final String VEHICLES_QUERY = "SELECT type_id, vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
+    // vehicle_id: entrada para a inserção na tabela rentals
+    // demais itens: conteúdo a ser exibido na tela
+    private static final String VEHICLES_QUERY = "SELECT vehicle_id, make, model, year, fuel_type, transmission, mileage FROM vehicles";
 
+    // type_id: entrada para a query que retornará os dados a serem exibidos na tabela
+    // type_name: conteúdo a ser exibido na tela
+    // additional_fees: utilizado para o cálculo do valor total da locação
     private static final String VEHICLE_TYPES_QUERY = "SELECT type_id, type_name, additional_fees FROM vehicle_types";
-    
+
     // Tamanhos de fonte
     private static final double LABEL_FONT_SIZE = 36.0;
 
@@ -124,7 +137,7 @@ public class MainScreenPlugin implements IPlugin {
         );
 
         cbEmail.getItems().addAll(customersData);
-        configureComboBoxDisplayColumn(cbEmail, "email");
+        MainScreenPlugin.configureComboBoxDisplayColumn(cbEmail, "email");
 
         // Cria um contêiner para agrupar label e combobox
         HBox hbEmail = new HBox(5, lbEmail, cbEmail);
@@ -145,13 +158,16 @@ public class MainScreenPlugin implements IPlugin {
         );
 
         cbVehicleType.getItems().addAll(vehicleTypesData);
-        configureComboBoxDisplayColumn(cbVehicleType, "type_name");
+        MainScreenPlugin.configureComboBoxDisplayColumn(cbVehicleType, "type_name");
         
         // Cria um contêiner para agrupar label e combobox
         HBox hbVehicleType = new HBox(5, lbVehicleType, cbVehicleType);
         hbVehicleType.setAlignment(Pos.CENTER_LEFT);
         VBox.setMargin(hbVehicleType, new Insets(40, 0, 0, 20));
-        
+
+        // ========== VEÍCULOS ==========
+    
+                
         // Adiciona os elementos visuais à lista de nodes
         mainNodes.addAll(List.of(
             hbEmail, 
@@ -179,7 +195,7 @@ public class MainScreenPlugin implements IPlugin {
      * selecionado na ComboBox. Isso teria um custo computacional maior.
      * 
      */
-    public void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
+    public static void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
 
         // Define como o JavaFX converte cada item (Map) em String
         cb.setConverter(new StringConverter<Map<String, Object>>() {
