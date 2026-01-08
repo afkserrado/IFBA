@@ -21,11 +21,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.SelectionMode;
 
@@ -62,7 +66,7 @@ public class MainScreenPlugin implements IPlugin {
         "FROM vehicle_types";
 
     // Tamanhos de fonte
-    private static final double LABEL_FONT_SIZE = 36.0;
+    private static final double LABEL_FONT_SIZE = 24.0;
 
     // ========== MÉTODOS ==========
 
@@ -136,6 +140,13 @@ public class MainScreenPlugin implements IPlugin {
         ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
         ComboBox<Map<String, Object>> cbVehicleTypes = new ComboBox<>();
         TableView<VehicleTableItem> tbVehicles = new TableView<>();
+        DatePicker dpStartDate = new DatePicker();
+        DatePicker dpEndDate = new DatePicker();
+        TextField tfPickupLocation = new TextField();
+        
+        // Cria um Spinner, definindo o valor mínimo, valor máximo, valor inicial e incremento
+        Spinner<Double> spBaseRate = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.01);
+        Spinner<Double> spInsuranceFee = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.10);
 
         // ========== NÓS ==========
         // Define os nós (contêineres) que serão enviados para a interface, incluindo os controles
@@ -143,75 +154,41 @@ public class MainScreenPlugin implements IPlugin {
         HBox hbEmail = createComboBoxNode("E-mail", cbEmail, customersData, "email");
         HBox hbVehicleTypes = createComboBoxNode("Tipo de veículo", cbVehicleTypes, vehicleTypesData, "type_name");
         VBox vbVehicles = createTableViewNode("Veículos disponíveis", tbVehicles);
+        HBox hbStartDate = createConteinerNode("Início da locação", dpStartDate);
+        HBox hbEndDate = createConteinerNode("Fim da locação", dpEndDate);
+        HBox hbPickupLocation = createConteinerNode("Local de retirada", tfPickupLocation);
+        HBox hbBaseRate = createSpinnerNode("Valor da diária", spBaseRate);
+        HBox hbInsuranceFee = createSpinnerNode("Valor do seguro", spInsuranceFee);
 
-        // ========== VEÍCULOS ==========
+        // ========== WIRE EVENTS ==========
+        // Define os eventos que acontecerão quando o usuário interagir com a interface
+        wireEvents(conn, cbVehicleTypes, tbVehicles);
 
-        /*
-        // cbVehicleType.setOnAction(event -> {
-
-        //     // Obtém o item selecionado na combobox (Map)
-        //     Map<String, Object> selected = cbVehicleType.getValue();
-
-        //     // Nada selecionado
-        //     if(selected == null) {
-        //         return;
-        //     }
-
-        //     // Extrai o type_id do map
-        //     int typeId = ((Number) selected.get("type_id")).intValue();
-
-        //     try {
-                
-        //         // Monta a query final
-        //         String sql = VEHICLES_BY_TYPE_QUERY + typeId;
-
-        //         // Executa a query
-        //         List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
-
-        //         // Limpa a tabela
-        //         rows.clear();
-
-        //         // Recria as linhas
-        //         for (Map<String, Object> row : filteredVehicles) {
-
-        //             Object yearObj = row.get("year");
-        //             int yearInt;
-        //             yearInt = ((Date) yearObj).toLocalDate().getYear();
-
-        //             VehicleTableItem item = new VehicleTableItem(
-        //                 (String) row.get("make"),
-        //                 (String) row.get("model"),
-        //                 yearInt,
-        //                 FuelType.valueOf((String) row.get("fuel_type")),
-        //                 Transmission.valueOf((String) row.get("transmission")),
-        //                 ((Number) row.get("mileage")).doubleValue()
-        //             );
-
-        //             rows.add(item);
-        //         }
-        //     } 
-            
-        //     catch(Exception e) {
-        //         e.printStackTrace();
-        //     }
-        // });
-        */
+        // ========== LAYOUT ==========
+        GridPane grid = new GridPane();
+        grid.setHgap(40); // Espaçamento entre colunas
+        grid.setVgap(25); // Espaçamento entre linhas
+        grid.setPadding(new Insets(20)); // Margens internas
         
-        // Adiciona os elementos visuais à lista de nodes
-        mainNodes.addAll(List.of(
-            hbEmail, 
-            hbVehicleTypes,
-            vbVehicles
-        ));
+        // Adiciona os elementos (coluna x linha)
+        grid.add(hbEmail,           0, 0);
+        grid.add(hbVehicleTypes,    1, 0);
+        grid.add(hbPickupLocation,  2, 0);
+        grid.add(hbBaseRate,        3, 0);
+        grid.add(hbInsuranceFee,    4, 0);
+        grid.add(hbStartDate,       0, 1);
+        grid.add(hbEndDate,         1, 1);
+        grid.add(vbVehicles,        0, 2);
+        
+        // Define a quantidade de colunas ocupadas pela tabela ("mescla" colunas)
+        GridPane.setColumnSpan(vbVehicles, GridPane.REMAINING); 
 
-        // Ajusta o layout
-        VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
-        VBox.setMargin(hbVehicleTypes, new Insets(40, 0, 0, 20));
-        VBox.setMargin(vbVehicles, new Insets(60, 0, 0, 20));
+        // Adiciona os elementos visuais à lista de nodes
+        mainNodes.addAll(List.of(grid));
     }
 
-    // Cria um nó contendo um Label e uma ComboBox
-    public HBox createComboBoxNode(String label, ComboBox<Map<String, Object>> cb, List<Map<String, Object>> data, String bdColumn) {
+    // Cria um nó contendo um Label e um Node qualquer (ComboBox, DatePicker etc.)
+    public HBox createConteinerNode(String label, Node node) {
 
         if(!label.contains(":")) {
             label = label + ": ";
@@ -223,16 +200,24 @@ public class MainScreenPlugin implements IPlugin {
             "-fx-text-fill: black;"
         );
         
-        cb.setStyle(
+        node.setStyle(
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
         );
 
+        // Cria um contêiner para agrupar label e combobox
+        HBox hb = new HBox(5, lb, node);
+        hb.setAlignment(Pos.CENTER_LEFT);
+
+        return hb;
+    }
+
+    // Cria um nó contendo um Label e uma ComboBox
+    public HBox createComboBoxNode(String label, ComboBox<Map<String, Object>> cb, List<Map<String, Object>> data, String bdColumn) {
+
+        HBox hb = createConteinerNode(label, cb);
+
         cb.getItems().addAll(data);
         MainScreenPlugin.configureComboBoxDisplayColumn(cb, bdColumn);
-
-        // Cria um contêiner para agrupar label e combobox
-        HBox hb = new HBox(5, lb, cb);
-        hb.setAlignment(Pos.CENTER_LEFT);
 
         return hb;
     }
@@ -245,6 +230,7 @@ public class MainScreenPlugin implements IPlugin {
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
             "-fx-text-fill: black;"
         );
+
         lb.setMaxWidth(Double.MAX_VALUE);
         lb.setAlignment(Pos.CENTER);
 
@@ -292,6 +278,74 @@ public class MainScreenPlugin implements IPlugin {
         vb.setAlignment(Pos.CENTER_LEFT);
 
         return vb;
+    }
+
+    // Cria um nó contendo um Label e um Spinner
+    public HBox createSpinnerNode(String label, Spinner<Double> sp) {
+        
+        HBox hb = createConteinerNode(label, sp);
+        sp.setEditable(true);
+       
+        return hb;
+    }
+
+    // Define os eventos a serem acionados quando o usuário interagir com certos elementos da interface
+    public void wireEvents(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
+
+        cbVehicleTypes.setOnAction(event -> {
+
+            // Obtém o item selecionado na combobox (Map)
+            Map<String, Object> selected = cbVehicleTypes.getValue();
+
+            // Nada selecionado
+            if(selected == null) {
+                return;
+            }
+
+            // Extrai o type_id do map
+            int typeId = ((Number) selected.get("type_id")).intValue();
+
+            try {
+            
+                // Monta a query final
+                String sql = VEHICLES_BY_TYPE_QUERY + typeId;
+
+                // Executa a query
+                List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
+
+                // Obtém as linhas da tabela
+                ObservableList<VehicleTableItem> rows = tbVehicles.getItems();
+
+                // Limpa a tabela
+                rows.clear();
+
+                // Cria as linhas as tabela com o resultado da consulta
+                for (Map<String, Object> row : filteredVehicles) {
+
+                    Object yearObj = row.get("year");
+                    int yearInt = ((Date) yearObj).toLocalDate().getYear();
+
+                    VehicleTableItem item = new VehicleTableItem(
+                        ((Number) row.get("vehicle_id")).intValue(),
+                        (String) row.get("make"),
+                        (String) row.get("model"),
+                        yearInt,
+                        FuelType.valueOf((String) row.get("fuel_type")),
+                        Transmission.valueOf((String) row.get("transmission")),
+                        ((Number) row.get("mileage")).doubleValue()
+                    );
+
+                    rows.add(item);
+                }
+
+                // Limpa a seleção atual da tabela
+                tbVehicles.getSelectionModel().clearSelection();
+            } 
+            
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
