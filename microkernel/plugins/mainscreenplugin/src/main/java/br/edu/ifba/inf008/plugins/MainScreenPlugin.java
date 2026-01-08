@@ -118,12 +118,10 @@ public class MainScreenPlugin implements IPlugin {
         // ========== DADOS ==========
 
         List<Map<String, Object>> customersData = new ArrayList<>();
-        //List<Map<String, Object>> vehiclesData = new ArrayList<>();
         List<Map<String, Object>> vehicleTypesData = new ArrayList<>();
 
         try {
             customersData = db.loadQuery(conn, CUSTOMERS_QUERY);
-            //vehiclesData = db.loadQuery(conn, VEHICLES_BY_TYPE_QUERY);
             vehicleTypesData = db.loadQuery(conn, VEHICLE_TYPES_QUERY);
         } 
         
@@ -132,76 +130,153 @@ public class MainScreenPlugin implements IPlugin {
             e.printStackTrace();
         }
 
-        // ========== ELEMENTOS VISUAIS ==========
+        // ========== CONTROLES ========== 
+        // Define os elementos visuais a partir dos quais os dados serão recuperados para inserção no banco
 
-        // ========== E-MAILS ==========
+        ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
+        ComboBox<Map<String, Object>> cbVehicleTypes = new ComboBox<>();
+        TableView<VehicleTableItem> tbVehicles = new TableView<>();
 
-        Label lbEmail = new Label("Email:");
-        lbEmail.setStyle(
+        // ========== NÓS ==========
+        // Define os nós (contêineres) que serão enviados para a interface, incluindo os controles
+
+        HBox hbEmail = createComboBoxNode("E-mail", cbEmail, customersData, "email");
+        HBox hbVehicleTypes = createComboBoxNode("Tipo de veículo", cbVehicleTypes, vehicleTypesData, "type_name");
+        VBox vbVehicles = createTableViewNode("Veículos disponíveis", tbVehicles);
+
+        // ========== VEÍCULOS ==========
+
+        /*
+        // cbVehicleType.setOnAction(event -> {
+
+        //     // Obtém o item selecionado na combobox (Map)
+        //     Map<String, Object> selected = cbVehicleType.getValue();
+
+        //     // Nada selecionado
+        //     if(selected == null) {
+        //         return;
+        //     }
+
+        //     // Extrai o type_id do map
+        //     int typeId = ((Number) selected.get("type_id")).intValue();
+
+        //     try {
+                
+        //         // Monta a query final
+        //         String sql = VEHICLES_BY_TYPE_QUERY + typeId;
+
+        //         // Executa a query
+        //         List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
+
+        //         // Limpa a tabela
+        //         rows.clear();
+
+        //         // Recria as linhas
+        //         for (Map<String, Object> row : filteredVehicles) {
+
+        //             Object yearObj = row.get("year");
+        //             int yearInt;
+        //             yearInt = ((Date) yearObj).toLocalDate().getYear();
+
+        //             VehicleTableItem item = new VehicleTableItem(
+        //                 (String) row.get("make"),
+        //                 (String) row.get("model"),
+        //                 yearInt,
+        //                 FuelType.valueOf((String) row.get("fuel_type")),
+        //                 Transmission.valueOf((String) row.get("transmission")),
+        //                 ((Number) row.get("mileage")).doubleValue()
+        //             );
+
+        //             rows.add(item);
+        //         }
+        //     } 
+            
+        //     catch(Exception e) {
+        //         e.printStackTrace();
+        //     }
+        // });
+        */
+        
+        // Adiciona os elementos visuais à lista de nodes
+        mainNodes.addAll(List.of(
+            hbEmail, 
+            hbVehicleTypes,
+            vbVehicles
+        ));
+
+        // Ajusta o layout
+        VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
+        VBox.setMargin(hbVehicleTypes, new Insets(40, 0, 0, 20));
+        VBox.setMargin(vbVehicles, new Insets(60, 0, 0, 20));
+    }
+
+    // Cria um nó contendo um Label e uma ComboBox
+    public HBox createComboBoxNode(String label, ComboBox<Map<String, Object>> cb, List<Map<String, Object>> data, String bdColumn) {
+
+        if(!label.contains(":")) {
+            label = label + ": ";
+        }
+
+        Label lb = new Label(label);
+        lb.setStyle(
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
             "-fx-text-fill: black;"
         );
         
-        ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
-        cbEmail.setStyle(
+        cb.setStyle(
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
         );
 
-        cbEmail.getItems().addAll(customersData);
-        MainScreenPlugin.configureComboBoxDisplayColumn(cbEmail, "email");
+        cb.getItems().addAll(data);
+        MainScreenPlugin.configureComboBoxDisplayColumn(cb, bdColumn);
 
         // Cria um contêiner para agrupar label e combobox
-        HBox hbEmail = new HBox(5, lbEmail, cbEmail);
-        hbEmail.setAlignment(Pos.CENTER_LEFT);
-        VBox.setMargin(hbEmail, new Insets(20, 0, 0, 20));
+        HBox hb = new HBox(5, lb, cb);
+        hb.setAlignment(Pos.CENTER_LEFT);
 
-        // ========== VEÍCULOS ==========
+        return hb;
+    }
 
-        // Cria uma tabela em que cada linha é um VehicleTableItem
-        TableView<VehicleTableItem> tbVehicles = new TableView<>();
+    // Cria um nó contendo um Label e uma TableView
+    public VBox createTableViewNode(String label, TableView<VehicleTableItem> tbVehicles) {
+        
+        Label lb = new Label(label);
+        lb.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
+        lb.setMaxWidth(Double.MAX_VALUE);
+        lb.setAlignment(Pos.CENTER);
+
+        // 'tbVehicles' é uma tabela na qual cada linha é um VehicleTableItem
 
         // Cria um ObservableList (internamente implementado como um ArrayList) de VehicleTableItem
         // Analogamente, é como uma lista na qual cada elemento é um VehicleTableItem
         // Um ObservableList permite refletir automaticamente na tela quaisquer alterações nos dados
         ObservableList<VehicleTableItem> rows = FXCollections.observableArrayList();
 
-        // Cria as colunas da tabela
-        // TableColumn<S, T> onde,
-            // S é o tipo da linha
-            // T é o tipo das células da coluna
-        TableColumn<VehicleTableItem, String> colMake = new TableColumn<>("Marca");
+        // Elimina as colunas existentes
+        tbVehicles.getColumns().clear();
 
-        // PropertyValueFactory usa reflexão para buscar um getter compatível com o parâmetro passado
-        // setCellValueFactory define a função que será chamada para obter o valor que deve aparecer na célula
-        // Obs.: os parâmetros passados para o construtor devem corresponder exatamente ao nome dos respectivos atributos da classe VehicleTableItem
-        colMake.setCellValueFactory(new PropertyValueFactory<>("make"));
+        for(VehicleColumns c : VehicleColumns.values()) {
+            
+            // Cria as colunas da tabela
+            // TableColumn<S, T> onde,
+                // S é o tipo da linha
+                // T é o tipo das células da coluna
+            TableColumn<VehicleTableItem, Object> col = new TableColumn<>(c.getHeaderText());
 
-        TableColumn<VehicleTableItem, String> colModel = new TableColumn<>("Modelo");
-        colModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+            // Obtém o nome do atributo correspondente
+            String propertyName = c.getPropertyName();
 
-        TableColumn<VehicleTableItem, Integer> colYear = new TableColumn<>("Ano");
-        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+            // PropertyValueFactory usa reflexão para buscar um getter compatível com o parâmetro passado
+            // setCellValueFactory define a função que será chamada para obter o valor que deve aparecer na célula
+            // Obs.: os parâmetros passados para o construtor devem corresponder exatamente ao nome dos respectivos atributos da classe VehicleTableItem
+            col.setCellValueFactory(new PropertyValueFactory<>(propertyName));
 
-        TableColumn<VehicleTableItem, FuelType> colFuelType = new TableColumn<>("Tipo de combustível");
-        colFuelType.setCellValueFactory(new PropertyValueFactory<>("fuelType"));
-
-        TableColumn<VehicleTableItem, Transmission> colTransmission = new TableColumn<>("Tipo de câmbio");
-        colTransmission.setCellValueFactory(new PropertyValueFactory<>("transmission"));
-
-        TableColumn<VehicleTableItem, Double> colMileage = new TableColumn<>("Quilometragem");
-        colMileage.setCellValueFactory(new PropertyValueFactory<>("mileage"));
-
-        // Vincula as colunas à tabela
-        tbVehicles.getColumns().addAll(
-            List.of(
-            colMake,
-            colModel,
-            colYear,
-            colFuelType,
-            colTransmission,
-            colMileage
-            )
-        );        
+            // Vincula a coluna à tabela
+            tbVehicles.getColumns().add(col);
+        }
 
         // Vincula as linhas à tabela
         tbVehicles.setItems(rows);
@@ -212,84 +287,11 @@ public class MainScreenPlugin implements IPlugin {
         // Autodimensiona as colunas
         tbVehicles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        VBox.setMargin(tbVehicles, new Insets(60, 0, 0, 20));
-
-        // ========== TIPO DE VEÍCULOS ==========
-
-        Label lbVehicleType = new Label("Tipo de veículo:");
-        lbVehicleType.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;"
-        );
-        
-        ComboBox<Map<String, Object>> cbVehicleType = new ComboBox<>();
-        cbVehicleType.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
-        );
-
-        cbVehicleType.getItems().addAll(vehicleTypesData);
-        MainScreenPlugin.configureComboBoxDisplayColumn(cbVehicleType, "type_name");
-
-        cbVehicleType.setOnAction(event -> {
-
-            // Obtém o item selecionado na combobox (Map)
-            Map<String, Object> selected = cbVehicleType.getValue();
-
-            // Nada selecionado
-            if(selected == null) {
-                return;
-            }
-
-            // Extrai o type_id do map
-            int typeId = ((Number) selected.get("type_id")).intValue();
-
-            try {
-                
-                // Monta a query final
-                String sql = VEHICLES_BY_TYPE_QUERY + typeId;
-
-                // Executa a query
-                List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
-
-                // Limpa a tabela
-                rows.clear();
-
-                // Recria as linhas
-                for (Map<String, Object> row : filteredVehicles) {
-
-                    Object yearObj = row.get("year");
-                    int yearInt;
-                    yearInt = ((Date) yearObj).toLocalDate().getYear();
-
-                    VehicleTableItem item = new VehicleTableItem(
-                        (String) row.get("make"),
-                        (String) row.get("model"),
-                        yearInt,
-                        FuelType.valueOf((String) row.get("fuel_type")),
-                        Transmission.valueOf((String) row.get("transmission")),
-                        ((Number) row.get("mileage")).doubleValue()
-                    );
-
-                    rows.add(item);
-                }
-            } 
-            
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        });
-        
         // Cria um contêiner para agrupar label e combobox
-        HBox hbVehicleType = new HBox(5, lbVehicleType, cbVehicleType);
-        hbVehicleType.setAlignment(Pos.CENTER_LEFT);
-        VBox.setMargin(hbVehicleType, new Insets(40, 0, 0, 20));
+        VBox vb = new VBox(5, lb, tbVehicles);
+        vb.setAlignment(Pos.CENTER_LEFT);
 
-        // Adiciona os elementos visuais à lista de nodes
-        mainNodes.addAll(List.of(
-            hbEmail, 
-            hbVehicleType,
-            tbVehicles
-        ));
+        return vb;
     }
 
     /**
