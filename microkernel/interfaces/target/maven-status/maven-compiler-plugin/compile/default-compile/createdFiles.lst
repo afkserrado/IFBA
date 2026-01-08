@@ -1,7 +1,7 @@
 br/edu/ifba/inf008/interfaces/IAuthenticationController.class
 br/edu/ifba/inf008/interfaces/IPlugin.class
-br/edu/ifba/inf008/interfaces/ITableColumn.class
 br/edu/ifba/inf008/interfaces/IIOController.class
+br/edu/ifba/inf008/interfaces/ITableColumns.class
 br/edu/ifba/inf008/interfaces/IDatabaseController.class
 br/edu/ifba/inf008/interfaces/ICore.class
 br/edu/ifba/inf008/interfaces/IScreen.class
