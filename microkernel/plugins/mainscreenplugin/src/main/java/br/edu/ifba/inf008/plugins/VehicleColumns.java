@@ -1,9 +1,9 @@
 package br.edu.ifba.inf008.plugins;
 
-import br.edu.ifba.inf008.interfaces.ITableColumn;
+import br.edu.ifba.inf008.interfaces.ITableColumns;
 
 // Define o nome de cada coluna da tabela de veículos, além do nome do atributo correspondente no DTO
-public enum VehicleColumns implements ITableColumn {
+public enum VehicleColumns implements ITableColumns {
 
     MAKE("Marca", "make"),
     MODEL("Modelo", "model"),
