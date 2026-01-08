@@ -3,6 +3,7 @@ package br.edu.ifba.inf008.plugins;
 // DTO (Data Transfer Object) para implementação da TableView
 public class VehicleTableItem {
     
+    private int vehicleId;
     private String make;
     private String model;
     private int year;
@@ -11,6 +12,7 @@ public class VehicleTableItem {
     private double mileage;
 
     public VehicleTableItem(
+        int vehicleId,
         String make, 
         String model, 
         int year, 
@@ -18,12 +20,17 @@ public class VehicleTableItem {
         Transmission transmission, 
         double mileage
     ) {
+        this.vehicleId = vehicleId;
         this.make = make;
         this.model = model;
         this.year = year;
         this.fuelType = fuelType;
         this.transmission = transmission;
         this.mileage = mileage;
+    }
+
+    public int getVehicleId() {
+        return vehicleId;
     }
 
     public String getMake() {
