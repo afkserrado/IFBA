@@ -4,6 +4,10 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.plugins.DTO.FuelType;
+import br.edu.ifba.inf008.plugins.DTO.Transmission;
+import br.edu.ifba.inf008.plugins.DTO.VehicleColumns;
+import br.edu.ifba.inf008.plugins.DTO.VehicleTableItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,19 +55,19 @@ public class MainScreenPlugin implements IPlugin {
         "SELECT customer_id, email " +
         "FROM customers";
 
+    // type_id: entrada para a query que retornará os dados a serem exibidos na tabela
+    // type_name: conteúdo a ser exibido na tela
+    // additional_fees: utilizado para o cálculo do valor total da locação
+    private static final String VEHICLE_TYPES_QUERY = 
+        "SELECT type_id, type_name, additional_fees " + 
+        "FROM vehicle_types";    
+
     // vehicle_id: entrada para a inserção na tabela rentals
     // demais itens: conteúdo a ser exibido na tela
     private static final String VEHICLES_BY_TYPE_QUERY = 
         "SELECT vehicle_id, make, model, year, fuel_type, transmission, mileage " + 
         "FROM vehicles " +
         "WHERE status = 'AVAILABLE' AND type_id = ";
-
-    // type_id: entrada para a query que retornará os dados a serem exibidos na tabela
-    // type_name: conteúdo a ser exibido na tela
-    // additional_fees: utilizado para o cálculo do valor total da locação
-    private static final String VEHICLE_TYPES_QUERY = 
-        "SELECT type_id, type_name, additional_fees " + 
-        "FROM vehicle_types";
 
     // Tamanhos de fonte
     private static final double LABEL_FONT_SIZE = 24.0;
@@ -347,6 +351,9 @@ public class MainScreenPlugin implements IPlugin {
             }
         });
     }
+
+    // Ao clicar no botão confirmar, o programa executará um evento que calculará o valor da locação. Antes, ele precisará validar os dados de entrada:
+        // endDate >= startDate
 
     /**
      * 

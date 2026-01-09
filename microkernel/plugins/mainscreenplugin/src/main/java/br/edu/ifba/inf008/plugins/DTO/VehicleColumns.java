@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins;
+package br.edu.ifba.inf008.plugins.DTO;
 
 import br.edu.ifba.inf008.interfaces.ITableColumns;
 

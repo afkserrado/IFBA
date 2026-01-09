@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins;
+package br.edu.ifba.inf008.plugins.DTO;
 
 // DTO (Data Transfer Object) para implementação da TableView
 public class VehicleTableItem {
