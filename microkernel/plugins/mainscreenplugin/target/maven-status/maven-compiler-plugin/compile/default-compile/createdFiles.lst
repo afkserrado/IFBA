@@ -1,6 +1,6 @@
+br/edu/ifba/inf008/plugins/DTO/FuelType.class
 br/edu/ifba/inf008/plugins/MainScreenPlugin$1.class
-br/edu/ifba/inf008/plugins/VehicleTableItem.class
-br/edu/ifba/inf008/plugins/FuelType.class
-br/edu/ifba/inf008/plugins/VehicleColumns.class
+br/edu/ifba/inf008/plugins/DTO/VehicleColumns.class
+br/edu/ifba/inf008/plugins/DTO/VehicleTableItem.class
+br/edu/ifba/inf008/plugins/DTO/Transmission.class
 br/edu/ifba/inf008/plugins/MainScreenPlugin.class
-br/edu/ifba/inf008/plugins/Transmission.class
