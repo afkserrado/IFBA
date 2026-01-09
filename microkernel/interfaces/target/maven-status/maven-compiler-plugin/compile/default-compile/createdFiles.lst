@@ -1,9 +1,11 @@
 br/edu/ifba/inf008/interfaces/IAuthenticationController.class
 br/edu/ifba/inf008/interfaces/IPlugin.class
+br/edu/ifba/inf008/interfaces/IVehicleTypes.class
 br/edu/ifba/inf008/interfaces/IIOController.class
 br/edu/ifba/inf008/interfaces/ITableColumns.class
 br/edu/ifba/inf008/interfaces/IDatabaseController.class
 br/edu/ifba/inf008/interfaces/ICore.class
+br/edu/ifba/inf008/interfaces/IVehicleTypes$1.class
 br/edu/ifba/inf008/interfaces/IScreen.class
 br/edu/ifba/inf008/interfaces/IUIController.class
 br/edu/ifba/inf008/interfaces/IPluginController.class
