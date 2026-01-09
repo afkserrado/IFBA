@@ -1,11 +1,12 @@
 package br.edu.ifba.inf008.interfaces;
 
-// Importanto bibliotecas do Java
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import br.edu.ifba.inf008.dtos.RentalsInsertDTO;
 
 // Classe responsável por controlar o acesso à base de dados
 public abstract class IDatabaseController {
@@ -57,4 +58,7 @@ public abstract class IDatabaseController {
 
     // Executa uma query e carrega o resultado em memória
     public abstract List<Map<String, Object>> loadQuery(Connection conn, String sql) throws SQLException;
+
+    // Executa uma query que insere dados na tabela 'rentals' do banco de dados
+    public abstract void insertRentalsData(Connection conn, RentalsInsertDTO rentals) throws SQLException;
 }

@@ -1,18 +1,19 @@
 package br.edu.ifba.inf008.shell;
 
-// Importanto bibliotecas internas
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import br.edu.ifba.inf008.dtos.RentalsInsertDTO;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 
 // Classe responsável por controlar o acesso à base de dados
@@ -139,5 +140,37 @@ public class DatabaseController extends IDatabaseController {
             }
         }
         return rows;
+    }
+
+    // Executa uma query que insere dados na tabela 'rentals' do banco de dados
+    @Override
+    public void insertRentalsData(Connection conn, RentalsInsertDTO rentals) throws SQLException {
+
+        // Evita NullPointerException
+        if(conn == null) {
+            throw new IllegalArgumentException("Connection conn não pode ser null.");
+        }
+
+        if(rentals == null) {
+            throw new IllegalArgumentException("Rentals não pode ser null.");
+        }
+
+        String sql = 
+            "INSERT INTO rentals (customer_id, vehicle_id, rental_type, start_date, scheduled_end_date, pickup_location, initial_mileage, base_rate, insurance_fee, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try(PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, rentals.getCustomerId());
+            ps.setInt(2, rentals.getVehicleId());
+            ps.setString(3, rentals.getRentalType().name());
+            ps.setTimestamp(4, Timestamp.valueOf(rentals.getStartDate()));
+            ps.setTimestamp(5, Timestamp.valueOf(rentals.getScheduledEndDate()));
+            ps.setString(6, rentals.getPickupLocation());
+            ps.setBigDecimal(7, rentals.getInitialMileage());
+            ps.setBigDecimal(8, rentals.getBaseRate());
+            ps.setBigDecimal(9, rentals.getInsuranceFee());
+            ps.setBigDecimal(10, rentals.getTotalAmount());
+
+            ps.executeUpdate();
+        }
     }
 }
