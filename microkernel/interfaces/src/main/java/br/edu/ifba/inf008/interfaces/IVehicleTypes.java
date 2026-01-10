@@ -8,18 +8,27 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class IVehicleTypes {
+public abstract class IVehicleTypes implements IPlugin {
     
     // Instancia o parser, que permitirá a "conversão" do JSON em um objeto Java
     private final ObjectMapper mapper = new ObjectMapper();
 
+    // Método init() do IPlugin a ser implementado nas classes que estenderem esta classe
+
     // Calcula o valor total da locação
-    public double calculateTotalAmount(double baseRate, double insuranceFee, LocalDate startDate, LocalDate endDate, String additionalFees) throws Exception {
-        return (baseRate * calculateNumberOfDays(startDate, endDate)) + insuranceFee + sumAdditionalFees(additionalFees);
+    public double calculateTotalAmount(double baseRate, double insuranceFee, LocalDate startDate, LocalDate endDate, String additionalFees) {
+            
+        long days = IVehicleTypes.calculateNumberOfDays(startDate, endDate);
+        double sumFees = insuranceFee + sumAdditionalFees(additionalFees);
+        System.out.println(this.getClass().getSimpleName() + ": ");
+        System.out.println("Diárias: " + days);
+        System.out.println("Taxas: " + sumFees);
+
+        return (baseRate * days) + sumFees;
     }
 
     // Calcula a quantidade de diárias
-    public long calculateNumberOfDays(LocalDate startDate, LocalDate endDate) {
+    public static long calculateNumberOfDays(LocalDate startDate, LocalDate endDate) {
 
         if(endDate.isBefore(startDate)) throw new IllegalArgumentException("Data de devolução não pode ser anterior à data de coleta.");
 
