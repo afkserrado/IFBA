@@ -29,7 +29,6 @@ public abstract class IVehicleTypes implements IPlugin {
 
     // Calcula a quantidade de diárias
     public static long calculateNumberOfDays(LocalDate startDate, LocalDate endDate) {
-
         if(endDate.isBefore(startDate)) throw new IllegalArgumentException("Data de devolução não pode ser anterior à data de coleta.");
 
         if(startDate.equals(endDate)) return 1; // Conta pelo menos 1 diária
