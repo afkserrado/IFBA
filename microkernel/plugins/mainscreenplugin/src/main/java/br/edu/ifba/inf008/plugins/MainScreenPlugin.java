@@ -4,6 +4,7 @@ import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.interfaces.IVehicleTypes;
 import br.edu.ifba.inf008.plugins.DTO.FuelType;
 import br.edu.ifba.inf008.plugins.DTO.Transmission;
 import br.edu.ifba.inf008.plugins.DTO.VehicleColumns;
@@ -18,17 +19,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Date;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.DatePicker;
@@ -37,6 +38,11 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
+import java.time.LocalDate;
 
 // Rever o fechamento da conexão
 // Refatorar: um método para cada elemento visual
@@ -140,7 +146,7 @@ public class MainScreenPlugin implements IPlugin {
         }
 
         // ========== CONTROLES ========== 
-        // Define os elementos visuais a partir dos quais os dados serão recuperados para inserção no banco
+        // Define os elementos visuais com os quais o usuário interagirá e a partir dos quais serão obtidos os dados de inserção
 
         ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
         ComboBox<Map<String, Object>> cbVehicleTypes = new ComboBox<>();
@@ -148,9 +154,12 @@ public class MainScreenPlugin implements IPlugin {
         DatePicker dpStartDate = new DatePicker();
         DatePicker dpEndDate = new DatePicker();
         TextField tfPickupLocation = new TextField();
+        Button btCalculate = createButton("Calcular");
+        Label lbTotalAmount = createLabel("Valor total: ");
+        Button btConfirm = createButton("Confirmar");
         
         // Cria um Spinner, definindo o valor mínimo, valor máximo, valor inicial e incremento
-        Spinner<Double> spBaseRate = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.01);
+        Spinner<Double> spBaseRate = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.10);
         Spinner<Double> spInsuranceFee = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.10);
 
         // ========== NÓS ==========
@@ -167,7 +176,9 @@ public class MainScreenPlugin implements IPlugin {
 
         // ========== WIRE EVENTS ==========
         // Define os eventos que acontecerão quando o usuário interagir com a interface
-        wireEvents(conn, cbVehicleTypes, tbVehicles);
+        ListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
+        calculateTotalAmount(btCalculate, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount 
+        );
 
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
@@ -184,6 +195,9 @@ public class MainScreenPlugin implements IPlugin {
         grid.add(hbStartDate,       0, 1);
         grid.add(hbEndDate,         1, 1);
         grid.add(vbVehicles,        0, 2);
+        grid.add(lbTotalAmount,     0, 3);
+        grid.add(btCalculate,       1, 3); 
+        grid.add(btConfirm,         0, 5);
         
         // Define a quantidade de colunas ocupadas pela tabela ("mescla" colunas)
         GridPane.setColumnSpan(vbVehicles, GridPane.REMAINING); 
@@ -199,11 +213,7 @@ public class MainScreenPlugin implements IPlugin {
             label = label + ": ";
         }
 
-        Label lb = new Label(label);
-        lb.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;"
-        );
+        Label lb = createLabel(label);
         
         node.setStyle(
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
@@ -230,11 +240,7 @@ public class MainScreenPlugin implements IPlugin {
     // Cria um nó contendo um Label e uma TableView
     public VBox createTableViewNode(String label, TableView<VehicleTableItem> tbVehicles) {
         
-        Label lb = new Label(label);
-        lb.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;"
-        );
+        Label lb = createLabel(label);
 
         lb.setMaxWidth(Double.MAX_VALUE);
         lb.setAlignment(Pos.CENTER);
@@ -314,8 +320,41 @@ public class MainScreenPlugin implements IPlugin {
         return hb;
     }
 
-    // Define os eventos a serem acionados quando o usuário interagir com certos elementos da interface
-    public void wireEvents(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
+    // Cria botão e define sua formatação
+    public Button createButton(String button) {
+
+        Button bt = new Button(button);
+        bt.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
+
+        return bt;
+    }
+
+    // Cria um label e define sua formatação
+    public Label createLabel(String label) {
+
+        Label lb = new Label(label);
+        lb.setStyle(
+            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
+            "-fx-text-fill: black;"
+        );
+
+        return lb;
+    }
+
+    // Cria uma caixa de diálogo
+    public Alert createAlert(AlertType alertType, String header, String msg) {
+
+        Alert al = new Alert(alertType, msg);
+        al.setHeaderText(header);
+
+        return al;
+    }
+
+    // Lista os veículos disponíveis conforme o tipo selecionado na combobox de tipos de veículos
+    public void ListAvailableVehicles(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
 
         cbVehicleTypes.setOnAction(event -> {
 
@@ -350,6 +389,7 @@ public class MainScreenPlugin implements IPlugin {
                     Object yearObj = row.get("year");
                     int yearInt = ((Date) yearObj).toLocalDate().getYear();
 
+                    // DTO
                     VehicleTableItem item = new VehicleTableItem(
                         ((Number) row.get("vehicle_id")).intValue(),
                         (String) row.get("make"),
@@ -373,8 +413,94 @@ public class MainScreenPlugin implements IPlugin {
         });
     }
 
-    // Ao clicar no botão confirmar, o programa executará um evento que calculará o valor da locação. Antes, ele precisará validar os dados de entrada:
-        // endDate >= startDate
+    // Valida as entradas e calcula o valor total da locação
+    public void calculateTotalAmount(
+        Button btCalculate, 
+        ComboBox<Map<String, Object>> cbEmail, 
+        ComboBox<Map<String, Object>> cbVehicleTypes, 
+        TableView<VehicleTableItem> tbVehicles,
+        DatePicker dpStartDate,
+        DatePicker dpEndDate,
+        TextField tfPickupLocation,
+        Spinner<Double> spBaseRate,
+        Spinner<Double> spInsuranceFee,
+        Label lbTotalAmount
+    ) {
+
+        btCalculate.setOnAction(event -> {
+
+            // Obtém os valores atuais dos controles
+            Map<String, Object> email = cbEmail.getValue();
+            Map<String, Object> vehicleType = cbVehicleTypes.getValue();
+            VehicleTableItem vehicle = tbVehicles.getSelectionModel().getSelectedItem();
+            LocalDate startDate = dpStartDate.getValue();
+            LocalDate endDate = dpEndDate.getValue();
+            String pickupLocation = tfPickupLocation.getText();
+            double baseRate = spBaseRate.getValue();
+            double insuranceFee = spInsuranceFee.getValue();
+
+            // Valida os dados de entrada
+            if(
+                email == null ||
+                vehicleType == null ||
+                vehicle == null ||
+                startDate == null ||
+                endDate == null ||
+                pickupLocation.isBlank() ||
+                baseRate == 0 ||
+                baseRate < 0 ||
+                insuranceFee < 0
+            )
+            {
+                String msg = 
+                    "Existem campos que não foram preenchidos pelo usuário. Verifique se: \n" +
+                    "   - Ao menos um e-mail, tipo de veículo e veículo foram informados.\n" +
+                    "   - O local da retirada foi informado.\n" +
+                    "   - Os valores da diária e do seguro são maiores que zero.\n" +
+                    "   - As datas de início e fim da locação foram informadas.";
+
+                createAlert(AlertType.ERROR, "Campos não preenchidos", msg).showAndWait();
+                return;
+            }
+
+            if(endDate.isBefore(startDate)) {
+                createAlert(AlertType.ERROR, "Datas incompatíveis", "A data de fim da locação não pode ser inferior à data de início.").showAndWait();
+                return;
+            }
+    
+            // Obtém os dados do tipo de veículo selecionado na combobox
+            String typeName = ((String) vehicleType.get("type_name")).trim();
+            
+            if(typeName.isEmpty()) {
+                createAlert(AlertType.ERROR, "Tipo de veículo incorreto", "O tipo de veículo não pode ser vazio.").showAndWait();
+                return;
+            }
+
+            typeName = typeName.substring(0, 1) + typeName.substring(1).toLowerCase();
+
+            String additionalFees = (String) vehicleType.get("additional_fees");
+
+            // Obtém o plugin correspondente ao tipo de veículo selecionado
+            String vehiclePluginName = typeName + "Plugin";
+            IPlugin plugin = ICore
+                .getInstance()
+                .getPluginController()
+                .getPlugin(vehiclePluginName);     
+                
+            if (plugin == null || !(plugin instanceof IVehicleTypes)) {
+                createAlert(AlertType.ERROR, "Plugin não encontrado",
+                    "O plugin " + vehiclePluginName + " indisponível. Não é possível calcular o valor total da locação."
+                ).showAndWait();
+                return;
+            }
+
+            IVehicleTypes vehiclePlugin = (IVehicleTypes) plugin;
+            double total = vehiclePlugin.calculateTotalAmount(baseRate, insuranceFee, startDate, endDate, additionalFees);
+
+            // Carrega o resultado na tela
+            lbTotalAmount.setText(String.format("Valor total: R$ %.2f", total));
+        });
+    }
 
     /**
      * 

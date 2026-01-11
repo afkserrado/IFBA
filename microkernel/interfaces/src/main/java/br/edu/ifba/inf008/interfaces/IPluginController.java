@@ -1,8 +1,11 @@
 package br.edu.ifba.inf008.interfaces;
 
-import br.edu.ifba.inf008.interfaces.ICore;
+public interface IPluginController {
+    abstract boolean init();
+    
+    // Registra os plugins ativos
+    abstract void registerPlugin(String typeKey, IPlugin plugin);
 
-public interface IPluginController
-{
-    public abstract boolean init();
+    // Obtém um plugin ativo
+    abstract IPlugin getPlugin(String typeKey);
 }

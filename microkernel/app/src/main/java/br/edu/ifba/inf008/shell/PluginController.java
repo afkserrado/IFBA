@@ -1,19 +1,21 @@
 package br.edu.ifba.inf008.shell;
 
-// Importando bibliotecas internas
 import br.edu.ifba.inf008.App;
 import br.edu.ifba.inf008.interfaces.IPluginController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.ICore;
 
-// Importando bibliotecas do Java
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 // Classe responsável por carregar plugins dinamicamente em tempo de execução
 public class PluginController implements IPluginController {
+
+    private final Map<String, IPlugin> registeredPlugins = new LinkedHashMap<>();
 
     // Carrega e inicializa dinamicamente todos os plugins da aplicação em tempo de execução
     @Override
@@ -67,6 +69,8 @@ public class PluginController implements IPluginController {
                         ulc
                 ).newInstance();
 
+                registerPlugin(pluginName, plugin);
+
                 // Inicializa o plugin após ele ter sido carregado
                 plugin.init();
             }
@@ -81,5 +85,21 @@ public class PluginController implements IPluginController {
 
             return false;
         }
+    }
+
+    // Registra os plugins ativos
+    @Override
+    public void registerPlugin(String typeKey, IPlugin plugin) {
+        typeKey = typeKey.trim().toUpperCase(); // Normalização
+        registeredPlugins.put(typeKey, plugin);
+        //System.out.println(typeKey + " - " + plugin);
+    }
+
+    // Obtém um plugin ativo
+    @Override
+    public IPlugin getPlugin(String typeKey) {
+        if(typeKey == null) return null;
+        typeKey = typeKey.trim().toUpperCase(); // Normalização
+        return registeredPlugins.get(typeKey);
     }
 }

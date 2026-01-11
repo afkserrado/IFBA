@@ -20,8 +20,15 @@
         <module>interfaces</module>
         <module>dtos</module>
         <module>app</module>
+
+        <!-- Plugins -->
         <module>plugins/mainscreenplugin</module>
-       <!-- <module>plugins/myplugin</module>-->
+        <module>plugins/economyplugin</module>
+        <module>plugins/compactplugin</module>
+        <module>plugins/suvplugin</module>
+        <module>plugins/luxuryplugin</module>
+        <module>plugins/vanplugin</module>
+        <module>plugins/electricplugin</module>
     </modules>
 
     <!-- 
