@@ -13,8 +13,9 @@ import br.edu.ifba.inf008.plugins.DTO.VehicleTableItem;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ArrayList;
-
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Date;
@@ -39,10 +40,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.time.LocalDate;
+
+import br.edu.ifba.inf008.dtos.RentalsInsertDTO;
 
 // Rever o fechamento da conexão
 // Refatorar: um método para cada elemento visual
@@ -52,6 +56,18 @@ public class MainScreenPlugin implements IPlugin {
     // ========== ATRIBUTOS ==========
 
     private IDatabaseController db;
+
+    // Estados da locação
+    private int lastCustomerId;
+    private int lastTypeId;
+    private int lastVehicleId;
+    private double lastMileage;
+    private String lastPickupLocation;
+    private double lastBaseRate;
+    private double lastInsuranceFee;
+    private LocalDate lastStartDate;
+    private LocalDate lastEndDate;
+    private Double lastTotal;
 
     // ========== CONSTANTES ==========
     
@@ -177,8 +193,8 @@ public class MainScreenPlugin implements IPlugin {
         // ========== WIRE EVENTS ==========
         // Define os eventos que acontecerão quando o usuário interagir com a interface
         ListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
-        showTotalAmount(btCalculate, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount 
-        );
+        showTotalAmount(btCalculate, btConfirm, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount);
+        requestConfirmation(conn, btConfirm);
 
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
@@ -416,6 +432,7 @@ public class MainScreenPlugin implements IPlugin {
     // Valida as entradas e calcula o valor total da locação
     public void showTotalAmount(
         Button btCalculate, 
+        Button btConfirm,
         ComboBox<Map<String, Object>> cbEmail, 
         ComboBox<Map<String, Object>> cbVehicleTypes, 
         TableView<VehicleTableItem> tbVehicles,
@@ -427,10 +444,14 @@ public class MainScreenPlugin implements IPlugin {
         Label lbTotalAmount
     ) {
 
+        btConfirm.setDisable(true); // Só habilita depois de calcular
+        this.lastTotal = null;
+
+        // Calcula o valor total da locação
         btCalculate.setOnAction(event -> {
 
             // Obtém os valores atuais dos controles
-            Map<String, Object> email = cbEmail.getValue();
+            Map<String, Object> customer = cbEmail.getValue();
             Map<String, Object> vehicleType = cbVehicleTypes.getValue();
             VehicleTableItem vehicle = tbVehicles.getSelectionModel().getSelectedItem();
             LocalDate startDate = dpStartDate.getValue();
@@ -441,14 +462,13 @@ public class MainScreenPlugin implements IPlugin {
 
             // Valida os dados de entrada
             if(
-                email == null ||
+                customer == null ||
                 vehicleType == null ||
                 vehicle == null ||
                 startDate == null ||
                 endDate == null ||
                 pickupLocation.isBlank() ||
-                baseRate == 0 ||
-                baseRate < 0 ||
+                baseRate <= 0 ||
                 insuranceFee < 0
             )
             {
@@ -468,6 +488,17 @@ public class MainScreenPlugin implements IPlugin {
                 return;
             }
     
+            // Atualiza o estado
+            this.lastCustomerId = ((Number) customer.get("customer_id")).intValue();
+            this.lastTypeId = ((Number) vehicleType.get("type_id")).intValue();
+            this.lastVehicleId = vehicle.getVehicleId();
+            this.lastMileage = vehicle.getMileage();
+            this.lastPickupLocation = pickupLocation;
+            this.lastBaseRate = baseRate;
+            this.lastInsuranceFee = insuranceFee;
+            this.lastStartDate = startDate;
+            this.lastEndDate = endDate;
+
             // Obtém os dados do tipo de veículo selecionado na combobox
             String typeName = ((String) vehicleType.get("type_name")).trim();
             
@@ -495,10 +526,60 @@ public class MainScreenPlugin implements IPlugin {
             }
 
             IVehicleTypes vehiclePlugin = (IVehicleTypes) plugin;
-            double total = vehiclePlugin.calculateTotalAmount(baseRate, insuranceFee, startDate, endDate, additionalFees);
+            this.lastTotal = vehiclePlugin.calculateTotalAmount(baseRate, insuranceFee, startDate, endDate, additionalFees);
 
             // Carrega o resultado na tela
-            lbTotalAmount.setText(String.format("Valor total: R$ %.2f", total));
+            lbTotalAmount.setText(String.format("Valor total: R$ %.2f", this.lastTotal));
+            btConfirm.setDisable(false);
+        });
+    }
+
+    public void requestConfirmation(Connection conn, Button btConfirm) {
+
+        btConfirm.setOnAction(event -> {
+
+            if (this.lastTotal == null) {
+                createAlert(AlertType.ERROR, "Calcule antes", "Clique em Calcular antes de confirmar.")
+                    .showAndWait();
+                return;
+            }
+
+            Alert confirmAlert = createAlert(
+                AlertType.CONFIRMATION, 
+                "Deseja confirmar?", 
+                String.format("Confirmar locação no valor total de R$ %.2f?", this.lastTotal));
+
+            confirmAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            
+            Optional<ButtonType> result = confirmAlert.showAndWait();
+            if (result.isEmpty() || result.get() != ButtonType.OK) {
+                return; // Usuário cancelou/fechou
+            }
+
+            // DTO
+            RentalsInsertDTO rentalsData = new RentalsInsertDTO(
+                lastCustomerId,
+                lastVehicleId,
+                lastStartDate.atStartOfDay(),
+                lastEndDate.atStartOfDay(),
+                lastPickupLocation,
+                BigDecimal.valueOf(lastMileage),
+                BigDecimal.valueOf(lastBaseRate),
+                BigDecimal.valueOf(lastInsuranceFee),
+                BigDecimal.valueOf(lastTotal)
+            );
+
+            try {
+                db.insertRentalsData(conn, rentalsData);
+
+                createAlert(AlertType.INFORMATION, "Confirmação de locação", "A locação foi confirmada com sucesso!").showAndWait();
+                btConfirm.setDisable(true);
+                this.lastTotal = null;
+            } 
+            catch (SQLException e) {
+                createAlert(AlertType.ERROR, "Servidor indisponível", "Não foi possível confirmar a locação.")
+                    .showAndWait();
+            }
         });
     }
 
