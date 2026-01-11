@@ -155,22 +155,43 @@ public class DatabaseController extends IDatabaseController {
             throw new IllegalArgumentException("Rentals não pode ser null.");
         }
 
-        String sql = 
+        String sqlInsert = 
             "INSERT INTO rentals (customer_id, vehicle_id, rental_type, start_date, scheduled_end_date, pickup_location, initial_mileage, base_rate, insurance_fee, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, rentals.getCustomerId());
-            ps.setInt(2, rentals.getVehicleId());
-            ps.setString(3, rentals.getRentalType().name());
-            ps.setTimestamp(4, Timestamp.valueOf(rentals.getStartDate()));
-            ps.setTimestamp(5, Timestamp.valueOf(rentals.getScheduledEndDate()));
-            ps.setString(6, rentals.getPickupLocation());
-            ps.setBigDecimal(7, rentals.getInitialMileage());
-            ps.setBigDecimal(8, rentals.getBaseRate());
-            ps.setBigDecimal(9, rentals.getInsuranceFee());
-            ps.setBigDecimal(10, rentals.getTotalAmount());
+        String sqlUpdate = "UPDATE vehicles SET status = 'RENTED' WHERE vehicle_id = ?";
 
-            ps.executeUpdate();
+        // Desabilita a atualização automática do banco
+        conn.setAutoCommit(false);
+
+        try(
+            PreparedStatement psInsert = conn.prepareStatement(sqlInsert);
+            PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)
+        ) {
+            psInsert.setInt(1, rentals.getCustomerId());
+            psInsert.setInt(2, rentals.getVehicleId());
+            psInsert.setString(3, rentals.getRentalType().name());
+            psInsert.setTimestamp(4, Timestamp.valueOf(rentals.getStartDate()));
+            psInsert.setTimestamp(5, Timestamp.valueOf(rentals.getScheduledEndDate()));
+            psInsert.setString(6, rentals.getPickupLocation());
+            psInsert.setBigDecimal(7, rentals.getInitialMileage());
+            psInsert.setBigDecimal(8, rentals.getBaseRate());
+            psInsert.setBigDecimal(9, rentals.getInsuranceFee());
+            psInsert.setBigDecimal(10, rentals.getTotalAmount());
+            psInsert.executeUpdate();
+
+            psUpdate.setInt(1, rentals.getVehicleId());
+            psUpdate.executeUpdate();
+
+            conn.commit();
+        }
+        
+        catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        }
+
+        finally {
+            conn.setAutoCommit(true);
         }
     }
 }
