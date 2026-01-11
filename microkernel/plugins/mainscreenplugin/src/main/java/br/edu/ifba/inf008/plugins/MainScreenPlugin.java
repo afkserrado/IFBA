@@ -36,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextFormatter;
 
 // Rever o fechamento da conexão
 // Refatorar: um método para cada elemento visual
@@ -289,7 +290,27 @@ public class MainScreenPlugin implements IPlugin {
         
         HBox hb = createConteinerNode(label, sp);
         sp.setEditable(true);
-       
+        
+        // Como o Spinner está editável (setEditable(true)), o usuário pode digitar no editor (TextField)
+        // TextField suporta um TextFormatter, objeto utilizado para interceptar/filtrar qualquer alteração no texto antes de ser aplicada
+        sp.getEditor().setTextFormatter(
+            // Cria um TextFormatter, passando uma função de filtro
+            new TextFormatter<>(
+                // Função de filtro
+                // A função recebe um "Change" (a mudança proposta) e deve retornar:
+                    // - o próprio change (aceita), ou
+                    // - null (rejeita)
+                change -> {
+                    // Texto completo que o controle teria se essa mudança fosse aplicada
+                    String t = change.getControlNewText(); 
+                    
+                    // Verifica se o texto atende ao requisito
+                    // Aceita: vazio, "123", "123," e "123,12"
+                    return t.matches("\\d*(,\\d*)?") ? change : null;
+                }
+            )
+        );
+
         return hb;
     }
 
