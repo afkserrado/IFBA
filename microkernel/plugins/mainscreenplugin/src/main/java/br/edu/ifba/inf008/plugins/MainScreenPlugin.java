@@ -177,7 +177,7 @@ public class MainScreenPlugin implements IPlugin {
         // ========== WIRE EVENTS ==========
         // Define os eventos que acontecerão quando o usuário interagir com a interface
         ListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
-        calculateTotalAmount(btCalculate, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount 
+        showTotalAmount(btCalculate, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount 
         );
 
         // ========== LAYOUT ==========
@@ -414,7 +414,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Valida as entradas e calcula o valor total da locação
-    public void calculateTotalAmount(
+    public void showTotalAmount(
         Button btCalculate, 
         ComboBox<Map<String, Object>> cbEmail, 
         ComboBox<Map<String, Object>> cbVehicleTypes, 
