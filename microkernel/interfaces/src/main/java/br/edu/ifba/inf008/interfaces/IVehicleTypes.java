@@ -20,9 +20,9 @@ public abstract class IVehicleTypes implements IPlugin {
             
         long days = IVehicleTypes.calculateNumberOfDays(startDate, endDate);
         double sumFees = insuranceFee + sumAdditionalFees(additionalFees);
-        System.out.println(this.getClass().getSimpleName() + ": ");
-        System.out.println("Diárias: " + days);
-        System.out.println("Taxas: " + sumFees);
+        //System.out.println(this.getClass().getSimpleName() + ": ");
+        //System.out.println("Diárias: " + days);
+        //System.out.println("Taxas: " + sumFees);
 
         return (baseRate * days) + sumFees;
     }
