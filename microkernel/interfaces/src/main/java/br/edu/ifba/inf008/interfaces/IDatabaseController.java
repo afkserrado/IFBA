@@ -57,8 +57,8 @@ public abstract class IDatabaseController {
     public abstract void closeConnection(Connection connection);
 
     // Executa uma query e carrega o resultado em memória
-    public abstract List<Map<String, Object>> loadQuery(Connection conn, String sql) throws SQLException;
+    public abstract List<Map<String, Object>> loadQuery(String sql) throws SQLException;
 
     // Executa uma query que insere dados na tabela 'rentals' do banco de dados
-    public abstract void insertRentalsData(Connection conn, RentalsInsertDTO rentals) throws SQLException;
+    public abstract void insertRentalsData(RentalsInsertDTO rentals) throws SQLException;
 }
