@@ -57,6 +57,7 @@ public class MainScreenPlugin implements IPlugin {
     // ========== ATRIBUTOS ==========
 
     private IDatabaseController db;
+    private IUIController uiController;
 
     // Estados da locação
     private int lastCustomerId;
@@ -105,29 +106,15 @@ public class MainScreenPlugin implements IPlugin {
     public boolean init() {
         
         // Obtém a instância do controlador da interface gráfica
-        IUIController uiController = ICore.getInstance().getUIController();
+        uiController = ICore.getInstance().getUIController();
 
-        // Inicializa a conexão
-        Connection conn = null;
-
-        // Abre a conexão com o banco de dados
-        try {
-            // Obtém a instância do controlador da base de dados
-            db = ICore.getInstance().getDatabaseController();
-            conn = db.getConnectionReadOnly();
-            System.out.println("Conexão estabelecida: " + conn);
-        } 
-        
-        // Conexão falhou
-        catch (Exception ex) {
-            System.err.println("Erro ao conectar com banco: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        // Obtém a instância do controlador da base de dados
+        db = ICore.getInstance().getDatabaseController();
 
         // Inicializa a lista de nós
         List<Node> mainNodes = new LinkedList<>();
 
-        createContent(conn, mainNodes);
+        createContent(mainNodes);
         uiController.addMainNodes(mainNodes);
 
         // Fecha a conexão
@@ -140,12 +127,7 @@ public class MainScreenPlugin implements IPlugin {
     // Executa querys SQL
     // Cria elementos visuais
     // Popula os elementos visuais com os dados do banco
-    private void createContent(Connection conn, List<Node> mainNodes) {
-
-        if (conn == null) {
-            System.err.println("Connection conn não pode ser null.");
-            return;
-        }
+    private void createContent(List<Node> mainNodes) {
 
         // ========== DADOS ==========
 
@@ -153,8 +135,8 @@ public class MainScreenPlugin implements IPlugin {
         List<Map<String, Object>> vehicleTypesData = new ArrayList<>();
 
         try {
-            customersData = db.loadQuery(conn, CUSTOMERS_QUERY);
-            vehicleTypesData = db.loadQuery(conn, VEHICLE_TYPES_QUERY);
+            customersData = db.loadQuery(CUSTOMERS_QUERY);
+            vehicleTypesData = db.loadQuery(VEHICLE_TYPES_QUERY);
         } 
         
         catch (SQLException e) {
@@ -193,13 +175,13 @@ public class MainScreenPlugin implements IPlugin {
 
         // ========== WIRE EVENTS ==========
         // Define os eventos que acontecerão quando o usuário interagir com a interface
-        wireListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
+        wireListAvailableVehicles(cbVehicleTypes, tbVehicles);
         
         wireShowTotalAmount(btCalculate, btConfirm, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount);
 
         wireInvalidateOnChange(btConfirm, lbTotalAmount, cbVehicleTypes, dpStartDate, dpEndDate, spBaseRate,spInsuranceFee);
         
-        wireConfirmationAction(conn, btConfirm);
+        wireConfirmationAction(btConfirm, tbVehicles);
 
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
@@ -378,7 +360,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Lista os veículos disponíveis conforme o tipo selecionado na combobox de tipos de veículos
-    private void wireListAvailableVehicles(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
+    private void wireListAvailableVehicles(ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
 
         cbVehicleTypes.setOnAction(event -> {
 
@@ -399,7 +381,7 @@ public class MainScreenPlugin implements IPlugin {
                 String sql = VEHICLES_BY_TYPE_QUERY + typeId;
 
                 // Executa a query
-                List<Map<String, Object>> filteredVehicles = db.loadQuery(conn, sql);
+                List<Map<String, Object>> filteredVehicles = db.loadQuery(sql);
 
                 // Obtém as linhas da tabela
                 ObservableList<VehicleTableItem> rows = tbVehicles.getItems();
@@ -550,7 +532,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Confirma a locação e registra os dados no banco de dados
-    private void wireConfirmationAction(Connection conn, Button btConfirm) {
+    private void wireConfirmationAction(Button btConfirm, TableView<VehicleTableItem> tbVehicles) {
 
         btConfirm.setOnAction(event -> {
 
@@ -587,12 +569,23 @@ public class MainScreenPlugin implements IPlugin {
             );
 
             try {
-                db.insertRentalsData(conn, rentalsData);
+                db.insertRentalsData(rentalsData);
 
                 createAlert(AlertType.INFORMATION, "Confirmação de locação", "A locação foi confirmada com sucesso!").showAndWait();
                 btConfirm.setDisable(true);
                 this.lastTotal = null;
+
+                // Obtém o item inserido no banco
+                VehicleTableItem selected = tbVehicles.getSelectionModel().getSelectedItem();
+
+                // Remove o item inserido no banco da tabela
+                if(selected != null) {
+                    ObservableList<VehicleTableItem> rows = tbVehicles.getItems();
+                    rows.remove(selected);
+                    tbVehicles.getSelectionModel().clearSelection();
+                }
             } 
+
             catch (SQLException e) {
                 createAlert(AlertType.ERROR, "Servidor indisponível", "Não foi possível confirmar a locação.")
                     .showAndWait();
