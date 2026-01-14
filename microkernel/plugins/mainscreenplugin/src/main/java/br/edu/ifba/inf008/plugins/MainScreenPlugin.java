@@ -287,6 +287,10 @@ public class MainScreenPlugin implements IPlugin {
         // Autodimensiona as colunas
         tbVehicles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        tbVehicles.setStyle(
+            "-fx-font-size: 14pt;"
+        );
+
         // Cria um contêiner para agrupar label e combobox
         VBox vb = new VBox(5, lb, tbVehicles);
         vb.setAlignment(Pos.CENTER_LEFT);
