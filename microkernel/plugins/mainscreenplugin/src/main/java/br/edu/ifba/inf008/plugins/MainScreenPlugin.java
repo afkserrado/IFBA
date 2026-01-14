@@ -600,7 +600,7 @@ public class MainScreenPlugin implements IPlugin {
         });
     }
 
-    // 
+    // Monitora mudanças nos dados de entrada
     private void wireInvalidateOnChange(
         Button btConfirm,
         Label lbTotalAmount,
