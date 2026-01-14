@@ -22,6 +22,7 @@ import java.sql.Date;
 
 import javafx.util.StringConverter;
 import javafx.collections.ObservableList;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -139,7 +140,7 @@ public class MainScreenPlugin implements IPlugin {
     // Executa querys SQL
     // Cria elementos visuais
     // Popula os elementos visuais com os dados do banco
-    public void createContent(Connection conn, List<Node> mainNodes) {
+    private void createContent(Connection conn, List<Node> mainNodes) {
 
         if (conn == null) {
             System.err.println("Connection conn não pode ser null.");
@@ -192,9 +193,13 @@ public class MainScreenPlugin implements IPlugin {
 
         // ========== WIRE EVENTS ==========
         // Define os eventos que acontecerão quando o usuário interagir com a interface
-        ListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
-        showTotalAmount(btCalculate, btConfirm, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount);
-        requestConfirmation(conn, btConfirm);
+        wireListAvailableVehicles(conn, cbVehicleTypes, tbVehicles);
+        
+        wireShowTotalAmount(btCalculate, btConfirm, cbEmail, cbVehicleTypes, tbVehicles, dpStartDate, dpEndDate, tfPickupLocation, spBaseRate, spInsuranceFee, lbTotalAmount);
+
+        wireInvalidateOnChange(btConfirm, lbTotalAmount, cbVehicleTypes, dpStartDate, dpEndDate, spBaseRate,spInsuranceFee);
+        
+        wireConfirmationAction(conn, btConfirm);
 
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
@@ -365,12 +370,15 @@ public class MainScreenPlugin implements IPlugin {
 
         Alert al = new Alert(alertType, msg);
         al.setHeaderText(header);
+        al.getDialogPane().setStyle(
+            "-fx-font-size: 14pt;"
+        );
 
         return al;
     }
 
     // Lista os veículos disponíveis conforme o tipo selecionado na combobox de tipos de veículos
-    public void ListAvailableVehicles(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
+    private void wireListAvailableVehicles(Connection conn, ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
 
         cbVehicleTypes.setOnAction(event -> {
 
@@ -430,7 +438,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Valida as entradas e calcula o valor total da locação
-    public void showTotalAmount(
+    private void wireShowTotalAmount(
         Button btCalculate, 
         Button btConfirm,
         ComboBox<Map<String, Object>> cbEmail, 
@@ -444,7 +452,7 @@ public class MainScreenPlugin implements IPlugin {
         Label lbTotalAmount
     ) {
 
-        btConfirm.setDisable(true); // Só habilita depois de calcular
+        btConfirm.setDisable(true); // Desabilita o botão de confirmar
         this.lastTotal = null;
 
         // Calcula o valor total da locação
@@ -484,7 +492,12 @@ public class MainScreenPlugin implements IPlugin {
             }
 
             if(endDate.isBefore(startDate)) {
-                createAlert(AlertType.ERROR, "Datas incompatíveis", "A data de fim da locação não pode ser inferior à data de início.").showAndWait();
+                createAlert(AlertType.ERROR, "Datas incompatíveis", "A data de fim da locação não pode ser anterior à data de início.").showAndWait();
+                return;
+            }
+
+            if(startDate.isBefore(LocalDate.now()) || endDate.isBefore(LocalDate.now())) {
+                createAlert(AlertType.ERROR, "Datas incompatíveis", "A data de início/fim da locação não pode ser anterior à data de hoje.").showAndWait();
                 return;
             }
     
@@ -501,26 +514,26 @@ public class MainScreenPlugin implements IPlugin {
 
             // Obtém os dados do tipo de veículo selecionado na combobox
             String typeName = ((String) vehicleType.get("type_name")).trim();
+            String additionalFees = (String) vehicleType.get("additional_fees");
             
             if(typeName.isEmpty()) {
                 createAlert(AlertType.ERROR, "Tipo de veículo incorreto", "O tipo de veículo não pode ser vazio.").showAndWait();
                 return;
             }
 
+            // Formata o nome do tipo de veículo (ex.: Economy)
             typeName = typeName.substring(0, 1) + typeName.substring(1).toLowerCase();
-
-            String additionalFees = (String) vehicleType.get("additional_fees");
 
             // Obtém o plugin correspondente ao tipo de veículo selecionado
             String vehiclePluginName = typeName + "Plugin";
             IPlugin plugin = ICore
                 .getInstance()
                 .getPluginController()
-                .getPlugin(vehiclePluginName);     
+                .getPlugin(vehiclePluginName);    
                 
             if (plugin == null || !(plugin instanceof IVehicleTypes)) {
                 createAlert(AlertType.ERROR, "Plugin não encontrado",
-                    "O plugin " + vehiclePluginName + " indisponível. Não é possível calcular o valor total da locação."
+                    "O plugin " + vehiclePluginName + " está indisponível. Não é possível calcular o valor total da locação."
                 ).showAndWait();
                 return;
             }
@@ -530,14 +543,18 @@ public class MainScreenPlugin implements IPlugin {
 
             // Carrega o resultado na tela
             lbTotalAmount.setText(String.format("Valor total: R$ %.2f", this.lastTotal));
-            btConfirm.setDisable(false);
+
+            // Reativa o botão de confirmar
+            btConfirm.setDisable(false); 
         });
     }
 
-    public void requestConfirmation(Connection conn, Button btConfirm) {
+    // Confirma a locação e registra os dados no banco de dados
+    private void wireConfirmationAction(Connection conn, Button btConfirm) {
 
         btConfirm.setOnAction(event -> {
 
+            // Garantia extra
             if (this.lastTotal == null) {
                 createAlert(AlertType.ERROR, "Calcule antes", "Clique em Calcular antes de confirmar.")
                     .showAndWait();
@@ -583,6 +600,42 @@ public class MainScreenPlugin implements IPlugin {
         });
     }
 
+    // 
+    private void wireInvalidateOnChange(
+        Button btConfirm,
+        Label lbTotalAmount,
+        ComboBox<Map<String, Object>> cbVehicleTypes,
+        DatePicker dpStartDate,
+        DatePicker dpEndDate,
+        Spinner<Double> spBaseRate,
+        Spinner<Double> spInsuranceFee
+    ) {              
+
+        // Implementa e instancia a interface InvalidationListener de forma anônima, implementando seu único método, invalidated(Observable obs)
+        // Como InvalidationListener é uma functional interface (interface com um único método abstrato), pode ser implementado via lambda
+        // invalidated() é chamado sempre que o objeto observado (obs) se torna inválido (por exemplo, quando seu valor muda)
+        InvalidationListener inv = obs -> invalidate(btConfirm, lbTotalAmount);
+
+        // Property é uma interface que representa um valor observável e editável
+        // Os controles gráficos do JavaFX utilizam properties para encapsular seu estado (texto, valor selecionado etc.)
+        // Uma Property tem métodos como getValue() e setValue(), além de listeners, que permitem monitorar seu estado
+        // valueProperty() retorna a Property que armazena o estado do controle gráfico
+        // addListener() registra um callback/listener no objeto observado (obs)
+        // Quando o obs se torna inválido, o callback é chamado
+        cbVehicleTypes.valueProperty().addListener(inv);
+        dpStartDate.valueProperty().addListener(inv);
+        dpEndDate.valueProperty().addListener(inv);
+        spBaseRate.valueProperty().addListener(inv);
+        spInsuranceFee.valueProperty().addListener(inv);    
+    }
+
+    // Desabilita o botão confirmar caso o usuário mude os dados de entrada após calcular
+    private void invalidate(Button btConfirm, Label lbTotalAmount) {
+        btConfirm.setDisable(true);
+        this.lastTotal = null;
+        lbTotalAmount.setText("Valor total: ");
+    }
+
     /**
      * 
      * @param cb ComboBox
@@ -603,7 +656,7 @@ public class MainScreenPlugin implements IPlugin {
      * selecionado na ComboBox. Isso teria um custo computacional maior.
      * 
      */
-    public static void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
+    private static void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
 
         // Define como o JavaFX converte cada item (Map) em String
         cb.setConverter(new StringConverter<Map<String, Object>>() {
