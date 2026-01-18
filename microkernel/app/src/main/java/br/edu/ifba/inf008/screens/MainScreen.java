@@ -54,7 +54,7 @@ public class MainScreen implements IScreen {
     public Parent createScreen() {
 
         // Posiciona as abas na parte inferior
-        tabPane.setSide(Side.BOTTOM);
+        tabPane.setSide(Side.TOP);
 
         root.setTop(menuBar);
         root.setBottom(tabPane);
@@ -67,6 +67,10 @@ public class MainScreen implements IScreen {
         tabPane.setStyle(
             "-fx-font-size: 24px;"
         );
+        tabPane.setPrefHeight(600);
+
+        // Desabilita a opção de fechar uma aba
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         mainBox.setAlignment(Pos.CENTER);
 

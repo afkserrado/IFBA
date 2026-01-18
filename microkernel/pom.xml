@@ -22,7 +22,7 @@
         <module>app</module>
 
         <!-- Plugins -->
-        <!--<module>plugins/myplugin</module>-->
+        <module>plugins/myplugin</module>
         <module>plugins/mainscreenplugin</module>
         <module>plugins/economyplugin</module>
         <module>plugins/compactplugin</module>
