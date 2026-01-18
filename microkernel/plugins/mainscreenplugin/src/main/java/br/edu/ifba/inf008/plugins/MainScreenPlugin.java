@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Date;
 
@@ -140,6 +139,7 @@ public class MainScreenPlugin implements IPlugin {
         } 
         
         catch (SQLException e) {
+            createAlert(AlertType.ERROR, "Dados indisponíveis", "Não foi possível conectar-se ao servidor.").showAndWait();
             System.err.println("Erro ao carregar dados.");
             e.printStackTrace();
         }
@@ -204,6 +204,8 @@ public class MainScreenPlugin implements IPlugin {
         
         // Define a quantidade de colunas ocupadas pela tabela ("mescla" colunas)
         GridPane.setColumnSpan(vbVehicles, GridPane.REMAINING); 
+
+        grid.setAlignment(Pos.CENTER);
 
         // Adiciona os elementos visuais à lista de nodes
         mainNodes.addAll(List.of(grid));
@@ -345,7 +347,8 @@ public class MainScreenPlugin implements IPlugin {
         Label lb = new Label(label);
         lb.setStyle(
             "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;"
+            "-fx-text-fill: black;" +
+            "-fx-font-weight: bold;"
         );
 
         return lb;

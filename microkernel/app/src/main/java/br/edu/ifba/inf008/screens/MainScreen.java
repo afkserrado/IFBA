@@ -1,10 +1,15 @@
 package br.edu.ifba.inf008.screens;
 
+import java.util.List;
+
 import br.edu.ifba.inf008.interfaces.IScreen;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.TabPane;     // Representa a barra de menu superior de uma janela
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -15,6 +20,8 @@ public class MainScreen implements IScreen {
 
     private final MenuBar menuBar; // Barra de menu superior da janela da aplicação
     private final TabPane tabPane; // Contêiner central que mantém múltiplas abas
+    private final BorderPane root = new BorderPane();
+    private final VBox mainBox = new VBox();
 
     /**
      * Construtor da tela principal
@@ -46,18 +53,27 @@ public class MainScreen implements IScreen {
     @Override
     public Parent createScreen() {
 
-        // Cria o contêiner principal
-        VBox mainBox = new VBox();
-
         // Posiciona as abas na parte inferior
         tabPane.setSide(Side.BOTTOM);
 
-        // Faz TabPane crescer verticalmente para ocupar espaço disponível
-        //VBox.setVgrow(tabPane, Priority.ALWAYS);
+        root.setTop(menuBar);
+        root.setBottom(tabPane);
+        root.setCenter(mainBox);
 
-        // Adiciona a barra de menus e o contêiner de abas ao contêiner principal
-        mainBox.getChildren().addAll(menuBar, tabPane);
+        menuBar.setStyle(
+            "-fx-font-size: 24px;"
+        );
 
-        return mainBox;
+        tabPane.setStyle(
+            "-fx-font-size: 24px;"
+        );
+
+        mainBox.setAlignment(Pos.CENTER);
+
+        return root;
+    }
+
+    public void addContent(List<Node> nodes) {
+        mainBox.getChildren().addAll(nodes);
     }
 }
