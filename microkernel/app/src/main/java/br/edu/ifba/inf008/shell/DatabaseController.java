@@ -16,16 +16,41 @@ import java.util.Properties;
 import br.edu.ifba.inf008.dtos.Rentals.RentalsInsertDTO;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 
-// Classe responsável por controlar o acesso à base de dados
+/**
+ * Controlador responsável por intermediar o acesso à base de dados via JDBC.
+ *
+ * <p>Esta classe implementa as operações definidas por {@link IDatabaseController}, oferecendo:</p>
+ * <ul>
+ *   <li>Criação de conexões somente-leitura e leitura/escrita.</li>
+ *   <li>Execução de queries de leitura com carregamento do resultado em memória.</li>
+ *   <li>Operação transacional para registrar locações e atualizar o status do veículo.</li>
+ * </ul>
+ *
+ * <p>A inicialização dos parâmetros de conexão (URL/credenciais) ocorre por meio dos métodos estáticos de {@link IDatabaseController}.</p>
+ */
 public class DatabaseController extends IDatabaseController {
     
-    // Visibilidade package-private para forçar os plugins a obterem o DatabaseController via Core
+    /**
+     * Constrói o controlador e inicializa os parâmetros de conexão com o banco.
+     *
+     * <p>O construtor é package-private para incentivar que o acesso ao controlador ocorra via core, evitando que plug-ins instanciem este controller diretamente.</p>
+     */
     DatabaseController() {
         IDatabaseController.init("mariadb", "3307", "car_rental_system", "root", "root");
     }
 
-    // Estabelece uma conexão read-only com a base de dados
-    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
+    /**
+     * Obtém uma conexão JDBC configurada para operações de leitura.
+     *
+     * <p>Além de abrir a conexão, o método:</p>
+     * <ul>
+     *   <li>Habilita {@code autoCommit} para encerrar automaticamente cada operação.</li>
+     *   <li>Configura {@code readOnly=true} como uma dica/barreira lógica para impedir escrita.</li>
+     * </ul>
+     *
+     * @return conexão JDBC em modo somente leitura
+     * @throws SQLException se ocorrer erro ao abrir/configurar a conexão
+     */
     @Override
     public Connection getConnectionReadOnly() throws SQLException {
         
@@ -52,8 +77,14 @@ public class DatabaseController extends IDatabaseController {
         }
     }
 
-    // Estabelece uma conexão read-write com a base de dados
-    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
+    /**
+     * Obtém uma conexão JDBC configurada para operações de leitura e escrita.
+     *
+     * <p>Por padrão, a conexão é criada com {@code autoCommit=true}, o que faz cada comando SQL ser confirmado automaticamente, a menos que o modo transacional seja explicitamente alterado (ver {@link #insertRentalsData(RentalsInsertDTO)}).</p> 
+     *
+     * @return conexão JDBC em modo leitura/escrita
+     * @throws SQLException se ocorrer erro ao abrir/configurar a conexão
+     */
     @Override
     public Connection getConnectionReadWrite() throws SQLException {
         
@@ -73,21 +104,24 @@ public class DatabaseController extends IDatabaseController {
         }
     }
 
-    // Libera os recursos (base de dados)
-    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
-    @Override
-    public void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            }
-            catch (SQLException e) {
-                System.err.println("Não foi possível encerrar a conexão com a base de dados: " + e.getMessage());
-            }
-        }
-    }
-
-    // Executa uma query e carrega o resultado em memória
+    /**
+     * Executa uma query SQL de leitura e carrega o resultado em memória.
+     *
+     * <p>O retorno é representado como uma lista de mapas, onde:</p>
+     * <ul>
+     *   <li>Cada item da lista representa uma linha (tupla) retornada.</li>
+     *   <li>O mapa associa o alias/nome da coluna ({@link ResultSetMetaData#getColumnLabel(int)})
+     *       ao respectivo valor ({@link ResultSet#getObject(int)}).</li>
+     * </ul>
+     *
+     * <p>Utiliza {@code try-with-resources} para garantir fechamento automático dos recursos
+     * JDBC associados ao statement e ao result set.</p>
+     *
+     * @param sql comando SQL a ser executado (não pode ser {@code null} ou vazio)
+     * @return lista de linhas do resultado, preservando a ordem das colunas
+     * @throws IllegalArgumentException se {@code sql} for {@code null} ou vazio
+     * @throws SQLException se ocorrer erro de acesso ao banco durante a execução da query
+     */
     @Override
     public List<Map<String, Object>> loadQuery(String sql) throws SQLException {
         
@@ -140,7 +174,17 @@ public class DatabaseController extends IDatabaseController {
         } 
     }
 
-    // Executa uma query que insere dados na tabela 'rentals' do banco de dados
+    /**
+     * Insere uma nova locação na tabela {@code rentals} e atualiza o status do veículo para {@code RENTED}.
+     *
+     * <p>As duas operações (insert + update) são executadas dentro de uma única transação JDBC:
+     * {@code autoCommit} é desabilitado, e ao final ocorre {@link Connection#commit()} ou, em caso de erro,
+     * {@link Connection#rollback()}.</p>
+     *
+     * @param rentals DTO contendo os dados necessários para inserção da locação
+     * @throws IllegalArgumentException se {@code rentals} for {@code null}
+     * @throws SQLException se ocorrer erro durante inserção/atualização; nesse caso a transação é revertida
+     */
     @Override
     public void insertRentalsData(RentalsInsertDTO rentals) throws SQLException {
 

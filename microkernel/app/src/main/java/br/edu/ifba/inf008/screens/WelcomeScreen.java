@@ -17,14 +17,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
- * Tela de boas-vindas do sistema LokiCar.
+ * Tela de boas-vindas do sistema.
  * Exibe logotipo, mensagem de boas-vindas e botão de login.
  */
 public class WelcomeScreen implements IScreen {
 
-    private final Runnable onLoginClick; // Guarda a ação do botão de login
+    /** Ação a ser executada quando o usuário clica no botão de login. */
+    private final Runnable onLoginClick;
 
     // ========== CONSTANTES DE ESTILO ==========
+    
+    /** Caminho base (no classpath) para os arquivos de ícones utilizados pela tela. */
     private static final String ICONS_PATH = "/icons/";
     
     // Tamanhos de fonte
@@ -38,7 +41,7 @@ public class WelcomeScreen implements IScreen {
     private static final double SUBTITLE_ICON_SIZE = SUBTITLE_FONT_SIZE * 0.7;
 
     /**
-     * Construtor da tela de boas-vindas
+     * Construtor da tela de boas-vindas.
      *
      * @param onLoginClick Ação a ser executada quando o botão LOGAR for clicado
      */
@@ -47,9 +50,12 @@ public class WelcomeScreen implements IScreen {
     }
 
     /**
-     * Cria e retorna o conteúdo visual da tela de boas-vindas
+     * Cria e retorna o conteúdo visual da tela de boas-vindas.
      *
-     * @return Parent contendo todos os elementos da tela
+     * <p>A tela é composta por um contêiner principal ({@link VBox}) com:
+     * título e ícone, subtítulo e ícone, uma área central com mensagem e botão de login e um rodapé com versão do sistema.</p>
+     *
+     * @return {@link Parent} contendo todos os elementos da tela
      */
     @Override
     public Parent createScreen() {
@@ -86,7 +92,6 @@ public class WelcomeScreen implements IScreen {
             "-fx-text-fill: white;"
         );
 
-        // Cria um contêiner para o subtítulo
         HBox subtitleBox = new HBox(20, subtitle, boltIcon);
         subtitleBox.setAlignment(Pos.BASELINE_CENTER);
 
@@ -113,10 +118,11 @@ public class WelcomeScreen implements IScreen {
 
         // Cria uma região vazia para preencher o espaço entre os elementos visuais
         Region spacerTop = new Region();
-        VBox.setVgrow(spacerTop, Priority.ALWAYS);  // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner
-
         Region spacerBottom = new Region();
-        VBox.setVgrow(spacerBottom, Priority.ALWAYS);  // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner
+
+        // Força o spacer a sempre ocupar todo o espaço disponível dentro do contêiner
+        VBox.setVgrow(spacerTop, Priority.ALWAYS);
+        VBox.setVgrow(spacerBottom, Priority.ALWAYS);  
 
         // ========== RODAPÉ ==========
 
@@ -163,6 +169,18 @@ public class WelcomeScreen implements IScreen {
         return welcomeBox;
     }
 
+    /**
+     * Cria um {@link ImageView} a partir de um arquivo de ícone localizado no classpath.
+     *
+     * <p>O recurso é carregado de {@code /icons/} (ver {@link #ICONS_PATH}) e o ícone é
+     * redimensionado para o tamanho informado, mantendo a proporção.</p>
+     *
+     * @param iconName Nome do arquivo do ícone (ex.: {@code "car.png"}).
+     * @param size Tamanho (largura/altura) a ser aplicado via {@code fitWidth} e {@code fitHeight}.
+     * @return {@link ImageView} configurado com {@code fitWidth}, {@code fitHeight} e {@code preserveRatio=true}.
+     * @throws NullPointerException se o recurso {@code /icons/<iconName>} não for encontrado no classpath
+     * (isto ocorre porque {@link Objects#requireNonNull(Object)} é aplicado ao stream do recurso).
+     */
     private ImageView createIcon(String iconName, double size) {
         ImageView icon = new ImageView(
             new Image(
