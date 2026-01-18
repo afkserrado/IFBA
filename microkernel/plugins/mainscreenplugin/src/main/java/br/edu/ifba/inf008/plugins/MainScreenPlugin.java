@@ -1,14 +1,14 @@
 package br.edu.ifba.inf008.plugins;
 
+import br.edu.ifba.inf008.dtos.Rentals.RentalsInsertDTO;
+import br.edu.ifba.inf008.dtos.Vehicles.FuelType;
+import br.edu.ifba.inf008.dtos.Vehicles.Transmission;
+import br.edu.ifba.inf008.dtos.Vehicles.VehiclesReadDTO;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.IVehicleTypes;
-import br.edu.ifba.inf008.plugins.DTO.FuelType;
-import br.edu.ifba.inf008.plugins.DTO.Transmission;
-import br.edu.ifba.inf008.plugins.DTO.VehicleColumns;
-import br.edu.ifba.inf008.plugins.DTO.VehicleTableItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,11 +45,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.time.LocalDate;
-
-import br.edu.ifba.inf008.dtos.RentalsInsertDTO;
-
-// Rever o fechamento da conexão
-// Refatorar: um método para cada elemento visual
 
 public class MainScreenPlugin implements IPlugin {
 
@@ -149,7 +144,7 @@ public class MainScreenPlugin implements IPlugin {
 
         ComboBox<Map<String, Object>> cbEmail = new ComboBox<>();
         ComboBox<Map<String, Object>> cbVehicleTypes = new ComboBox<>();
-        TableView<VehicleTableItem> tbVehicles = new TableView<>();
+        TableView<VehiclesReadDTO> tbVehicles = new TableView<>();
         DatePicker dpStartDate = new DatePicker();
         DatePicker dpEndDate = new DatePicker();
         TextField tfPickupLocation = new TextField();
@@ -212,7 +207,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria um nó contendo um Label e um Node qualquer (ComboBox, DatePicker etc.)
-    public HBox createConteinerNode(String label, Node node) {
+    private HBox createConteinerNode(String label, Node node) {
 
         if(!label.contains(":")) {
             label = label + ": ";
@@ -232,7 +227,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria um nó contendo um Label e uma ComboBox
-    public HBox createComboBoxNode(String label, ComboBox<Map<String, Object>> cb, List<Map<String, Object>> data, String bdColumn) {
+    private HBox createComboBoxNode(String label, ComboBox<Map<String, Object>> cb, List<Map<String, Object>> data, String bdColumn) {
 
         HBox hb = createConteinerNode(label, cb);
 
@@ -243,19 +238,19 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria um nó contendo um Label e uma TableView
-    public VBox createTableViewNode(String label, TableView<VehicleTableItem> tbVehicles) {
+    private VBox createTableViewNode(String label, TableView<VehiclesReadDTO> tbVehicles) {
         
         Label lb = createLabel(label);
 
         lb.setMaxWidth(Double.MAX_VALUE);
         lb.setAlignment(Pos.CENTER);
 
-        // 'tbVehicles' é uma tabela na qual cada linha é um VehicleTableItem
+        // 'tbVehicles' é uma tabela na qual cada linha é um VehiclesReadDTO
 
-        // Cria um ObservableList (internamente implementado como um ArrayList) de VehicleTableItem
-        // Analogamente, é como uma lista na qual cada elemento é um VehicleTableItem
+        // Cria um ObservableList (internamente implementado como um ArrayList) de VehiclesReadDTO
+        // Analogamente, é como uma lista na qual cada elemento é um VehiclesReadDTO
         // Um ObservableList permite refletir automaticamente na tela quaisquer alterações nos dados
-        ObservableList<VehicleTableItem> rows = FXCollections.observableArrayList();
+        ObservableList<VehiclesReadDTO> rows = FXCollections.observableArrayList();
 
         // Elimina as colunas existentes
         tbVehicles.getColumns().clear();
@@ -266,14 +261,14 @@ public class MainScreenPlugin implements IPlugin {
             // TableColumn<S, T> onde,
                 // S é o tipo da linha
                 // T é o tipo das células da coluna
-            TableColumn<VehicleTableItem, Object> col = new TableColumn<>(c.getHeaderText());
+            TableColumn<VehiclesReadDTO, Object> col = new TableColumn<>(c.getHeaderText());
 
             // Obtém o nome do atributo correspondente
             String propertyName = c.getPropertyName();
 
             // PropertyValueFactory usa reflexão para buscar um getter compatível com o parâmetro passado
             // setCellValueFactory define a função que será chamada para obter o valor que deve aparecer na célula
-            // Obs.: os parâmetros passados para o construtor devem corresponder exatamente ao nome dos respectivos atributos da classe VehicleTableItem
+            // Obs.: os parâmetros passados para o construtor devem corresponder exatamente ao nome dos respectivos atributos da classe VehiclesReadDTO
             col.setCellValueFactory(new PropertyValueFactory<>(propertyName));
 
             // Vincula a coluna à tabela
@@ -301,7 +296,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria um nó contendo um Label e um Spinner
-    public HBox createSpinnerNode(String label, Spinner<Double> sp) {
+    private HBox createSpinnerNode(String label, Spinner<Double> sp) {
         
         HBox hb = createConteinerNode(label, sp);
         sp.setEditable(true);
@@ -330,7 +325,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria botão e define sua formatação
-    public Button createButton(String button) {
+    private Button createButton(String button) {
 
         Button bt = new Button(button);
         bt.setStyle(
@@ -342,7 +337,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria um label e define sua formatação
-    public Label createLabel(String label) {
+    private Label createLabel(String label) {
 
         Label lb = new Label(label);
         lb.setStyle(
@@ -355,7 +350,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Cria uma caixa de diálogo
-    public Alert createAlert(AlertType alertType, String header, String msg) {
+    private Alert createAlert(AlertType alertType, String header, String msg) {
 
         Alert al = new Alert(alertType, msg);
         al.setHeaderText(header);
@@ -367,7 +362,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Lista os veículos disponíveis conforme o tipo selecionado na combobox de tipos de veículos
-    private void wireListAvailableVehicles(ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehicleTableItem> tbVehicles) {
+    private void wireListAvailableVehicles(ComboBox<Map<String, Object>> cbVehicleTypes, TableView<VehiclesReadDTO> tbVehicles) {
 
         cbVehicleTypes.setOnAction(event -> {
 
@@ -391,7 +386,7 @@ public class MainScreenPlugin implements IPlugin {
                 List<Map<String, Object>> filteredVehicles = db.loadQuery(sql);
 
                 // Obtém as linhas da tabela
-                ObservableList<VehicleTableItem> rows = tbVehicles.getItems();
+                ObservableList<VehiclesReadDTO> rows = tbVehicles.getItems();
 
                 // Limpa a tabela
                 rows.clear();
@@ -403,7 +398,7 @@ public class MainScreenPlugin implements IPlugin {
                     int yearInt = ((Date) yearObj).toLocalDate().getYear();
 
                     // DTO
-                    VehicleTableItem item = new VehicleTableItem(
+                    VehiclesReadDTO item = new VehiclesReadDTO(
                         ((Number) row.get("vehicle_id")).intValue(),
                         (String) row.get("make"),
                         (String) row.get("model"),
@@ -432,7 +427,7 @@ public class MainScreenPlugin implements IPlugin {
         Button btConfirm,
         ComboBox<Map<String, Object>> cbEmail, 
         ComboBox<Map<String, Object>> cbVehicleTypes, 
-        TableView<VehicleTableItem> tbVehicles,
+        TableView<VehiclesReadDTO> tbVehicles,
         DatePicker dpStartDate,
         DatePicker dpEndDate,
         TextField tfPickupLocation,
@@ -450,7 +445,7 @@ public class MainScreenPlugin implements IPlugin {
             // Obtém os valores atuais dos controles
             Map<String, Object> customer = cbEmail.getValue();
             Map<String, Object> vehicleType = cbVehicleTypes.getValue();
-            VehicleTableItem vehicle = tbVehicles.getSelectionModel().getSelectedItem();
+            VehiclesReadDTO vehicle = tbVehicles.getSelectionModel().getSelectedItem();
             LocalDate startDate = dpStartDate.getValue();
             LocalDate endDate = dpEndDate.getValue();
             String pickupLocation = tfPickupLocation.getText();
@@ -539,7 +534,7 @@ public class MainScreenPlugin implements IPlugin {
     }
 
     // Confirma a locação e registra os dados no banco de dados
-    private void wireConfirmationAction(Button btConfirm, TableView<VehicleTableItem> tbVehicles) {
+    private void wireConfirmationAction(Button btConfirm, TableView<VehiclesReadDTO> tbVehicles) {
 
         btConfirm.setOnAction(event -> {
 
@@ -583,11 +578,11 @@ public class MainScreenPlugin implements IPlugin {
                 this.lastTotal = null;
 
                 // Obtém o item inserido no banco
-                VehicleTableItem selected = tbVehicles.getSelectionModel().getSelectedItem();
+                VehiclesReadDTO selected = tbVehicles.getSelectionModel().getSelectedItem();
 
                 // Remove o item inserido no banco da tabela
                 if(selected != null) {
-                    ObservableList<VehicleTableItem> rows = tbVehicles.getItems();
+                    ObservableList<VehiclesReadDTO> rows = tbVehicles.getItems();
                     rows.remove(selected);
                     tbVehicles.getSelectionModel().clearSelection();
                 }
