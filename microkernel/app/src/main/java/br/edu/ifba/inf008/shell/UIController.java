@@ -18,13 +18,16 @@ import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 /**
- * Controlador principal da interface gráfica do sistema LokiCar.
- * Gerencia a criação de telas, menus e abas, atuando como ponte
- * entre o núcleo da aplicação e o JavaFX.
+ * Controller responsável por inicializar e coordenar a interface gráfica JavaFX do sistema.
+ *
+ * <p>Esta classe atua como:</p>
+ * <ul>
+ *   <li>Ponto de entrada do JavaFX por estender {@link Application} (ciclo de vida: {@link #init()} e {@link #start(Stage)}).</li>
+ *   <li>Fachada/ponte entre o núcleo ({@link Core}) e as funcionalidades de UI expostas por {@link IUIController}.</li>
+ * </ul>
+ *
+ * <p>A troca de telas é feita atualizando o nó raiz ({@code root}) da {@link Scene} por meio de {@link Scene#setRoot(javafx.scene.Parent)}.</p>
  */
-
-// Atua como ponto de entrada para o JavaFX e como uma fachada entre o núcleo da aplicação e a interface gráfica gerenciada pelo JavaFX
-// UIController não é a interface gráfica em si: ele a constrói e controla
 public class UIController extends Application implements IUIController {
 
     private Parent root; // Contêiner que armazena o conteúdo visual da tela criada 
@@ -36,28 +39,41 @@ public class UIController extends Application implements IUIController {
     private IScreen welcomeScreen;
     private IScreen mainScreen;
 
-    // Construtor padrão (exigido pelo JavaFX)
-    // Invocado pelo próprio JavaFX
-    // JavaFX exige que seja public
+    /**
+     * Construtor padrão exigido pelo JavaFX.
+     *
+     * <p>O runtime do JavaFX cria a instância da classe que estende {@link Application} antes de chamar {@link #init()} e {@link #start(Stage)}.</p>
+     */
     public UIController() {}
 
-    // Inicializa a instância singleton
-    // Invocado pelo próprio JavaFX após o construtor e antes do start() 
-    // JavaFX exige que seja public
+    /**
+     * Inicializa o controller antes da exibição da interface.
+     *
+     * <p>Faz a vinculação da instância atual ao atributo estático usado como acesso tipo Singleton.</p>
+     */
     @Override
     public void init() {
         uiController = this;
     }
 
-    // Fornece acesso global à instância atual do UIController
-    // Visibilidade package-private para forçar os plugins a obterem o UIController via Core
+    /**
+     * Retorna a instância atual do {@link UIController} criada pelo JavaFX.
+     *
+     * <p>O método é package-private para incentivar que o acesso ocorra via {@link Core}, evitando dependência direta de plug-ins com a implementação concreta de UI.</p>
+     *
+     * @return instância em execução do {@link UIController}
+     */
     static UIController getInstance() {
         return uiController;
     }
 
-    // Constrói e exibie a GUI
-    // Invocado pelo próprio JavaFX após o init()
-    // JavaFX exige que seja public
+    /**
+     * Monta e exibe a interface gráfica na janela principal.
+     *
+     * <p>No ciclo de vida do JavaFX, {@link #start(Stage)} é chamado após {@link #init()} e já com o runtime pronto para renderização da GUI.</p>
+     *
+     * @param primaryStage janela principal fornecida pelo JavaFX
+     */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -76,7 +92,9 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Cria a tela de boas-vindas (WelcomeScreen)
+     * Cria a tela de boas-vindas e a define como tela corrente.
+     *
+     * <p>A {@link WelcomeScreen} recebe uma ação a ser executada no clique do botão "LOGAR", que direciona o fluxo para a criação da tela principal.</p>
      */
     private void createWelcomeScreen() {
         // Cria a WelcomeScreen passando a ação: "quando o botão 'LOGAR' for clicado, mostre a MainScreen"
@@ -85,7 +103,9 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Cria a tela principal com menu e tabs (MainScreen)
+     * Cria a tela principal (menu + abas), define como tela corrente e inicializa os plug-ins.
+     *
+     * <p>A inicialização do {@link br.edu.ifba.inf008.interfaces.IPluginController} é realizada após a GUI principal ser montada, permitindo que plug-ins registrem menus/abas na aplicação.</p>
      */
     private void createMainScreen() {
         
@@ -104,9 +124,11 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Método genérico para trocar a tela (Scene) exibida
+     * Troca a tela atual atualizando o nó raiz da {@link Scene}.
      *
-     * @param screen Tela a ser exibida
+     * <p>Se a {@link Scene} já tiver sido criada, usa {@link Scene#setRoot(javafx.scene.Parent)} para substituir o conteúdo exibido sem trocar a instância de {@link Scene}.</p>
+     *
+     * @param screen tela a ser exibida
      */
     private void setScreen(IScreen screen) {
         root = screen.createScreen();
@@ -118,11 +140,13 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Cria um item de menu na barra de menus
-     * 
-     * @param menuText Texto do menu (ex: "Arquivo")
-     * @param menuItemText Texto do item (ex: "Abrir")
-     * @return MenuItem criado, permitindo adicionar ações
+     * Cria (ou reutiliza) um {@link Menu} e adiciona um novo {@link MenuItem} a ele.
+     *
+     * <p>Se não existir um menu com o texto {@code menuText} na {@link MenuBar}, um novo menu é criado e adicionado; em seguida, o item {@code menuItemText} é criado e anexado ao menu.</p>
+     *
+     * @param menuText texto do menu (ex.: "Arquivo")
+     * @param menuItemText texto do item (ex.: "Abrir")
+     * @return {@link MenuItem} criado (para permitir que o chamador configure eventos, por exemplo)
      */
     @Override
     public MenuItem createMenuItem(String menuText, String menuItemText) {
@@ -151,11 +175,11 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Cria uma nova aba no TabPane
-     * 
-     * @param tabText Título da aba
-     * @param contents Conteúdo visual da aba
-     * @return true se a aba foi criada com sucesso
+     * Cria uma nova aba no {@link TabPane} e define seu conteúdo.
+     *
+     * @param tabText título da aba
+     * @param contents conteúdo visual (nó JavaFX) a ser exibido na aba
+     * @return {@code true} se a aba foi criada e adicionada ao {@link TabPane}
      */
     @Override
     public boolean createTab(String tabText, Node contents) {
@@ -177,10 +201,10 @@ public class UIController extends Application implements IUIController {
     }
 
     /**
-     * Adiciona um ou mais elementos visuais à tela principal
-     * 
-     * @param node Elementos visuais
-     * @return true se os elementos visuais forem adicionados com sucesso
+     * Adiciona nós visuais ao conteúdo central da tela principal.
+     *
+     * @param nodes lista de nós JavaFX a serem adicionados na {@link MainScreen}
+     * @return {@code true} se os nós foram encaminhados para a tela principal com sucesso
      */
     @Override
     public boolean addMainNodes(List<Node> nodes) {

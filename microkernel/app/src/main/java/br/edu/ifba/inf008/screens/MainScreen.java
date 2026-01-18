@@ -13,14 +13,26 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Tela principal do sistema LokiCar.
- * Exibe o menu de opções e as abas de conteúdo.
+ * Tela principal do sistema.
+ *
+ * <p>Responsável por compor a estrutura base da aplicação, exibindo a barra de menus
+ * e a área de abas (tabs) onde funcionalidades (incluindo plug-ins) podem apresentar conteúdo.</p>
+ *
+ * <p>Implementa {@link br.edu.ifba.inf008.interfaces.IScreen}, fornecendo o nó raiz
+ * do layout por meio de {@link #createScreen()}.</p>
  */
 public class MainScreen implements IScreen {
 
-    private final MenuBar menuBar; // Barra de menu superior da janela da aplicação
-    private final TabPane tabPane; // Contêiner central que mantém múltiplas abas
+    /** Barra de menu superior da janela da aplicação. */
+    private final MenuBar menuBar;
+    
+    /** Contêiner central que mantém múltiplas abas. */
+    private final TabPane tabPane;
+    
+    /** Layout raiz da tela, usado para posicionar menu, abas e conteúdo central. */
     private final BorderPane root = new BorderPane();
+    
+    /** Contêiner principal para componentes exibidos no centro da tela. */
     private final VBox mainBox = new VBox();
 
     /**
@@ -35,7 +47,7 @@ public class MainScreen implements IScreen {
     }
 
     /**
-     * Cria e retorna o conteúdo visual da tela principal
+     * Cria e retorna o conteúdo visual da tela principal.
      *
      * <p>Hierarquia visual:</p>
      * <pre>
@@ -48,7 +60,7 @@ public class MainScreen implements IScreen {
      *           └─ Node (conteúdo)
      * </pre>
      *
-     * @return Parent contendo todos os elementos da tela
+     * @return {@link Parent} contendo todos os elementos da tela
      */
     @Override
     public Parent createScreen() {
@@ -56,10 +68,12 @@ public class MainScreen implements IScreen {
         // Posiciona as abas na parte inferior
         tabPane.setSide(Side.TOP);
 
+        // Define a estrutura do BorderPane
         root.setTop(menuBar);
         root.setBottom(tabPane);
         root.setCenter(mainBox);
 
+        // Formatação
         menuBar.setStyle(
             "-fx-font-size: 24px;"
         );
@@ -69,14 +83,23 @@ public class MainScreen implements IScreen {
         );
         tabPane.setPrefHeight(600);
 
+        mainBox.setAlignment(Pos.CENTER);
+
         // Desabilita a opção de fechar uma aba
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        mainBox.setAlignment(Pos.CENTER);
 
         return root;
     }
 
+    /**
+     * Adiciona uma lista de nós ao contêiner central da tela.
+     *
+     * <p>Os nós são adicionados ao {@link VBox} {@code mainBox}, preservando a ordem
+     * fornecida na lista.</p>
+     *
+     * @param nodes Lista de componentes JavaFX a serem adicionados ao conteúdo central
+     * @throws NullPointerException se {@code nodes} for {@code null}
+     */
     public void addContent(List<Node> nodes) {
         mainBox.getChildren().addAll(nodes);
     }

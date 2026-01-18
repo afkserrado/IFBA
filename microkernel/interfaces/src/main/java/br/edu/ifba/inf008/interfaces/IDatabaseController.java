@@ -52,10 +52,6 @@ public abstract class IDatabaseController {
     // Não-estático para garantir que operação passe obrigatoriamente pelo Core
     public abstract Connection getConnectionReadWrite() throws SQLException;
 
-    // Libera os recursos (base de dados)
-    // Não-estático para garantir que operação passe obrigatoriamente pelo Core
-    public abstract void closeConnection(Connection connection);
-
     // Executa uma query e carrega o resultado em memória
     public abstract List<Map<String, Object>> loadQuery(String sql) throws SQLException;
 

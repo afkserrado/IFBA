@@ -1,0 +1,56 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+--no-fonts
+-classpath
+'/home/akserrado/.m2/repository/br/edu/ifba/inf008/dtos/1.0-SNAPSHOT/dtos-1.0-SNAPSHOT.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-controls/17/javafx-controls-17.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-controls/17/javafx-controls-17-linux.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-graphics/17/javafx-graphics-17.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-graphics/17/javafx-graphics-17-linux.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-base/17/javafx-base-17.jar:/home/akserrado/.m2/repository/org/openjfx/javafx-base/17/javafx-base-17-linux.jar:/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar:/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar:/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'11'
+-sourcepath
+'/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'interfaces 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/11/docs/api' '/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'interfaces 1.0-SNAPSHOT API'
+br.edu.ifba.inf008.interfaces
+/home/akserrado/.m2/repository/br/edu/ifba/inf008/dtos/1.0-SNAPSHOT/dtos-1.0-SNAPSHOT.jar = 1768775576641
+/home/akserrado/.m2/repository/org/openjfx/javafx-controls/17/javafx-controls-17.jar = 1631016078000
+/home/akserrado/.m2/repository/org/openjfx/javafx-controls/17/javafx-controls-17-linux.jar = 1631016102000
+/home/akserrado/.m2/repository/org/openjfx/javafx-graphics/17/javafx-graphics-17.jar = 1631016144000
+/home/akserrado/.m2/repository/org/openjfx/javafx-graphics/17/javafx-graphics-17-linux.jar = 1631016146000
+/home/akserrado/.m2/repository/org/openjfx/javafx-base/17/javafx-base-17.jar = 1631016051000
+/home/akserrado/.m2/repository/org/openjfx/javafx-base/17/javafx-base-17-linux.jar = 1631016060000
+/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar = 1732756356000
+/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar = 1732754140000
+/home/akserrado/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar = 1732755405000
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/src/main/java = 1767038196248
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/allclasses-index.html = 1768776379836
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/allpackages-index.html = 1768776379837
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/element-list = 1768776379801
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/help-doc.html = 1768776379850
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/index-all.html = 1768776379845
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/index.html = 1768776379847
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/member-search-index.js = 1768776379839
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/module-search-index.js = 1768776379838
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/overview-tree.html = 1768776379830
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/package-search-index.js = 1768776379838
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/search.html = 1768776379846
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/tag-search-index.js = 1768776379840
+/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/interfaces/target/reports/apidocs/type-search-index.js = 1768776379839

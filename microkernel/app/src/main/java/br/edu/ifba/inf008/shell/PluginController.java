@@ -12,12 +12,30 @@ import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-// Classe responsável por carregar plugins dinamicamente em tempo de execução
+/**
+ * Controlador responsável por carregar e gerenciar plug-ins em tempo de execução.
+ *
+ * <p>Este controller procura arquivos {@code .jar} no diretório {@code ./plugins}, cria um {@link URLClassLoader} para esses JARs e instancia classes de plug-in por reflexão, seguindo uma convenção de nomes (por exemplo: {@code br.edu.ifba.inf008.plugins.<NomeDoJarSemExtensao>}).</p>
+ *
+ * <p>Os plug-ins carregados são armazenados internamente e podem ser recuperados por uma chave normalizada (trim + uppercase).</p>
+ */
 public class PluginController implements IPluginController {
 
     private final Map<String, IPlugin> registeredPlugins = new LinkedHashMap<>();
 
-    // Carrega e inicializa dinamicamente todos os plugins da aplicação em tempo de execução
+    /**
+     * Carrega e inicializa dinamicamente todos os plug-ins disponíveis no diretório {@code ./plugins}.
+     *
+     * <p>Fluxo geral:</p>
+     * <ul>
+     *   <li>Lista os arquivos {@code .jar} do diretório de plug-ins usando um {@link FilenameFilter}.</li>
+     *   <li>Cria um {@link URLClassLoader} apontando para os JARs encontrados.</li>
+     *   <li>Para cada JAR: determina o nome do plug-in, carrega a classe e instancia via reflexão.</li>
+     *   <li>Registra o plug-in via {@link #registerPlugin(String, IPlugin)} e chama {@link IPlugin#init()}.</li>
+     * </ul>
+     *
+     * @return {@code true} se todos os plug-ins foram carregados/inicializados; {@code false} em caso de erro
+     */
     @Override
     public boolean init() {
         try {
@@ -87,7 +105,14 @@ public class PluginController implements IPluginController {
         }
     }
 
-    // Registra os plugins ativos
+    /**
+     * Registra um plug-in em memória, associado a uma chave de tipo.
+     *
+     * <p>A chave recebida é normalizada (trim + uppercase) antes de ser usada como chave do mapa.</p>
+     *
+     * @param typeKey chave de identificação do plug-in (será normalizada)
+     * @param plugin instância do plug-in a registrar
+     */
     @Override
     public void registerPlugin(String typeKey, IPlugin plugin) {
         typeKey = typeKey.trim().toUpperCase(); // Normalização
@@ -95,7 +120,14 @@ public class PluginController implements IPluginController {
         //System.out.println(typeKey + " - " + plugin);
     }
 
-    // Obtém um plugin ativo
+    /**
+     * Recupera um plug-in previamente registrado.
+     *
+     * <p>Se {@code typeKey} for {@code null}, retorna {@code null}. Caso contrário, a chave é normalizada (trim + uppercase) antes da consulta no mapa.</p>
+     *
+     * @param typeKey chave de identificação do plug-in
+     * @return plug-in registrado para a chave informada, ou {@code null} se não existir
+     */
     @Override
     public IPlugin getPlugin(String typeKey) {
         if(typeKey == null) return null;
