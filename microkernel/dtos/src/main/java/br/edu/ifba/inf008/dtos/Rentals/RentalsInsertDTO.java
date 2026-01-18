@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.dtos;
+package br.edu.ifba.inf008.dtos.Rentals;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

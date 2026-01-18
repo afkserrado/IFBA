@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import br.edu.ifba.inf008.dtos.RentalsInsertDTO;
+import br.edu.ifba.inf008.dtos.Rentals.RentalsInsertDTO;
 
 // Classe responsável por controlar o acesso à base de dados
 public abstract class IDatabaseController {

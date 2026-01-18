@@ -1,7 +1,7 @@
-package br.edu.ifba.inf008.plugins.DTO;
+package br.edu.ifba.inf008.dtos.Vehicles;
 
 // DTO (Data Transfer Object) para implementação da TableView
-public class VehicleTableItem {
+public class VehiclesReadDTO {
     
     private int vehicleId;
     private String make;
@@ -11,7 +11,7 @@ public class VehicleTableItem {
     private Transmission transmission;
     private double mileage;
 
-    public VehicleTableItem(
+    public VehiclesReadDTO(
         int vehicleId,
         String make, 
         String model, 
