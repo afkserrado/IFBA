@@ -15,7 +15,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -28,18 +27,19 @@ import javafx.stage.Stage;
 // UIController não é a interface gráfica em si: ele a constrói e controla
 public class UIController extends Application implements IUIController {
 
-    private Parent content;                     // Contêiner que armazena o conteúdo visual da tela criada 
-    private MenuBar menuBar;                    // Barra de menu superior da janela da aplicação
-    private TabPane tabPane;                    // Contêiner central que mantém múltiplas abas (área principal de conteúdo)
-    private Scene scene;                        // Contêiner que contém o contêiner de elementos visuais
-    private Stage primaryStage;                 // Guardar a scene (tela em execução)
-    private static UIController uiController;   // Referência estática usada para implementar acesso singleton ao UIController
+    private Parent root; // Contêiner que armazena o conteúdo visual da tela criada 
+    private MenuBar menuBar; // Barra de menu superior da janela da aplicação
+    private TabPane tabPane; // Contêiner central que mantém múltiplas abas (área principal de conteúdo)
+    private Scene scene; // Contêiner que contém o contêiner de elementos visuais
+    private Stage primaryStage; // Guardar a scene (tela em execução)
+    private static UIController uiController; // Referência estática usada para implementar acesso singleton ao UIController
+    private IScreen welcomeScreen;
+    private IScreen mainScreen;
 
     // Construtor padrão (exigido pelo JavaFX)
     // Invocado pelo próprio JavaFX
     // JavaFX exige que seja public
-    public UIController() {
-    }
+    public UIController() {}
 
     // Inicializa a instância singleton
     // Invocado pelo próprio JavaFX após o construtor e antes do start() 
@@ -69,7 +69,7 @@ public class UIController extends Application implements IUIController {
         createWelcomeScreen();
 
         // Cria uma Scene e passa para a janela do SO
-        scene = new Scene(content, 960, 600);
+        scene = new Scene(root, 960, 600);
         primaryStage.setScene(scene);
 
         primaryStage.show(); // Exibe a janela fornecida pelo SO
@@ -80,7 +80,7 @@ public class UIController extends Application implements IUIController {
      */
     private void createWelcomeScreen() {
         // Cria a WelcomeScreen passando a ação: "quando o botão 'LOGAR' for clicado, mostre a MainScreen"
-        IScreen welcomeScreen = new WelcomeScreen(() -> createMainScreen());
+        welcomeScreen = new WelcomeScreen(() -> createMainScreen());
         setScreen(welcomeScreen);
     }
 
@@ -93,7 +93,7 @@ public class UIController extends Application implements IUIController {
         menuBar = new MenuBar();
         tabPane = new TabPane();
         
-        IScreen mainScreen = new MainScreen(menuBar, tabPane);
+        mainScreen = new MainScreen(menuBar, tabPane);
         setScreen(mainScreen);
 
         // Inicializa os plugins após a GUI ter sido criada e exibida
@@ -109,11 +109,11 @@ public class UIController extends Application implements IUIController {
      * @param screen Tela a ser exibida
      */
     private void setScreen(IScreen screen) {
-        content = screen.createScreen();
+        root = screen.createScreen();
         
         // Se Scene já foi criada, atualiza o root
         if (scene != null) {
-            scene.setRoot(content);
+            scene.setRoot(root);
         }
     }
 
@@ -184,14 +184,8 @@ public class UIController extends Application implements IUIController {
      */
     @Override
     public boolean addMainNodes(List<Node> nodes) {
-        if(content instanceof VBox) {
-            VBox mainBox = (VBox) content;
-            mainBox.getChildren().addAll(nodes);
-           
-            return true;
-        }
-
-        System.err.println("Erro: content não é VBox. Não é possível adicionar os elementos.");
-        return false;
+        MainScreen ms = (MainScreen) mainScreen;
+        ms.addContent(nodes);
+        return true;
     }
 }
