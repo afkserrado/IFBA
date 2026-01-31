@@ -11,7 +11,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>relatorio1</artifactId>
+    <artifactId>report1</artifactId>
 
     <dependencies>
         <dependency>
@@ -39,7 +39,7 @@
                     <!-- Change the output directory -->
                     <outputDirectory>${project.basedir}/../</outputDirectory>
                     <!-- Change the JAR file name -->
-                    <finalName>Relatorio1</finalName>
+                    <finalName>Report1</finalName>
                 </configuration>
             </plugin>
         </plugins>
