@@ -30,7 +30,7 @@
         <module>plugins/luxuryplugin</module>
         <module>plugins/vanplugin</module>
         <module>plugins/electricplugin</module>
-        <module>plugins/relatorio1</module>
+        <module>plugins/report1</module>
     </modules>
 
     <!-- 
