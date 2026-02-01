@@ -78,8 +78,8 @@ public class Report1 implements IPlugin {
         statusLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: #b00020;");
         statusLabel.setAlignment(Pos.CENTER);
         statusLabel.setMaxWidth(Double.MAX_VALUE);
-        statusLabel.setVisible(false);   // começa escondido
-        statusLabel.setManaged(false);   // não ocupa espaço quando escondido
+        statusLabel.setVisible(false); 
+        statusLabel.setManaged(false);  
 
         root = new VBox(10, btRefresh, chart, statusLabel);
         root.setPadding(new Insets(10));
@@ -118,6 +118,8 @@ public class Report1 implements IPlugin {
 
             statusLabel.setVisible(true);
             statusLabel.setManaged(true);
+
+            e.printStackTrace();
         }
     }
 
