@@ -111,10 +111,6 @@ public class MainScreenPlugin implements IPlugin {
         createContent(mainNodes);
         uiController.addMainNodes(mainNodes);
 
-        // Fecha a conexão
-        //db.closeConnection(conn);
-        //System.out.println("Conexão fechada com sucesso!");
-
         return true;
     }
 

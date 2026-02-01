@@ -22,7 +22,7 @@
         <module>app</module>
 
         <!-- Plugins -->
-        <module>plugins/myplugin</module>
+        <!--<module>plugins/myplugin</module>-->
         <module>plugins/mainscreenplugin</module>
         <module>plugins/economyplugin</module>
         <module>plugins/compactplugin</module>
@@ -31,6 +31,7 @@
         <module>plugins/vanplugin</module>
         <module>plugins/electricplugin</module>
         <module>plugins/report1</module>
+        <module>plugins/report2</module>
     </modules>
 
     <!-- 
@@ -38,7 +39,6 @@
         Aplica-se a todos os módulos que herdam deste POM
     -->
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>25</maven.compiler.release>
     </properties>
 </project>

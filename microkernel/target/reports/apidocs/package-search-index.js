@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"br.edu.ifba.inf008"},{"l":"br.edu.ifba.inf008.dtos.Rentals"},{"l":"br.edu.ifba.inf008.dtos.Vehicles"},{"l":"br.edu.ifba.inf008.interfaces"},{"l":"br.edu.ifba.inf008.plugins"},{"l":"br.edu.ifba.inf008.screens"},{"l":"br.edu.ifba.inf008.shell"}];updateSearchResults();
