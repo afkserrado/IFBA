@@ -1,8 +1,8 @@
 package br.edu.ifba.inf008.interfaces;
 
 // Representa o núcleo do sistema
-public abstract class ICore
-{
+public abstract class ICore {
+    
     // Mantém a instância global do núcleo da aplicação
     protected static ICore instance = null;
 
