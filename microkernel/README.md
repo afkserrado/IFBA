@@ -1,3 +1,17 @@
+# Navigate to the microkernel folder
+
+Example (Linux):
+
+cd "/mnt/Arquivos_D0P6LA/Codes/Projetos privados/INF008 (POO) - Trabalho/microkernel/"
+
+# Clean the project (optionally)
+
+To avoid problems caused by previous compilations, use:
+
+mvn clean
+
+before mvn install
+
 # Build instructions:
 
 mvn install
@@ -5,6 +19,10 @@ mvn install
 # Execution instructions:
 
 mvn exec:java -pl app
+
+# Build and execution instructions:
+
+mvn install && mvn exec:java -pl app
 
 # New plugin creation instructions:
 
