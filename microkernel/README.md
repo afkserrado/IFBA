@@ -24,6 +24,10 @@ mvn exec:java -pl app
 
 mvn install && mvn exec:java -pl app
 
+Or
+
+mvn clean install && mvn exec:java -pl app
+
 # New plugin creation instructions:
 
 1. Create your plugin folder in "plugins"
