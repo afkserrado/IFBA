@@ -85,7 +85,12 @@ public class Report2 implements IPlugin {
         statusLabel.setVisible(false);
         statusLabel.setManaged(false);
 
-        root = new VBox(10, btRefresh, table, statusLabel);
+        Label titleLabel = new Label("Tabela geral de locações");
+        titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        titleLabel.setMaxWidth(Double.MAX_VALUE);
+        titleLabel.setAlignment(Pos.CENTER);
+
+        root = new VBox(10, btRefresh, titleLabel, table, statusLabel);
         root.setPadding(new Insets(10));
 
         uiController.createTab("Relatório 2", root);
