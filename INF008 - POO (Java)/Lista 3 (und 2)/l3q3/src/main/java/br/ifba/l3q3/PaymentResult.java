@@ -1,20 +1,17 @@
 package br.ifba.l3q3;
 
 // Imports
-import br.ifba.l3q3.payment.*;
+import br.ifba.l3q3.payment.IPayment;
 
 public class PaymentResult {
 
     private IPayment payment;
-    private String result;
-    
+
     // Constructor
-    public PaymentResult(IPayment payment, String result) {
+    public PaymentResult(IPayment payment) {
         this.payment = payment;
-        this.result = result;
     }
 
     // Getters
     public IPayment getPayment() { return payment; }
-    public String getResult() { return result; }
 }

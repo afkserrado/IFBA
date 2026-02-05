@@ -5,10 +5,22 @@ Desenvolva um sistema de processamento de pedidos que utilize hierarquias parale
 */
 
 package br.ifba.l3q2;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Arrays;
+import java.util.Map;
+
+import br.ifba.l3q2.order.ExpressOrder;
+import br.ifba.l3q2.order.IOrder;
+import br.ifba.l3q2.order.InternationalOrder;
+import br.ifba.l3q2.order.StandardOrder;
+import br.ifba.l3q2.processingStrategy.ExpressProcessingStrategy;
+import br.ifba.l3q2.processingStrategy.IProcessingStrategy;
+import br.ifba.l3q2.processingStrategy.InternationalProcessingStrategy;
+import br.ifba.l3q2.processingStrategy.StandardProcessingStrategy;
+import br.ifba.l3q2.shippingCalculator.DomesticShippingCalculator;
+import br.ifba.l3q2.shippingCalculator.InternationalShippingCalculator;
+import br.ifba.l3q2.shippingCalculator.PriorityShippingCalculator;
 
 public class OrderManagementApp {
     public static void main(String[] args) {
@@ -32,10 +44,9 @@ public class OrderManagementApp {
         
         
         // Diferentes tipos de pedidos com estratégias específicas
-        Order standardOrder = new StandardOrder(items, customer);
-        Order expressOrder = new ExpressOrder(items, customer);
-        Order internationalOrder = new InternationalOrder(items, customer);
-        
+        IOrder standardOrder = new StandardOrder(items, customer);
+        IOrder expressOrder = new ExpressOrder(items, customer);
+        IOrder internationalOrder = new InternationalOrder(items, customer);
         
         // Processamento polimórfico através de múltiplas hierarquias
         ProcessingResult result1 = processor.processOrder(
@@ -56,13 +67,11 @@ public class OrderManagementApp {
             new InternationalShippingCalculator()
         );
         
-        
         // Processamento em lote com diferentes combinações
-        List<Order> orderBatch = Arrays.asList(standardOrder, expressOrder);
-        Map<Order, IProcessingStrategy> strategyMap = new HashMap<>();
+        List<IOrder> orderBatch = Arrays.asList(standardOrder, expressOrder);
+        Map<IOrder, IProcessingStrategy> strategyMap = new HashMap<>();
         strategyMap.put(standardOrder, new StandardProcessingStrategy());
         strategyMap.put(expressOrder, new ExpressProcessingStrategy());
-        
         
         List<ProcessingResult> batchResults = processor.processOrderBatch(
             orderBatch,

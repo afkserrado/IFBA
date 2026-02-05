@@ -1,8 +1,9 @@
 package br.ifba.l3q3.payment;
 
-public class PIXPayment implements IPayment {
+import br.ifba.l3q3.paymentProcessor.PIXProcessor;
+
+public class PIXPayment extends IPayment {
     
-    private final String paymentType = "pix";
     private final double value;
     private final String key;
 
@@ -13,7 +14,16 @@ public class PIXPayment implements IPayment {
         }
 
         this.value = value;
-        this.key = key;        
+        this.key = key;  
+        this.processor = new PIXProcessor();      
+    }
+
+    @Override
+    public boolean processPayment() {
+        System.out.println("PIXPayment...");
+        processor.process();
+
+        return true;
     }
 
     // Getters
@@ -27,11 +37,5 @@ public class PIXPayment implements IPayment {
     // Gets key
     public String getKey() {
         return key;
-    }
-
-    // Gets payment type
-    @Override
-    public String getPaymentType() {
-        return paymentType;
     }
 }

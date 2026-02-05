@@ -1,1 +1,13 @@
+br/ifba/l3q2/shippingCalculator/InternationalShippingCalculator.class
+br/ifba/l3q2/order/IOrder.class
+br/ifba/l3q2/processingStrategy/StandardProcessingStrategy.class
+br/ifba/l3q2/shippingCalculator/DomesticShippingCalculator.class
+br/ifba/l3q2/order/StandardOrder.class
+br/ifba/l3q2/processingStrategy/IProcessingStrategy.class
+br/ifba/l3q2/processingStrategy/InternationalProcessingStrategy.class
+br/ifba/l3q2/shippingCalculator/PriorityShippingCalculator.class
+br/ifba/l3q2/shippingCalculator/IShippingCalculator.class
+br/ifba/l3q2/order/InternationalOrder.class
+br/ifba/l3q2/order/ExpressOrder.class
+br/ifba/l3q2/processingStrategy/ExpressProcessingStrategy.class
 br/ifba/l3q2/OrderManagementApp.class

@@ -1,14 +1,15 @@
 package br.ifba.l3q3;
 
 // Imports
-import br.ifba.l3q3.payment.*;
-import br.ifba.l3q3.paymentProcessor.*;
-import br.ifba.l3q3.riskAnalyzer.*;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import br.ifba.l3q3.payment.IPayment;
+import br.ifba.l3q3.paymentProcessor.IPaymentProcessor;
+import br.ifba.l3q3.riskAnalyzer.IRiskAnalyzer;
 
 public class PaymentOrchestrator {
     
@@ -34,22 +35,21 @@ public class PaymentOrchestrator {
     // Processes a single payment
     public PaymentResult processPayment(IPayment payment, String risk) {
 
-        IRiskAnalyzer riskAnalyzer = riskAnalyzers.get(risk);
-        boolean riskAnalyzed = false;
+        if(riskAnalyzers.containsKey(risk)) {
 
-        if(riskAnalyzer != null) {
-            riskAnalyzed = riskAnalyzer.analyzeRisk(payment);
-        }
-
-        String paymentProcessed = "Payment unprocessed";
-        for(IPaymentProcessor paymentProcessor : paymentProcessors) {
-            if(paymentProcessor.getPaymentType().equals(payment.getPaymentType())) {
-                paymentProcessed = paymentProcessor.processor(payment, riskAnalyzed);
-                break;
+            if(riskAnalyzers.get(risk).analyzeRisk(payment)) {
+                payment.processPayment();
+                return new PaymentResult(payment);
+            }
+            else {
+                System.out.println("Payment too risky!");
             }
         }
-
-        return new PaymentResult(payment, paymentProcessed);
+        else {
+            System.out.println("Risk analyzer not found!");
+        }
+    
+        return null;
     }
 
     // Processes a batch of payments

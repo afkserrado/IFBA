@@ -1,12 +1,15 @@
 package br.ifba.l3q3.payment;
 
-public interface IPayment {
+import br.ifba.l3q3.paymentProcessor.IPaymentProcessor;
+
+public abstract class IPayment {
+
+    protected IPaymentProcessor processor;
+
+    public abstract boolean processPayment();
 
     // Getters
     //
     // Gets value
-    public double getValue();
-
-    // Gets payment type
-    public String getPaymentType();
+    public abstract double getValue();
 }

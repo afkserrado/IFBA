@@ -7,11 +7,19 @@ Implemente um sistema de pagamentos que suporte múltiplas formas de pagamento a
 package br.ifba.l3q3;
 
 // Imports
-import br.ifba.l3q3.payment.*;
-import br.ifba.l3q3.riskAnalyzer.*;
-import br.ifba.l3q3.paymentProcessor.*;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
+
+import br.ifba.l3q3.payment.CreditCardPayment;
+import br.ifba.l3q3.payment.CryptoPayment;
+import br.ifba.l3q3.payment.IPayment;
+import br.ifba.l3q3.payment.PIXPayment;
+import br.ifba.l3q3.paymentProcessor.CreditCardProcessor;
+import br.ifba.l3q3.paymentProcessor.CryptoProcessor;
+import br.ifba.l3q3.paymentProcessor.PIXProcessor;
+import br.ifba.l3q3.riskAnalyzer.HighRiskAnalyzer;
+import br.ifba.l3q3.riskAnalyzer.LowRiskAnalyzer;
+import br.ifba.l3q3.riskAnalyzer.MediumRiskAnalyzer;
 
 public class ECommerceApp {
     public static void main(String[] args) {
@@ -52,6 +60,7 @@ public class ECommerceApp {
             new CryptoPayment(75.0, "0x842d35Cc6634C0532925a3b8E", "BTC")
         );
 
+        System.out.println("\nBatch process: ");
         List<PaymentResult> batchResults = orchestrator.processBatch(
             batchPayments,
             "low"  // Analisador de risco para todo o lote

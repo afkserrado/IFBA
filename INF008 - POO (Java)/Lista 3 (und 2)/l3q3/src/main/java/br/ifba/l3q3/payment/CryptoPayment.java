@@ -1,8 +1,9 @@
 package br.ifba.l3q3.payment;
 
-public class CryptoPayment implements IPayment {
-    
-    private final String paymentType = "crypto";
+import br.ifba.l3q3.paymentProcessor.CryptoProcessor;
+
+public class CryptoPayment extends IPayment {
+
     private final double value;
     private final String walletAddress;
     private final String cryptoType;
@@ -15,7 +16,16 @@ public class CryptoPayment implements IPayment {
 
         this.value = value;
         this.walletAddress = walletAddress;
-        this.cryptoType = cryptoType;        
+        this.cryptoType = cryptoType;   
+        this.processor = new CryptoProcessor();     
+    }
+
+    @Override
+    public boolean processPayment() {
+        System.out.println("CryptoPayment...");
+        processor.process();
+
+        return true;
     }
 
     // Getters
@@ -34,11 +44,5 @@ public class CryptoPayment implements IPayment {
     // Gets the crypto type
     public String getCryptoType() {
         return cryptoType;
-    }
-
-    // Gets payment type
-    @Override
-    public String getPaymentType() {
-        return paymentType;
     }
 }

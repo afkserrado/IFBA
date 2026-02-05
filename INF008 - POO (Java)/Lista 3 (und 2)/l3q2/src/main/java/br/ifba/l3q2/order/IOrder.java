@@ -1,8 +1,12 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.order;
 import java.util.List;
 
+import br.ifba.l3q2.Customer;
+import br.ifba.l3q2.Product;
+import br.ifba.l3q2.processingStrategy.IProcessingStrategy;
+
 // Abstract class: it can't be instantiated
-public abstract class Order {
+public abstract class IOrder {
     
     //
     // Fields
@@ -13,7 +17,7 @@ public abstract class Order {
     //
     // Constructor
     //
-    public Order(List<Product> items, Customer customer) {
+    public IOrder(List<Product> items, Customer customer) {
         this.items = items;
         this.customer = customer;
     }

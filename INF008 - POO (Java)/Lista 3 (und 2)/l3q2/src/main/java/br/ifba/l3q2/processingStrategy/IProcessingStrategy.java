@@ -1,4 +1,6 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.processingStrategy;
+
+import br.ifba.l3q2.order.IOrder;
 
 public interface IProcessingStrategy {
     
@@ -6,7 +8,7 @@ public interface IProcessingStrategy {
     // Methods
     //
     // Public and abstract by default
-    String processStrategy(Order order);
+    String processStrategy(IOrder order);
 
     // Default method: provides a reusable implementation for all implementing classes
     default String extractPrefix() {

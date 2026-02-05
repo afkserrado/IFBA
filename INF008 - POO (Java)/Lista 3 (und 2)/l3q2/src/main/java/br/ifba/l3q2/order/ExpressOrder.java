@@ -1,7 +1,12 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.order;
 import java.util.List;
 
-public class ExpressOrder extends Order {
+import br.ifba.l3q2.Customer;
+import br.ifba.l3q2.Product;
+import br.ifba.l3q2.processingStrategy.ExpressProcessingStrategy;
+import br.ifba.l3q2.processingStrategy.IProcessingStrategy;
+
+public class ExpressOrder extends IOrder {
 
     //
     // Constructor

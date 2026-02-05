@@ -1,4 +1,6 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.processingStrategy;
+
+import br.ifba.l3q2.order.IOrder;
 
 public class StandardProcessingStrategy implements IProcessingStrategy {
     
@@ -22,7 +24,7 @@ public class StandardProcessingStrategy implements IProcessingStrategy {
 
     // Processes the order by using this strategy
     @Override
-    public String processStrategy(Order order) {
+    public String processStrategy(IOrder order) {
         return "Customer: " + order.getCustomer() + " | Result: " + prefix + " process strategy applied.";
     }
 }

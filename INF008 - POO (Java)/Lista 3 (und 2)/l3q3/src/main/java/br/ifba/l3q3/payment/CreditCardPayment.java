@@ -1,9 +1,9 @@
 package br.ifba.l3q3.payment;
-import java.time.LocalDate;
 
-public class CreditCardPayment implements IPayment {
+import br.ifba.l3q3.paymentProcessor.CreditCardProcessor;
+
+public class CreditCardPayment extends IPayment {
     
-    private final String paymentType = "credit card";
     private final double value;
     private final String cardNumber;
     private final String expirationDate;
@@ -13,6 +13,15 @@ public class CreditCardPayment implements IPayment {
         this.value = value;
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
+        this.processor = new CreditCardProcessor();
+    }
+
+    @Override
+    public boolean processPayment() {
+        System.out.println("CreditCardPayment...");
+        processor.process();
+
+        return true;
     }
 
     // Getters
@@ -31,12 +40,6 @@ public class CreditCardPayment implements IPayment {
     // Gets expiration date
     public String getExpirationDate() {
         return expirationDate;
-    }
-
-    // Gets payment type
-    @Override
-    public String getPaymentType() {
-        return paymentType;
     }
 
     public boolean validateData() {

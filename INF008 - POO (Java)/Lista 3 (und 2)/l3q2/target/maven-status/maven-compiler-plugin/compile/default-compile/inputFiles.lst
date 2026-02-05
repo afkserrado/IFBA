@@ -1,17 +1,17 @@
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/Customer.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/DomesticShippingCalculator.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/ExpressOrder.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/ExpressProcessingStrategy.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/IProcessingStrategy.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/IShippingCalculator.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/InternationalOrder.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/InternationalProcessingStrategy.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/InternationalShippingCalculator.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/Order.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/OrderManagementApp.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/OrderProcessor.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/PriorityShippingCalculator.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/ProcessingResult.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/Product.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/StandardOrder.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF008-Codes/Lista 3/l3q2/src/main/java/br/ifba/l3q2/StandardProcessingStrategy.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/Customer.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/OrderManagementApp.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/OrderProcessor.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/ProcessingResult.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/Product.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/order/ExpressOrder.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/order/IOrder.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/order/InternationalOrder.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/order/StandardOrder.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/processingStrategy/ExpressProcessingStrategy.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/processingStrategy/IProcessingStrategy.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/processingStrategy/InternationalProcessingStrategy.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/processingStrategy/StandardProcessingStrategy.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/shippingCalculator/DomesticShippingCalculator.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/shippingCalculator/IShippingCalculator.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/shippingCalculator/InternationalShippingCalculator.java
+/home/akserrado/Downloads/Exercícios/Lista 3 (und 2)/l3q2/src/main/java/br/ifba/l3q2/shippingCalculator/PriorityShippingCalculator.java

@@ -1,4 +1,6 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.shippingCalculator;
+
+import br.ifba.l3q2.order.IOrder;
 
 public class PriorityShippingCalculator implements IShippingCalculator {
     //
@@ -18,7 +20,7 @@ public class PriorityShippingCalculator implements IShippingCalculator {
 
     // Processes the shipping by using this strategy
     @Override
-    public double calculateShipping(Order order) {
+    public double calculateShipping(IOrder order) {
         return calculateProducts(order) * shipping + priorityFee;
     }
 }

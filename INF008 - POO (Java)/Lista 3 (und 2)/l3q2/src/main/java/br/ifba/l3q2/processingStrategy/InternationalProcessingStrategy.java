@@ -1,6 +1,8 @@
-package br.ifba.l3q2;
+package br.ifba.l3q2.processingStrategy;
 
-public class ExpressProcessingStrategy implements IProcessingStrategy {
+import br.ifba.l3q2.order.IOrder;
+
+public class InternationalProcessingStrategy implements IProcessingStrategy {
     
     //
     // Fields
@@ -11,7 +13,7 @@ public class ExpressProcessingStrategy implements IProcessingStrategy {
     //
     // Constructor
     //
-    public ExpressProcessingStrategy() {
+    public InternationalProcessingStrategy() {
         // Extracts the prefix of the instance
         prefix = extractPrefix();
     }
@@ -22,7 +24,7 @@ public class ExpressProcessingStrategy implements IProcessingStrategy {
 
     // Processes the order by using this strategy
     @Override
-    public String processStrategy(Order order) {
+    public String processStrategy(IOrder order) {
         return "Customer: " + order.getCustomer() + " | Result: " + prefix + " process strategy applied.";
     }
 }

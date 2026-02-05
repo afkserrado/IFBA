@@ -1,8 +1,12 @@
 package br.ifba.l3q2;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
-import java.util.ArrayList;
+
+import br.ifba.l3q2.order.IOrder;
+import br.ifba.l3q2.processingStrategy.IProcessingStrategy;
+import br.ifba.l3q2.shippingCalculator.IShippingCalculator;
 
 public class OrderProcessor {
 
@@ -15,7 +19,7 @@ public class OrderProcessor {
     // Methods
     //
     // Processes a single order
-    public ProcessingResult processOrder(Order order, IProcessingStrategy strategy, IShippingCalculator calculator) {
+    public ProcessingResult processOrder(IOrder order, IProcessingStrategy strategy, IShippingCalculator calculator) {
         
         String strategyProcessed = strategy.processStrategy(order);
         double shippingCalculated = calculator.calculateShipping(order);
@@ -24,14 +28,14 @@ public class OrderProcessor {
     }
 
     // Processes a batch of orders
-    public List<ProcessingResult> processOrderBatch(List<Order> orderBatch, Map<Order, IProcessingStrategy> strategyMap, IShippingCalculator shippingCalculator) {
+    public List<ProcessingResult> processOrderBatch(List<IOrder> orderBatch, Map<IOrder, IProcessingStrategy> strategyMap, IShippingCalculator shippingCalculator) {
         
         List<ProcessingResult> batchResults = new ArrayList<>();
 
-        Iterator<Order> it = orderBatch.iterator();
+        Iterator<IOrder> it = orderBatch.iterator();
         while(it.hasNext()) {
-            Order order = it.next();
-            IProcessingStrategy strategy = strategyMap.getOrDefault(order, order.defaultProcessingStrategy());
+            IOrder order = it.next();
+            IProcessingStrategy strategy = strategyMap.get(order);
             batchResults.add(processOrder(order, strategy, shippingCalculator));
         }
 
