@@ -9,6 +9,7 @@ import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.IVehicleTypes;
+import br.edu.ifba.inf008.interfaces.IPluginController;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class MainScreenPlugin implements IPlugin {
     // additional_fees: utilizado para o cálculo do valor total da locação
     private static final String VEHICLE_TYPES_QUERY = 
         "SELECT type_id, type_name, additional_fees " + 
-        "FROM vehicle_types";    
+        "FROM vehicle_types";
 
     // vehicle_id: entrada para a inserção na tabela rentals
     // demais itens: conteúdo a ser exibido na tela
@@ -135,6 +136,21 @@ public class MainScreenPlugin implements IPlugin {
             e.printStackTrace();
         }
 
+        // Constrói a lista de veículos com base nos plugins carregados
+        List<Map<String, Object>> filteredVehicleTypesData = new ArrayList<>();
+        for(Map<String, Object> row : vehicleTypesData) {
+            
+            Object tn = row.get("type_name");
+            if(tn == null) continue;
+
+            String vehicleType = tn.toString().trim();
+            if(vehicleType.isEmpty()) continue;
+
+            if(getVehicleTypePluginForName(vehicleType) != null) {
+                filteredVehicleTypesData.add(row);
+            }
+        }
+
         // ========== CONTROLES ========== 
         // Define os elementos visuais com os quais o usuário interagirá e a partir dos quais serão obtidos os dados de inserção
 
@@ -156,7 +172,7 @@ public class MainScreenPlugin implements IPlugin {
         // Define os nós (contêineres) que serão enviados para a interface, incluindo os controles
 
         HBox hbEmail = createComboBoxNode("E-mail", cbEmail, customersData, "email");
-        HBox hbVehicleTypes = createComboBoxNode("Tipo de veículo", cbVehicleTypes, vehicleTypesData, "type_name");
+        HBox hbVehicleTypes = createComboBoxNode("Tipo de veículo", cbVehicleTypes, filteredVehicleTypesData, "type_name");
         VBox vbVehicles = createTableViewNode("Veículos disponíveis", tbVehicles);
         HBox hbStartDate = createConteinerNode("Início da locação", dpStartDate);
         HBox hbEndDate = createConteinerNode("Fim da locação", dpEndDate);
@@ -501,24 +517,15 @@ public class MainScreenPlugin implements IPlugin {
                 return;
             }
 
-            // Formata o nome do tipo de veículo (ex.: Economy)
-            typeName = typeName.substring(0, 1) + typeName.substring(1).toLowerCase();
+            IVehicleTypes vehiclePlugin = getVehicleTypePluginForName(typeName);
 
-            // Obtém o plugin correspondente ao tipo de veículo selecionado
-            String vehiclePluginName = typeName + "Plugin";
-            IPlugin plugin = ICore
-                .getInstance()
-                .getPluginController()
-                .getPlugin(vehiclePluginName);    
-                
-            if (plugin == null || !(plugin instanceof IVehicleTypes)) {
+            if(vehiclePlugin == null) {
                 createAlert(AlertType.ERROR, "Plugin não encontrado",
-                    "O plugin " + vehiclePluginName + " está indisponível. Não é possível calcular o valor total da locação."
+                    "Plugin para o tipo " + typeName + " indisponível."
                 ).showAndWait();
                 return;
             }
 
-            IVehicleTypes vehiclePlugin = (IVehicleTypes) plugin;
             this.lastTotal = vehiclePlugin.calculateTotalAmount(baseRate, insuranceFee, startDate, endDate, additionalFees);
 
             // Carrega o resultado na tela
@@ -625,6 +632,25 @@ public class MainScreenPlugin implements IPlugin {
         btConfirm.setDisable(true);
         this.lastTotal = null;
         lbTotalAmount.setText("Valor total: ");
+    }
+
+    private IVehicleTypes getVehicleTypePluginForName(String vehicleType) {
+
+        if(vehicleType == null) return null;
+
+        vehicleType = vehicleType.trim();
+        if(vehicleType.isEmpty()) return null;
+        
+        // Normalização (por exemplo, "CompactPlugin")
+        String typeName = vehicleType.substring(0, 1).toUpperCase() + vehicleType.substring(1).toLowerCase();
+
+        String vehiclePluginName = typeName + "Plugin";
+
+        IPlugin plugin = ICore.getInstance()
+                              .getPluginController()
+                              .getPlugin(vehiclePluginName);
+
+        return (plugin instanceof IVehicleTypes) ? (IVehicleTypes) plugin : null;
     }
 
     /**
