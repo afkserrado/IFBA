@@ -1,16 +1,15 @@
 package br.edu.ifba.inf008.shell;
 
-import br.edu.ifba.inf008.App;
-import br.edu.ifba.inf008.interfaces.IPluginController;
-import br.edu.ifba.inf008.interfaces.IPlugin;
-import br.edu.ifba.inf008.interfaces.ICore;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import br.edu.ifba.inf008.App;
+import br.edu.ifba.inf008.interfaces.IPlugin;
+import br.edu.ifba.inf008.interfaces.IPluginController;
 
 /**
  * Controlador responsável por carregar e gerenciar plug-ins em tempo de execução.
@@ -39,6 +38,7 @@ public class PluginController implements IPluginController {
     @Override
     public boolean init() {
         try {
+            
             // Diretório onde estão localizados os arquivos .jar dos plugins
             File currentDir = new File("./plugins");
 

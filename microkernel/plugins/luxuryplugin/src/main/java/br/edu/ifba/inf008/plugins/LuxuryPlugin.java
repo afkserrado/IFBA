@@ -20,4 +20,9 @@ public class LuxuryPlugin extends IVehicleTypes {
         // Apenas para implementar o requisito de método polimórfico exigido no trabalho, mas sem precisar repetir as mesmas linhas de código em todos os veículos, já que todos calcularam o valor total da alocação da mesma forma
         return super.calculateTotalAmount(baseRate, insuranceFee, startDate, endDate, additionalFees);
     }
+
+    @Override
+    public String getVehicleType() {
+        return "Luxury";
+    }
 }

@@ -75,4 +75,6 @@ public abstract class IVehicleTypes implements IPlugin {
             throw new IllegalArgumentException("additional_fees inválido: " + additionalFeesJson, e);
         }
     }
+
+    public abstract String getVehicleType();
 }
