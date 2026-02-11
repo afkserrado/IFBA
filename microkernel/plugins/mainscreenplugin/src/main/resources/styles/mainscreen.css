@@ -1,0 +1,16 @@
+/* Grid */
+.ms-root {
+    -fx-font-size: 24px;
+    -fx-text-fill: black;
+}
+
+.ms-label {
+    -fx-font-weight: bold;
+}
+
+.ms-button {
+}
+
+.ms-table {
+    -fx-font-size: 16pt;
+}
