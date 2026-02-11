@@ -140,10 +140,10 @@ public class MainScreenPlugin implements IPlugin {
         List<Map<String, Object>> filteredVehicleTypesData = new ArrayList<>();
         for(Map<String, Object> row : vehicleTypesData) {
             
-            Object tn = row.get("type_name");
-            if(tn == null) continue;
+            Object typeName = row.get("type_name"); // Ex.: COMPACT
+            if(typeName == null) continue;
 
-            String vehicleType = tn.toString().trim();
+            String vehicleType = typeName.toString().trim(); // Ex.: COMPACT
             if(vehicleType.isEmpty()) continue;
 
             if(getVehicleTypePluginForName(vehicleType) != null) {
@@ -641,10 +641,7 @@ public class MainScreenPlugin implements IPlugin {
         vehicleType = vehicleType.trim();
         if(vehicleType.isEmpty()) return null;
         
-        // Normalização (por exemplo, "CompactPlugin")
-        String typeName = vehicleType.substring(0, 1).toUpperCase() + vehicleType.substring(1).toLowerCase();
-
-        String vehiclePluginName = typeName + "Plugin";
+        String vehiclePluginName = vehicleType + "PLUGIN"; // Ex.: COMPACTPLUGIN
 
         IPlugin plugin = ICore.getInstance()
                               .getPluginController()

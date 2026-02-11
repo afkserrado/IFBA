@@ -71,8 +71,8 @@ public class PluginController implements IPluginController {
             // Cria um carregador de classes capaz de carregar classes a partir dos arquivos .jar dos plugins
             // O class loader pai é o class loader da aplicação, permitindo que os plugins acessem as classes do programa principal
             URLClassLoader ulc = new URLClassLoader(jars, App.class.getClassLoader());
-            for (i = 0; i < plugins.length; i++)
-            {
+            for (i = 0; i < plugins.length; i++) {
+                
                 // Extrai o nome do plugin removendo a extensão ".jar"
                 // Exemplo: "MyPlugin.JAR" -> "MyPlugin"
                 String pluginName = plugins[i].split("\\.")[0];
@@ -88,8 +88,12 @@ public class PluginController implements IPluginController {
                 ).newInstance();
 
                 registerPlugin(pluginName, plugin);
+            }
 
-                // Inicializa o plugin após ele ter sido carregado
+            // Inicializa os plugins após o carregamento
+            // Garante que todos os plugins serão carregados antes de qualquer inicialização
+            for(Map.Entry<String, IPlugin> row : registeredPlugins.entrySet()) {
+                IPlugin plugin = row.getValue();
                 plugin.init();
             }
 
@@ -115,9 +119,8 @@ public class PluginController implements IPluginController {
      */
     @Override
     public void registerPlugin(String typeKey, IPlugin plugin) {
-        typeKey = typeKey.trim().toUpperCase(); // Normalização
+        typeKey = typeKey.trim().toUpperCase(); // Normalização. Ex.: COMPACTPLUGIN
         registeredPlugins.put(typeKey, plugin);
-        //System.out.println(typeKey + " - " + plugin);
     }
 
     /**
@@ -131,7 +134,7 @@ public class PluginController implements IPluginController {
     @Override
     public IPlugin getPlugin(String typeKey) {
         if(typeKey == null) return null;
-        typeKey = typeKey.trim().toUpperCase(); // Normalização
+        typeKey = typeKey.trim().toUpperCase();
         return registeredPlugins.get(typeKey);
     }
 }
