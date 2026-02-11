@@ -26,6 +26,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
@@ -43,6 +44,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import java.time.LocalDate;
 
@@ -87,9 +91,6 @@ public class MainScreenPlugin implements IPlugin {
         "SELECT vehicle_id, make, model, year, fuel_type, transmission, mileage " + 
         "FROM vehicles " +
         "WHERE status = 'AVAILABLE' AND type_id = ";
-
-    // Tamanhos de fonte
-    private static final double LABEL_FONT_SIZE = 24.0;
 
     // ========== MÉTODOS ==========
 
@@ -167,6 +168,8 @@ public class MainScreenPlugin implements IPlugin {
         Spinner<Double> spBaseRate = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.10);
         Spinner<Double> spInsuranceFee = new Spinner<>(0.0, 1_000_000.0, 0.0, 0.10);
 
+        tbVehicles.getStyleClass().add("ms-table");
+
         // ========== NÓS ==========
         // Define os nós (contêineres) que serão enviados para a interface, incluindo os controles
 
@@ -191,6 +194,7 @@ public class MainScreenPlugin implements IPlugin {
 
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
+        grid.getStyleClass().add("ms-root");
         grid.setHgap(40); // Espaçamento entre colunas
         grid.setVgap(25); // Espaçamento entre linhas
         grid.setPadding(new Insets(20)); // Margens internas
@@ -213,6 +217,8 @@ public class MainScreenPlugin implements IPlugin {
 
         grid.setAlignment(Pos.CENTER);
 
+        applyCss(grid);
+
         // Adiciona os elementos visuais à lista de nodes
         mainNodes.addAll(List.of(grid));
     }
@@ -225,10 +231,6 @@ public class MainScreenPlugin implements IPlugin {
         }
 
         Label lb = createLabel(label);
-        
-        node.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;"
-        );
 
         // Cria um contêiner para agrupar label e combobox
         HBox hb = new HBox(5, lb, node);
@@ -295,10 +297,6 @@ public class MainScreenPlugin implements IPlugin {
         // Autodimensiona as colunas
         tbVehicles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        tbVehicles.setStyle(
-            "-fx-font-size: 14pt;"
-        );
-
         // Cria um contêiner para agrupar label e combobox
         VBox vb = new VBox(5, lb, tbVehicles);
         vb.setAlignment(Pos.CENTER_LEFT);
@@ -339,24 +337,15 @@ public class MainScreenPlugin implements IPlugin {
     private Button createButton(String button) {
 
         Button bt = new Button(button);
-        bt.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;"
-        );
+        bt.getStyleClass().add("ms-button");
 
         return bt;
     }
 
     // Cria um label e define sua formatação
     private Label createLabel(String label) {
-
         Label lb = new Label(label);
-        lb.setStyle(
-            "-fx-font-size: " + LABEL_FONT_SIZE + "px;" + 
-            "-fx-text-fill: black;" +
-            "-fx-font-weight: bold;"
-        );
-
+        lb.getStyleClass().add("ms-label");
         return lb;
     }
 
@@ -633,6 +622,7 @@ public class MainScreenPlugin implements IPlugin {
         lbTotalAmount.setText("Valor total: ");
     }
 
+    // Retorna o plugin correspondente ao tipo de veículo
     private IVehicleTypes getVehicleTypePluginForName(String vehicleType) {
 
         if(vehicleType == null) return null;
@@ -649,26 +639,21 @@ public class MainScreenPlugin implements IPlugin {
         return (plugin instanceof IVehicleTypes) ? (IVehicleTypes) plugin : null;
     }
 
-    /**
-     * 
-     * @param cb ComboBox
-     * @param displayColumn Coluna a ser exibida
-     * 
-     * Ao optar pela abordagem de inserir um contêiner (Map) na combobox, faz-se 
-     * necessário definir o setConverter() da ComboBox, que é o método responsável
-     * configurar o que será exibido na tela.
-     * 
-     * Embora pareça mais verboso, essa abordagem foi escolhida para facilitar
-     * a inserção de dados no banco. Isso porque a tabela "rentals" requer os IDs
-     * (customer_id, vehicle_id) de outras tabelas para criar um novo registro.
-     * Como esses dados já estarão carregados em memória, basta um 
-     * data.get("columnID") para obtê-los.
-     * 
-     * Carregar apenas as strings (como email ou type_name) exigiria percorrer a
-     * lista de mapas, comparando o valor da chave correspondente com o valor
-     * selecionado na ComboBox. Isso teria um custo computacional maior.
-     * 
-     */
+    /*
+    Ao optar pela abordagem de inserir um contêiner (Map) na combobox, faz-se 
+    necessário definir o setConverter() da ComboBox, que é o método responsável
+    configurar o que será exibido na tela.
+    
+    Embora pareça mais verboso, essa abordagem foi escolhida para facilitar
+    a inserção de dados no banco. Isso porque a tabela "rentals" requer os IDs
+    (customer_id, vehicle_id) de outras tabelas para criar um novo registro.
+    Como esses dados já estarão carregados em memória, basta um 
+    data.get("columnID") para obtê-los.
+    
+    Carregar apenas as strings (como email ou type_name) exigiria percorrer a
+    lista de mapas, comparando o valor da chave correspondente com o valor
+    selecionado na ComboBox. Isso teria um custo computacional maior.
+    */
     private static void configureComboBoxDisplayColumn(ComboBox<Map<String, Object>> cb, String displayColumn) {
 
         // Define como o JavaFX converte cada item (Map) em String
@@ -701,5 +686,32 @@ public class MainScreenPlugin implements IPlugin {
                 return null;
             }
         });
+    }
+
+    private void applyCss(Parent root) {
+        
+        // Abre um InputStream do recurso no classpath (pode estar dentro do JAR)
+        // Um InputStream é um canal de entrada para ler bytes de algum lugar (arquivo, rede, recurso dentro do JAR etc.)
+        try (var in = getClass().getResourceAsStream("/styles/mainscreen.css")) {
+            if (in == null) {
+                System.err.println("CSS não encontrado: /styles/mainscreen.css");
+                return;
+            }
+
+            // Cria um arquivo temporário no diretório temp do SO
+            var temp = Files.createTempFile("mainscreen-", ".css");
+            
+            // Copia os bytes do CSS (in) para esse arquivo temporário
+            Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
+
+            // Cria um URI apontando para o arquivo temporário e o transforma em uma string, formato aceitado pelo JavaFX
+            // URI significa Uniform Resource Identifier: é uma forma padronizada de identificar um recurso como texto estruturado
+            // Adiciona o arquivo CSS na lista de stylesheets do root
+            root.getStylesheets().add(temp.toUri().toString());
+        } 
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
