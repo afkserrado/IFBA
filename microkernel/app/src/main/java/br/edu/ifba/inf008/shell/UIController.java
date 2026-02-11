@@ -85,7 +85,7 @@ public class UIController extends Application implements IUIController {
         createWelcomeScreen();
 
         // Cria uma Scene e passa para a janela do SO
-        scene = new Scene(root, 960, 600);
+        scene = new Scene(root, 1920, 1080);
         primaryStage.setScene(scene);
 
         primaryStage.show(); // Exibe a janela fornecida pelo SO

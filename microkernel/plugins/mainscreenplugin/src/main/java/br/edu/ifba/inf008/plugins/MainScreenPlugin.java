@@ -9,7 +9,6 @@ import br.edu.ifba.inf008.interfaces.IDatabaseController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.IVehicleTypes;
-import br.edu.ifba.inf008.interfaces.IPluginController;
 
 import java.util.LinkedList;
 import java.util.List;
