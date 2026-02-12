@@ -1,0 +1,62 @@
+# Define os serviços (contêineres) que serão criados e executados
+services:
+  # Nome do serviço: mariadb (pode ser referenciado por este nome)
+  mariadb:
+    # Imagem Docker oficial do MariaDB que será baixada do Docker Hub
+    image: mariadb
+
+    # Define o nome do contêiner como "car_rental_database"
+    # Facilita identificar e gerenciar o contêiner (ex: docker logs car_rental_database)
+    container_name: car_rental_database
+
+    # Política de reinicialização: reinicia automaticamente o contêiner
+    # EXCETO quando é interrompido manualmente com "docker stop"
+    # Útil para o banco subir automaticamente após reiniciar o computador
+    restart: unless-stopped
+
+    # Variáveis de ambiente que configuram o MariaDB na primeira inicialização
+    environment:
+      # O usuário padrão criado automaticamente pela imagem oficial do MariaDB é chamado de "root"
+      # Define a senha do usuário root do banco de dados
+      MYSQL_ROOT_PASSWORD: root
+
+      # Cria automaticamente um banco de dados chamado "car_rental_system"
+      # na primeira vez que o contêiner é iniciado
+      MYSQL_DATABASE: car_rental_system
+
+    # Mapeamento de portas entre o host (PC do usuário) e o contêiner
+    # Formato: "PORTA_HOST:PORTA_CONTAINER"
+    ports:
+      # Porta 3307 do PC do usuário redireciona para porta 3306 dentro do contêiner
+      # 3306 é a porta padrão onde o MariaDB escuta dentro do contêiner
+      # 3307 foi escolhida no host para evitar conflito caso já exista MySQL/MariaDB instalado localmente
+      # A aplicação Java acessará: jdbc:mariadb://localhost:3307/car_rental_system
+      - "3307:3306"
+
+    # Define quais volumes serão montados/conectados neste contêiner
+    volumes:
+      # VOLUME NOMEADO (gerenciado pelo Docker)
+      # "db_data" é o nome do volume (declarado no final do arquivo)
+      # "/var/lib/mysql" é o caminho DENTRO do contêiner onde o MariaDB salva os dados do banco
+      # Este caminho é definido pela imagem oficial do MariaDB
+      # Função: Persistir os dados do banco mesmo se o contêiner for deletado
+      # Sem este volume, todos os dados seriam perdidos ao remover o contêiner
+      - db_data:/var/lib/mysql
+
+      # BIND MOUNT (vincula arquivo local do PC do usuário ao contêiner)
+      # "./init.sql" é o arquivo no PC do usuário (mesma pasta do docker-compose.yml)
+      # "/docker-entrypoint-initdb.d/init.sql" é o caminho DENTRO do contêiner
+      # A pasta "/docker-entrypoint-initdb.d/" é especial: a imagem MariaDB executa
+      # automaticamente todos os scripts .sql e .sh desta pasta na PRIMEIRA inicialização
+      # ":ro" significa "read-only" (somente leitura) - o contêiner não pode modificar o arquivo
+      # Função: Criar tabelas e inserir dados iniciais automaticamente
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+# Declara volumes nomeados que serão gerenciados pelo Docker
+# Estes volumes ficam em uma área especial do Docker (geralmente /var/lib/docker/volumes/)
+volumes:
+  # Cria um volume chamado "db_data"
+  # Este volume é referenciado em services > mariadb > volumes
+  # Persiste mesmo se o contêiner for deletado
+  # Para remover: docker volume rm <nome_do_projeto>_db_data
+  db_data:
