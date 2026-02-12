@@ -195,9 +195,6 @@ public class MainScreenPlugin implements IPlugin {
         // ========== LAYOUT ==========
         GridPane grid = new GridPane();
         grid.getStyleClass().add("ms-root");
-        grid.setHgap(40); // Espaçamento entre colunas
-        grid.setVgap(25); // Espaçamento entre linhas
-        grid.setPadding(new Insets(20)); // Margens internas
         
         // Adiciona os elementos (coluna x linha)
         grid.add(hbEmail,           0, 0);
@@ -233,7 +230,8 @@ public class MainScreenPlugin implements IPlugin {
         Label lb = createLabel(label);
 
         // Cria um contêiner para agrupar label e combobox
-        HBox hb = new HBox(5, lb, node);
+        HBox hb = new HBox(lb, node);
+        hb.getStyleClass().add("ms-hbox");
         hb.setAlignment(Pos.CENTER_LEFT);
 
         return hb;
@@ -298,7 +296,8 @@ public class MainScreenPlugin implements IPlugin {
         tbVehicles.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Cria um contêiner para agrupar label e combobox
-        VBox vb = new VBox(5, lb, tbVehicles);
+        VBox vb = new VBox(lb, tbVehicles);
+        vb.getStyleClass().add("ms-vbox");
         vb.setAlignment(Pos.CENTER_LEFT);
 
         return vb;
@@ -351,13 +350,9 @@ public class MainScreenPlugin implements IPlugin {
 
     // Cria uma caixa de diálogo
     private Alert createAlert(AlertType alertType, String header, String msg) {
-
         Alert al = new Alert(alertType, msg);
+        al.getDialogPane().getStyleClass().add("ms-dialog");
         al.setHeaderText(header);
-        al.getDialogPane().setStyle(
-            "-fx-font-size: 14pt;"
-        );
-
         return al;
     }
 
@@ -700,6 +695,7 @@ public class MainScreenPlugin implements IPlugin {
 
             // Cria um arquivo temporário no diretório temp do SO
             var temp = Files.createTempFile("mainscreen-", ".css");
+            temp.toFile().deleteOnExit();
             
             // Copia os bytes do CSS (in) para esse arquivo temporário
             Files.copy(in, temp, StandardCopyOption.REPLACE_EXISTING);
