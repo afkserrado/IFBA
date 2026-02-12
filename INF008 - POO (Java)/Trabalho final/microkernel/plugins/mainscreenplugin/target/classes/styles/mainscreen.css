@@ -1,0 +1,31 @@
+/* Grid */
+.ms-root {
+    -fx-padding: 20;    /* Margens internas */
+    -fx-hgap: 40;       /* Espaçamento entre colunas */
+    -fx-vgap: 25;       /* Espaçamento entre linhas */
+    -fx-font-size: 24px;
+}
+
+.ms-label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold; 
+}
+
+.ms-button {
+}
+
+.ms-table {
+    -fx-font-size: 20px;
+}
+
+.ms-dialog {
+    -fx-font-size: 14px;
+}
+
+.ms-hbox {
+    -fx-spacing: 5;
+}
+
+.ms-vbox {
+    -fx-spacing: 5;
+}

@@ -1,0 +1,44 @@
+<!-- 
+    Módulo pai (parent-project)
+    Responsável por centralizar configurações comuns e agregar os módulos do projeto
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>br.edu.ifba.inf008</groupId>
+    <artifactId>parent-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- 
+        Lista de módulos que fazem parte do projeto multi-módulo
+        O Maven irá construir esses módulos na ordem declarada
+    -->
+    <modules>
+        <module>interfaces</module>
+        <module>dtos</module>
+        <module>app</module>
+
+        <!-- Plugins -->
+        <!--<module>plugins/myplugin</module>-->
+        <module>plugins/mainscreenplugin</module>
+        <module>plugins/economyplugin</module>
+        <module>plugins/compactplugin</module>
+        <module>plugins/suvplugin</module>
+        <module>plugins/luxuryplugin</module>
+        <module>plugins/vanplugin</module>
+        <module>plugins/electricplugin</module>
+        <module>plugins/report1</module>
+        <module>plugins/report2</module>
+    </modules>
+
+    <!-- 
+        Versão do Java usada para compilar o projeto
+        Aplica-se a todos os módulos que herdam deste POM
+    -->
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+    </properties>
+</project>
