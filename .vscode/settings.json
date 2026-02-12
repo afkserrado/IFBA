@@ -1,4 +1,0 @@
-{
-    // Não atualizar automaticamente configuração Maven/Gradle
-    "java.configuration.updateBuildConfiguration": "interactive",
-}
