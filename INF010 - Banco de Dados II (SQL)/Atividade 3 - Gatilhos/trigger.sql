@@ -1,3 +1,25 @@
+/*
+Criar uma tabela AUDITORIA com os seguintes atributos:
+
+id
+data  [data da alteração]
+valor_antigo_idx
+novo_valor_idx
+diferenca   [valor que representa o módulo da diferença entre o valor novo e o valor antigo]
+cod_municipio  [município ao qual se refere o índice alterado]
+ano  [ano do índice alterado ]
+
+Elaborar um gatilho (trigger) que, considerando as colunas utilizadas no cálculo do valor de IDX (tarefa anterior de procedimentos armazenados), após ter quaisquer dos valores destas colunas atualizados, a mesma recalcule o valor de IDX com os novos valores.
+
+O gatilho deve inserir na tabela AUDITORIA os valores envolvidos para o atributo IDX e os demais campos desta tabela.
+
+Além do gatilho, crie uma função que retorne a média das diferenças entre os valores de IDX que foram alterados para o dia atual.
+
+Verifique se a utilização de estruturas de cursor é útil para resolver a questão.
+
+Alunos: Anderson Serrado e Anna Luísa
+*/
+
 -- Criação da tabela de auditoria
 CREATE TABLE Auditoria(
     id DECIMAL(6) NOT NULL,
