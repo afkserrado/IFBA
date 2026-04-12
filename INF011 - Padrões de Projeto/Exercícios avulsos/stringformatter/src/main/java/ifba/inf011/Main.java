@@ -13,7 +13,6 @@ class DisplayNameFormatter {
     }
 }
 
-
 public class Main {
     public static void main(String[] args) {
         DisplayNameFormatter formatter = new DisplayNameFormatter();
