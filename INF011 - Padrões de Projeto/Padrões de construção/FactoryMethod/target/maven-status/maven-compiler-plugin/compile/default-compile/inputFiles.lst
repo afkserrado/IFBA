@@ -1,7 +1,7 @@
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Creators/CreatorProductA.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Creators/CreatorProductB.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Interfaces/Creator.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Interfaces/IProduct.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Main.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Products/ProductA.java
-/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/Products/ProductB.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/creators/CreatorProductA.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/creators/CreatorProductB.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/interfaces/Creator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/interfaces/IProduct.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/products/ProductA.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/FactoryMethod/src/main/java/ifba/inf011/classic/products/ProductB.java
