@@ -1,7 +1,7 @@
-ifba/inf011/Products/ProductB.class
+ifba/inf011/classic/interfaces/Creator.class
+ifba/inf011/classic/products/ProductB.class
 ifba/inf011/Main.class
-ifba/inf011/Creators/CreatorProductB.class
-ifba/inf011/Products/ProductA.class
-ifba/inf011/Creators/CreatorProductA.class
-ifba/inf011/Interfaces/IProduct.class
-ifba/inf011/Interfaces/Creator.class
+ifba/inf011/classic/creators/CreatorProductA.class
+ifba/inf011/classic/interfaces/IProduct.class
+ifba/inf011/classic/products/ProductA.class
+ifba/inf011/classic/creators/CreatorProductB.class
