@@ -1,16 +1,11 @@
 package ifba.inf011;
 
-import ifba.inf011.classic.creators.CreatorProductA;
-import ifba.inf011.classic.creators.CreatorProductB;
-import ifba.inf011.classic.interfaces.Creator;
-
-// Cliente
 public class Main {
     public static void main(String[] args) {
-        Creator creatorProductA = new CreatorProductA();
-        Creator creatorProductB = new CreatorProductB();
+        System.out.println("=== Classic ===");
+        ifba.inf011.classic.Main.main(args);
 
-        creatorProductA.someOperation();
-        creatorProductB.someOperation();
+        System.out.println("\n=== Parameterized ===");
+        ifba.inf011.parameterized.Main.main(args);
     }
 }
