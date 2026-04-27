@@ -1,8 +1,8 @@
 package ifba.inf011.Creators;
 
+import ifba.inf011.Interfaces.Creator;
+import ifba.inf011.Interfaces.IProduct;
 import ifba.inf011.Products.ProductB;
-import ifba.inf011.interfaces.Creator;
-import ifba.inf011.interfaces.IProduct;
 
 public class CreatorProductB extends Creator {
     @Override
