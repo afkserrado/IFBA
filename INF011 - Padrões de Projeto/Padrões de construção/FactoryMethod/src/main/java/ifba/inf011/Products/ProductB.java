@@ -1,6 +1,6 @@
 package ifba.inf011.Products;
 
-import ifba.inf011.interfaces.IProduct;
+import ifba.inf011.Interfaces.IProduct;
 
 public class ProductB implements IProduct {
     @Override

@@ -1,4 +1,4 @@
-package ifba.inf011.interfaces;
+package ifba.inf011.Interfaces;
 
 // Criador
 public abstract class Creator {

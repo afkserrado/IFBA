@@ -1,4 +1,4 @@
-package ifba.inf011.interfaces;
+package ifba.inf011.Interfaces;
 
 // Produto
 public interface IProduct {
