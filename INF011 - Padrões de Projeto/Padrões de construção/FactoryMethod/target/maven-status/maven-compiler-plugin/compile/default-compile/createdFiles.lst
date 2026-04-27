@@ -1,7 +1,15 @@
 ifba/inf011/classic/interfaces/Creator.class
-ifba/inf011/classic/products/ProductB.class
+ifba/inf011/classic/Main.class
 ifba/inf011/Main.class
+ifba/inf011/parameterized/Main.class
+ifba/inf011/parameterized/enums/ProductId.class
 ifba/inf011/classic/creators/CreatorProductA.class
 ifba/inf011/classic/interfaces/IProduct.class
-ifba/inf011/classic/products/ProductA.class
 ifba/inf011/classic/creators/CreatorProductB.class
+ifba/inf011/classic/products/ProductB.class
+ifba/inf011/parameterized/interfaces/IProduct.class
+ifba/inf011/parameterized/products/ProductA.class
+ifba/inf011/parameterized/creators/Creator$1.class
+ifba/inf011/classic/products/ProductA.class
+ifba/inf011/parameterized/products/ProductB.class
+ifba/inf011/parameterized/creators/Creator.class
