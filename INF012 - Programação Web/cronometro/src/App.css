@@ -1,0 +1,97 @@
+/* Container principal da aplicação */
+.conteiner{
+
+    /* Usa Flexbox para organizar os elementos */
+    display: flex;
+
+    /* Faz o container ocupar toda a largura disponível */
+    width: 100%;
+
+    /* Centraliza os elementos horizontalmente */
+    align-items: center;
+
+    /* Centraliza os elementos verticalmente */
+    justify-content: center;
+
+    /* Organiza os elementos em coluna */
+    flex-direction: column;
+
+    background-color: gray;
+}
+
+/* Estiliza a imagem */
+.img{
+
+    /* Define margem superior/inferior e centraliza horizontalmente */
+    margin: 100px auto;
+
+    /* Define largura da imagem */
+    width: 300px;
+
+    /* Define altura da imagem */
+    height: 350px;
+}
+
+/* Estiliza o timer */
+.timer{
+
+    /* Define tamanho da fonte */
+    font-size: 130px;
+
+    /* Move o elemento para cima */
+    margin-top: -330px;
+}
+
+/* Área dos textos/botões */
+.areaTexto{
+
+    /* Adiciona espaçamento superior */
+    margin-top: 120px;
+
+    /* Usa Flexbox */
+    display: flex;
+}
+
+/* Estiliza os botões */
+.botao{
+
+    /* Define largura do botão */
+    width: 150px;
+
+    /* Define cor de fundo */
+    background-color: thistle;
+
+    /* Define tamanho da fonte */
+    font-size: 20px;
+
+    /* Centraliza o texto */
+    text-align: center;
+
+    /* Arredonda as bordas */
+    border-radius: 5px;
+
+    /* Espaçamento lateral esquerdo */
+    margin-left: 15px;
+
+    /* Espaçamento lateral direito */
+    margin-right: 15px;
+
+    /* Mostra cursor de clique */
+    cursor: pointer;
+
+    /* Espaçamento interno */
+    padding: 5px;
+}
+
+/* Estilo aplicado quando o mouse passa sobre o botão */
+.botao:hover{
+
+    /* Define transparência */
+    opacity: 0.9;
+
+    /* Altera a cor do texto */
+    color: rgb(0, 234, 255);
+
+    /* Cria transição suave */
+    transition: all 0.60s;
+}
