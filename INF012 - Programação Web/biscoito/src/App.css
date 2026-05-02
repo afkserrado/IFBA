@@ -1,0 +1,47 @@
+/* Estiliza o corpo da página */
+body{
+    /* Define a cor de fundo da página */
+    background-color: #DDD;
+}
+
+/* Container principal do componente */
+.conteiner{
+
+    /* Usa Flexbox para organizar os elementos */
+    display: flex;
+
+    /* Organiza os itens em coluna */
+    flex-direction: column;
+
+    /* Faz o container ocupar toda a largura disponível */
+    width: 100%;
+
+    /* Centraliza os itens horizontalmente */
+    align-items: center;
+
+    /* Alinha os itens no eixo secundário do grid/flex */
+    justify-items: center; 
+}
+
+/* Estiliza a imagem do biscoito */
+.img{
+
+    /* Define a largura da imagem */
+    width: 250px;
+
+    /* Define a altura da imagem */
+    height: 250px;
+}
+
+/* Estiliza o texto da frase */
+.textoFrase{
+
+    /* Deixa o texto em itálico */
+    font-style: italic;
+
+    /* Define a cor do texto */
+    color: #dd7b22;
+
+    /* Centraliza o texto */
+    text-align: center;
+}
