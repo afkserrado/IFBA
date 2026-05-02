@@ -55,9 +55,9 @@ class IMC extends Component {
                 <form> {/* Estrutura HTML */}
                     <label>Peso </label>
                     <input type="text" value={this.state.peso}
-                    onChange={(e)=>this.setState({peso:e.target.value})} name="peso" /> <br />
+                    onChange={(e)=>this.setState({peso:e.target.value})} name="peso" /> <br /> <br />
                     <label>Altura </label>
-                    <input type="text" value={this.state.altura} onChange={(e)=>this.setState({altura:e.target.value})} name="altura" />
+                    <input type="text" value={this.state.altura} onChange={(e)=>this.setState({altura:e.target.value})} name="altura" /> <br /> <br />
                     <input type="button" onClick={()=>this.calcularIMC()} value="CALCULAR"></input>
                 </form>
                 <h1>{this.state.imc}</h1>

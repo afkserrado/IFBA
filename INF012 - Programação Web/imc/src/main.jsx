@@ -3,7 +3,7 @@
 
 import { StrictMode } from 'react' // Alerta sobre práticas problemáticas
 import { createRoot } from 'react-dom/client' // Cria a raiz da aplicação
-import IMC from './components/imc/index.jsx' // Componente
+import IMC from './components/Imc' // Componente
 
 // Pega a tag de id 'root' do index.html: document.getElementById('root')
 // Cria uma raiz: createRoot(...)
