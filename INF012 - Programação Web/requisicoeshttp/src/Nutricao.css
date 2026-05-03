@@ -1,0 +1,131 @@
+/* Remove margens e espaçamentos padrão do navegador */
+/* border-box faz padding e border entrarem no cálculo da largura/altura */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container principal da aplicação */
+.container {
+
+    /* Usa Flexbox */
+    display: flex;
+
+    /* Organiza os elementos em coluna */
+    flex-direction: column;
+
+    /* Ocupa toda a largura disponível */
+    width: 100%;
+
+    /* Centraliza verticalmente */
+    justify-content: center;
+
+    /* Centraliza horizontalmente */
+    align-items: center;
+}
+
+/* Cabeçalho da aplicação */
+header {
+
+    display: flex;
+
+    /* Centraliza o conteúdo horizontalmente */
+    justify-content: center;
+
+    /* Centraliza o conteúdo verticalmente */
+    align-items: center;
+
+    /* Tamanho da fonte */
+    font-size: 35px;
+
+    /* Altura fixa */
+    height: 60px;
+
+    /* Ocupa toda a largura */
+    width: 100%;
+
+    /* Cor de fundo */
+    background-color: #4c89e3;
+
+    /* Cor do texto */
+    color: #FFF;
+}
+
+/* Card de cada postagem */
+.post {
+
+    display: flex;
+
+    /* Conteúdo em coluna */
+    flex-direction: column;
+
+    justify-content: center;
+
+    /* Largura fixa */
+    width: 700px;
+
+    background-color: #FFF;
+
+    /* Bordas arredondadas */
+    border-radius: 7px;
+
+    /* Espessura da borda */
+    border-width: 1px;
+
+    /* Espaçamento externo */
+    margin: 8px;
+
+    /* Espaçamento interno */
+    padding: 10px;
+}
+
+/* Título do post */
+.titulo {
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+/* Subtítulo/texto do post */
+.subtitulo {
+    margin: 5px;
+}
+
+/* Botão */
+.botao {
+
+    /* Altura fixa */
+    height: 40px;
+
+    /* Sem cor de fundo inicialmente */
+    background: none;
+
+    /* Bordas arredondadas */
+    border-radius: 5px;
+
+    /* Cor do texto */
+    color: #4c89e3;
+
+    /* Borda azul */
+    border: 2px solid #4c89e3;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    /* Suaviza animações */
+    transition: all 0.5s;
+}
+
+/* Efeito ao passar o mouse */
+.botao:hover {
+    background-color: #4c89e3;
+    color: #FFF;
+}
