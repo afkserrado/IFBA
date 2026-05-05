@@ -30,7 +30,6 @@ export default function Home() {
 
     return(
         <div className='conteiner'>
-            <Link to='/favoritos'>Filmes salvos</Link>
             <div className='lista-filmes'>
                 {filmes.map(item => {
                     return(
