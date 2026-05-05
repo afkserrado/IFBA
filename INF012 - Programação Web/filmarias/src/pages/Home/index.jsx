@@ -30,11 +30,12 @@ export default function Home() {
 
     return(
         <div className='conteiner'>
+            <Link to='/favoritos'>Filmes salvos</Link>
             <div className='lista-filmes'>
                 {filmes.map(item => {
                     return(
                         <article key={item.id}>
-                            <strong>{item.name}</strong>
+                            <strong>{item.nome}</strong>
                             <img src={item.foto} alt={item.nome}/>
                             <Link to={`/filme/${item.id}`}>Acessar</Link>
                         </article>
