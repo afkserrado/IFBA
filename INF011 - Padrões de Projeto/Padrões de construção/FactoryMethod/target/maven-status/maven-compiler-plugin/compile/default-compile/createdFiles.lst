@@ -1,6 +1,6 @@
 ifba/inf011/classic/interfaces/Creator.class
 ifba/inf011/classic/Main.class
-ifba/inf011/Main.class
+ifba/inf011/App.class
 ifba/inf011/parameterized/Main.class
 ifba/inf011/parameterized/enums/ProductId.class
 ifba/inf011/classic/creators/CreatorProductA.class
