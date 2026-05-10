@@ -1,6 +1,6 @@
 package ifba.inf011;
 
-public class Main {
+public class App {
     public static void main(String[] args) {
         System.out.println("=== Classic ===");
         ifba.inf011.classic.Main.main(args);
