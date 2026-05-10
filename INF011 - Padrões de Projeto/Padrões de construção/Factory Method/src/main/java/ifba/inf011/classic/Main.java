@@ -6,7 +6,7 @@ import ifba.inf011.classic.interfaces.Creator;
 
 // Cliente
 public class Main {
-    public static void main(String[] args) {
+    public static void run() {
         
         Creator creatorProductA = new CreatorProductA();
         Creator creatorProductB = new CreatorProductB();
