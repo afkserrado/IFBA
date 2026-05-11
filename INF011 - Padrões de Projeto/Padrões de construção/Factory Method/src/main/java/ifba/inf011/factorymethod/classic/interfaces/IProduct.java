@@ -1,4 +1,4 @@
-package ifba.inf011.parameterized.interfaces;
+package ifba.inf011.factorymethod.classic.interfaces;
 
 // Produto
 public interface IProduct {

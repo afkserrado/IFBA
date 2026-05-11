@@ -1,8 +1,8 @@
-package ifba.inf011.parameterized.creators;
+package ifba.inf011.factorymethod.parameterized.creators;
 
-import ifba.inf011.parameterized.enums.ProductId;
-import ifba.inf011.parameterized.interfaces.IProduct;
-import ifba.inf011.parameterized.products.*;
+import ifba.inf011.factorymethod.parameterized.enums.ProductId;
+import ifba.inf011.factorymethod.parameterized.interfaces.IProduct;
+import ifba.inf011.factorymethod.parameterized.products.*;
 
 public class Creator {
     public IProduct create(ProductId id) {

@@ -1,6 +1,6 @@
 package ifba.inf011;
 
-public class App {
+public class Client {
     public static void main(String[] args) {
         System.out.println("Hello, world!");
     }
