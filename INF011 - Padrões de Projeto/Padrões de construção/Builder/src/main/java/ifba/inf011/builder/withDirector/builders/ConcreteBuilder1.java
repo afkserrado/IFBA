@@ -3,6 +3,7 @@ package ifba.inf011.builder.withDirector.builders;
 import ifba.inf011.builder.Product1;
 import ifba.inf011.builder.interfaces.Builder;
 
+// Builder concreto para construção não encadeada
 public class ConcreteBuilder1 implements Builder {
     
     private Product1 result;

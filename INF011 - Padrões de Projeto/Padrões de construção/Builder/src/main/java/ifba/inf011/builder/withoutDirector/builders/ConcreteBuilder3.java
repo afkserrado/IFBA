@@ -3,6 +3,7 @@ package ifba.inf011.builder.withoutDirector.builders;
 import ifba.inf011.builder.Product3;
 import ifba.inf011.builder.interfaces.FluentBuilder;
 
+// Builder concreto para construção encadeada
 public class ConcreteBuilder3 implements FluentBuilder {
         
     private Product3 result;
