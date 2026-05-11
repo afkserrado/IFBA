@@ -21,7 +21,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>ifba.inf011.App</mainClass>
+                    <mainClass>ifba.inf011.factorymethod.Client</mainClass>
                 </configuration>
             </plugin>
         </plugins>
