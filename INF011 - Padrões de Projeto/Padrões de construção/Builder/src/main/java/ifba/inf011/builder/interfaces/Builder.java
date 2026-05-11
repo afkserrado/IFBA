@@ -1,6 +1,6 @@
 package ifba.inf011.builder.interfaces;
 
-// Interface Builder
+// Interface Builder para construção não encadeada
 public interface Builder {
     
     // Reseta o produto atributo interno do builder concreto que armazena o produto

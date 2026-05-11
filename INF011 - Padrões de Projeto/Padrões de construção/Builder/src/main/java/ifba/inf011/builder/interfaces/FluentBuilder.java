@@ -1,5 +1,6 @@
 package ifba.inf011.builder.interfaces;
 
+// Interface Builder para construção encadeada
 public interface FluentBuilder {
     
     // Reseta o produto atributo interno do builder concreto que armazena o produto

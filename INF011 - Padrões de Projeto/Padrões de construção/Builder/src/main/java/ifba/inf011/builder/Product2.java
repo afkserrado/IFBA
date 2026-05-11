@@ -25,6 +25,6 @@ public class Product2 {
 
     @Override
     public String toString() {
-        return "Product2{stepA=" + stepA + ", stepB=" + stepB + ", stepZ=" + stepZ + "featureB=" + featureB + "}";
+        return "Product2{stepA=" + stepA + ", stepB=" + stepB + ", stepZ=" + stepZ + ", featureB=" + featureB + "}";
     }
 }
