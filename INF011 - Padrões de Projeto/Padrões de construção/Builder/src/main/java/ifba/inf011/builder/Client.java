@@ -1,4 +1,4 @@
-package ifba.inf011;
+package ifba.inf011.builder;
 
 public class Client {
     public static void main(String[] args) {
