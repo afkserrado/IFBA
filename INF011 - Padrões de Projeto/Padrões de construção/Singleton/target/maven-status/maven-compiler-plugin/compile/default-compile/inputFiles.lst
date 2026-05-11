@@ -1,1 +1,8 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/BillPughSingleton.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/Client.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/DoubleCheckedSingleton.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/EagerSingleton.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/EnumSingleton.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/LazySingleton.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/StaticBlockSingleton.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Singleton/src/main/java/ifba/inf011/singleton/ThreadSafeSingleton.java

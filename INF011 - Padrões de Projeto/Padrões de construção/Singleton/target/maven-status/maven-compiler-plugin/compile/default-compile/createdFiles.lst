@@ -1,1 +1,9 @@
+ifba/inf011/singleton/ThreadSafeSingleton.class
+ifba/inf011/singleton/DoubleCheckedSingleton.class
+ifba/inf011/singleton/BillPughSingleton.class
 ifba/inf011/singleton/Client.class
+ifba/inf011/singleton/EnumSingleton.class
+ifba/inf011/singleton/StaticBlockSingleton.class
+ifba/inf011/singleton/BillPughSingleton$Holder.class
+ifba/inf011/singleton/LazySingleton.class
+ifba/inf011/singleton/EagerSingleton.class
