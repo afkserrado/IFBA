@@ -4,6 +4,8 @@ import api from '../../services/API';
 
 import { Link } from 'react-router-dom';
 
+import './index.css';
+
 function CourseList() {
 
     // 1. Define as variáveis necessárias
@@ -20,23 +22,24 @@ function CourseList() {
 
     // 4. Implementa a interface com HTML
     return(
-        <div>
-            <h1>Course Explorer</h1>
-
-            <nav>
+        <div className='conteiner'>
+            
+            <nav className='nav'>
                 <Link to='/'>Home</Link>
             </nav>
+
+            <h1>Course Explorer</h1>
 
             <h2>Cursos disponíveis</h2>
 
             {/* Lista de cursos */}
-            <ul>
+            <ul className='course-list'>
                 {/* Percorre cada item de 'courses' */}
                 {courses.map(course => {
                     // Retorna cada item de 'courses'
                     return(
-                        <li key={course.id}>
-                            <strong>{course.id}</strong> - {course.name} | {course.category} | <Link to={`/courses/${course.id}`}>Detalhar</Link>
+                        <li key={course.id} className='course-card'>
+                            <strong>{course.id}</strong> {course.name} | {course.category} | <Link className='button' to={`/courses/${course.id}`}>Detalhar</Link>
                         </li>
                     );
                 })}

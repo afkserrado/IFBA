@@ -1,0 +1,54 @@
+/* Container geral */
+.conteiner {
+    max-width: 700px;           /* Largura máxima */
+    margin: 40px auto;          /* 40px no topo/baixo e centraliza horizontalmente */
+    padding: 30px;              /* Espaçamento interno */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    background-color: #1a1a2e;  /* Fundo azul escuro */
+    border-radius: 10px;        /* Bordas arredondadas */
+    color: white;               /* Cor do texto */
+}
+
+/* Título do curso */
+.title {
+    font-size: 28px;            /* Tamanho da fonte */
+    margin-bottom: 20px;        /* Espaço abaixo do título */
+    border-bottom: 2px solid #3498db; /* Linha azul abaixo do título */
+    padding-bottom: 10px;       /* Espaço entre o texto e a linha */
+}
+
+/* Lista de detalhes */
+.list {
+    list-style: none;           /* Remove os bullets */
+    padding: 0px;               /* Remove o recuo padrão da lista */
+    display: flex;              /* Ativa o layout flexbox */
+    flex-direction: column;     /* Empilha os itens verticalmente */
+    gap: 12px;                  /* Espaço entre cada item */
+    margin-bottom: 30px;        /* Espaço abaixo da lista */
+}
+
+.list li {
+    background-color: #16213e;  /* Fundo azul mais escuro que o container */
+    padding: 12px 16px;         /* Espaçamento interno: 12px cima/baixo, 16px lados */
+    border-radius: 6px;         /* Bordas arredondadas */
+    font-size: 15px;            /* Tamanho da fonte */
+}
+
+.list li:hover {
+    background-color: #0f3460; /* Fundo mais claro ao passar o mouse */
+}
+
+/* Botão Home */
+.button {
+    display: inline-block;      /* Permite aplicar padding em um link */
+    background-color: #3498db;  /* Fundo azul */
+    color: white;               /* Texto branco */
+    padding: 10px 20px;         /* Espaçamento interno: 10px cima/baixo, 20px lados */
+    border-radius: 6px;         /* Bordas arredondadas */
+    text-decoration: none;      /* Remove o sublinhado do link */
+    font-size: 14px;            /* Tamanho da fonte */
+}
+
+.button:hover {
+    background-color: #2980b9;  /* Azul mais escuro ao passar o mouse */
+}
