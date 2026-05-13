@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/API';
 
+import './index.css';
+
 class CourseDetails extends Component {
 
     // 1. Construtor
@@ -30,9 +32,9 @@ class CourseDetails extends Component {
     // interface visual
     render() {
         return(
-            <div>
-                <h1>{this.state.course.name}</h1>
-                <ul>
+            <div className='conteiner'>
+                <h1 className='title'>{this.state.course.name}</h1>
+                <ul className='list'>
                     <li>{this.state.course.category};</li>
                     <li>{this.state.course.instructor};</li>
                     <li>{this.state.course.duration};</li>
@@ -40,7 +42,7 @@ class CourseDetails extends Component {
                     <li>{this.state.course.description}</li>
                 </ul>
 
-                <Link to='/'>Home</Link>
+                <Link className='button' to='/'>Home</Link>
             </div>
         );
     }

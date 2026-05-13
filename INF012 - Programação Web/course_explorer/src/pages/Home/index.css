@@ -1,0 +1,64 @@
+/* Container geral da página */
+.conteiner {
+    max-width: 1000px; /* Largura máxima da página */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    padding: 10px; /* Espaçamento interno nas bordas */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    color: white; /* Cor da fonte */
+    background-color: black; /* Cor de fundo */
+}
+
+/* Menu de navegação */
+.nav {
+    background-color: white; /* Cor de fundo */
+    padding: 12px 20px; /* Espaçamento interno em cima/baixo, nos lados */
+    border-radius: 6px; /* Bordas arredondadas */
+    margin-bottom: 24px; /* Espaço abaixo do menu */
+}
+
+.nav a {
+    color: black; /* Cor do texto do link */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    font-weight: bold; /* Texto em negrito */
+}
+
+.nav a:hover {
+    text-decoration: underline; /* Sublinha ao passar o mouse por cima */
+}
+
+/* Lista de cursos */
+.course-list {
+    list-style: none; /* Remove os bullets da lista */
+    padding: 0; /* Remove o recuo padrão da lista */
+    display: flex; /* Ativa o layout flexbox */
+    flex-direction: column; /* Emplia os itens verticalmente */
+    gap: 12 px; /* Espaço entre cada card */
+}
+
+.course-card {
+    background-color: lightslategrey; /* Cor de fundo */
+    border: 1px solid #ddd; /* Borda */
+    border-radius: 6px; /* Bordas arredondadas */
+    padding: 16px; /* Espaçamento interno do card */
+    display: flex; /* Ativa o layout flexbox */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    justify-content: space-between; /* Distribui os itens nas extremidades */
+}
+
+.course-card:hover {
+    background-color: darkblue; /* Muda o fundo ao passar o mouse por cima */
+}
+
+/* Botão Detalhar */
+.button {
+    background-color: #3498db; /* Fundo azul */
+    color: white;              /* Texto branco */
+    padding: 8px 16px;         /* Espaçamento interno: 8px cima/baixo, 16px lados */
+    border-radius: 6px;        /* Bordas arredondadas */
+    text-decoration: none;     /* Remove sublinhado do link */
+    font-size: 14px;           /* Tamanho da fonte */
+}
+
+.button:hover {
+    background-color: #2980b9; /* Azul mais escuro ao passar o mouse */
+}
