@@ -5,15 +5,25 @@ class Q2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            consumo: 0,
-            qtdPessoas: 0,
-            percGorjeta: 0,
+            consumo: '',
+            qtdPessoas: '',
+            percGorjeta: '',
         };
     }
 
     render() {
         
-        const { consumo, qtdPessoas, percGorjeta } = this.state;
+        const { 
+            consumo: consumoStr, 
+            qtdPessoas: qtdPessoasStr, 
+            percGorjeta: percGorjetaStr 
+        } = this.state;
+
+        // Converte as strings para Number
+        const consumo = Number(consumoStr || 0);
+        const qtdPessoas = Number(qtdPessoasStr || 0);
+        const percGorjeta = Number(percGorjetaStr || 0);
+
         const totalGeral = consumo * (1 + percGorjeta / 100);
         const totalPorPessoa = qtdPessoas > 0 ? totalGeral / qtdPessoas : 0;
         
@@ -24,24 +34,24 @@ class Q2 extends Component {
                 <label>Consumo: </label>
                 <input 
                     type='number' 
-                    value={this.state.consumo} 
-                    onChange={e => this.setState({ consumo: Number(e.target.value) })}
+                    value={consumoStr} 
+                    onChange={e => this.setState({ consumo: e.target.value })}
                 />
                 <br/>
 
                 <label>Quantidade de pessoas: </label>
                 <input
                     type='number'
-                    value={this.state.qtdPessoas}
-                    onChange={e => this.setState({ qtdPessoas: Number(e.target.value) })}
+                    value={qtdPessoasStr}
+                    onChange={e => this.setState({ qtdPessoas: e.target.value })}
                 />
                 <br/>
 
                 <label>Percentual de gorjeta: </label>
                 <input
                     type='number'
-                    value={this.state.percGorjeta}
-                    onChange={e => this.setState({ percGorjeta: Number(e.target.value) })}
+                    value={percGorjetaStr}
+                    onChange={e => this.setState({ percGorjeta: e.target.value })}
                 />
                 <br/>
                 <br/>
