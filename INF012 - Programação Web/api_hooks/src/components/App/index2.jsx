@@ -36,7 +36,7 @@ function Tarefa() {
     return (
         <div>
             <h2>Com function components</h2>
-            <a>Você tem {tamanho} tarefas!</a>
+            <span>Você tem {tamanho} tarefas!</span>
             <ul>
                 {lista.map((item, index) => <li key={index}>{item}</li>)}
             </ul>

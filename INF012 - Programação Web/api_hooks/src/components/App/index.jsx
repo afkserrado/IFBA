@@ -6,7 +6,7 @@ class Tarefa extends Component {
         super(props);
         this.state = {
             texto: "Digite sua tarefa",
-            lista: ["lavar os pratos", "arrumar a cama"]
+            lista: ["lavar os pratos", "arrumar a cama"],
         };
     }
 
@@ -24,9 +24,12 @@ class Tarefa extends Component {
     }
 
     render() {
+        const tamanho = this.state.lista.length;
+        
         return(
             <div>
                 <h2>Com class components</h2>
+                <p>Você tem {tamanho} tarefas!</p>
                 <ul>
                     {this.state.lista.map((item, index) => 
                     <li key={index}>{item}</li>)}
@@ -39,7 +42,7 @@ class Tarefa extends Component {
                         this.setState({ texto: e.target.value })} 
                 />
                 
-                <button onClick={this.addTarefa.bind(this)}>Incluir</button>
+                <button onClick={() => this.addTarefa()}>Incluir</button>
             </div>
         );
     }
