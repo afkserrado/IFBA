@@ -19,7 +19,7 @@ function Home() {
                 const response = await api.get('/');
                 const data = response.data;
                 setQuestoes(data);
-                console.log(data);
+                //console.log(data);
             }
             catch(error) {
                 console.error(error);
@@ -34,7 +34,7 @@ function Home() {
         //         .then(response => response.data)
         //         .then(data => {
         //             setQuestoes(data);
-        //             console.log(data);
+        //             //console.log(data);
         //         })
         //         .catch(error => {
         //             console.error(error);
@@ -54,7 +54,7 @@ function Home() {
 
         //         const data = await response.json();
         //         setQuestoes(data);
-        //         console.log(data); 
+        //         //console.log(data); 
         //     }
         //     catch(error) {
         //         console.error(error);
@@ -76,7 +76,7 @@ function Home() {
         //         })
         //         .then(data => {
         //             setQuestoes(data);
-        //             console.log(data);
+        //             //console.log(data);
         //         })
         //         .catch(error => {
         //             console.error(error);
