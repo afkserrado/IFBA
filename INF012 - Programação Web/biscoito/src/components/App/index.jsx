@@ -30,8 +30,8 @@ class App extends Component {
     render() {
         return(
             <div className="conteiner">
-                <img alt="biscoito" src={biscoito} className="img"/>
-                <button onClick={this.abrirBiscoito.bind(this)}>Sortear</button>
+                <img src={biscoito} alt="biscoito" className="img"/>
+                <button onClick={(this.abrirBiscoito.bind(this))}>Sortear</button>
                 <h1 className="textoFrase">{this.state.fraseSorteada}</h1>
             </div>
         )
