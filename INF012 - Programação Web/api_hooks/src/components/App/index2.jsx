@@ -11,7 +11,7 @@ function Tarefa() {
         // 'tarefa' é a chave para recuperar o valor
     useEffect(() => {
         localStorage.setItem('tarefa', JSON.stringify(lista));
-        console.log(`Valor armazenado: ${localStorage.getItem('tarefa')} e tipo: ${typeof localStorage.getItem('tarefa')}`);
+        //console.log(`Valor armazenado: ${localStorage.getItem('tarefa')} e tipo: ${typeof localStorage.getItem('tarefa')}`);
     }, [lista]);
 
     // Retorna a quantidade de itens da 'lista' cada vez que ela é atualizada
