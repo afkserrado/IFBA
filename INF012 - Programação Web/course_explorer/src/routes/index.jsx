@@ -5,7 +5,7 @@ import CourseDetailsWrapper from '../pages/Details';
 
 function Rotas() {
     return(
-        <BrowserRouter>
+        <BrowserRouter>          
             <Routes>
                 <Route path='/' element={<CourseList/>}/>
                 <Route path='/courses/:id' element={<CourseDetailsWrapper/>}/>

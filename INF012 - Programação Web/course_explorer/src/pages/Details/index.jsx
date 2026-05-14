@@ -1,7 +1,6 @@
 import { Component } from 'react';
 
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import api from '../../services/API';
 
@@ -35,11 +34,11 @@ class CourseDetails extends Component {
             <div className='conteiner'>
                 <h1 className='title'>{this.state.course.name}</h1>
                 <ul className='list'>
-                    <li>{this.state.course.category};</li>
-                    <li>{this.state.course.instructor};</li>
-                    <li>{this.state.course.duration};</li>
-                    <li>{this.state.course.students};</li>
-                    <li>{this.state.course.description}</li>
+                    <li>Categoria: {this.state.course.category}</li>
+                    <li>Instrutor: {this.state.course.instructor}</li>
+                    <li>Carga horária: {this.state.course.duration}</li>
+                    <li>Estudantes: {this.state.course.students}</li>
+                    <li>Descrição: {this.state.course.description}</li>
                 </ul>
 
                 <Link className='button' to='/'>Home</Link>
