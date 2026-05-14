@@ -10,6 +10,12 @@ class Tarefa extends Component {
         };
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.lista !== this.state.lista) {
+            localStorage.setItem('tarefa', JSON.stringify(this.state.lista));
+        }
+    }
+
     addTarefa() {
         this.setState({ 
             lista: [this.state.texto, ...this.state.lista],
@@ -21,7 +27,8 @@ class Tarefa extends Component {
         return(
             <div>
                 <h2>Com class components</h2>
-                <ul>{this.state.lista.map((item, index) => 
+                <ul>
+                    {this.state.lista.map((item, index) => 
                     <li key={index}>{item}</li>)}
                 </ul>
                 
