@@ -13,16 +13,20 @@ class App extends Component {
             botao: 'Vai'
         };
 
-        this.intervalo = null; // Identifica um timer definido por 'setInterval()'
+        // Identifica um timer definido por 'setInterval()'
+        // Não precisa fazer parte do 'state' porque não é
+        // utilizado para renderizar a interface
+        this.intervalo = null; 
     }
 
     vai() {
                 
-        // Cronometro parado
-        // Cronometro é iniciado
+        // Cronometro não foi iniciado nenhuma vez
+        // Inicia o cronometro
         if(this.intervalo === null) {
             this.setState({ botao: 'Pausar' }); // Muda o texto do botão
             
+            // Cria um timer
             this.intervalo = setInterval(() => {
                 this.setState({ tempo: this.state.tempo + 0.1 });
             }, 100);
@@ -32,13 +36,13 @@ class App extends Component {
         // Cronometro é pausado
         else {
             this.setState({ botao: 'Vai' }); // Muda o texto do botão
-            this.reset();
+            this.reset(); // Reseta o timer
         }
     }
 
     limpar() {
         this.setState({ tempo: 0 , botao: 'Vai'})
-        this.reset();       
+        this.reset(); // Reseta o timer   
     }
 
     reset() {
