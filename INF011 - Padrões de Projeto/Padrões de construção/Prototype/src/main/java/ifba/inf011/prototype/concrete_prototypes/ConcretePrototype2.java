@@ -19,7 +19,7 @@ public class ConcretePrototype2 implements Prototype {
 
     // Construtor sobrecarregado
     // Deep copy
-    public ConcretePrototype2(ConcretePrototype2 source) {
+    private ConcretePrototype2(ConcretePrototype2 source) {
         this.value = source.value;
         this.tags = new ArrayList<>(source.tags); // cópia profunda da lista
         this.nested = (ConcretePrototype1) source.nested.clone(); // cópia profunda
