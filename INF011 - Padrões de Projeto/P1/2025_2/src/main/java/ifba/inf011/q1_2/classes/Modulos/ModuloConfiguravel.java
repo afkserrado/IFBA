@@ -4,6 +4,7 @@ import ifba.inf011.q1_2.interfaces.IDocumentoPrototipavel;
 import ifba.inf011.q1_2.interfaces.IModulo;
 import ifba.inf011.q1_2.interfaces.IOperadorPrototipavel;
 
+// Concrete Factory
 public class ModuloConfiguravel implements IModulo {
     
     private IOperadorPrototipavel operador;

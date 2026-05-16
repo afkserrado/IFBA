@@ -12,6 +12,7 @@ import ifba.inf011.q1_2.interfaces.IOperador;
 // Adaptado para atender a questão 2
 
 // Concrete Product
+// Concrete Prototype
 public class DocumentoCalculoPericial implements IDocumentoPrototipavel {
     
     private IOperador proprietario;

@@ -5,6 +5,7 @@ import ifba.inf011.q1_2.interfaces.IOperadorPrototipavel;
 // Adaptado para atender a questão 2
 
 // Concrete Product
+// Concrete Prototype
 public class OperadorCalculista implements IOperadorPrototipavel {
     
     private String Id;
