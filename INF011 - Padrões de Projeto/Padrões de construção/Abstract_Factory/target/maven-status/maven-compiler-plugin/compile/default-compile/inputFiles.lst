@@ -1,0 +1,11 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/Client.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/classic/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_factories/ConcreteFactory1.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_factories/ConcreteFactory2.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_products/ProductA1.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_products/ProductA2.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_products/ProductB1.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/concrete_products/ProductB2.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/interfaces/AbstractFactory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/interfaces/AbstractProductA.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões de construção/Abstract_Factory/src/main/java/ifba/inf011/abstract_factory/interfaces/AbstractProductB.java
