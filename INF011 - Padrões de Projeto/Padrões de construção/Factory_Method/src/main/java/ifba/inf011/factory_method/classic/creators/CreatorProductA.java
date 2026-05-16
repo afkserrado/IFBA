@@ -1,0 +1,12 @@
+package ifba.inf011.factory_method.classic.creators;
+
+import ifba.inf011.factory_method.classic.interfaces.Creator;
+import ifba.inf011.factory_method.classic.interfaces.IProduct;
+import ifba.inf011.factory_method.classic.products.ProductA;
+
+public class CreatorProductA extends Creator {
+    @Override
+    public IProduct create() {
+        return new ProductA();
+    }
+}
