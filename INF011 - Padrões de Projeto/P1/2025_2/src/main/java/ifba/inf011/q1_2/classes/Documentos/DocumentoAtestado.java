@@ -1,5 +1,6 @@
 package ifba.inf011.q1_2.classes.Documentos;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import ifba.inf011.q1_2.classes.Assinatura;
@@ -18,6 +19,7 @@ public class DocumentoAtestado implements IDocumento {
     private String conteudo;
 
     public DocumentoAtestado() {
+        this.assinaturas = new HashSet<>();
         System.out.println("Documento criado: " + this.getClass().getSimpleName());
     }
 

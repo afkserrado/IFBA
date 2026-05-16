@@ -13,7 +13,7 @@ import ifba.inf011.q1_2.interfaces.IOperador;
 public class App {
     public static void main(String[] args) {
         
-        // q1_2
+        // Q1
         IModulo moduloABC = new ModuloABC();
         IOperador operador = moduloABC.criarOperador();
         IDocumento documento = moduloABC.criarDocumento();

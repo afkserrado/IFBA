@@ -1,12 +1,11 @@
 package ifba.inf011.q1_2.classes.Operadores;
 
-import ifba.inf011.q1_2.interfaces.IOperador;
-import ifba.inf011.q1_2.interfaces.IPrototipo;
+import ifba.inf011.q1_2.interfaces.IOperadorPrototipavel;
 
 // Adaptado para atender a questão 2
 
 // Concrete Product
-public class OperadorCalculista implements IOperador, IPrototipo {
+public class OperadorCalculista implements IOperadorPrototipavel {
     
     private String Id;
     private String nome;
@@ -33,7 +32,7 @@ public class OperadorCalculista implements IOperador, IPrototipo {
 
     @Override
     // Retorno covariante
-    public OperadorCalculista clone() {
+    public IOperadorPrototipavel clone() {
         return new OperadorCalculista(this);
     }
 }

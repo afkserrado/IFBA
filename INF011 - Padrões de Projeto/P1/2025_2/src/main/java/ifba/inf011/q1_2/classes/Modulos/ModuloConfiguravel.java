@@ -1,27 +1,26 @@
 package ifba.inf011.q1_2.classes.Modulos;
 
-import ifba.inf011.q1_2.interfaces.IDocumento;
+import ifba.inf011.q1_2.interfaces.IDocumentoPrototipavel;
 import ifba.inf011.q1_2.interfaces.IModulo;
-import ifba.inf011.q1_2.interfaces.IOperador;
-import ifba.inf011.q1_2.interfaces.IPrototipo;
+import ifba.inf011.q1_2.interfaces.IOperadorPrototipavel;
 
 public class ModuloConfiguravel implements IModulo {
     
-    private IOperador operador;
-    private IDocumento documento;
+    private IOperadorPrototipavel operador;
+    private IDocumentoPrototipavel documento;
 
-    public ModuloConfiguravel(IOperador operador, IDocumento documento) {
+    public ModuloConfiguravel(IOperadorPrototipavel operador, IDocumentoPrototipavel documento) {
         this.operador = operador;
         this.documento = documento;
     }
 
     @Override
-    public IOperador criarOperador() {
-        return (IOperador) ((IPrototipo) operador).clone();
+    public IOperadorPrototipavel criarOperador() {
+        return operador.clone();
     }
 
     @Override
-    public IDocumento criarDocumento() {
-        return (IDocumento) ((IPrototipo) documento).clone();
+    public IDocumentoPrototipavel criarDocumento() {
+        return documento.clone();
     }
 }
