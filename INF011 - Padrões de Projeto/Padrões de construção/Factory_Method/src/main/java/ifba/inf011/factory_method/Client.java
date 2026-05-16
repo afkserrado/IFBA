@@ -11,5 +11,8 @@ public class Client {
 
         System.out.println("\n=== Extended Parameterized ===");
         ifba.inf011.factory_method.extended_parameterized.Main.run();
+
+        System.out.println("\n=== Template Based ===");
+        ifba.inf011.factory_method.template_based.Main.run();
     }
 }
