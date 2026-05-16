@@ -1,4 +1,4 @@
-package ifba.inf011.factorymethod.classic.interfaces;
+package ifba.inf011.factory_method.classic.interfaces;
 
 // Criador
 public abstract class Creator {

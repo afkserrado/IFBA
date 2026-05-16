@@ -1,8 +1,8 @@
-package ifba.inf011.factorymethod.classic;
+package ifba.inf011.factory_method.classic;
 
-import ifba.inf011.factorymethod.classic.creators.CreatorProductA;
-import ifba.inf011.factorymethod.classic.creators.CreatorProductB;
-import ifba.inf011.factorymethod.classic.interfaces.Creator;
+import ifba.inf011.factory_method.classic.creators.CreatorProductA;
+import ifba.inf011.factory_method.classic.creators.CreatorProductB;
+import ifba.inf011.factory_method.classic.interfaces.Creator;
 
 // Cliente
 public class Main {

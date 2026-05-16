@@ -1,7 +1,7 @@
-package ifba.inf011.factorymethod.parameterized;
+package ifba.inf011.factory_method.parameterized;
 
-import ifba.inf011.factorymethod.parameterized.creators.Creator;
-import ifba.inf011.factorymethod.parameterized.enums.ProductId;
+import ifba.inf011.factory_method.parameterized.creators.Creator;
+import ifba.inf011.factory_method.parameterized.enums.ProductId;
 
 // Cliente
 public class Main {
