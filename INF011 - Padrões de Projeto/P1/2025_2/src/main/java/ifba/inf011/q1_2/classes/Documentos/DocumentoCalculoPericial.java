@@ -6,14 +6,13 @@ import java.util.Set;
 import ifba.inf011.q1_2.classes.Assinatura;
 import ifba.inf011.q1_2.classes.error.FWDocumentException;
 import ifba.inf011.q1_2.enums.Privacidade;
-import ifba.inf011.q1_2.interfaces.IDocumento;
+import ifba.inf011.q1_2.interfaces.IDocumentoPrototipavel;
 import ifba.inf011.q1_2.interfaces.IOperador;
-import ifba.inf011.q1_2.interfaces.IPrototipo;
 
 // Adaptado para atender a questão 2
 
 // Concrete Product
-public class DocumentoCalculoPericial implements IDocumento, IPrototipo {
+public class DocumentoCalculoPericial implements IDocumentoPrototipavel {
     
     private IOperador proprietario;
     private Privacidade privacidade;
@@ -22,6 +21,7 @@ public class DocumentoCalculoPericial implements IDocumento, IPrototipo {
     private String conteudo;
 
     public DocumentoCalculoPericial() {
+        this.assinaturas = new HashSet<>();
         System.out.println("Documento criado: " + this.getClass().getSimpleName());
     }
 
@@ -75,7 +75,7 @@ public class DocumentoCalculoPericial implements IDocumento, IPrototipo {
 
     @Override
     // Retorno covariante
-    public DocumentoCalculoPericial clone() {
+    public IDocumentoPrototipavel clone() {
         return new DocumentoCalculoPericial(this);
     }
 }

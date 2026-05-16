@@ -9,6 +9,8 @@
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/classes/error/FWDocumentException.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/enums/Privacidade.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IDocumento.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IDocumentoPrototipavel.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IModulo.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IOperador.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IOperadorPrototipavel.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/q1_2/interfaces/IPrototipo.java
