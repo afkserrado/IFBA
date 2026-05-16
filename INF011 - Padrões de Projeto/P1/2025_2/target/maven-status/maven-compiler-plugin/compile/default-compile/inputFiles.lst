@@ -1,0 +1,12 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/App.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Assinatura.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Documentos/DocumentoAtestado.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Documentos/DocumentoCalculoPericial.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Modulos/ModuloABC.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Operadores/OperadorCalculista.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/Operadores/OperadorPerito.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/classes/error/FWDocumentException.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/enums/Privacidade.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/interfaces/IDocumento.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/interfaces/IModulo.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P1/2025_2/src/main/java/ifba/inf011/s25_2/interfaces/IOperador.java

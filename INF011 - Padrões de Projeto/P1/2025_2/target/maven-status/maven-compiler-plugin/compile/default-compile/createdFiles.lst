@@ -1,0 +1,12 @@
+ifba/inf011/s25_2/classes/error/FWDocumentException.class
+ifba/inf011/s25_2/interfaces/IOperador.class
+ifba/inf011/s25_2/classes/Documentos/DocumentoCalculoPericial.class
+ifba/inf011/s25_2/classes/Operadores/OperadorPerito.class
+ifba/inf011/s25_2/enums/Privacidade.class
+ifba/inf011/s25_2/classes/Operadores/OperadorCalculista.class
+ifba/inf011/s25_2/classes/Assinatura.class
+ifba/inf011/s25_2/classes/Modulos/ModuloABC.class
+ifba/inf011/s25_2/classes/Documentos/DocumentoAtestado.class
+ifba/inf011/s25_2/interfaces/IDocumento.class
+ifba/inf011/s25_2/App.class
+ifba/inf011/s25_2/interfaces/IModulo.class
