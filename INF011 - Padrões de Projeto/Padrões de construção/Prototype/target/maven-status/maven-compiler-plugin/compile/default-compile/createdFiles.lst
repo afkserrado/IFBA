@@ -1,0 +1,7 @@
+ifba/inf011/prototype/Client.class
+ifba/inf011/prototype/registry/PrototypeRegistry.class
+ifba/inf011/prototype/interfaces/Prototype.class
+ifba/inf011/prototype/classic/Main.class
+ifba/inf011/prototype/concrete_prototypes/ConcretePrototype2.class
+ifba/inf011/prototype/concrete_prototypes/ConcretePrototype1.class
+ifba/inf011/prototype/registry/Main.class
