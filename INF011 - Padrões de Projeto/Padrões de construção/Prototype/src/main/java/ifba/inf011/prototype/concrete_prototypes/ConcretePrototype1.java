@@ -11,7 +11,7 @@ public class ConcretePrototype1 implements Prototype {
     }
 
     // Construtor sobrecarregado
-    public ConcretePrototype1(ConcretePrototype1 source) {
+    private ConcretePrototype1(ConcretePrototype1 source) {
         this.field = source.field;
     }
 
