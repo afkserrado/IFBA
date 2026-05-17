@@ -4,6 +4,7 @@ import ifba.inf011.s23_2.interfaces.Protocolo;
 import ifba.inf011.s23_2.interfaces.Request;
 import ifba.inf011.s23_2.interfaces.Response;
 
+// Concrete product
 public class HTTPProtocolo implements Protocolo {
     
     private Integer porta;
