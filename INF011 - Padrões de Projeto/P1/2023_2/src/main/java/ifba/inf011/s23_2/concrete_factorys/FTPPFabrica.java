@@ -8,6 +8,7 @@ import ifba.inf011.s23_2.interfaces.Protocolo;
 import ifba.inf011.s23_2.interfaces.Request;
 import ifba.inf011.s23_2.interfaces.Response;
 
+// Concrete factory
 public class FTPPFabrica implements Fabrica {
     
     @Override
