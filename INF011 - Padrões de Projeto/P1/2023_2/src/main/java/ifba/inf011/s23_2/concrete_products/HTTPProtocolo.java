@@ -21,7 +21,7 @@ public class HTTPProtocolo implements Protocolo {
     }
 
     @Override
-    public void message(Request req, Response resp) {
+    public void message(Request req, Response resp) {       
         System.out.println("Método message: HTTPProtocolo");
     }
 

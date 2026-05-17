@@ -4,5 +4,5 @@ import ifba.inf011.s23_2.interfaces.Request;
 
 // Concrete product
 public class FTPPRequest implements Request {
-    
+
 }
