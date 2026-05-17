@@ -10,6 +10,8 @@ public abstract class Calendario {
     private Boolean notificacaoHabilitada;
     private String proprietario;
 
+    public Calendario() {}
+
     public Calendario(Short mes, Integer ano, Boolean not, String proprietario) {
         this.mes = mes;
         this.ano = ano;
