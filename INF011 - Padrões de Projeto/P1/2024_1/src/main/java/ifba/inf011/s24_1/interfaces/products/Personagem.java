@@ -3,6 +3,7 @@ package ifba.inf011.s24_1.interfaces.products;
 import java.util.ArrayList;
 import java.util.List;
 
+// Interface do produto
 public abstract class Personagem {
     
     private double ataqueRapido = 10;

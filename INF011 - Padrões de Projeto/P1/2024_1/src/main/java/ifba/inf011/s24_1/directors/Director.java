@@ -5,6 +5,7 @@ import ifba.inf011.s24_1.interfaces.builders.BuilderPersonagem;
 import ifba.inf011.s24_1.interfaces.products.Arma;
 import ifba.inf011.s24_1.interfaces.products.Personagem;
 
+// Director
 public class Director {
     
     private BuilderPersonagem builderPersonagem;

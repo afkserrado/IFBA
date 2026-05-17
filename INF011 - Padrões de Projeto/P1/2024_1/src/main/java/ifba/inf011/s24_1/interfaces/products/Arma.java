@@ -1,5 +1,6 @@
 package ifba.inf011.s24_1.interfaces.products;
 
+// Interface do produto
 public abstract class Arma {
     
     private double adicionalRapido = 15;
