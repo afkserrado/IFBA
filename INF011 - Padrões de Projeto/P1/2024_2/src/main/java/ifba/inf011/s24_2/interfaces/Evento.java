@@ -11,6 +11,8 @@ public abstract class Evento {
     private Boolean concluido = false;
     private String geolocalizacao;
 
+    public Evento() {}
+
     public Evento(String descricao, LocalDate inicio, LocalDate fim, Integer prioridade, Boolean concluido, String geolocalizacao) {
 
         this.descricao = descricao;
@@ -33,4 +35,10 @@ public abstract class Evento {
 
         this.geolocalizacao = geolocalizacao;
     }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    // ... Demais setters para os demais atributos
 }
