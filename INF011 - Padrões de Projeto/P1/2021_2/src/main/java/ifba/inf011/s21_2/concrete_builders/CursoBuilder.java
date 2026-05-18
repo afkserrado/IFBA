@@ -17,7 +17,7 @@ public class CursoBuilder implements Builder<Curso> {
 
     @Override
     public void reset() {
-        this.curso = new Curso();
+        this.curso = new Curso(null, null);
     }
 
     @Override

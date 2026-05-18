@@ -8,13 +8,39 @@ import ifba.inf011.s21_2.interfaces.Product;
 // Concrete product
 public class Curso extends Product {
 
-    private List<Disciplina> disciplinas;
-    private List<Livro> livros;
+    private final List<Disciplina> disciplinas;
+    private final List<Livro> livros;
 
-    public Curso() {
-        super(null, null);
+    // Construtor padrão
+    public Curso(String codigo, String nome) {
+        super(codigo, nome);
         this.disciplinas = new ArrayList<>();
         this.livros = new ArrayList<>();
+    }
+
+    // Construtor privado para o singleton da Q3
+    private Curso(Curso prototipo) {
+        super(prototipo.codigo, prototipo.nome);
+        this.disciplinas = new ArrayList<>();
+        this.livros = new ArrayList<>();
+
+        for (Disciplina disciplina : prototipo.disciplinas) {
+            Disciplina copiaDisciplina = new Disciplina(
+                disciplina.getCodigo(),
+                disciplina.getNome()
+            );
+
+            copiaDisciplina.setCargaHoraria(disciplina.getCargaHoraria());
+            this.disciplinas.add(copiaDisciplina);
+        }
+
+        for (Livro livro : prototipo.livros) {
+            Livro copiaLivro = new Livro(
+                livro.getCodigo(),
+                livro.getNome()
+            );
+            this.livros.add(copiaLivro);
+        }
     }
 
     public List<Disciplina> getDisciplinas() {
@@ -31,6 +57,11 @@ public class Curso extends Product {
 
     public void addLivro(Livro livro) {
         this.livros.add(livro);
+    }
+
+    @Override
+    public Curso clone() {
+        return new Curso(this);
     }
 
     @Override
