@@ -3,6 +3,7 @@ package ifba.inf011.s23_1.builder;
 import ifba.inf011.s23_1.classes.Alimento;
 import ifba.inf011.s23_1.classes.ValorNutricional;
 
+// Builder concreto
 public class ValorNutricionalBuilder implements PreparoBuilder {
     
     private Double cho;
