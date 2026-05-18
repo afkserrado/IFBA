@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ifba.inf011.s21_2.concrete_products.Curso;
 
+// Q3
 // Singleton
 public class CatalogoCursos {
 

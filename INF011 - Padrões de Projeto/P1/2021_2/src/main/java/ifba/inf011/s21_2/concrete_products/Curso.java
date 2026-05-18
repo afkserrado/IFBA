@@ -59,6 +59,7 @@ public class Curso extends Product {
         this.livros.add(livro);
     }
 
+    // Q3
     @Override
     public Curso clone() {
         return new Curso(this);
