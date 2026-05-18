@@ -6,6 +6,7 @@ import java.util.List;
 import ifba.inf011.s23_1.classes.Alimento;
 import ifba.inf011.s23_1.classes.Preparo;
 
+// Builder concreto
 public class PreparoObjectBuilder implements PreparoBuilder {
     
     private String nome;
