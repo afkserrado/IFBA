@@ -17,7 +17,7 @@ public class PartidaDirector {
         // Cria a instância do produto via builder
         builder.reset();
         
-        Partida partida = builder
+        Partida partida = (Partida) builder
             .setDescricao(descricao)
             .setEquipeA(equipeA)
             .setEquipeB(equipeB)
