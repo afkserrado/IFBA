@@ -29,6 +29,6 @@ public class App {
         calendario.sinalizarEventos(LocalDate.of(2026, 5, 1));
 
         PartidaDirector partidaDirector = new PartidaDirector(new PartidaBuilder());
-        Partida partida = partidaDirector.criarPartida("Final da Copa do Mundo de 1970", "Brasil", "Itália");        
+        Partida partida = partidaDirector.criarPartida("Final da Copa do Mundo de 1970", "Brasil", "Itália");    
     }
 }
