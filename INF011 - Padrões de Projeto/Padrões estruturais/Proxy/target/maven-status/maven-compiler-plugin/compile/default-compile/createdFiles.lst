@@ -1,0 +1,10 @@
+ifba/inf011/proxy/domain/ThirdPartyYouTubeClass.class
+ifba/inf011/proxy/proxies/YouTubeCacheProxy.class
+ifba/inf011/proxy/client/YouTubeDownloader.class
+ifba/inf011/proxy/Main.class
+ifba/inf011/proxy/proxies/RemoteYouTubeProxy.class
+ifba/inf011/proxy/domain/ThirdPartyYouTubeLib.class
+ifba/inf011/proxy/proxies/SecureYouTubeProxy.class
+ifba/inf011/proxy/proxies/ReferenceCountingYouTubeProxy.class
+ifba/inf011/proxy/proxies/LoggingYouTubeProxy.class
+ifba/inf011/proxy/domain/Video.class
