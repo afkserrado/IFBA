@@ -1,0 +1,10 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/client/YouTubeDownloader.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/domain/ThirdPartyYouTubeClass.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/domain/ThirdPartyYouTubeLib.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/domain/Video.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/proxies/LoggingYouTubeProxy.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/proxies/ReferenceCountingYouTubeProxy.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/proxies/RemoteYouTubeProxy.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/proxies/SecureYouTubeProxy.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Proxy/src/main/java/ifba/inf011/proxy/proxies/YouTubeCacheProxy.java
