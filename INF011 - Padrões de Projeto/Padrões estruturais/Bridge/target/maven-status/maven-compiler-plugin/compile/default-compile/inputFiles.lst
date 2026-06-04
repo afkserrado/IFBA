@@ -1,0 +1,11 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/common/Device.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/common/Remote.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/devices/Radio.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/devices/Tv.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/factory/AutoConfiguringRemote.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/factory/DeviceFactory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/factory/RadioFactory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/factory/TvFactory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/remotes/AdvancedRemote.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Bridge/src/main/java/ifba/inf011/bridge/remotes/BasicRemote.java
