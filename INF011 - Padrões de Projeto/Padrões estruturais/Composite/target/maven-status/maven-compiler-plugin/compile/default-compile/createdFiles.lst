@@ -1,0 +1,14 @@
+ifba/inf011/composite/aggregate/Disk.class
+ifba/inf011/composite/aggregate/Equipment.class
+ifba/inf011/composite/safe/SafeComposite.class
+ifba/inf011/composite/Main.class
+ifba/inf011/composite/transparent/TransparentLeaf.class
+ifba/inf011/composite/safe/SafeLeaf.class
+ifba/inf011/composite/aggregate/CompositeEquipment.class
+ifba/inf011/composite/safe/Cacheable.class
+ifba/inf011/composite/safe/SafeComponent.class
+ifba/inf011/composite/transparent/TransparentComposite.class
+ifba/inf011/composite/transparent/TransparentComponent.class
+ifba/inf011/composite/aggregate/Cabinet.class
+ifba/inf011/composite/aggregate/Chassis.class
+ifba/inf011/composite/safe/AbstractComponent.class

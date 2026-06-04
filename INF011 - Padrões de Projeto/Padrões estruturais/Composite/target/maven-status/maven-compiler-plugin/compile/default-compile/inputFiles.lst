@@ -1,0 +1,14 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/aggregate/Cabinet.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/aggregate/Chassis.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/aggregate/CompositeEquipment.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/aggregate/Disk.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/aggregate/Equipment.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/safe/AbstractComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/safe/Cacheable.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/safe/SafeComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/safe/SafeComposite.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/safe/SafeLeaf.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/transparent/TransparentComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/transparent/TransparentComposite.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Composite/src/main/java/ifba/inf011/composite/transparent/TransparentLeaf.java
