@@ -1,0 +1,9 @@
+ifba/inf011/facade/rg/CodecFactory.class
+ifba/inf011/facade/rg/AudioMixer.class
+ifba/inf011/facade/rg/BitrateReader.class
+ifba/inf011/facade/rg/VideoConversionFacade.class
+ifba/inf011/facade/rg/VideoFile.class
+ifba/inf011/facade/rg/MPEG4CompressionCodec.class
+ifba/inf011/facade/Main.class
+ifba/inf011/facade/rg/Codec.class
+ifba/inf011/facade/rg/OggCompressionCodec.class

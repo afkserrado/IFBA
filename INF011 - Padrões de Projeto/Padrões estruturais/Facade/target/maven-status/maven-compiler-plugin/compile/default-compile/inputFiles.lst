@@ -1,0 +1,9 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/AudioMixer.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/BitrateReader.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/Codec.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/CodecFactory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/MPEG4CompressionCodec.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/OggCompressionCodec.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/VideoConversionFacade.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/Padrões estruturais/Facade/src/main/java/ifba/inf011/facade/rg/VideoFile.java
