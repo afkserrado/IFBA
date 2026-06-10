@@ -1,0 +1,10 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/AbstractComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/AesDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/BaseDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/BasicRequest.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/BasicResponse.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/Component.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/HuffmanDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/ICipher.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/ICompressor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2023_2/src/main/java/ifba/inf011/p2/s23_2/Main.java

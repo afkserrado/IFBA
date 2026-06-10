@@ -1,0 +1,10 @@
+ifba/inf011/p2/s23_2/BasicResponse.class
+ifba/inf011/p2/s23_2/BaseDecorator.class
+ifba/inf011/p2/s23_2/Component.class
+ifba/inf011/p2/s23_2/HuffmanDecorator.class
+ifba/inf011/p2/s23_2/Main.class
+ifba/inf011/p2/s23_2/BasicRequest.class
+ifba/inf011/p2/s23_2/ICompressor.class
+ifba/inf011/p2/s23_2/AbstractComponent.class
+ifba/inf011/p2/s23_2/ICipher.class
+ifba/inf011/p2/s23_2/AesDecorator.class
