@@ -52,4 +52,8 @@ public class ArquivoProtegido extends AbstractComponent {
         this.pai = pai;
         this.arquivo.setPai(pai);
     }
+
+    public Map<String, Integer> getLog() {
+        return this.log;
+    }
 }
