@@ -13,7 +13,7 @@ public class Main {
         System.out.println();
 
         // 2. Mensagem criptografada com AES
-        Component request2 = new AesDecorator(
+        Component request2 = new AESDecorator(
                                 new BasicRequest("MENSAGEM CRIPTOGRAFADA AES")
                              );
 
@@ -32,7 +32,7 @@ public class Main {
 
         // 4. Mensagem criptografada (AES) + compactada (Huffman)
         Component request4 = new HuffmanDecorator(
-                                new AesDecorator(
+                                new AESDecorator(
                                     new BasicRequest("MSG AES + HUFFMAN")
                                 )
                              );
@@ -42,11 +42,11 @@ public class Main {
         System.out.println();
 
         // 5. Exemplo com Response também (simetria do modelo)
-        Component response = new AesDecorator(
+        Component response = new AES256Decorator(
                                 new HuffmanDecorator(
                                     new BasicResponse("RESPOSTA CRIPTOGRAFADA E COMPACTADA")
                                 )
-                             );
+                             , new AES256());
 
         System.out.println("RESPONSE:");
         System.out.println(response.getContent());
