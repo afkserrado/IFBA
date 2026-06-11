@@ -7,11 +7,11 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 // Concrete Decorator do Decorator
-public class AesDecorator extends BaseDecorator implements ICipher {
+public class AESDecorator extends BaseDecorator implements ICipher {
     
     private final byte[] key;
 
-    public AesDecorator(Component inner) {
+    public AESDecorator(Component inner) {
         super(inner);
 
         // Transforma a string 'chave-secreta-16' em uma sequência de 16 bytes
