@@ -41,6 +41,8 @@ public class Main {
         System.out.println(request4.getContent());
         System.out.println();
 
+        System.out.println("=== QUESTÃO 2: ADAPTER ===\n");
+
         // 5. Exemplo com Response também (simetria do modelo)
         Component response = new AES256Decorator(
                                 new HuffmanDecorator(
