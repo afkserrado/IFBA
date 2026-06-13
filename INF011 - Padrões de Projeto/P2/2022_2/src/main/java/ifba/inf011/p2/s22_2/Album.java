@@ -4,7 +4,6 @@ public class Album extends Obra {
 
     private String gravadora;
     private String estudio;
-    private String autor;
     private int duracao;
 
     public Album(
@@ -16,10 +15,9 @@ public class Album extends Obra {
             String autor,
             int duracao) {
 
-        super(titulo, ano, avaliacao);
+        super(titulo, autor, ano, avaliacao);
         this.gravadora = gravadora;
         this.estudio = estudio;
-        this.autor = autor;
         this.duracao = duracao;
     }
 
@@ -29,10 +27,6 @@ public class Album extends Obra {
 
     public String getEstudio() {
         return estudio;
-    }
-
-    public String getAutor() {
-        return autor;
     }
 
     public int getDuracao() {

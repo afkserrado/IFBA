@@ -1,0 +1,11 @@
+ifba/inf011/p2/s22_2/abstraction/AbstractRelatorio.class
+ifba/inf011/p2/s22_2/Obra.class
+ifba/inf011/p2/s22_2/implementation/Formato.class
+ifba/inf011/p2/s22_2/Livro.class
+ifba/inf011/p2/s22_2/implementation/AbstractFormato.class
+ifba/inf011/p2/s22_2/abstraction/Relatorio.class
+ifba/inf011/p2/s22_2/Main.class
+ifba/inf011/p2/s22_2/implementation/FormatoLatex.class
+ifba/inf011/p2/s22_2/Album.class
+ifba/inf011/p2/s22_2/abstraction/RelatorioResumido.class
+ifba/inf011/p2/s22_2/implementation/FormatoHTML.class
