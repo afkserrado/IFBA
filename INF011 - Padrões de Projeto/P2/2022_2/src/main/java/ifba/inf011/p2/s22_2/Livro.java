@@ -4,7 +4,6 @@ public class Livro extends Obra {
 
     private String editora;
     private String idioma;
-    private String autor;
     private int numeroPaginas;
 
     public Livro(
@@ -16,10 +15,9 @@ public class Livro extends Obra {
             String autor,
             int numeroPaginas) {
 
-        super(titulo, ano, avaliacao);
+        super(titulo, autor, ano, avaliacao);
         this.editora = editora;
         this.idioma = idioma;
-        this.autor = autor;
         this.numeroPaginas = numeroPaginas;
     }
 
@@ -29,10 +27,6 @@ public class Livro extends Obra {
 
     public String getIdioma() {
         return idioma;
-    }
-
-    public String getAutor() {
-        return autor;
     }
 
     public int getNumeroPaginas() {

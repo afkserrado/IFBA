@@ -1,0 +1,11 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/Album.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/Livro.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/Obra.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/abstraction/AbstractRelatorio.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/abstraction/Relatorio.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/abstraction/RelatorioResumido.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/implementation/AbstractFormato.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/implementation/Formato.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/implementation/FormatoHTML.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_2/src/main/java/ifba/inf011/p2/s22_2/implementation/FormatoLatex.java

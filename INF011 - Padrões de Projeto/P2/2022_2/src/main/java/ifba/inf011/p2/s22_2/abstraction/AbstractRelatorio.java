@@ -11,11 +11,12 @@ public abstract class AbstractRelatorio implements Relatorio {
         this.formato = formato;
     }
 
-    public void setFormato(Formato formato) {
-        this.formato = formato;
-    }
-
     public Formato getFormato() {
         return this.formato;
+    }
+
+    @Override
+    public void setFormato(Formato formato) {
+        this.formato = formato;
     }
 }
