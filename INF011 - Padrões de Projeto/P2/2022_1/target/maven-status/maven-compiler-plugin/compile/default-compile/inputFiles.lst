@@ -1,0 +1,15 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/AbstractExercicioComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/Cacheavel.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/ExercicioComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/ExercicioComposite.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Acessorios.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Equipamento.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Exercicio.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/GrupoMuscular.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Halteres.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Maquinas.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Programa.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Serie.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/TipoExercicio.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/TipoPrograma.java
