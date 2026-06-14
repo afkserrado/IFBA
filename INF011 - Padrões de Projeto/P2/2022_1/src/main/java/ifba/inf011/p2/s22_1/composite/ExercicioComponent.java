@@ -15,12 +15,12 @@ public interface ExercicioComponent {
 
     // Lança exceção para composites
     default void setCategoria(List<TipoExercicio> categoria) {
-        throw new UnsupportedOperationException("Esse objeto não pode ter filhos.");
+        throw new UnsupportedOperationException("Operação não permitida.");
     }
 
     // Lança exceção para composites
     default void setGruposMusculares(List<GrupoMuscular> gruposMusculares) {
-        throw new UnsupportedOperationException("Esse objeto não pode ter filhos.");
+       throw new UnsupportedOperationException("Operação não permitida.");
     }
 
     // Lança exceção para folhas
