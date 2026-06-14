@@ -61,5 +61,15 @@ public class Main {
 
         System.out.println("Categorias: " + treinoCompleto.getCategoria());
         System.out.println("Grupos Musculares: " + treinoCompleto.getGruposMusculares());
+
+
+        Exercicio supino2 = new Exercicio(
+                "Supino Reto",
+                List.of(TipoExercicio.FORCA),
+                List.of(GrupoMuscular.PEITORAL, GrupoMuscular.TRICEPS),
+                new Halteres("HAL-10", 2, 10.0));
+
+        supino.exibir();
+        supino2.exibir();
     }
 }

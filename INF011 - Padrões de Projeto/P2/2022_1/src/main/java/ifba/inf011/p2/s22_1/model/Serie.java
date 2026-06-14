@@ -36,6 +36,16 @@ public class Serie {
         this.exercicio = exercicio;
     }
 
+    public void executar() {
+        this.exercicio.exibir();
+
+        System.out.println(
+            "Exercício: " + exercicio.getNome()
+            + " | Repetições: " + numRepeticoes
+            + " | Quantidade: " + qtde
+        );
+    }
+
     @Override
     public String toString() {
         return "Serie[numRepeticoes=" + numRepeticoes + ", qtde=" + qtde +
