@@ -1,0 +1,16 @@
+ifba/inf011/p2/s21_2/decorator/LivroBaseDecorator.class
+ifba/inf011/p2/s21_2/Main$1.class
+ifba/inf011/p2/s21_2/decorator/LivroComponent.class
+ifba/inf011/p2/s21_2/Main.class
+ifba/inf011/p2/s21_2/model/Disciplina.class
+ifba/inf011/p2/s21_2/model/Curso.class
+ifba/inf011/p2/s21_2/adapter/WebinarAdapter.class
+ifba/inf011/p2/s21_2/composite/Component.class
+ifba/inf011/p2/s21_2/decorator/LivroCapaDuraDecorator.class
+ifba/inf011/p2/s21_2/model/Livro.class
+ifba/inf011/p2/s21_2/model/Produto.class
+ifba/inf011/p2/s21_2/adapter/WebinarIF.class
+ifba/inf011/p2/s21_2/decorator/LivroColoridoDecorator.class
+ifba/inf011/p2/s21_2/model/Precificavel.class
+ifba/inf011/p2/s21_2/decorator/AbstractLivroComponent.class
+ifba/inf011/p2/s21_2/decorator/LivroDigitalDecorator.class
