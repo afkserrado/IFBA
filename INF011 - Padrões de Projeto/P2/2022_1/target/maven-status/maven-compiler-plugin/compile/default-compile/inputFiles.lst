@@ -3,6 +3,9 @@
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/Cacheavel.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/ExercicioComponent.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/composite/ExercicioComposite.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/flyweight/VideoConcreteFlyweight.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/flyweight/VideoFlyweight.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/flyweight/VideoFlyweightFactory.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Acessorios.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Equipamento.java
 /mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2022_1/src/main/java/ifba/inf011/p2/s22_1/model/Exercicio.java

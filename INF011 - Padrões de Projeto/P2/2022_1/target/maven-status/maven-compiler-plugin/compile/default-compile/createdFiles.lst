@@ -5,9 +5,12 @@ ifba/inf011/p2/s22_1/model/Programa.class
 ifba/inf011/p2/s22_1/model/Serie.class
 ifba/inf011/p2/s22_1/model/Halteres.class
 ifba/inf011/p2/s22_1/model/Exercicio.class
+ifba/inf011/p2/s22_1/flyweight/VideoConcreteFlyweight.class
 ifba/inf011/p2/s22_1/composite/AbstractExercicioComponent.class
 ifba/inf011/p2/s22_1/composite/Cacheavel.class
 ifba/inf011/p2/s22_1/model/Acessorios.class
+ifba/inf011/p2/s22_1/flyweight/VideoFlyweightFactory.class
+ifba/inf011/p2/s22_1/flyweight/VideoFlyweight.class
 ifba/inf011/p2/s22_1/model/Equipamento.class
 ifba/inf011/p2/s22_1/model/TipoExercicio.class
 ifba/inf011/p2/s22_1/model/Maquinas.class

@@ -5,8 +5,12 @@ import java.util.List;
 
 import ifba.inf011.p2.s22_1.composite.AbstractExercicioComponent;
 import ifba.inf011.p2.s22_1.composite.Cacheavel;
+import ifba.inf011.p2.s22_1.flyweight.VideoFlyweightFactory;
 
 // Leaf do Composite
+// Context do Flyweight
+// Armazena o estado extrínseco
+// Utiliza um vídeo compartilhado
 public class Exercicio extends AbstractExercicioComponent {
 
     private Equipamento equipamento;
@@ -41,11 +45,15 @@ public class Exercicio extends AbstractExercicioComponent {
     }
 
     public Equipamento getEquipamento() {
-        return equipamento;
+        return this.equipamento;
     }
 
     public void setEquipamento(Equipamento equipamento) {
         this.equipamento = equipamento;
+    }
+
+    public void exibir() {
+        VideoFlyweightFactory.getVideo(getNome()).exibir();
     }
 
     @Override
