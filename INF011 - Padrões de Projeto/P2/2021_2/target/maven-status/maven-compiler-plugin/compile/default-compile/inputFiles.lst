@@ -1,0 +1,15 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/adapter/WebinarAdapter.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/adapter/WebinarIF.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/composite/Component.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/AbstractLivroComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/LivroBaseDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/LivroCapaDuraDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/LivroColoridoDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/LivroComponent.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/decorator/LivroDigitalDecorator.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/model/Curso.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/model/Disciplina.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/model/Livro.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/model/Precificavel.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/P2/2021_2/src/main/java/ifba/inf011/p2/s21_2/model/Produto.java
