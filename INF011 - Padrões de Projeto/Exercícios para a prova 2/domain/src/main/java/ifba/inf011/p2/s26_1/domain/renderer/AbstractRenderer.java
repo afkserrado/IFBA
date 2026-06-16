@@ -10,8 +10,8 @@ public abstract class AbstractRenderer implements Renderer {
     public void initialize(Canva target) {
         this.targetCanva = target;
 
-        System.out.println("[" + this.getRendererName() + "] Inicializando motor gráfico...");
-        System.out.println("[" + this.getRendererName() + "] Canva alvo: " + target);
+        //System.out.println("[" + this.getRendererName() + "] Inicializando motor gráfico...");
+        //System.out.println("[" + this.getRendererName() + "] Canva alvo: " + target);
     }
 
     @Override

@@ -19,14 +19,14 @@ public abstract class AbstractEncoder implements Encoder {
     public void initialize(Renderer target) {
         this.target = target;
 
-        System.out.println("[" + this.getEncoderName() + "] Conectado ao renderer: "
-                + target.getRendererName());
+        //System.out.println("[" + this.getEncoderName() + "] Conectado ao renderer: "
+                //+ target.getRendererName());
 
-        System.out.println("[" + this.getEncoderName() + "] Codec de vídeo: "
-                + this.profile.getVideoCodec());
+        //System.out.println("[" + this.getEncoderName() + "] Codec de vídeo: "
+                //+ this.profile.getVideoCodec());
 
-        System.out.println("[" + this.getEncoderName() + "] Codec de áudio: "
-                + this.profile.getAudioCodec());
+        //System.out.println("[" + this.getEncoderName() + "] Codec de áudio: "
+                //+ this.profile.getAudioCodec());
     }
 
     @Override
