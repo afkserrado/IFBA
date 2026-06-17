@@ -21,6 +21,12 @@ public class Timeline {
     private List<AudioTrack> audioTracks;
     private List<SubTitleTrack> subtitleTracks;
 
+    public Timeline() {
+        this.videoTracks = new ArrayList<VideoTrack>();
+        this.audioTracks = new ArrayList<AudioTrack>();
+        this.subtitleTracks = new ArrayList<SubTitleTrack>();
+    }
+
     public Timeline(Canva canva, Renderer renderer, Encoder encoder) {
         this.videoTracks = new ArrayList<VideoTrack>();
         this.audioTracks = new ArrayList<AudioTrack>();

@@ -1,0 +1,23 @@
+[ProResEncoder]
+Container: MOV (Apple QuickTime)
+Video Codec: ProRes 422 HQ
+Audio Codec: PCM Linear
+Compression: Lossless (Sem Perdas)
+Output: saida_cinema.mov
+
+[HighPrecisionRenderer]
+Renderização em alta precisão
+Canva: 4K UHD
+Color Space: DCI-P3
+HDR: true
+
+--- VIDEO TRACKS ---
+[VideoTrack] filme_cena01.mov | duração: 120s
+
+--- AUDIO TRACKS ---
+[AudioTrack] audio_master.wav | duração: 120s
+
+--- SUBTITLE TRACKS ---
+[SubTitleTrack] legenda_pt.srt | idioma: Português
+ - Exportação simplificada com Facade.
+
