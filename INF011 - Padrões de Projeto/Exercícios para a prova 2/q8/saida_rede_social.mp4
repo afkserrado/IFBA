@@ -1,0 +1,13 @@
+[NetworksAACEncoder]
+Container: MP4 (MPEG-4 Part 14)
+Video Codec: H.264 / AVC
+Audio Codec: AAC-LC
+Compression: Lossy (Alta Compressão)
+Output: saida_rede_social.mp4
+
+[FastRenderer]
+Renderização rápida
+Canva: 1080p Vertical
+
+--- VIDEO TRACKS ---
+[VideoTrack] filme_cena01.mov | duração: 120s
