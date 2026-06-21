@@ -1,0 +1,15 @@
+ifba/inf011/template_method/hooks/FacebookPublishingWorkflow.class
+ifba/inf011/template_method/chainstyle/FacebookPostHandler.class
+ifba/inf011/template_method/domain/SocialPost.class
+ifba/inf011/template_method/factory_method/SocialPublisherApplication.class
+ifba/inf011/template_method/classic/TwitterNetwork.class
+ifba/inf011/template_method/factory_method/FacebookPublisherApplication.class
+ifba/inf011/template_method/chainstyle/AbstractPostHandler.class
+ifba/inf011/template_method/hooks/TwitterPublishingWorkflow.class
+ifba/inf011/template_method/hooks/PublishingWorkflow.class
+ifba/inf011/template_method/Main.class
+ifba/inf011/template_method/chainstyle/TwitterPostHandler.class
+ifba/inf011/template_method/classic/Network.class
+ifba/inf011/template_method/chainstyle/PostHandler.class
+ifba/inf011/template_method/factory_method/TwitterPublisherApplication.class
+ifba/inf011/template_method/classic/FacebookNetwork.class

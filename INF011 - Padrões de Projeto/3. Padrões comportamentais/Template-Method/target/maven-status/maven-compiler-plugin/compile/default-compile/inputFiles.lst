@@ -1,0 +1,15 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/chainstyle/AbstractPostHandler.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/chainstyle/FacebookPostHandler.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/chainstyle/PostHandler.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/chainstyle/TwitterPostHandler.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/classic/FacebookNetwork.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/classic/Network.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/classic/TwitterNetwork.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/domain/SocialPost.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/factory_method/FacebookPublisherApplication.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/factory_method/SocialPublisherApplication.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/factory_method/TwitterPublisherApplication.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/hooks/FacebookPublishingWorkflow.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/hooks/PublishingWorkflow.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Template-Method/src/main/java/ifba/inf011/template_method/hooks/TwitterPublishingWorkflow.java
