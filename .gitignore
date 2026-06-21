@@ -1,0 +1,2 @@
+# Ignora todos os arquivos .class em qualquer nível de pasta
+**/*.class
