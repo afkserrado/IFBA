@@ -1,0 +1,17 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/classic/EditorHistory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/classic/EditorMemento.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/classic/GraphicEditor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/command/AbstractEditorCommand.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/command/ChangeColorCommand.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/command/CommandHistory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/command/EditorCommand.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/command/MoveShapeCommand.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/domain/BaseShape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/domain/CircleShape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/domain/RectangleShape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/domain/Shape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/named/NamedVersionHistory.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/strict/RestorableMemento.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/strict/StrictGraphicEditor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Memento/src/main/java/ifba/inf011/memento/strict/StrictHistory.java
