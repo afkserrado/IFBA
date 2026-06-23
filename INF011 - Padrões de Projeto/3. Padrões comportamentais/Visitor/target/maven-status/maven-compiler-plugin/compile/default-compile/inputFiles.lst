@@ -1,0 +1,16 @@
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/Main.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/classic/XMLExportVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/operations/AreaCalculatorVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/operations/SVGExportVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/operations/ShapeStatisticsVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/partial/CircleOnlyReportVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/partial/ShapeVisitorAdapter.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/Circle.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/CompoundShape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/Dot.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/Rectangle.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/Shape.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/shapes/ShapeVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/structure/MoveShapeVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/structure/PrintShapeVisitor.java
+/mnt/Arquivos_D0P6LA/Codes/IFBA/INF011 - Padrões de Projeto/3. Padrões comportamentais/Visitor/src/main/java/ifba/inf011/visitor/structure/ShapeCatalog.java
