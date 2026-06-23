@@ -1,0 +1,16 @@
+ifba/inf011/visitor/operations/ShapeStatisticsVisitor.class
+ifba/inf011/visitor/shapes/Circle.class
+ifba/inf011/visitor/classic/XMLExportVisitor.class
+ifba/inf011/visitor/structure/ShapeCatalog.class
+ifba/inf011/visitor/shapes/CompoundShape.class
+ifba/inf011/visitor/shapes/Rectangle.class
+ifba/inf011/visitor/shapes/ShapeVisitor.class
+ifba/inf011/visitor/partial/ShapeVisitorAdapter.class
+ifba/inf011/visitor/operations/AreaCalculatorVisitor.class
+ifba/inf011/visitor/shapes/Dot.class
+ifba/inf011/visitor/shapes/Shape.class
+ifba/inf011/visitor/structure/MoveShapeVisitor.class
+ifba/inf011/visitor/structure/PrintShapeVisitor.class
+ifba/inf011/visitor/operations/SVGExportVisitor.class
+ifba/inf011/visitor/Main.class
+ifba/inf011/visitor/partial/CircleOnlyReportVisitor.class
