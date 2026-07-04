@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,15 +34,15 @@ public class PostController {
 		this.userRepository = userRepository;
 	}
 	
-	@GetMapping
-    public List<PostDto> listarTudo() {
-    	return PostDto.converte(repository.findAll());
-    }
-
 	// @GetMapping
-	// public List<PostDto> listarPorTitulo(@RequestParam String titulo) {
-	// 	return PostDto.converte(repository.findByTitulo(titulo));
-	// }
+    // public List<PostDto> listarTudo() {
+    // 	return PostDto.converte(repository.findAll());
+    // }
+
+	@GetMapping
+	public List<PostDto> listarPorTitulo(@RequestParam String titulo) {
+		return PostDto.converte(repository.findByTitulo(titulo));
+	}
 
 	// @GetMapping
 	// public List<PostDto> listarPorTitulo(String titulo) {
@@ -54,6 +55,7 @@ public class PostController {
 	// }
 
 	@PostMapping
+	@Transactional // Redundante
 	public ResponseEntity<PostDto> cadastrar(@RequestBody @Valid PostDto postDto, UriComponentsBuilder uriBuilder) {
 		Post post = postDto.converte(userRepository);
 		repository.save(post);

@@ -16,6 +16,16 @@ public class Usuario {
     private String login;
     private String senha;
 
+    // O JPA/Hibernate instancia o objeto pelo construtor vazio
+    public Usuario() {}
+
+    public Usuario(Long id, String nome, String login, String senha) {
+        this.id = id;
+        this.login = login;
+        this.nome = nome;
+        this.senha = senha;
+    }
+
     public Long getId() {
         return id;
     }

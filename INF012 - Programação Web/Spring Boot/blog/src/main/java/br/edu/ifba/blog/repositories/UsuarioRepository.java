@@ -6,5 +6,5 @@ import br.edu.ifba.blog.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    public Usuario findByNome(String usuario);
+    public Usuario findByNome(String nome);
 }

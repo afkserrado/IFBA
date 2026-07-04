@@ -15,6 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     public List<Post> findByTituloContaining(String titulo);
     public List<Post> findByTituloStartsWith(String titulo);
 
+    // Equivale ao findByTituloContaining(String titulo)
     @Query("""
         SELECT p
         FROM posts p
