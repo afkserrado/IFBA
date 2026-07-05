@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.edu.ifba.blog.clients.EmailClient;
+import br.edu.ifba.blog.dtos.EmailDto;
 import br.edu.ifba.blog.dtos.PostDto;
 import br.edu.ifba.blog.model.Post;
 import br.edu.ifba.blog.repositories.PostRepository;
@@ -35,13 +37,26 @@ public class PostController {
 	private PostRepository repository;
 	private UsuarioRepository userRepository;
 	
-	public PostController(PostRepository repository, UsuarioRepository userRepository) {
+	private EmailClient emailClient;
+	
+	public PostController(PostRepository repository, UsuarioRepository userRepository, EmailClient emailClient) {
 		this.repository = repository;
 		this.userRepository = userRepository;
+		this.emailClient = emailClient;
 	}
 	
-	// @GetMapping
+	@GetMapping
     public List<PostDto> listarTudo() {
+
+		emailClient.sendEmail(
+			new EmailDto(
+				"akserrado@gmail.com",
+				"akserrado@gmail.com",
+				"Listar tudo",
+				"Listando todos os posts do banco de dados."
+			)
+		);
+
     	return PostDto.converte(repository.findAll());
     }
 
@@ -59,8 +74,7 @@ public class PostController {
 		responseCode = "200",
 		description = "Lista de posts"
 	)
-
-	@GetMapping
+	//@GetMapping
 	public Page<PostDto> listarPorTitulo(
 		@RequestParam(required = false) String titulo,
 		@RequestParam int pagina,
