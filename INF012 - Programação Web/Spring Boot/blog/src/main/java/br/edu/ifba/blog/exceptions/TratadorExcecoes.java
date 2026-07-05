@@ -14,7 +14,7 @@ public class TratadorExcecoes {
     @ExceptionHandler(
         EntityNotFoundException.class
     )
-    public ResponseEntity<?> tratarErro404NotFound() {
+    public ResponseEntity<?> tratarErro404() {
         return ResponseEntity
             .notFound()
             .build();
@@ -23,7 +23,7 @@ public class TratadorExcecoes {
     @ExceptionHandler(
         MethodArgumentNotValidException.class
     )   
-    public ResponseEntity<?> tratarErro400NotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<?> tratarErro400 (MethodArgumentNotValidException ex) {
 
         var erros = ex.getFieldErrors();
 
