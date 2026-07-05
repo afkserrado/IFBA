@@ -12,7 +12,7 @@ import com.br.edu.ifba.email_ms.model.Email;
 import com.br.edu.ifba.email_ms.services.EmailService;
 
 @RestController // Define a classe como um controller REST
-@RequestMapping("/email") // Define a rota base do controller
+@RequestMapping("/email-ms") // Define a rota base do controller
 public class EmailController {
     
     private EmailService service;
