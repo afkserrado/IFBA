@@ -1,7 +1,9 @@
 package com.br.edu.ifba.email_ms.controllers;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +34,13 @@ public class EmailController {
             new EmailDto(email),
             HttpStatus.CREATED // Retorna HTTP 201 Created
         );
+    }
+
+    @GetMapping("/porta")
+    public String retornaPorta(
+        @Value("${local.server.port}") String porta
+    ) {
+
+        return String.format("Requisição respondida pela instância executando na porta %s", porta);
     }
 }
