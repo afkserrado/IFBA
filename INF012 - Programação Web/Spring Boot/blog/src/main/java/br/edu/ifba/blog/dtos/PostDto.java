@@ -3,6 +3,8 @@ package br.edu.ifba.blog.dtos;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+
 import br.edu.ifba.blog.model.Categoria;
 import br.edu.ifba.blog.model.Post;
 import br.edu.ifba.blog.model.Usuario;
@@ -38,6 +40,10 @@ public class PostDto {
 	
 	public static List<PostDto> converte(List<Post> lista){
 		return lista.stream().map(PostDto::new).collect(Collectors.toList());
+	}
+
+	public static Page<PostDto> converte(Page<Post> posts) {
+		return posts.map(PostDto::new);
 	}
 
 	public Post converte(UsuarioRepository userRepository){

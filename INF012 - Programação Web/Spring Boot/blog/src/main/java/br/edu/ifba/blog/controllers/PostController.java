@@ -3,6 +3,9 @@ package br.edu.ifba.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,8 @@ import br.edu.ifba.blog.dtos.PostDto;
 import br.edu.ifba.blog.model.Post;
 import br.edu.ifba.blog.repositories.PostRepository;
 import br.edu.ifba.blog.repositories.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -35,13 +40,43 @@ public class PostController {
 	}
 	
 	// @GetMapping
-    // public List<PostDto> listarTudo() {
-    // 	return PostDto.converte(repository.findAll());
-    // }
+    public List<PostDto> listarTudo() {
+    	return PostDto.converte(repository.findAll());
+    }
 
-	@GetMapping
+	// @GetMapping
 	public List<PostDto> listarPorTitulo(@RequestParam String titulo) {
 		return PostDto.converte(repository.findByTitulo(titulo));
+	}
+
+	// Com paginação, utilizando PageRequest
+	@Operation(
+		summary = "Listar posts",
+		description = "Retorna posts por título ou todos os posts"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Lista de posts"
+	)
+
+	@GetMapping
+	public Page<PostDto> listarPorTitulo(
+		@RequestParam(required = false) String titulo,
+		@RequestParam int pagina,
+		@RequestParam int qtd
+	) {
+		
+		// Cria o objeto de paginação
+		Pageable pageable = PageRequest.of(pagina, qtd);
+
+		if(titulo != null && !titulo.equals("")) {
+
+			return PostDto.converte(
+				repository.findByTitulo(titulo, pageable)
+			);
+		}
+
+		return PostDto.converte(repository.findAll(pageable));
 	}
 
 	// @GetMapping
