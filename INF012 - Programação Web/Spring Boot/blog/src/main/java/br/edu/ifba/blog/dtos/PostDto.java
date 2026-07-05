@@ -25,6 +25,8 @@ public class PostDto {
 
 	@NotBlank(message = "O usuário não pode ser vazio.")
 	private String usuario;
+
+	@NotNull(message = "A categoria não pode ser nula.")
 	private Categoria categoria;
 	
 	// O JPA/Hibernate instancia o objeto pelo construtor vazio

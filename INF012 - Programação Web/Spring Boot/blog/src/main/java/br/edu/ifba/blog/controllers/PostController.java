@@ -24,6 +24,7 @@ import br.edu.ifba.blog.repositories.PostRepository;
 import br.edu.ifba.blog.repositories.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -115,13 +116,26 @@ public class PostController {
 		return ResponseEntity.ok(new PostDto(post));		
 	}
 
+	// @DeleteMapping("/{id}")
+	// @Transactional
+	// public ResponseEntity<?> deletar(
+	// 	@PathVariable Long id
+	// ) {
+
+	// 	repository.deleteById(id);
+	// 	return ResponseEntity.ok().build();
+	// }
+
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deletar(
 		@PathVariable Long id
 	) {
 
-		repository.deleteById(id);
-		return ResponseEntity.ok().build();
+		Post post = repository.findById(id)
+            .orElseThrow(EntityNotFoundException::new);
+
+		repository.delete(post);
+		return ResponseEntity.noContent().build();
 	}
 }
