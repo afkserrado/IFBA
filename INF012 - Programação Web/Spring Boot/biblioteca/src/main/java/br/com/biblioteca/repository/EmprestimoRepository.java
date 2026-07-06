@@ -14,4 +14,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long>{
 
     // Lista empréstimos em atraso
     public List<Emprestimo> findByDevolvidoFalseAndDataPrevistaDevolucaoBefore(LocalDate data);
+
+    // Contabiliza os livros que não foram devolvidos
+    public Long countByDevolvidoFalse();
 }
