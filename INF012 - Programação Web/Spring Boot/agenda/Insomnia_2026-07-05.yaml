@@ -1,0 +1,229 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1780181901605
+  modified: 1780181901605
+  description: ""
+collection:
+  - url: http://localhost:8080/contatos
+    name: Criar contato
+    meta:
+      id: req_c05d351f38c14a0e9794f9ef462259b7
+      created: 1783292220520
+      modified: 1783303324392
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220520
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": 2,
+        	"nome": "João Pereira",
+        	"telefone": "71988887777",
+        	"email": "joao.pereira@email.com",
+        	"favorito": false
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos?sort=nome,asc
+    name: Listar contatos
+    meta:
+      id: req_22a04e3640634bd28eea8f46b90e3803
+      created: 1783293632943
+      modified: 1783304333725
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220470
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos/11
+    name: Buscar contato por id
+    meta:
+      id: req_ec12c064a4e84a16bf38a64c82f6bf71
+      created: 1783297229995
+      modified: 1783299674836
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220420
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos/1
+    name: Atualizar contato por id
+    meta:
+      id: req_9ef7129a5bce4a0ba6f587fb7595411c
+      created: 1783299247366
+      modified: 1783299316638
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220370
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |
+        {
+        "nome": "Maria Souza",
+        "telefone": "71988887777",
+        "email": "souza@email.com",
+        "favorito": false
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos/1
+    name: Deletar contato por id
+    meta:
+      id: req_674ab8d791be4b2dba4dd75c5c2ab788
+      created: 1783299654826
+      modified: 1783299694963
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220320
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos?page=0&size=10&sort=nome,desc
+    name: Listar contatos paginados
+    meta:
+      id: req_157d6f0ae4634bdbabef54d934b1c887
+      created: 1783302135178
+      modified: 1783305023087
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220445
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos/busca?nome=joão
+    name: Buscar contatos por nome
+    meta:
+      id: req_169e7df0b56f4918b32691cafe0a8358
+      created: 1783303207953
+      modified: 1783303489541
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220395
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/contatos/favoritos
+    name: Buscar contatos favoritos
+    meta:
+      id: req_313d2a40e9eb4d3b9639d04b6c4c831e
+      created: 1783303484077
+      modified: 1783303570609
+      isPrivate: false
+      description: ""
+      sortKey: -1783292220382.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1780181919783
+    modified: 1780181919783
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1780181919779
+    modified: 1780181919779
+    isPrivate: false
