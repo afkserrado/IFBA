@@ -31,6 +31,12 @@ public class LivroService {
     @Transactional // Redundância
     public LivroRequestDto cadastrarLivro(LivroRequestDto dto) {
         
+        if (livroRepository.existsByIsbn(dto.getIsbn())) {
+            throw new OperacaoNaoPermitidaException(
+                "Já existe um livro com este ISBN."
+            );
+        }
+
         Livro livro = dto.converterDtoParaEntidade();
         Livro livroSalvo = livroRepository.save(livro);
         return new LivroRequestDto(livroSalvo);

@@ -20,4 +20,5 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
         "SELECT COALESCE(SUM(l.quantidadeDisponivel), 0) FROM Livro l"
     )
     public Long sumByQuantidadeDisponivel();
+    public boolean existsByIsbn(String isbn);
 }
