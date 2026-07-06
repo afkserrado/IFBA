@@ -1,5 +1,6 @@
 package br.com.biblioteca.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -60,6 +61,13 @@ public class EmprestimoService {
                                     .orElseThrow(EmprestimoNaoEncontradoException::new);
 
         return new EmprestimoResponseDto(emprestimo);
+    }
+
+    public List<EmprestimoResponseDto> listarEmprestimosEmAtraso() {
+        List<Emprestimo> emprestimos = emprestimoRepository
+            .findByDevolvidoFalseAndDataPrevistaDevolucaoBefore(LocalDate.now());
+
+        return EmprestimoResponseDto.converterEntidadesParaDto(emprestimos);
     }
 
     @Transactional

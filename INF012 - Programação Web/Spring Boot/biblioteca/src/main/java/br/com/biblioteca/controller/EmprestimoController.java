@@ -79,6 +79,15 @@ public class EmprestimoController {
                 .ok(emprestimoService.buscarEmprestimoPorId(id));
     }
 
+    @Operation(summary = "Listar empréstimos em atraso")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Empréstimos em atraso listados")
+    })
+    @GetMapping(params = "atrasados")
+    public ResponseEntity<List<EmprestimoResponseDto>> listarEmprestimosEmAtraso() {
+        return ResponseEntity.ok(emprestimoService.listarEmprestimosEmAtraso());
+    }
+
     @Operation(summary = "Registrar devolução")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Livro devolvido"),

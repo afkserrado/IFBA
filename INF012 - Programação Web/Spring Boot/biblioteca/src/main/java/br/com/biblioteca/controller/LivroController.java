@@ -3,6 +3,8 @@ package br.com.biblioteca.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -64,6 +67,17 @@ public class LivroController {
         return ResponseEntity.ok(livroService.buscarLivros());
     }
 
+    @Operation(summary = "Listar livros com paginação")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livros listados com paginação")
+    })
+    @GetMapping(params = {"page", "size"})
+    public ResponseEntity<Page<LivroResponseDto>> buscarLivros(
+        Pageable pageable
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivros(pageable));
+    }
+
     @Operation(summary = "Buscar livro por id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Livro encontrado"),
@@ -77,6 +91,28 @@ public class LivroController {
         LivroResponseDto livroEncontrado = livroService.buscarLivroPorId(id);
         return ResponseEntity
                 .ok(livroEncontrado);
+    }
+
+    @Operation(summary = "Buscar livros por autor")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livros encontrados")
+    })
+    @GetMapping(params = "autor")
+    public ResponseEntity<List<LivroResponseDto>> buscarLivrosPorAutor(
+        @RequestParam String autor
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivrosPorAutor(autor));
+    }
+
+    @Operation(summary = "Buscar livros por título")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livros encontrados")
+    })
+    @GetMapping(params = "titulo")
+    public ResponseEntity<List<LivroResponseDto>> buscarLivrosPorTitulo(
+        @RequestParam String titulo
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivrosPorTitulo(titulo));
     }
 
     @Operation(summary = "Atualizar livro")

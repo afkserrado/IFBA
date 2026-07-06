@@ -2,6 +2,8 @@ package br.com.biblioteca.dto;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import br.com.biblioteca.entity.Livro;
 
 // Utilizado como resposta para os métodos GET e PUT
@@ -23,6 +25,10 @@ public class LivroResponseDto {
     
     public static List<LivroResponseDto> converterEntidadesParaDto(List<Livro> livros) {
         return livros.stream().map(LivroResponseDto::new).toList();
+    }
+
+    public static Page<LivroResponseDto> converterEntidadesParaDto(Page<Livro> livros) {
+        return livros.map(LivroResponseDto::new);
     }
 
     public String getTitulo() {
