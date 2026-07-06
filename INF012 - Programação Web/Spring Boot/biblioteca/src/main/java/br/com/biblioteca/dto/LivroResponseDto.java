@@ -1,5 +1,7 @@
 package br.com.biblioteca.dto;
 
+import java.util.List;
+
 import br.com.biblioteca.entity.Livro;
 
 // Utilizado como resposta para os métodos GET e PUT
@@ -19,35 +21,23 @@ public class LivroResponseDto {
         this.quantidadeDisponivel = livro.getQuantidadeDisponivel();
     }
     
-    public String getTitulo() {
-        return titulo;
+    public static List<LivroResponseDto> converterEntidadesParaDto(List<Livro> livros) {
+        return livros.stream().map(LivroResponseDto::new).toList();
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public String getTitulo() {
+        return titulo;
     }
 
     public String getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
     public String getIsbn() {
         return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }    
+    } 
 
     public Integer getQuantidadeDisponivel() {
         return quantidadeDisponivel;
-    }
-
-    public void setQuantidadeDisponivel(Integer quantidadeDisponivel) {
-        this.quantidadeDisponivel = quantidadeDisponivel;
     }
 }
