@@ -1,0 +1,342 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1780181901605
+  modified: 1780181901605
+  description: ""
+collection:
+  - url: http://localhost:8080/posts
+    name: Listar todos os posts
+    meta:
+      id: req_d5e5fbecaf5f456396b1e5480d339b85
+      created: 1780182073466
+      modified: 1783192447513
+      isPrivate: false
+      description: ""
+      sortKey: -1780182073466
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/usuarios
+    name: Listar todos os usuarios
+    meta:
+      id: req_c0043fedadd643b19dd1591d708b0256
+      created: 1780188400004
+      modified: 1783192433017
+      isPrivate: false
+      description: ""
+      sortKey: -1780188400004
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts?titulo=9999999
+    name: Listar posts por título
+    meta:
+      id: req_77d8ab1d4aff4583acc1d340a629c273
+      created: 1780189280182
+      modified: 1783216444229
+      isPrivate: false
+      description: ""
+      sortKey: -1780189280182
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts?usuario=Anderson
+    name: Lista posts por usuário
+    meta:
+      id: req_85e2829591ce4108a6d74a09974f2847
+      created: 1780190905482
+      modified: 1783192442174
+      isPrivate: false
+      description: ""
+      sortKey: -1780190905482
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts
+    name: Cadastrar post
+    meta:
+      id: req_c130249258024e3683eac2027c17f9a3
+      created: 1780193371921
+      modified: 1783216961031
+      isPrivate: false
+      description: ""
+      sortKey: -1780193371921
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "",
+          "texto": "",
+          "usuario": "",
+          "categoria": null
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts/5
+    name: Atualizar post
+    meta:
+      id: req_ad79189769d44065a23b092cea47ff2b
+      created: 1780195726589
+      modified: 1780195992278
+      isPrivate: false
+      description: ""
+      sortKey: -1780195726589
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        	{
+        		"titulo": "Corrigindo título",
+        		"texto": "Testando outro texto",
+        		"usuario": "Aluno",
+        		"categoria": "EDUCACAO"
+        	}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts/99999
+    name: Deletar post
+    meta:
+      id: req_66d60645b4f249deb41afd090dc4f1c7
+      created: 1780195998820
+      modified: 1783220119609
+      isPrivate: false
+      description: ""
+      sortKey: -1780195998820
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/posts?pagina=2&qtd=10
+    name: Listar posts paginados
+    meta:
+      id: req_b1eb057b9ee2444e92a8d7a7c8d063d8
+      created: 1783214385233
+      modified: 1783214493405
+      isPrivate: false
+      description: ""
+      sortKey: -1780192138701.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:36805/email/send
+    name: Enviar e-mail
+    meta:
+      id: req_80247f0bc7c64b82bbac93000e97584f
+      created: 1783220154248
+      modified: 1783266308454
+      isPrivate: false
+      description: ""
+      sortKey: -1780195998920
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+            "mailFrom": "akserrado@gmail.com",
+            "mailTo": "akserrado@gmail.com",
+            "mailSubject": "Teste pelo serviço de e-mail",
+            "mailText": "Testando o serviço de e-mail."
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://192.168.1.147:8082/email-ms/email/send
+    name: Enviar e-mail via gateway
+    meta:
+      id: req_a6cf9798a3b946e29fb268254e090119
+      created: 1783264181822
+      modified: 1783266239276
+      isPrivate: false
+      description: ""
+      sortKey: -1783264181822
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+            "mailFrom": "akserrado@gmail.com",
+            "mailTo": "akserrado@gmail.com",
+            "mailSubject": "Teste pelo Gatewat",
+            "mailText": "Testando o serviço de e-mail pelo gateway."
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://192.168.1.147:8082/email-ms/email/porta
+    name: Obtendo a porta do email-ms via gateway
+    meta:
+      id: req_40cea3f73ff6468e9593e2929d8bfe66
+      created: 1783266718716
+      modified: 1783267802785
+      isPrivate: false
+      description: ""
+      sortKey: -1783266718716
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://192.168.1.147:8082/blog-ms/posts
+    name: Listando todos os posts e mandando e-mail via gateway
+    meta:
+      id: req_7d575646e3d448acbec4f7b5a34c60cd
+      created: 1783267807491
+      modified: 1783268087214
+      isPrivate: false
+      description: ""
+      sortKey: -1783267807491
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1780181919783
+    modified: 1780181919783
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1780181919779
+    modified: 1780181919779
+    isPrivate: false
