@@ -27,11 +27,10 @@ public class Emprestimo {
 
     public Emprestimo() {}
 
-    public Emprestimo(String nomeLeitor, LocalDate dataEmprestimo, LocalDate dataPrevistaDevolucao, boolean devolvido, Livro livro) {
+    public Emprestimo(String nomeLeitor, LocalDate dataEmprestimo, LocalDate dataPrevistaDevolucao, Livro livro) {
         this.nomeLeitor = nomeLeitor;
         this.dataEmprestimo = dataEmprestimo;
         this.dataPrevistaDevolucao = dataPrevistaDevolucao;
-        this.devolvido = devolvido;
         this.livro = livro;
     }
 

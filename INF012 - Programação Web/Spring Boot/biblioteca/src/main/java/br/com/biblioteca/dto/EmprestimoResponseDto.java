@@ -1,6 +1,7 @@
 package br.com.biblioteca.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.biblioteca.entity.Emprestimo;
 
@@ -21,6 +22,10 @@ public class EmprestimoResponseDto {
         this.dataPrevistaDevolucao = emprestimo.getDataPrevistaDevolucao();
         this.devolvido = emprestimo.isDevolvido();
         this.livroId = emprestimo.getLivro().getId();
+    }
+
+    public static List<EmprestimoResponseDto> converterEntidadesParaDto(List<Emprestimo> emprestimos) {
+        return emprestimos.stream().map(EmprestimoResponseDto::new).toList();
     }
 
     public String getNomeLeitor() {

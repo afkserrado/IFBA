@@ -38,7 +38,7 @@ public class LivroRequestDto {
         this.quantidadeDisponivel = livro.getQuantidadeDisponivel();
     }
 
-    public Livro converterParaLivro() {
+    public Livro converterDtoParaEntidade() {
         return new Livro(titulo, autor, isbn, quantidadeDisponivel);
     }
 

@@ -3,6 +3,7 @@ package br.com.biblioteca.dto;
 import java.time.LocalDate;
 
 import br.com.biblioteca.entity.Emprestimo;
+import br.com.biblioteca.entity.Livro;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -31,6 +32,10 @@ public class EmprestimoRequestDto {
         this.dataEmprestimo = emprestimo.getDataEmprestimo();
         this.dataPrevistaDevolucao = emprestimo.getDataPrevistaDevolucao();
         this.livroId = emprestimo.getLivro().getId();
+    }
+
+    public Emprestimo converterDtoParaEntidade(Livro livro) {
+        return new Emprestimo(nomeLeitor, dataEmprestimo, dataPrevistaDevolucao, livro);
     }
 
     public Long getId() {

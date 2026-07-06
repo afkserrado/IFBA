@@ -17,6 +17,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.biblioteca.dto.LivroRequestDto;
 import br.com.biblioteca.dto.LivroResponseDto;
 import br.com.biblioteca.service.LivroService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,6 +32,11 @@ public class LivroController {
         this.livroService = livroService;
     }
 
+    @Operation(summary = "Cadastrar livro")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Livro criado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    })
     @PostMapping
     public ResponseEntity<LivroRequestDto> cadastrarLivro(
         @RequestBody @Valid LivroRequestDto dto,
@@ -47,11 +55,20 @@ public class LivroController {
                 .body(livroSalvo);
     }
 
+    @Operation(summary = "Listar livros")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livros listados")
+    })
     @GetMapping
     public ResponseEntity<List<LivroResponseDto>> buscarLivros() {
         return ResponseEntity.ok(livroService.buscarLivros());
     }
 
+    @Operation(summary = "Buscar livro por id")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livro encontrado"),
+        @ApiResponse(responseCode = "404", description = "Id inválido")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<LivroResponseDto> buscarLivroPorId(
         @PathVariable Long id
@@ -62,6 +79,12 @@ public class LivroController {
                 .ok(livroEncontrado);
     }
 
+    @Operation(summary = "Atualizar livro")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Livro atualizado"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "404", description = "Id inválido")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<LivroResponseDto> atualizarLivro(
         @PathVariable Long id,
@@ -73,6 +96,12 @@ public class LivroController {
                 .ok(livroAtualizado);
     }
 
+    @Operation(summary = "Remover livro")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Livro removido"),
+        @ApiResponse(responseCode = "404", description = "Id inválido"),
+        @ApiResponse(responseCode = "409", description = "Livro emprestado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerLivro(
         @PathVariable Long id

@@ -27,7 +27,7 @@ public class LivroService {
     @Transactional // Redundância
     public LivroRequestDto cadastrarLivro(LivroRequestDto dto) {
         
-        Livro livro = dto.converterParaLivro();
+        Livro livro = dto.converterDtoParaEntidade();
         Livro livroSalvo = livroRepository.save(livro);
         return new LivroRequestDto(livroSalvo);
     }
