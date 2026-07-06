@@ -63,8 +63,10 @@ public class LivroController {
         @ApiResponse(responseCode = "200", description = "Livros listados")
     })
     @GetMapping
-    public ResponseEntity<List<LivroResponseDto>> buscarLivros() {
-        return ResponseEntity.ok(livroService.buscarLivros());
+    public ResponseEntity<List<LivroResponseDto>> buscarLivros(
+        @RequestParam(required = false) String sort
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivros(sort));
     }
 
     @Operation(summary = "Listar livros com paginação")
@@ -73,9 +75,10 @@ public class LivroController {
     })
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<Page<LivroResponseDto>> buscarLivros(
-        Pageable pageable
+        Pageable pageable,
+        @RequestParam(required = false) String sort
     ) {
-        return ResponseEntity.ok(livroService.buscarLivros(pageable));
+        return ResponseEntity.ok(livroService.buscarLivros(pageable, sort));
     }
 
     @Operation(summary = "Buscar livro por id")
@@ -104,6 +107,14 @@ public class LivroController {
         return ResponseEntity.ok(livroService.buscarLivrosPorAutor(autor));
     }
 
+    @GetMapping(params = {"autor", "page", "size"})
+    public ResponseEntity<Page<LivroResponseDto>> buscarLivrosPorAutor(
+        @RequestParam String autor,
+        Pageable pageable
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivrosPorAutor(autor, pageable));
+    }
+
     @Operation(summary = "Buscar livros por título")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Livros encontrados")
@@ -113,6 +124,14 @@ public class LivroController {
         @RequestParam String titulo
     ) {
         return ResponseEntity.ok(livroService.buscarLivrosPorTitulo(titulo));
+    }
+
+    @GetMapping(params = {"titulo", "page", "size"})
+    public ResponseEntity<Page<LivroResponseDto>> buscarLivrosPorTitulo(
+        @RequestParam String titulo,
+        Pageable pageable
+    ) {
+        return ResponseEntity.ok(livroService.buscarLivrosPorTitulo(titulo, pageable));
     }
 
     @Operation(summary = "Atualizar livro")

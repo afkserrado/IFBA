@@ -3,7 +3,9 @@ package br.com.biblioteca.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,15 +36,47 @@ public class LivroService {
         return new LivroRequestDto(livroSalvo);
     }
 
-    public List<LivroResponseDto> buscarLivros() {
-        return LivroResponseDto.converterEntidadesParaDto(
-            livroRepository.findAll()
-        );
+    public List<LivroResponseDto> buscarLivros(String sort) {
+
+        List<Livro> livros;
+
+        if (sort == null || sort.isBlank()) {
+            livros = livroRepository.findAll();
+        } 
+        
+        else if (sort.equals("titulo") || sort.equals("autor")) {
+            livros = livroRepository.findAll(Sort.by(sort));
+        } 
+        
+        else {
+            throw new OperacaoNaoPermitidaException("Ordenação permitida apenas por título ou autor.");
+        }
+
+        return LivroResponseDto.converterEntidadesParaDto(livros);
     }
 
-    public Page<LivroResponseDto> buscarLivros(Pageable pageable) {
+    public Page<LivroResponseDto> buscarLivros(Pageable pageable, String sort) {
+
+        Page<Livro> livros;
+
+        if (sort == null || sort.isBlank()) {
+            livros = livroRepository.findAll(pageable);
+        } 
         
-        Page<Livro> livros = livroRepository.findAll(pageable);
+        else if (sort.equals("titulo") || sort.equals("autor")) {
+            Pageable pageableComSort = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(sort)
+            );
+
+            livros = livroRepository.findAll(pageableComSort);
+        } 
+        
+        else {
+            throw new OperacaoNaoPermitidaException("Ordenação permitida apenas por título ou autor.");
+        }
+
         return LivroResponseDto.converterEntidadesParaDto(livros);
     }
 
@@ -60,9 +94,21 @@ public class LivroService {
         return LivroResponseDto.converterEntidadesParaDto(livros);
     }
 
+    public Page<LivroResponseDto> buscarLivrosPorAutor(String autor, Pageable pageable) {
+        
+        Page<Livro> livros = livroRepository.findByAutorContainingIgnoreCase(autor, pageable);
+        return LivroResponseDto.converterEntidadesParaDto(livros);
+    }
+
     public List<LivroResponseDto> buscarLivrosPorTitulo(String titulo) {
         
         List<Livro> livros = livroRepository.findByTituloContainingIgnoreCase(titulo);
+        return LivroResponseDto.converterEntidadesParaDto(livros);
+    }
+
+    public Page<LivroResponseDto> buscarLivrosPorTitulo(String titulo, Pageable pageable) {
+        
+        Page<Livro> livros = livroRepository.findByTituloContainingIgnoreCase(titulo, pageable);
         return LivroResponseDto.converterEntidadesParaDto(livros);
     }
 
