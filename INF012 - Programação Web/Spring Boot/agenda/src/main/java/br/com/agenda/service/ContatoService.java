@@ -38,6 +38,7 @@ public class ContatoService {
         if(sort == null || sort.isBlank()) {
             contatos = contatoRepository.findAll();
         }
+
         else {
             String[] partes = sort.split(",");
             String campo = partes[0];
@@ -60,6 +61,7 @@ public class ContatoService {
         if(sort == null || sort.isBlank()) {
             contatos = contatoRepository.findAll(pageable);
         }
+
         else {
             String[] partes = sort.split(",");
             String campo = partes[0];
@@ -101,7 +103,7 @@ public class ContatoService {
     public List<ContatoResponseDto> buscarContatoFavoritos() {
         
         List<Contato> contatos = contatoRepository
-                            .findByFavorito(true);
+                            .findByFavorito(true); // ou findByFavoritoTrue()
 
         return ContatoResponseDto.converterListaParaContatoDto(contatos);
     }
