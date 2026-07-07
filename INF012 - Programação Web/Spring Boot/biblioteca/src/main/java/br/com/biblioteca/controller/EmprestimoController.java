@@ -83,7 +83,7 @@ public class EmprestimoController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Empréstimos em atraso listados")
     })
-    @GetMapping(params = "atrasados")
+    @GetMapping("/atrasados")
     public ResponseEntity<List<EmprestimoResponseDto>> listarEmprestimosEmAtraso() {
         return ResponseEntity.ok(emprestimoService.listarEmprestimosEmAtraso());
     }

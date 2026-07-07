@@ -52,7 +52,7 @@ public class LivroService {
         
         else if (sort.equals("titulo") || sort.equals("autor")) {
             livros = livroRepository.findAll(Sort.by(sort));
-        } 
+        }
         
         else {
             throw new OperacaoNaoPermitidaException("Ordenação permitida apenas por título ou autor.");
@@ -77,7 +77,7 @@ public class LivroService {
             );
 
             livros = livroRepository.findAll(pageableComSort);
-        } 
+        }
         
         else {
             throw new OperacaoNaoPermitidaException("Ordenação permitida apenas por título ou autor.");
@@ -120,6 +120,7 @@ public class LivroService {
 
     @Transactional
     public LivroResponseDto atualizarLivro(Long id, LivroRequestDto dto) {
+        
         Livro livro = livroRepository
             .findById(id)
             .orElseThrow(LivroNaoEncontradoException::new);
@@ -136,6 +137,7 @@ public class LivroService {
 
     @Transactional
     public void removerLivro(Long id) {
+        
         Livro livro = livroRepository
             .findById(id)
             .orElseThrow(LivroNaoEncontradoException::new);
