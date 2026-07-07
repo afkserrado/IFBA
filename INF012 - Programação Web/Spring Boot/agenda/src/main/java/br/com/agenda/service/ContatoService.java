@@ -24,12 +24,15 @@ public class ContatoService {
     }
 
     public ContatoDto criarContato(ContatoDto dto) {
+        
         Contato contato = dto.converterParaContato();
         Contato contatoSalvo = contatoRepository.save(contato); // save() já retorna a entidade já salva
+        
         return new ContatoDto(contatoSalvo);
     }
 
     public List<ContatoResponseDto> listarContatos(String sort) {
+        
         List<Contato> contatos;
         
         if(sort == null || sort.isBlank()) {
@@ -51,6 +54,7 @@ public class ContatoService {
     }
 
     public Page<ContatoResponseDto> listarContatos(Pageable pageable, String sort) {
+        
         Page<Contato> contatos;
 
         if(sort == null || sort.isBlank()) {
@@ -78,6 +82,7 @@ public class ContatoService {
     }
 
     public ContatoResponseDto buscarContatoPorId(Long id) {
+        
         Contato contato = contatoRepository
                             .findById(id)
                             .orElseThrow(EntityNotFoundException::new);
@@ -86,6 +91,7 @@ public class ContatoService {
     }
 
     public List<ContatoResponseDto> buscarContatoPorNome(String nome) {
+        
         List<Contato> contatos = contatoRepository
                             .findByNomeContainingIgnoreCase(nome);
 
@@ -93,6 +99,7 @@ public class ContatoService {
     }
 
     public List<ContatoResponseDto> buscarContatoFavoritos() {
+        
         List<Contato> contatos = contatoRepository
                             .findByFavorito(true);
 
@@ -100,6 +107,7 @@ public class ContatoService {
     }
 
     public ContatoResponseDto atualizarContato(Long id, ContatoDto dto) {
+        
         Contato contato = contatoRepository
                             .findById(id)
                             .orElseThrow(EntityNotFoundException::new);
@@ -113,6 +121,7 @@ public class ContatoService {
     }
 
     public void apagarContato(Long id) {
+        
         Contato contato = contatoRepository
                             .findById(id)
                             .orElseThrow(EntityNotFoundException::new);

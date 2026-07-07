@@ -6,10 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity(name = "contatos")
 public class Contato {
@@ -18,24 +14,9 @@ public class Contato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(
-        min = 3,
-        max = 100,
-        message = "O nome deve possuir de 3 a 100 caracteres."
-    )
     private String nome;
-
-    @NotBlank
-    @Pattern(
-        regexp = "\\d{10,11}",
-        message = "O telefone deve conter 10 ou 11 números."
-    )
     private String telefone;
-
-    @Email(message = "O e-mail deve estar em um formato válido.")
     private String email;
-
     private boolean favorito = false;
     private LocalDateTime dataCriacao;
 
