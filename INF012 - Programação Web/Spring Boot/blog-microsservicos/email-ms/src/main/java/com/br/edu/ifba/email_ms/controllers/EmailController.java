@@ -34,6 +34,11 @@ public class EmailController {
             new EmailDto(email),
             HttpStatus.CREATED // Retorna HTTP 201 Created
         );
+
+        // Alternativamente:
+        // return ResponseEntity
+        //     .status(HttpStatus.CREATED)
+        //     .body(new EmailDto(email));
     }
 
     @GetMapping("/porta")
