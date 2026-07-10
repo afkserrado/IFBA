@@ -31,7 +31,6 @@ public class Serie {
     	return this.temporada;
     }
     
-
 	public String toXML() {
 		String xml = "\t<serie titulo=\"" + this.getTitulo() + "\" temporada=\"" + this.getTemporada() + "\">\n";
 		for(Episodio episodio : this.episodios)

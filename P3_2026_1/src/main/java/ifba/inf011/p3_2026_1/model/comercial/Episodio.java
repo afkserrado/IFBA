@@ -2,7 +2,7 @@ package ifba.inf011.p3_2026_1.model.comercial;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 
-public class Episodio{
+public class Episodio {
 	
 	private String titulo;
     private Double preco;
@@ -35,5 +35,6 @@ public class Episodio{
 	public String toXML() {
 		String xml = "<episodio titulo=\"" + this.getTitulo() + "\" numero=\"" + this.getNumero() + "\"/>\n";
 		return xml;
-	}   	
+	}  
+	 	
 }
