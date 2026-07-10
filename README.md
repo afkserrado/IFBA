@@ -20,4 +20,13 @@ Portanto, o Composite resolve o problema de como proporcionar uma estrutura que 
 
 ### Implementação
 
-- Interface ProdutoComponent
+- Interface Component: `ProdutoComponent`;
+- Leafs, que implementam `ProdutoComponent`: `Filme` e `Episodio`;
+- Composites, que implementam `ProdutoComponent`:
+    - `Serie`, que contém episódios;
+    - `Pacote`, que pode conter qualquer objeto do tipo `ProdutoComponent`, como filmes, episódios, séries e outros pacotes.
+    
+- Interface Builder: `ProdutoBuilder`;
+- Concrete Builder: `PacoteBuilder`, que implementa `ProdutoBuilder` e constrói uma instância de `Pacote`.
+
+O Director do Builder foi evitado porque não foram identificadas sequências fixas e recorrentes para a construção dos pacotes. A composição de cada promoção pode variar conforme a necessidade. Por exemplo, a coleção “Sci-Fi” pode conter os pacotes “Trilogia Matrix” e “Star Wars”, a série “Black Mirror” e o filme “Blade Runner”, mas sua composição pode ser alterada posteriormente. Dessa forma, o próprio cliente pode utilizar diretamente o `PacoteBuilder` para definir os elementos de cada pacote.
