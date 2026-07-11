@@ -13,7 +13,7 @@ public class Pacote implements PlaylistItem {
 	
 	public Pacote(String titulo) {
 		this.titulo = titulo;
-		this.filmes = new ArrayList<Filme>();
+		this.filmes = new ArrayList<>();
 	};
 	
 	public Pacote(String titulo, List<Filme> filmes) {
@@ -34,6 +34,7 @@ public class Pacote implements PlaylistItem {
 		return  this.filmes.stream().mapToDouble(Filme::getDuracao).sum();
 	}    
 	
+	@Override
 	public String toXML() {
 		String filmesXML = this.filmes.stream()
 				.map(Filme::toXML)
@@ -43,6 +44,7 @@ public class Pacote implements PlaylistItem {
 			+ "</pacote>\n";
 	}
 
+	@Override
 	public Double getBandwidth(Double bandPerSecond) {
 		return this.getDuracao() * bandPerSecond;
 	}    

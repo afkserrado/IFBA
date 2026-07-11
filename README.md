@@ -21,7 +21,7 @@ Portanto, o Composite resolve o problema de como proporcionar uma estrutura que 
 ### Implementação
 
 - Interface Component: `ProdutoComponent`;
-- Leafs, que implementam `ProdutoComponent`: `Filme` e `Episodio`;
+- Leaves, que implementam `ProdutoComponent`: `Filme` e `Episodio`;
 - Composites, que implementam `ProdutoComponent`:
     - `Serie`, que contém episódios;
     - `Pacote`, que pode conter qualquer objeto do tipo `ProdutoComponent`, como filmes, episódios, séries e outros pacotes.

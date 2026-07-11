@@ -11,7 +11,7 @@ public class Serie {
     
     public Serie(String titulo, Integer temporada) {
     	this.titulo = titulo;
-    	this.episodios = new ArrayList<Episodio>();
+    	this.episodios = new ArrayList<>();
     };
     
     public String getTitulo() {
