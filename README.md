@@ -33,21 +33,24 @@ O Director do Builder foi evitado porque não foram identificadas sequências fi
 
 ### Requisitos de implementação
 
-* **Composite transparente:** o enunciado determina que filmes avulsos e pacotes complexos aninhados sejam tratados exatamente da mesma maneira. Portanto, produtos individuais e composições compartilharão as mesmas operações por meio da interface `ProdutoComponent`.
+- **Composite transparente:** o enunciado determina que filmes avulsos e pacotes complexos aninhados sejam tratados exatamente da mesma maneira. Portanto, produtos individuais e composições compartilharão as mesmas operações por meio da interface `ProdutoComponent`.
 
-* **Sem referência para o pai e sem cache:** o enunciado pede uma solução elegante, mas não apresenta requisitos relacionados a desempenho, otimização ou redução de recálculos de preço e duração. Por isso, não será mantida referência para o elemento pai nem serão armazenados resultados em cache.
+- **Sem referência para o pai e sem cache:** o enunciado pede uma solução elegante, mas não apresenta requisitos relacionados a desempenho, otimização ou redução de recálculos de preço e duração. Por isso, não será mantida referência para o elemento pai nem serão armazenados resultados em cache.
 
-* **Restrição de tipo dos filhos:** `Pacote` poderá conter qualquer objeto que implemente `ProdutoComponent`, enquanto `Serie` poderá conter apenas objetos do tipo `Episodio`, preservando as regras do domínio.
+- **Restrição de tipo dos filhos:** `Pacote` poderá conter qualquer objeto que implemente `ProdutoComponent`, enquanto `Serie` poderá conter apenas objetos do tipo `Episodio`, preservando as regras do domínio.
 
-* **Composite estrutural:** os filhos apenas participam da estrutura hierárquica e podem existir independentemente dos objetos compostos. Um filme ou episódio, por exemplo, pode existir mesmo sem pertencer a um pacote ou série.
+- **Composite estrutural:** os filhos apenas participam da estrutura hierárquica e podem existir independentemente dos objetos compostos. Um filme ou episódio, por exemplo, pode existir mesmo sem pertencer a um pacote ou série.
+
+* **Builder concreto:** o builder é responsável por construir pacotes. Para isso, deve receber objetos que implementem `ProdutoComponent`, já previamente instanciados. Criar métodos específicos para cada tipo de produto, como `Filme`, ou receber parâmetros destinados à criação desses objetos comprometeria a flexibilidade proporcionada pelo Composite, faria o builder acumular responsabilidades, aumentaria o acoplamento e prejudicaria a extensibilidade e o princípio Aberto/Fechado. Além disso, os produtos individuais existem independentemente do builder e do pacote, que apenas os organiza em uma composição.
 
 ### Classes criadas ou modificadas
 
-- Todas as classes dos pacotes Composite e Comercial.
-
+- Todas as classes dos pacotes Builder, Composite e Comercial.
 
 ### Dúvidas
 
 - Só para confirmar, séries só podem conter episódios, certo (restrição de tipo)?
 - Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?
 - Precisamos definir o valor do desconto na criação do pacote?
+- O builder é para criar pacotes, não séries, né?
+- Eu preciso de um director para instanciar pacotes pré-definidos? Digo, o conteúdo do pacote Sci-Fi sempre vai ser o mesmo ou pode mudar? Se sempre for o mesmo, ter um Director faria sentido. Se não for o caso, faria sentido ter Director?

@@ -9,9 +9,10 @@ import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
 
 // Composite (objeto composto) do Composite
+// Product do Builder
 public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
-	private List<ProdutoComponent> produtos;
+	private final List<ProdutoComponent> produtos;
 	
 	public Pacote(String titulo) {
 		super(titulo);

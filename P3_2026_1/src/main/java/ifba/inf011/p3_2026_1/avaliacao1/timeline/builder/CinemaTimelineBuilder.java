@@ -79,5 +79,4 @@ public class CinemaTimelineBuilder implements TimelineBuilder {
         return this.timeline;
     }
 
-
 }
