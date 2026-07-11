@@ -17,9 +17,9 @@ public class Timeline implements Forkable, RenderableContent{
     private Canva canvas; 
     private Renderer renderer; 
     private Encoder encoder;
-    private List<Track> videoTracks = new ArrayList<Track>();
-    private List<AudioTrack> audioTracks = new ArrayList<AudioTrack>();
-    private List<SubTitleTrack> subtitleTracks = new ArrayList<SubTitleTrack>();
+    private List<Track> videoTracks = new ArrayList<>();
+    private List<AudioTrack> audioTracks = new ArrayList<>();
+    private List<SubTitleTrack> subtitleTracks = new ArrayList<>();
 
     protected Timeline() {}
 
@@ -46,6 +46,7 @@ public class Timeline implements Forkable, RenderableContent{
     	return subtitleTracks; 
     }
     
+    @Override
     public Timeline fork() {
     	Timeline fork = new Timeline();
     	fork.canvas = this.canvas;
@@ -59,6 +60,7 @@ public class Timeline implements Forkable, RenderableContent{
         return fork;
     }  
     
+    @Override
     public void render(Integer inicio, Integer duration) {
     	Integer fimDesejado = inicio + duration;
     	Integer fimReal  = 0;
@@ -85,6 +87,7 @@ public class Timeline implements Forkable, RenderableContent{
         return tempoAcumuladoVideo;
 	}
     
+    @Override
     public Integer getDurationInSeconds() {
         Integer maxDuration = 0;
         Integer trackDuration = 0;

@@ -2,46 +2,69 @@ package ifba.inf011.p3_2026_1.model.comercial;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
+import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
-public class Pacote implements PlaylistItem {
+// Composite (objeto composto) do Composite
+public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
-	protected String titulo;
-	protected List<Filme> filmes;
+	protected List<ProdutoComponent> produtos;
 	
 	public Pacote(String titulo) {
-		this.titulo = titulo;
-		this.filmes = new ArrayList<>();
+		super(titulo);
+		this.produtos = new ArrayList<>();
 	};
 	
-	public Pacote(String titulo, List<Filme> filmes) {
-		this.titulo = titulo;
-		this.filmes = filmes;
-	};	    
-	
-	public String getTitulo() {
-		return this.titulo;
-	}
-		
+	public Pacote(String titulo, List<ProdutoComponent> produtos) {
+		super(titulo);
+		this.produtos = new ArrayList<>(produtos);
+	};
+
+	public Pacote(String titulo, ProdutoComponent... produtos) {
+		super(titulo);
+		this.produtos = new ArrayList<>(List.of(produtos));
+	};
+
+	@Override
+	public Integer getDuracao() {
+		return this.produtos
+				   .stream()
+				   .mapToInt(produto -> produto.getDuracao())
+				   .sum();
+	} 
+
+	@Override
 	public Double getPreco() {
-		double soma = this.filmes.stream().mapToDouble(Filme::getPreco).sum();
+		double soma = this.produtos
+						  .stream()
+						  .mapToDouble(ProdutoComponent::getPreco)
+						  .sum();
+
 		return soma * 0.9;
 	}
-		
-	public Double getDuracao() {
-		return  this.filmes.stream().mapToDouble(Filme::getDuracao).sum();
-	}    
-	
+
+	@Override
+	public void adicionarProduto(ProdutoComponent produto) {
+		this.produtos.add(produto);
+	}
+
+	@Override
+	public void removerProduto(ProdutoComponent produto) {
+		this.produtos.remove(produto);
+	}
+
 	@Override
 	public String toXML() {
-		String filmesXML = this.filmes.stream()
-				.map(Filme::toXML)
-				.collect(Collectors.joining());
-		return "<pacote titulo=\"" + this.getTitulo() + "\">\n" 
-			+ filmesXML 
-			+ "</pacote>\n";
+		// String produtosXML = this.produtos.stream()
+		// 		.map(Filme::toXML)
+		// 		.collect(Collectors.joining());
+		// return "<pacote titulo=\"" + this.getTitulo() + "\">\n" 
+		// 	+ produtosXML 
+		// 	+ "</pacote>\n";
+
+		return ""; // Só para teste
 	}
 
 	@Override

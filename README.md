@@ -30,3 +30,18 @@ Portanto, o Composite resolve o problema de como proporcionar uma estrutura que 
 - Concrete Builder: `PacoteBuilder`, que implementa `ProdutoBuilder` e constrói uma instância de `Pacote`.
 
 O Director do Builder foi evitado porque não foram identificadas sequências fixas e recorrentes para a construção dos pacotes. A composição de cada promoção pode variar conforme a necessidade. Por exemplo, a coleção “Sci-Fi” pode conter os pacotes “Trilogia Matrix” e “Star Wars”, a série “Black Mirror” e o filme “Blade Runner”, mas sua composição pode ser alterada posteriormente. Dessa forma, o próprio cliente pode utilizar diretamente o `PacoteBuilder` para definir os elementos de cada pacote.
+
+### Requisitos de implementação
+
+* **Composite transparente:** o enunciado determina que filmes avulsos e pacotes complexos aninhados sejam tratados exatamente da mesma maneira. Portanto, produtos individuais e composições compartilharão as mesmas operações por meio da interface `ProdutoComponent`.
+
+* **Sem referência para o pai e sem cache:** o enunciado pede uma solução elegante, mas não apresenta requisitos relacionados a desempenho, otimização ou redução de recálculos de preço e duração. Por isso, não será mantida referência para o elemento pai nem serão armazenados resultados em cache.
+
+* **Restrição de tipo dos filhos:** `Pacote` poderá conter qualquer objeto que implemente `ProdutoComponent`, enquanto `Serie` poderá conter apenas objetos do tipo `Episodio`, preservando as regras do domínio.
+
+* **Composite estrutural:** os filhos apenas participam da estrutura hierárquica e podem existir independentemente dos objetos compostos. Um filme ou episódio, por exemplo, pode existir mesmo sem pertencer a um pacote ou série.
+
+### Dúvidas
+
+- Só para confirmar, séries só podem conter episódios, certo (restrição de tipo)?
+- Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?

@@ -1,30 +1,29 @@
 package ifba.inf011.p3_2026_1.model.comercial;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
+import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
 
-public class Filme {
+// Leaf do Composite
+public class Filme extends AbstractProdutoComponent {
 	
-	private String titulo;
     private Double preco;
     private Timeline timeline;
 
 	public Filme(String titulo, Double preco, Timeline timeline) {
-    	this.titulo = titulo;
+    	super(titulo);
         this.preco = preco;
         this.timeline = timeline;
 	}
 	
+	@Override
     public Double getPreco() {
     	return this.preco; 
     }
     
+	@Override
     public Integer getDuracao() { 
     	return this.timeline.getDurationInSeconds();
     }
-
-	public String getTitulo() {
-		return this.titulo;
-	}
 
 	public String toXML() {
 		String xml = "<filme titulo=\"" + this.getTitulo() + "\"/>\n";
