@@ -4,9 +4,9 @@ package ifba.inf011.p3_2026_1.composite;
 public interface ProdutoComponent {
     
     // Métodos comuns a folhas e objetos compostos
-    public String getTitulo();
-    public Integer getDuracao();
-    public Double getPreco();
+    String getTitulo();
+    Integer getDuracao();
+    Double getPreco();
 
     // Métodos restritos a objetos compostos
 

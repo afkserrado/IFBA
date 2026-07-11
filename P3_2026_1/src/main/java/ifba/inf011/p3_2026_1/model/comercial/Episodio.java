@@ -2,6 +2,7 @@ package ifba.inf011.p3_2026_1.model.comercial;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
+import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
 
 // Leaf do Composite
 public class Episodio extends AbstractProdutoComponent {
@@ -12,9 +13,14 @@ public class Episodio extends AbstractProdutoComponent {
 
 	public Episodio(String titulo, Double preco, Integer numero, Timeline timeline) {
     	super(titulo);
-        this.preco = preco;
+
+		ProdutoValidador.validarPreco(preco);
+		ProdutoValidador.validarNaoNegativo(numero);
+		ProdutoValidador.validarTimeline(timeline);
+
+		this.preco = preco;
+		this.numero = numero;
         this.timeline = timeline;
-        this.numero = numero;
 	}
 	
 	@Override

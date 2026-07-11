@@ -6,26 +6,33 @@ import java.util.List;
 import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
+import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
 
 // Composite (objeto composto) do Composite
 public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
-	protected List<ProdutoComponent> produtos;
+	private List<ProdutoComponent> produtos;
 	
 	public Pacote(String titulo) {
 		super(titulo);
 		this.produtos = new ArrayList<>();
-	};
+	}
 	
 	public Pacote(String titulo, List<ProdutoComponent> produtos) {
 		super(titulo);
+
+		ProdutoValidador.validarLista(produtos);
+
 		this.produtos = new ArrayList<>(produtos);
-	};
+	}
 
 	public Pacote(String titulo, ProdutoComponent... produtos) {
 		super(titulo);
+
+		ProdutoValidador.validarLista(produtos);
+
 		this.produtos = new ArrayList<>(List.of(produtos));
-	};
+	}
 
 	@Override
 	public Integer getDuracao() {
@@ -46,7 +53,8 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 	}
 
 	@Override
-	public void adicionarProduto(ProdutoComponent produto) {
+	public void adicionarProduto(ProdutoComponent produto) {	
+		ProdutoValidador.validarProduto(produto);		
 		this.produtos.add(produto);
 	}
 

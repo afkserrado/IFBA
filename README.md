@@ -41,7 +41,13 @@ O Director do Builder foi evitado porque não foram identificadas sequências fi
 
 * **Composite estrutural:** os filhos apenas participam da estrutura hierárquica e podem existir independentemente dos objetos compostos. Um filme ou episódio, por exemplo, pode existir mesmo sem pertencer a um pacote ou série.
 
+### Classes criadas ou modificadas
+
+- Todas as classes dos pacotes Composite e Comercial.
+
+
 ### Dúvidas
 
 - Só para confirmar, séries só podem conter episódios, certo (restrição de tipo)?
 - Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?
+- Precisamos definir o valor do desconto na criação do pacote?
