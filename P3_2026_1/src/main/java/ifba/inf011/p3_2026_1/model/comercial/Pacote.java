@@ -13,26 +13,35 @@ import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
 public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
 	private final List<ProdutoComponent> produtos;
+	private Double desconto;
 	
-	public Pacote(String titulo) {
+	public Pacote(String titulo, Double desconto) {
 		super(titulo);
+		
+		validarDesconto(desconto);
+
+		this.desconto = desconto;
 		this.produtos = new ArrayList<>();
 	}
 	
-	public Pacote(String titulo, List<ProdutoComponent> produtos) {
-		super(titulo);
+	public Pacote(String titulo, Double desconto, List<ProdutoComponent> produtos) {
+		this(titulo, desconto);
 
 		ProdutoValidador.validarLista(produtos);
 
-		this.produtos = new ArrayList<>(produtos);
+		this.produtos.addAll(produtos);
 	}
 
-	public Pacote(String titulo, ProdutoComponent... produtos) {
-		super(titulo);
+	public Pacote(String titulo, Double desconto, ProdutoComponent... produtos) {
+		this(titulo, desconto);
 
 		ProdutoValidador.validarLista(produtos);
 
-		this.produtos = new ArrayList<>(List.of(produtos));
+		this.produtos.addAll(List.of(produtos));
+	}
+
+	public void alterarTitulo(String titulo) {
+		setTitulo(titulo);
 	}
 
 	@Override
@@ -41,7 +50,7 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 				   .stream()
 				   .mapToInt(produto -> produto.getDuracao())
 				   .sum();
-	} 
+	}
 
 	@Override
 	public Double getPreco() {
@@ -50,7 +59,16 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 						  .mapToDouble(ProdutoComponent::getPreco)
 						  .sum();
 
-		return soma * 0.9;
+		return soma * (1 - this.desconto / 100);
+	}
+
+	public Double consultarDesconto() {
+		return this.desconto;
+	}
+
+	public void alterarDesconto(Double desconto) {
+		validarDesconto(desconto);
+		this.desconto = desconto;
 	}
 
 	@Override
@@ -79,6 +97,16 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 	@Override
 	public Double getBandwidth(Double bandPerSecond) {
 		return this.getDuracao() * bandPerSecond;
-	}    
+	}
+
+	// Se o desconto for aplicável a outros tipos, extrair esse método
+	// para a classe ProdutoValidador
+	private static void validarDesconto(Double desconto) {
+		ProdutoValidador.validarNaoNegativo(desconto);
+
+		if(desconto > 100) {
+			throw new IllegalArgumentException("O desconto não pode ser maior que 100%.");
+		}
+	}
 
 }

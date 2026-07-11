@@ -20,16 +20,17 @@ Portanto, o Composite resolve o problema de como proporcionar uma estrutura que 
 
 ### Implementação
 
-- Interface Component: `ProdutoComponent`;
-- Leaves, que implementam `ProdutoComponent`: `Filme` e `Episodio`;
-- Composites, que implementam `ProdutoComponent`:
+- Interface Component do Component: `ProdutoComponent`;
+- Leaves do Component, que implementam `ProdutoComponent`: `Filme` e `Episodio`;
+- Composites do Component, que implementam `ProdutoComponent`:
     - `Serie`, que contém episódios;
     - `Pacote`, que pode conter qualquer objeto do tipo `ProdutoComponent`, como filmes, episódios, séries e outros pacotes.
     
 - Interface Builder: `ProdutoBuilder`;
 - Concrete Builder: `PacoteBuilder`, que implementa `ProdutoBuilder` e constrói uma instância de `Pacote`.
+- Product: é o próprio `Pacote`, objeto de criação do `PacoteBuilder`.
 
-O Director do Builder foi evitado porque não foram identificadas sequências fixas e recorrentes para a construção dos pacotes. A composição de cada promoção pode variar conforme a necessidade. Por exemplo, a coleção “Sci-Fi” pode conter os pacotes “Trilogia Matrix” e “Star Wars”, a série “Black Mirror” e o filme “Blade Runner”, mas sua composição pode ser alterada posteriormente. Dessa forma, o próprio cliente pode utilizar diretamente o `PacoteBuilder` para definir os elementos de cada pacote.
+O Director do Builder foi dispensado porque não foram identificadas sequências fixas e recorrentes para a construção dos pacotes. A composição de cada promoção pode variar conforme a necessidade. Por exemplo, a coleção “Sci-Fi” pode conter os pacotes “Trilogia Matrix” e “Star Wars”, a série “Black Mirror” e o filme “Blade Runner”, mas sua composição pode ser alterada posteriormente. Dessa forma, o próprio cliente pode utilizar diretamente o `PacoteBuilder` para definir os elementos de cada pacote.
 
 ### Requisitos de implementação
 
@@ -53,4 +54,6 @@ O Director do Builder foi evitado porque não foram identificadas sequências fi
 - Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?
 - Precisamos definir o valor do desconto na criação do pacote?
 - O builder é para criar pacotes, não séries, né?
-- Eu preciso de um director para instanciar pacotes pré-definidos? Digo, o conteúdo do pacote Sci-Fi sempre vai ser o mesmo ou pode mudar? Se sempre for o mesmo, ter um Director faria sentido. Se não for o caso, faria sentido ter Director?
+- A questão não fala sobre desempenho, mas exige uma solução "elegante". Isso de alguma forma significa dizer que precisamos manter um cache nos pacotes para o preço e duração deles em vez de sempre recalcular esses valores quando os getters forem chamados?
+- É preciso um director para instanciar pacotes pré-definidos? Digo, o conteúdo do pacote Sci-Fi sempre vai ser o mesmo ou pode mudar? Se sempre for o mesmo, ter um Director faria sentido. Se não for o caso, faria sentido ter Director?
+- Se um pacote tem um desconto e ele é adicionado a um super pacote, o super pacote tem um desconto próprio? Se sim, esse desconto é aplicado ao preço original do pacote ou ao preço descontado do pacote?

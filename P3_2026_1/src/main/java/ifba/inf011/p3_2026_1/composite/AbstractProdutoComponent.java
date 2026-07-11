@@ -19,4 +19,9 @@ public abstract class AbstractProdutoComponent implements ProdutoComponent {
         return this.titulo;
     }
 
+    protected void setTitulo(String titulo) {
+        ProdutoValidador.validarTitulo(titulo);
+        this.titulo = titulo;
+    }
+
 }
