@@ -127,7 +127,7 @@ services:
 
     # Usuário e senha padrão do RabbitMQ.
     environment:
-      RABBITMQ_DEFAULT_USER: biblioteca
+      RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: biblioteca
 
     # Portas expostas.

@@ -123,16 +123,6 @@
         </dependency>
 
         <!-- ============================ -->
-        <!-- Eureka Client -->
-        <!-- Registra a aplicação em um servidor Eureka -->
-        <!-- Permite localizar outros serviços registrados -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-
-        <!-- ============================ -->
         <!-- OpenFeign -->
         <!-- Permite que um microsserviço chame outro por interfaces Java -->
         <!-- ============================ -->
@@ -213,6 +203,16 @@
 			<version>0.12.6</version>
 			<scope>runtime</scope>
 		</dependency>
+
+        <!-- ============================ -->
+        <!-- Spring Dotenv -->
+        <!-- Permite carregar variáveis de ambiente a partir de arquivo .env -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
     </dependencies>
 
