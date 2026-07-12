@@ -39,7 +39,7 @@ services:
     #
     # A aplicação poderá acessar o banco através de:
     #
-    # jdbc:postgresql://localhost:5432/biblioteca
+    # jdbc:postgresql://localhost:5433/biblioteca
     #
     # A porta interna padrão do PostgreSQL também é 5432.
     ports:
