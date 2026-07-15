@@ -3,10 +3,10 @@ package ifba.inf011.p3_2026_1.model.comercial;
 import java.util.ArrayList;
 import java.util.List;
 
-import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
-import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
 import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
-import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
 
 // Composite (objeto composto) do Composite
 // Product do Builder

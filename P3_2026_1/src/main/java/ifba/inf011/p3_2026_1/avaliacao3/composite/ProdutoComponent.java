@@ -1,4 +1,4 @@
-package ifba.inf011.p3_2026_1.composite;
+package ifba.inf011.p3_2026_1.avaliacao3.composite;
 
 // Interface Component do Composite
 public interface ProdutoComponent {

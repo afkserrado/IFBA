@@ -1,9 +1,9 @@
-package ifba.inf011.p3_2026_1.builder;
+package ifba.inf011.p3_2026_1.avaliacao3.builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.model.comercial.Pacote;
 
 // Concrete Builder do Builder

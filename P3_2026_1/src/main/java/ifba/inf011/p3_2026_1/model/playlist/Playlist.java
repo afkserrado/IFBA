@@ -21,6 +21,7 @@ public class Playlist{
 		String xml = this.items.stream()
                 	.map(PlaylistItem::toXML)
                 	.collect(Collectors.joining());
+		
 		return "<playlist>\n" 
 				+ xml 
 				+"</playlist>\n";
@@ -32,5 +33,4 @@ public class Playlist{
 	                     .sum();
 	}
 
-	
 }

@@ -1,3 +1,4 @@
+package ifba.inf011.p3_2026_1.client;
 // package ifba.inf011.p3_2026_1.model;
 
 // import java.util.ArrayList;

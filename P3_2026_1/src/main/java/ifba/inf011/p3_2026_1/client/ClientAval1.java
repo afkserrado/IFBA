@@ -1,4 +1,4 @@
-package ifba.inf011.p3_2026_1.model;
+package ifba.inf011.p3_2026_1.client;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.CinemaTimelineBuilder;
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;

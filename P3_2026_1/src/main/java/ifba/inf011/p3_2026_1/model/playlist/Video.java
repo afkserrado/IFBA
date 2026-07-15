@@ -34,4 +34,5 @@ public class Video implements PlaylistItem {
 	public Double getBandwidth(Double bandPerSecond) {
 		return this.getTamanhoMegaBytes();
 	}
+	
 }

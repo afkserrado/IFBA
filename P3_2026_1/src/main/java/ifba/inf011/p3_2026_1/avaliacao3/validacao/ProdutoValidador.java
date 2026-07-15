@@ -1,10 +1,10 @@
-package ifba.inf011.p3_2026_1.validacao;
+package ifba.inf011.p3_2026_1.avaliacao3.validacao;
 
 import java.util.List;
 import java.util.Objects;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
-import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 
 // Classe utilitária para validação dos dados de entrada
 // 'final' impede que outra classe herde dela

@@ -1,6 +1,7 @@
 package ifba.inf011.p3_2026_1.model.playlist;
 
 public class MP3 implements PlaylistItem {
+    
     public String nome;
     public double tamanhoMegaBytes;
 
@@ -26,4 +27,5 @@ public class MP3 implements PlaylistItem {
 	public Double getBandwidth(Double bandPerSecond) {
 		return this.getTamanhoMegaBytes();
 	}
+    
 }

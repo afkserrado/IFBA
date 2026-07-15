@@ -1,8 +1,8 @@
 package ifba.inf011.p3_2026_1.model.comercial;
 
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
-import ifba.inf011.p3_2026_1.composite.AbstractProdutoComponent;
-import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
 
 // Leaf do Composite
 public class Episodio extends AbstractProdutoComponent {

@@ -1,6 +1,6 @@
-package ifba.inf011.p3_2026_1.builder;
+package ifba.inf011.p3_2026_1.avaliacao3.builder;
 
-import ifba.inf011.p3_2026_1.composite.ProdutoComponent;
+import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.model.comercial.Pacote;
 
 // Interface Builder do Builder

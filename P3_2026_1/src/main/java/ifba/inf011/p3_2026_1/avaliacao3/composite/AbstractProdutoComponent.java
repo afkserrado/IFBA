@@ -1,6 +1,6 @@
-package ifba.inf011.p3_2026_1.composite;
+package ifba.inf011.p3_2026_1.avaliacao3.composite;
 
-import ifba.inf011.p3_2026_1.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
 
 // Component abstrato do Composite
 public abstract class AbstractProdutoComponent implements ProdutoComponent {
