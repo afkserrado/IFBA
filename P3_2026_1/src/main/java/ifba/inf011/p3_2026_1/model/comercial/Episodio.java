@@ -3,9 +3,12 @@ package ifba.inf011.p3_2026_1.model.comercial;
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 
 // Leaf do Composite
-public class Episodio extends AbstractProdutoComponent {
+// Concrete Element do Visitor
+public class Episodio extends AbstractProdutoComponent implements PlaylistItem {
 	
     private Double preco;
     private Timeline timeline;
@@ -37,9 +40,10 @@ public class Episodio extends AbstractProdutoComponent {
 		return this.numero;
 	}
 
-	public String toXML() {
-		String xml = "<episodio titulo=\"" + this.getTitulo() + "\" numero=\"" + this.getNumero() + "\"/>\n";
-		return xml;
-	}  
+	// Para implementação do Visitor
+	@Override
+	public void accept(VisitorPlaylist visitor) {
+		visitor.visit(this);
+	}
 	 	
 }

@@ -1,5 +1,9 @@
 package ifba.inf011.p3_2026_1.model.playlist;
 
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
+
+// Concrete Element do Visitor
 public class MP3 implements PlaylistItem {
     
     public String nome;
@@ -18,14 +22,10 @@ public class MP3 implements PlaylistItem {
     	return this.nome;
     }
 
+	// Para implementação do Visitor
 	@Override
-	public String toXML() {
-		return "<mp3 nome=\"" + this.getNome() + "\"/>\n";
-	}
-
-	@Override
-	public Double getBandwidth(Double bandPerSecond) {
-		return this.getTamanhoMegaBytes();
+	public void accept(VisitorPlaylist visitor) {
+		visitor.visit(this);
 	}
     
 }

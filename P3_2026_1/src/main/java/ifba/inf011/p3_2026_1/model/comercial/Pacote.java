@@ -6,10 +6,12 @@ import java.util.List;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
-import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 
 // Composite (objeto composto) do Composite
 // Product do Builder
+// Concrete Element do Visitor
 public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
 	private final List<ProdutoComponent> produtos;
@@ -82,21 +84,16 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 		this.produtos.remove(produto);
 	}
 
+	// Para implementação do Visitor
 	@Override
-	public String toXML() {
-		// String produtosXML = this.produtos.stream()
-		// 		.map(Filme::toXML)
-		// 		.collect(Collectors.joining());
-		// return "<pacote titulo=\"" + this.getTitulo() + "\">\n" 
-		// 	+ produtosXML 
-		// 	+ "</pacote>\n";
+	public void accept(VisitorPlaylist visitor) {
+		visitor.visit(this);
 
-		return ""; // Só para teste
-	}
-
-	@Override
-	public Double getBandwidth(Double bandPerSecond) {
-		return this.getDuracao() * bandPerSecond;
+		for(ProdutoComponent produto : produtos) {
+			if(produto instanceof PlaylistItem item) {
+				item.accept(visitor);
+			}
+		}
 	}
 
 	// Se o desconto for aplicável a outros tipos, extrair esse método

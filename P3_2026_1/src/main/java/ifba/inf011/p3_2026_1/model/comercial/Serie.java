@@ -6,9 +6,12 @@ import java.util.List;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 
 // Composite (objeto composto) do Composite
-public class Serie extends AbstractProdutoComponent {
+// Concrete Element do Visitor
+public class Serie extends AbstractProdutoComponent implements PlaylistItem {
 
 	private Integer temporada;
     private List<Episodio> episodios;
@@ -76,12 +79,14 @@ public class Serie extends AbstractProdutoComponent {
         this.episodios.remove(episodio);
 	}
         
-	public String toXML() {
-		String xml = "\t<serie titulo=\"" + this.getTitulo() + "\" temporada=\"" + this.getTemporada() + "\">\n";
-		for(Episodio episodio : this.episodios)
-			xml += episodio.toXML();
-		return xml + "\t</serie>\n";
-		
-	}    
+	// Para implementação do Visitor
+	@Override
+	public void accept(VisitorPlaylist visitor) {
+		visitor.visit(this);
+
+		for(Episodio episodio : episodios) {
+			episodio.accept(visitor);
+		}
+	}
 
 }

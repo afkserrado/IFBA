@@ -32,7 +32,7 @@ Portanto, o Composite resolve o problema de como proporcionar uma estrutura que 
 
 O Director do Builder foi dispensado porque não foram identificadas sequências fixas e recorrentes para a construção dos pacotes. A composição de cada promoção pode variar conforme a necessidade. Por exemplo, a coleção “Sci-Fi” pode conter os pacotes “Trilogia Matrix” e “Star Wars”, a série “Black Mirror” e o filme “Blade Runner”, mas sua composição pode ser alterada posteriormente. Dessa forma, o próprio cliente pode utilizar diretamente o `PacoteBuilder` para definir os elementos de cada pacote.
 
-### Requisitos de implementação
+#### Estratégias de implementação
 
 - **Composite transparente:** o enunciado determina que filmes avulsos e pacotes complexos aninhados sejam tratados exatamente da mesma maneira. Portanto, produtos individuais e composições compartilharão as mesmas operações por meio da interface `ProdutoComponent`.
 
@@ -47,21 +47,6 @@ O Director do Builder foi dispensado porque não foram identificadas sequências
 ### Classes criadas ou modificadas
 
 - Todas as classes dos pacotes Builder, Composite e Comercial.
-
-### Dúvidas
-
-- Só para confirmar, séries só podem conter episódios, certo (restrição de tipo)?
-- Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?
-
-- Precisamos definir o valor do desconto na criação do pacote?
-- Se um pacote tem um desconto e ele é adicionado a um super pacote, o super pacote tem um desconto próprio? Se sim, esse desconto é aplicado ao preço original do pacote ou ao preço descontado do pacote?
-
-- A questão não fala sobre desempenho, mas exige uma solução "elegante". Isso de alguma forma significa dizer que precisamos manter um cache nos pacotes para o preço e duração deles em vez de sempre recalcular esses valores quando os getters forem chamados?
-
-- O builder é para criar pacotes, não séries, né?
-
-- É preciso um director para instanciar pacotes pré-definidos (configuração fixa)? Digo, o conteúdo do pacote Sci-Fi sempre vai ser o mesmo ou pode mudar? Se sempre for o mesmo, ter um Director faria sentido. Se não for o caso, faria sentido ter Director?
-
 
 ## Questão II: Visitor
 
@@ -78,7 +63,33 @@ O Visitor resolve esse cenário, separando as operações da estrutura de objeto
 - Interface Element: `PlaylistItem`;
 - Elementos concretos que implementam `PlaylistItem`: `MP3`, `Video`, `Filme`, `Episodio`, `Pacote`, `Serie`.
 
+#### Estratégias de implementação
+
+Como o enunciado afirma que as playlists podem combinar tanto os diversos tipos disponibilizados no catálogo da operadora quanto outros elementos sem relação, entendeu-se que a estrutura visitável inclui objetos compostos. Assim, a travessia foi concentrada nos próprios compostos, por meio do método `accept(visitor)`, deixando os visitantes concretos responsáveis apenas pela operação aplicada a cada elemento visitado.
+
 ### Dúvidas
 
+#### Q1
+
+- Só para confirmar, séries só podem conter episódios, certo (restrição de tipo)?
+
+- Episódios avulsos podem ser adicionados a um pacote sem estarem encapsulados em séries?
+
+- Precisamos definir o valor do desconto na criação do pacote?
+
+- Se um pacote tem um desconto e ele é adicionado a um super pacote, o super pacote tem um desconto próprio? Se sim, esse desconto é aplicado ao preço original do pacote ou ao preço descontado do pacote?
+
+- A questão não fala sobre desempenho, mas exige uma solução "elegante". Isso de alguma forma significa dizer que precisamos manter um cache nos pacotes para o preço e duração deles em vez de sempre recalcular esses valores quando os getters forem chamados?
+
+- O builder é para criar pacotes, não séries, né?
+
+- É preciso um director para instanciar pacotes pré-definidos (configuração fixa)? Digo, o conteúdo do pacote Sci-Fi sempre vai ser o mesmo ou pode mudar? Se sempre for o mesmo, ter um Director faria sentido. Se não for o caso, faria sentido ter Director?
+
+#### Q2
+
 - Na q2, o enunciado diz "Estas operações resultaram em mudanças nas classes MP3, VideoClipe, Episodio e Filme.". Porém, Serie e Episodio não estão implementando PlaylistItem na classe base, mas tem um método toXML(). Ou seja, eles não precisam de getBandWidth?
+
 - Na q2, Episodio e Serie vão precisar de todas as operações também? Porque na implementação base elas só possuem o método toXML().
+
+
+

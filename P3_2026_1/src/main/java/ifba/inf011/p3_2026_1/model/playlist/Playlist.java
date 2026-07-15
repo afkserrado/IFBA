@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
+
 public class Playlist{
 	
 	private List<PlaylistItem> items;
