@@ -5,15 +5,20 @@ import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.TimelineBuilder;
 import ifba.inf011.p3_2026_1.avaliacao3.builder.ConcretePacoteBuilder;
 import ifba.inf011.p3_2026_1.avaliacao3.builder.PacoteBuilder;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorExportadorXML;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorLarguraBanda;
 import ifba.inf011.p3_2026_1.model.comercial.Episodio;
 import ifba.inf011.p3_2026_1.model.comercial.Filme;
 import ifba.inf011.p3_2026_1.model.comercial.Pacote;
 import ifba.inf011.p3_2026_1.model.comercial.Serie;
+import ifba.inf011.p3_2026_1.model.playlist.MP3;
+import ifba.inf011.p3_2026_1.model.playlist.Playlist;
+import ifba.inf011.p3_2026_1.model.playlist.Video;
 
 public class Main {
 
     public static void main(String[] args) {
-        q1();
+        q2();
     }
 
     public static void q1() {
@@ -163,6 +168,43 @@ public class Main {
                 + colecaoSciFi.getDuracao()
                 + " segundos"
         );
+    }
+
+    public static void q2() {
+        
+        TimelineBuilder timelineBuilder = new CinemaTimelineBuilder();
+
+        Timeline timeline1 = timelineBuilder.reset()
+            .addClassAdapterVideo("matrix.mov")
+            .addAudio("matrix_audio.wav")
+            .build();
+
+        Timeline timeline2 = timelineBuilder.reset()
+            .addClassAdapterVideo("star_wars.mov")
+            .addAudio("star_wars_audio.wav")
+            .build();
+
+        Filme filme = new Filme("Blade Runner", 30.0, timeline1);
+        Episodio episodio = new Episodio("The National Anthem", 10.0, 1, timeline2);
+        Serie serie = new Serie("Black Mirror", 1, episodio);
+
+        Pacote pacote = new Pacote("Coleção Sci-Fi", 10.0);
+        pacote.adicionarProduto(filme);
+        pacote.adicionarProduto(serie);
+
+        Playlist playlist = new Playlist();
+        playlist.addItem(pacote);
+        playlist.addItem(new MP3("Son Of A Gun", 1000));
+        playlist.addItem(new Video("Trailer", 500, "https://..."));
+
+        VisitorLarguraBanda visitorBand = new VisitorLarguraBanda(1.5);
+        double total = visitorBand.calcularLarguraBanda(playlist);
+
+        VisitorExportadorXML visitorXml = new VisitorExportadorXML();
+        String xml = visitorXml.export(playlist);
+
+        System.out.println("Consumo de Largura de Banda: " + total);
+        System.out.println(xml);
     }
 
     private static Timeline criarTimeline(

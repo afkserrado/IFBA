@@ -46,6 +46,10 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 		setTitulo(titulo);
 	}
 
+	public List<ProdutoComponent> getProdutos() {
+		return List.copyOf(produtos);
+	}
+
 	@Override
 	public Integer getDuracao() {
 		return this.produtos
@@ -88,12 +92,6 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 	@Override
 	public void accept(VisitorPlaylist visitor) {
 		visitor.visit(this);
-
-		for(ProdutoComponent produto : produtos) {
-			if(produto instanceof PlaylistItem item) {
-				item.accept(visitor);
-			}
-		}
 	}
 
 	// Se o desconto for aplicável a outros tipos, extrair esse método

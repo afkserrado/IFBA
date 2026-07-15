@@ -45,6 +45,10 @@ public class Serie extends AbstractProdutoComponent implements PlaylistItem {
     	return this.temporada;
     }
 
+    public List<Episodio> getEpisodios() {
+        return List.copyOf(episodios);
+    }
+
     @Override
     public Integer getDuracao() {
         return this.episodios
@@ -83,10 +87,6 @@ public class Serie extends AbstractProdutoComponent implements PlaylistItem {
 	@Override
 	public void accept(VisitorPlaylist visitor) {
 		visitor.visit(this);
-
-		for(Episodio episodio : episodios) {
-			episodio.accept(visitor);
-		}
 	}
 
 }

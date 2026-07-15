@@ -65,7 +65,7 @@ O Visitor resolve esse cenário, separando as operações da estrutura de objeto
 
 #### Estratégias de implementação
 
-Como o enunciado afirma que as playlists podem combinar tanto os diversos tipos disponibilizados no catálogo da operadora quanto outros elementos sem relação, entendeu-se que a estrutura visitável inclui objetos compostos. Assim, a travessia foi concentrada nos próprios compostos, por meio do método `accept(visitor)`, deixando os visitantes concretos responsáveis apenas pela operação aplicada a cada elemento visitado.
+Como o enunciado afirma que as playlists podem combinar tanto os diversos tipos disponibilizados no catálogo da operadora quanto outros elementos sem relação, entendeu-se que a estrutura visitável inclui tanto elementos simples quanto compostos, já que playlists podem conter produtos do catálogo em diferentes níveis de composição. Para oferecer mais flexibilidade, portanto, a travessia foi concentrada nos próprios visitors concretos.
 
 ### Dúvidas
 

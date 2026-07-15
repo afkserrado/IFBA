@@ -15,6 +15,10 @@ public final class ProdutoValidador {
 
     // 'static' permite que os métodos públicos sejam utilizados sem criar instância
     
+    public static void validarObjeto(Object objeto) {
+        validarNonNull(objeto, null);
+    }
+
     public static void validarTitulo(String titulo) {
         validarNonNull(titulo, "O título não pode ser nulo.");
         validarNonBlank(titulo, "O título não pode estar em branco.");

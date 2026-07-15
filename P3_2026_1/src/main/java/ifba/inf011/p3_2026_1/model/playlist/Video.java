@@ -16,14 +16,17 @@ public class Video implements PlaylistItem {
         this.link = link;
     }
     
+    public String getNome() {
+    	return this.nome;
+    }
+    
     public double getTamanhoMegaBytes() {
     	return this.tamanhoMegaBytes;
     }
 
-    
-    public String getNome() {
-    	return this.nome;
-    }
+    public String getLink() {
+		return this.link;
+	}
 
 	// Para implementação do Visitor
 	@Override
