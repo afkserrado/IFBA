@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifba.acervo_ms.client.EmprestimoClient;
 import br.edu.ifba.acervo_ms.dto.LivroRequestDTO;
+import br.edu.ifba.acervo_ms.dto.LivroResponseDTO;
 import br.edu.ifba.acervo_ms.dto.LivroResumoResponseDTO;
 import br.edu.ifba.acervo_ms.entity.Livro;
 import br.edu.ifba.acervo_ms.enums.OrdenacaoLivro;
@@ -32,7 +33,7 @@ public class LivroService {
     }
 
     @Transactional
-    public LivroResumoResponseDTO cadastrarLivro(LivroRequestDTO dto) {
+    public LivroResponseDTO cadastrarLivro(LivroRequestDTO dto) {
 
         if(livroRepository.existsByIsbn(dto.getIsbn())) {
             throw new OperacaoNaoPermitidaException(
@@ -45,13 +46,7 @@ public class LivroService {
         );
 
         Livro livroSalvo = livroRepository.save(livro);
-        return LivroMapper.converterEntidadeParaDtoResumido(livroSalvo);
-    }
-
-    public List<LivroResumoResponseDTO> buscarLivros(String ordenacao) {
-        Sort sort = OrdenacaoLivro.resolverSort(ordenacao);
-        List<Livro> livros = livroRepository.findAll(sort);
-        return LivroMapper.converterEntidadesParaDtoResumido(livros);
+        return LivroMapper.converterEntidadeParaDto(livroSalvo);
     }
 
     public Page<LivroResumoResponseDTO> buscarLivros(String ordenacao, Pageable pageable) {
@@ -68,21 +63,9 @@ public class LivroService {
         return LivroMapper.converterEntidadeParaDtoResumido(livro);
     }
 
-    public List<LivroResumoResponseDTO> buscarLivrosPorAutor(String autor, String ordenacao) {
-        Sort sort = OrdenacaoLivro.resolverSort(ordenacao);
-        List<Livro> livros = livroRepository.findByAutorContainingIgnoreCase(autor, sort);
-        return LivroMapper.converterEntidadesParaDtoResumido(livros);
-    }
-
     public Page<LivroResumoResponseDTO> buscarLivrosPorAutor(String autor, String ordenacao, Pageable pageable) {
         Pageable pageableComSort = criarPageableComOrdenacao(pageable, ordenacao);
         Page<Livro> livros = livroRepository.findByAutorContainingIgnoreCase(autor, pageableComSort);
-        return LivroMapper.converterEntidadesParaDtoResumido(livros);
-    }
-
-    public List<LivroResumoResponseDTO> buscarLivrosPorTitulo(String titulo, String ordenacao) {
-        Sort sort = OrdenacaoLivro.resolverSort(ordenacao);
-        List<Livro> livros = livroRepository.findByTituloContainingIgnoreCase(titulo, sort);
         return LivroMapper.converterEntidadesParaDtoResumido(livros);
     }
 

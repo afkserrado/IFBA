@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import br.edu.ifba.acervo_ms.entity.Livro;
 
-// DTO para retorno de dados de livro nas respostas da API
+// DTO para retorno de dados de livro quando um livro for criado
 public class LivroResponseDTO {
 
     private Long id;
