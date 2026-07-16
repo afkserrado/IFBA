@@ -3,8 +3,8 @@ package ifba.inf011.p3_2026_1.model.comercial;
 import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
-import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
+import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
 // Leaf do Composite
 // Concrete Element do Visitor

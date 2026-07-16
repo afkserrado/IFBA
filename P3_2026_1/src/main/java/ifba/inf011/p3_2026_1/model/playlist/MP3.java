@@ -1,6 +1,5 @@
 package ifba.inf011.p3_2026_1.model.playlist;
 
-import ifba.inf011.p3_2026_1.avaliacao3.visitor.PlaylistItem;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 
 // Concrete Element do Visitor

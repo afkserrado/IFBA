@@ -8,6 +8,7 @@ import ifba.inf011.p3_2026_1.model.comercial.Pacote;
 import ifba.inf011.p3_2026_1.model.comercial.Serie;
 import ifba.inf011.p3_2026_1.model.playlist.MP3;
 import ifba.inf011.p3_2026_1.model.playlist.Playlist;
+import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 import ifba.inf011.p3_2026_1.model.playlist.Video;
 
 // Visitor concreto do Visitor
