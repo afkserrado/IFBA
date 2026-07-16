@@ -67,6 +67,8 @@ O Visitor resolve esse cenário, separando as operações da estrutura de objeto
 
 Como o enunciado afirma que as playlists podem combinar tanto os diversos tipos disponibilizados no catálogo da operadora quanto outros elementos sem relação, entendeu-se que a estrutura visitável inclui tanto elementos simples quanto compostos, já que playlists podem conter produtos do catálogo em diferentes níveis de composição. Para oferecer mais flexibilidade, portanto, a travessia foi concentrada nos próprios visitors concretos.
 
+Playlist não precisa implementar PlaylistItem porque ele é só um objeto agregador, e não uma estrutura visitada.
+
 ### Dúvidas
 
 #### Q1

@@ -10,81 +10,72 @@ import ifba.inf011.p3_2026_1.model.playlist.MP3;
 import ifba.inf011.p3_2026_1.model.playlist.Playlist;
 import ifba.inf011.p3_2026_1.model.playlist.Video;
 
-// Visitor concreto do Visitor
-public class VisitorExportadorXML implements VisitorPlaylist {
-
+public class VisitorRelatorioNomes implements VisitorPlaylist {
+    
     private final StringBuilder output;
-    private int nivelIndentacao;
+    private int nivelIndentacao = 0;
 
-    public VisitorExportadorXML() {
+    public VisitorRelatorioNomes() {
         this.output = new StringBuilder();
         this.nivelIndentacao = 0;
     }
 
-    public String export(Playlist playlist) {
+    public String gerarRelatorio(Playlist playlist) {
         
         ProdutoValidador.validarObjeto(playlist);
 
         output.setLength(0);
         nivelIndentacao = 0;
 
-        output.append("<playlist>\n");
-        nivelIndentacao++;
+        output.append("Playlist:\n");
 
         for (PlaylistItem item : playlist.getItems()) {
             item.accept(this);
         }
 
-        nivelIndentacao--;
-        output.append("</playlist>\n");
         return output.toString();
     }
 
     @Override
     public void visit(MP3 mp3) {
-        indentar();
-        output.append("<mp3 nome=\"")
-              .append(mp3.getNome())
-              .append("\"/>\n");
+        this.indentar();
+        output.append("- ")
+                   .append(mp3.getNome())
+                   .append(" (mp3)")
+                   .append("\n");
     }
 
     @Override
     public void visit(Video video) {
         indentar();
-        output.append("<video nome=\"")
+        output.append("- ")
               .append(video.getNome())
-              .append("\" link=\"")
-              .append(video.getLink())
-              .append("\"/>\n");
-    }
-
-    @Override
-    public void visit(Episodio episodio) {
-        indentar();
-        output.append("<episodio titulo=\"")
-              .append(episodio.getTitulo())
-              .append("\" numero=\"")
-              .append(episodio.getNumero())
-              .append("\"/>\n");
+              .append(" (vídeo)\n");
     }
 
     @Override
     public void visit(Filme filme) {
         indentar();
-        output.append("<filme titulo=\"")
+        output.append("- ")
               .append(filme.getTitulo())
-              .append("\"/>\n");
+              .append(" (filme)\n");
+    }
+
+    @Override
+    public void visit(Episodio episodio) {
+        indentar();
+        output.append("- ")
+              .append(episodio.getTitulo())
+              .append(" (episódio)\n");
     }
 
     @Override
     public void visit(Serie serie) {
-
+        
         indentar();
-        output.append("<serie titulo=\"")
-          .append(serie.getTitulo())
-          .append("\" temporada=\"")
-          .append(serie.getTemporada())
-          .append("\">\n");
+        output.append("- ")
+              .append(serie.getTitulo())
+              .append(" (série)\n");
 
         nivelIndentacao++;
 
@@ -93,31 +84,25 @@ public class VisitorExportadorXML implements VisitorPlaylist {
         }
 
         nivelIndentacao--;
-
-        indentar();
-        output.append("</serie>\n");
     }
 
     @Override
     public void visit(Pacote pacote) {
         
         indentar();
-        output.append("<pacote titulo=\"")
+        output.append("- ")
               .append(pacote.getTitulo())
-              .append("\">\n");
+              .append(" (pacote)\n");
 
         nivelIndentacao++;
 
-        for(ProdutoComponent produto : pacote.getProdutos()) {
+        for (ProdutoComponent produto : pacote.getProdutos()) {
             if (produto instanceof PlaylistItem item) {
                 item.accept(this);
             }
         }
 
         nivelIndentacao--;
-        
-        indentar();
-        output.append("</pacote>\n");
     }
 
     private void indentar() {
@@ -125,5 +110,4 @@ public class VisitorExportadorXML implements VisitorPlaylist {
             output.append("\t");
         }
     }
-
 }
