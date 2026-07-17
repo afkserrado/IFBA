@@ -1,6 +1,5 @@
 package br.edu.ifba.acervo_ms.service;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.domain.Page;
