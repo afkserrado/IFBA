@@ -56,6 +56,8 @@ O Director do Builder foi dispensado porque não foram identificadas sequências
 
 - Adotou-se a interpretação de que cada pacote é responsável por calcular seu próprio preço. Assim, quando um pacote é incluído dentro de outro, o super pacote pode aplicar seu desconto sobre a soma dos preços retornados pelos itens que contém. Isso preserva o encapsulamento e evita efeitos colaterais. O Builder implementado permite a construção de pacotes com e sem desconto. Portanto, para evitar descontos encadeados, é possível compor um pacote sem desconto dentro de outro pacote com desconto, preservando a autonomia de cada objeto composto.
 
+- O enunciado fala em “pacotes fechados de conteúdo com desconto”. Dessa forma, o desconto foi pensado como uma responsabilidade de `Pacote`,  e não de produtos individuais como `Filme` ou `Serie`. Assim, cada pacote calcula seu preço e aplica seu próprio desconto. Em outras palavras, não é possível criar um `Filme` e aplicar-lhe um desconto, porque apenas pacotes podem aplicar descontos.
+
 ---
 
 ## Questão II: Visitor
