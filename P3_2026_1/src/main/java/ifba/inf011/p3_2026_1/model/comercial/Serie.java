@@ -5,7 +5,7 @@ import java.util.List;
 
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
-import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
@@ -13,13 +13,21 @@ import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 // Concrete Element do Visitor
 public class Serie extends AbstractProdutoComponent implements PlaylistItem {
 
+    private static final String MSG_TEMPORADA_INVALIDA =
+        "A temporada da série não pode ser nula ou negativa.";
+    private static final String MSG_LISTA_EPISODIOS_INVALIDA =
+        "A lista de episódios da série não pode ser nula.";
+    private static final String MSG_ARRAY_EPISODIOS_INVALIDO =
+        "O array de episódios da série não pode ser nulo.";
+
 	private Integer temporada;
     private List<Episodio> episodios;
     
     public Serie(String titulo, Integer temporada) {
-    	super(titulo);
+    	
+        super(titulo);
 
-        ProdutoValidador.validarNaoNegativo(temporada);
+        ValidadorUtil.validarNaoNegativo(temporada, MSG_TEMPORADA_INVALIDA);
 
         this.temporada = temporada;
     	this.episodios = new ArrayList<>();
@@ -27,17 +35,13 @@ public class Serie extends AbstractProdutoComponent implements PlaylistItem {
     
     public Serie(String titulo, Integer temporada, List<Episodio> episodios) {
 		this(titulo, temporada);
-
-        ProdutoValidador.validarLista(episodios);
-
+        ValidadorUtil.validarColecao(episodios, MSG_LISTA_EPISODIOS_INVALIDA);
 		this.episodios = new ArrayList<>(episodios);
 	}
 
 	public Serie(String titulo, Integer temporada, Episodio... episodios) {
 		this(titulo, temporada);
-
-        ProdutoValidador.validarLista(episodios);
-
+        ValidadorUtil.validarArray(episodios, MSG_ARRAY_EPISODIOS_INVALIDO);
 		this.episodios = new ArrayList<>(List.of(episodios));
 	}
 

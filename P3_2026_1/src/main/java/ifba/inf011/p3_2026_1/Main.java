@@ -19,6 +19,7 @@ import ifba.inf011.p3_2026_1.model.playlist.Video;
 public class Main {
 
     public static void main(String[] args) {
+        q1();
         q2();
     }
 

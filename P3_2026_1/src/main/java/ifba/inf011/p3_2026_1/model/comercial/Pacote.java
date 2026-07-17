@@ -5,7 +5,7 @@ import java.util.List;
 
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
-import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
 import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
@@ -14,10 +14,22 @@ import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 // Concrete Element do Visitor
 public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
+	private static final String MSG_DESCONTO_INVALIDO =
+        "O desconto do pacote não pode ser nulo ou negativo.";
+    private static final String MSG_LISTA_PRODUTOS_INVALIDA =
+        "A lista de produtos do pacote não pode ser nula.";
+    private static final String MSG_ARRAY_PRODUTOS_INVALIDO =
+        "O array de produtos do pacote não pode ser nulo.";
+    private static final String MSG_PRODUTO_INVALIDO =
+        "O produto do pacote não pode ser nulo.";
+    private static final String MSG_DESCONTO_MAIOR_100 =
+        "O desconto do pacote não pode ser maior que 100%.";
+
 	private final List<ProdutoComponent> produtos;
 	private Double desconto;
 	
 	public Pacote(String titulo, Double desconto) {
+		
 		super(titulo);
 		
 		validarDesconto(desconto);
@@ -28,17 +40,13 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 	
 	public Pacote(String titulo, Double desconto, List<ProdutoComponent> produtos) {
 		this(titulo, desconto);
-
-		ProdutoValidador.validarLista(produtos);
-
+		ValidadorUtil.validarColecao(produtos, MSG_LISTA_PRODUTOS_INVALIDA);
 		this.produtos.addAll(produtos);
 	}
 
 	public Pacote(String titulo, Double desconto, ProdutoComponent... produtos) {
 		this(titulo, desconto);
-
-		ProdutoValidador.validarLista(produtos);
-
+		ValidadorUtil.validarArray(produtos, MSG_ARRAY_PRODUTOS_INVALIDO);
 		this.produtos.addAll(List.of(produtos));
 	}
 
@@ -60,6 +68,7 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
 	@Override
 	public Double getPreco() {
+		
 		double soma = this.produtos
 						  .stream()
 						  .mapToDouble(ProdutoComponent::getPreco)
@@ -79,7 +88,7 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
 	@Override
 	public void adicionarProduto(ProdutoComponent produto) {	
-		ProdutoValidador.validarProduto(produto);		
+		ValidadorUtil.validarObjeto(produto, MSG_PRODUTO_INVALIDO);    
 		this.produtos.add(produto);
 	}
 
@@ -94,14 +103,13 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 		visitor.visit(this);
 	}
 
-	// Se o desconto for aplicável a outros tipos, extrair esse método
-	// para a classe ProdutoValidador
 	private static void validarDesconto(Double desconto) {
-		ProdutoValidador.validarNaoNegativo(desconto);
+		
+		ValidadorUtil.validarNaoNegativo(desconto, MSG_DESCONTO_INVALIDO);
 
 		if(desconto > 100) {
-			throw new IllegalArgumentException("O desconto não pode ser maior que 100%.");
-		}
+            throw new IllegalArgumentException(MSG_DESCONTO_MAIOR_100);
+        }
 	}
 
 }

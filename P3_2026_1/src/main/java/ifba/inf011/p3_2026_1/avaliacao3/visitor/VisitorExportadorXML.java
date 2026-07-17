@@ -1,7 +1,7 @@
 package ifba.inf011.p3_2026_1.avaliacao3.visitor;
 
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
-import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 import ifba.inf011.p3_2026_1.model.comercial.Episodio;
 import ifba.inf011.p3_2026_1.model.comercial.Filme;
 import ifba.inf011.p3_2026_1.model.comercial.Pacote;
@@ -14,6 +14,9 @@ import ifba.inf011.p3_2026_1.model.playlist.Video;
 // Visitor concreto do Visitor
 public class VisitorExportadorXML implements VisitorPlaylist {
 
+    private static final String MSG_PLAYLIST_INVALIDA =
+        "A playlist para exportação XML não pode ser nula.";
+
     private final StringBuilder output;
     private int nivelIndentacao;
 
@@ -24,7 +27,7 @@ public class VisitorExportadorXML implements VisitorPlaylist {
 
     public String export(Playlist playlist) {
         
-        ProdutoValidador.validarObjeto(playlist);
+        ValidadorUtil.validarObjeto(playlist, MSG_PLAYLIST_INVALIDA);
 
         output.setLength(0);
         nivelIndentacao = 0;

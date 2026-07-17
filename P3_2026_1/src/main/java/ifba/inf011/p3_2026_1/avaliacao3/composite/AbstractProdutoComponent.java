@@ -1,16 +1,16 @@
 package ifba.inf011.p3_2026_1.avaliacao3.composite;
 
-import ifba.inf011.p3_2026_1.avaliacao3.validacao.ProdutoValidador;
+import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 
-// Component abstrato do Composite
 public abstract class AbstractProdutoComponent implements ProdutoComponent {
     
+    private static final String MSG_TITULO_INVALIDO =
+        "O título não pode ser nulo ou em branco.";
+
     private String titulo;
 
     public AbstractProdutoComponent(String titulo) {
-        
-        ProdutoValidador.validarTitulo(titulo);
-
+        ValidadorUtil.validarTexto(titulo, MSG_TITULO_INVALIDO);
         this.titulo = titulo;
     }
 
@@ -20,8 +20,7 @@ public abstract class AbstractProdutoComponent implements ProdutoComponent {
     }
 
     protected void setTitulo(String titulo) {
-        ProdutoValidador.validarTitulo(titulo);
+        ValidadorUtil.validarTexto(titulo, MSG_TITULO_INVALIDO);
         this.titulo = titulo;
     }
-
 }
