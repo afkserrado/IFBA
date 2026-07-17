@@ -7,6 +7,7 @@ import ifba.inf011.p3_2026_1.avaliacao3.builder.ConcretePacoteBuilder;
 import ifba.inf011.p3_2026_1.avaliacao3.builder.PacoteBuilder;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorExportadorXML;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorLarguraBanda;
+import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorRelatorioNomes;
 import ifba.inf011.p3_2026_1.model.comercial.Episodio;
 import ifba.inf011.p3_2026_1.model.comercial.Filme;
 import ifba.inf011.p3_2026_1.model.comercial.Pacote;
@@ -177,8 +178,14 @@ public class ClienteAval3 {
         VisitorExportadorXML visitorXml = new VisitorExportadorXML();
         String xml = visitorXml.export(playlist);
 
+        VisitorRelatorioNomes visitorRelatorio = new VisitorRelatorioNomes();
+        String relatorio = visitorRelatorio.gerarRelatorio(playlist);
+
         System.out.println("\n=== QUESTÃO II ===");
         System.out.println("Consumo de Largura de Banda: " + total);
+        System.out.println("\n=== RELATÓRIO DE NOMES ===");
+        System.out.println(relatorio);
+        System.out.println("=== XML ===");
         System.out.println(xml);
     }
 
