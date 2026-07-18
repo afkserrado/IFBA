@@ -2,7 +2,7 @@ package ifba.inf010.atv13.model;
 
 import java.util.Set;
 
-// Representa os resultados do APriori
+// Representa um conjunto frequente encontrado pelo algoritmo Apriori e seu suporte associado
 public class ConjuntoFrequente {
 
     private Set<String> itens;

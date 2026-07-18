@@ -44,7 +44,7 @@ public class TransacaoRepository {
         }
 
         catch(SQLException ex) {
-            throw new RuntimeException();
+            throw new RuntimeException(ex);
         }
 
         return mapa
