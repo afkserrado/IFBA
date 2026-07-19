@@ -85,11 +85,12 @@ O Visitor resolve esse cenário separando as operações da estrutura de objetos
   - `Episodio`;
   - `Pacote`;
   - `Serie`;
+  - `Playlist`.
 - **Object Structure:** `Playlist`.
 
 #### Papel da Playlist
 
-A classe `Playlist` foi tratada como a Object Structure do Visitor, pois ela é a estrutura agregadora que contém os elementos sobre os quais as operações serão aplicadas. Ao mesmo tempo, ela também atua como ponto de entrada da travessia, coordenando a visita aos seus itens e podendo contribuir com a saída produzida por determinados visitors, como no caso da geração de relatórios e exportação XML.
+A classe `Playlist` foi tratada como a Object Structure do Visitor, pois ela é a estrutura agregadora que contém os elementos sobre os quais as operações serão aplicadas. Ao mesmo tempo, ela também atua como um Concret Element, servindo de ponto de entrada da travessia por meio do método `accept()`. Essa abordagem também possibilita que os visitors concretos incluam algum conteúdo padrão, como uma tag </playlist>, na saída por eles produzidas.
 
 ### Estratégias de implementação
 
