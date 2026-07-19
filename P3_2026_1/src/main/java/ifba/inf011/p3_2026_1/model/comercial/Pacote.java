@@ -58,6 +58,19 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 		return List.copyOf(produtos);
 	}
 
+	public List<PlaylistItem> getPlaylistItens() {
+		
+		List<PlaylistItem> itens = new ArrayList<>();
+		
+		for(ProdutoComponent produto : produtos) {
+			if (produto instanceof PlaylistItem item) {
+				itens.add(item);
+			}
+		}
+
+		return List.copyOf(itens);
+	}
+
 	@Override
 	public Integer getDuracao() {
 		return this.produtos

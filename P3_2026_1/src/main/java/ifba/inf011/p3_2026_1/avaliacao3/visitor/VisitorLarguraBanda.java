@@ -14,62 +14,60 @@ public class VisitorLarguraBanda implements VisitorPlaylist {
     
     private static final String MSG_BANDWIDTH_INVALIDA =
         "A largura de banda por segundo não pode ser negativa.";
-    private static final String MSG_PLAYLIST_INVALIDA =
-        "A playlist para cálculo de largura de banda não pode ser nula.";
 
-    private double band; // Largura de banda total da playlist
-    private double bandPerSecond;
+    private double larguraBandaTotal; // Largura de banda total da playlist
+    private double larguraBandaPorSegundo;
 
-    public VisitorLarguraBanda(double bandPerSecond) {
-        this.band = 0.0;
-        ValidadorUtil.validarNaoNegativo(bandPerSecond, MSG_BANDWIDTH_INVALIDA);
-        this.bandPerSecond = bandPerSecond == 0.0 ? 1.5 : bandPerSecond;
+    public VisitorLarguraBanda(double larguraBandaPorSegundo) {
+        this.larguraBandaTotal = 0.0;
+        ValidadorUtil.validarNaoNegativo(larguraBandaPorSegundo, MSG_BANDWIDTH_INVALIDA);
+        this.larguraBandaPorSegundo = larguraBandaPorSegundo == 0.0 ? 1.5 : larguraBandaPorSegundo;
     }
 
     public void reset() {
-        this.band = 0.0;
+        larguraBandaTotal = 0.0;
     }
 
-    public double calcularLarguraBanda(Playlist playlist) {
-        
-        ValidadorUtil.validarObjeto(playlist, MSG_PLAYLIST_INVALIDA);
+    public double getLarguraBandaTotal() {
+        return larguraBandaTotal;
+    }
 
+    @Override
+    public void visit(Playlist playlist) {
         reset();
 
-        for (PlaylistItem item : playlist.getItems()) {
+        for (PlaylistItem item : playlist.getItens()) {
             item.accept(this);
         }
-
-        return this.band;
     }
 
     @Override
     public void visit(MP3 mp3) {
-        this.band += mp3.getTamanhoMegaBytes();
+        larguraBandaTotal += mp3.getTamanhoMegaBytes();
     }
 
     @Override
     public void visit(Video video) {
-        this.band += video.getTamanhoMegaBytes();
+        larguraBandaTotal += video.getTamanhoMegaBytes();
     }
 
     @Override
     public void visit(Episodio episodio) {
-        this.band += episodio.getDuracao() * this.bandPerSecond;
+        larguraBandaTotal += episodio.getDuracao() * this.larguraBandaPorSegundo;
     }
 
     @Override
     public void visit(Filme filme) {
-        this.band += filme.getDuracao() * this.bandPerSecond;
+        larguraBandaTotal += filme.getDuracao() * this.larguraBandaPorSegundo;
     }
 
     @Override
     public void visit(Serie serie) {
-        this.band += serie.getDuracao() * this.bandPerSecond;
+        larguraBandaTotal += serie.getDuracao() * this.larguraBandaPorSegundo;
     }
 
     @Override
     public void visit(Pacote pacote) {
-        this.band += pacote.getDuracao() * this.bandPerSecond;
+        larguraBandaTotal += pacote.getDuracao() * this.larguraBandaPorSegundo;
     }
 }

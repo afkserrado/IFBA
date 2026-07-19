@@ -84,17 +84,20 @@ O Visitor resolve esse cenário separando as operações da estrutura de objetos
   - `Filme`;
   - `Episodio`;
   - `Pacote`;
-  - `Serie`.
+  - `Serie`;
+- **Object Structure:** `Playlist`.
 
 #### Papel da Playlist
 
-A classe `Playlist` não implementa `PlaylistItem`. Ela atua como objeto agregador e ponto de entrada para as operações, oferecendo acesso à coleção de itens visitáveis, mas não sendo ela própria um elemento visitado.
+A classe `Playlist` foi tratada como a Object Structure do Visitor, pois ela é a estrutura agregadora que contém os elementos sobre os quais as operações serão aplicadas. Ao mesmo tempo, ela também atua como ponto de entrada da travessia, coordenando a visita aos seus itens e podendo contribuir com a saída produzida por determinados visitors, como no caso da geração de relatórios e exportação XML.
 
 ### Estratégias de implementação
 
 - Como o enunciado afirma que as playlists podem combinar tanto elementos do catálogo comercial da operadora quanto elementos externos, como MP3 e pequenos videoclipes, a estrutura visitável foi definida a partir da interface `PlaylistItem`, que representa especificamente os elementos aceitos em playlist.
 
 - `PlaylistItem` e `ProdutoComponent` não foram unificados na mesma hierarquia principal, pois representam papéis distintos no domínio. `ProdutoComponent` modela a composição comercial de produtos; `PlaylistItem` modela a capacidade de um objeto participar de uma playlist e receber visitantes. Essa separação evita forçar todo produto comercial a ser, obrigatoriamente, um item de playlist.
+
+- Em virtude da decisão adotada no item anterior, a classe `Pacote` expõe o método `getPlaylistItens()` para permitir que apenas os elementos compatíveis com o contexto de playlist participem da travessia.
 
 - A travessia foi concentrada nos próprios visitors concretos. Isso oferece flexibilidade para decidir como tratar objetos simples e compostos, inclusive controlando recursão, indentação textual e serialização XML de acordo com a necessidade da análise.
 

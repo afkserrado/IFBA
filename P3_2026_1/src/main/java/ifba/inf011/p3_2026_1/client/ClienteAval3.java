@@ -23,29 +23,10 @@ public class ClienteAval3 {
         TimelineBuilder timelineBuilder = new CinemaTimelineBuilder();
         PacoteBuilder pacoteBuilder = new ConcretePacoteBuilder();
 
-        Filme matrix = new Filme(
-            "Matrix",
-            20.0,
-            criarTimeline(timelineBuilder, "matrix.mov")
-        );
-
-        Filme matrixReloaded = new Filme(
-            "Matrix Reloaded",
-            25.0,
-            criarTimeline(timelineBuilder, "matrix_reloaded.mov")
-        );
-
-        Filme matrixRevolutions = new Filme(
-            "Matrix Revolutions",
-            25.0,
-            criarTimeline(timelineBuilder, "matrix_revolutions.mov")
-        );
-
-        Filme documentarioMatrix = new Filme(
-            "The Matrix Revisited",
-            15.0,
-            criarTimeline(timelineBuilder, "matrix_revisited.mov")
-        );
+        Filme matrix = new Filme("Matrix", 20.0, criarTimeline(timelineBuilder, "matrix.mov"));
+        Filme matrixReloaded = new Filme("Matrix Reloaded", 25.0, criarTimeline(timelineBuilder, "matrixreloaded.mov"));
+        Filme matrixRevolutions = new Filme("Matrix Revolutions", 25.0, criarTimeline(timelineBuilder, "matrixrevolutions.mov"));
+        Filme documentarioMatrix = new Filme("The Matrix Revisited", 15.0, criarTimeline(timelineBuilder, "matrixrevisited.mov"));
 
         pacoteBuilder
             .reset()
@@ -57,27 +38,12 @@ public class ClienteAval3 {
             .adicionarProduto(documentarioMatrix);
 
         Pacote trilogiaMatrixAvulsa = pacoteBuilder.build();
-
         Pacote trilogiaMatrixSemDesconto = pacoteBuilder.build();
         trilogiaMatrixSemDesconto.alterarDesconto(0.0);
 
-        Filme starWarsIV = new Filme(
-            "Star Wars: Uma Nova Esperança",
-            25.0,
-            criarTimeline(timelineBuilder, "star_wars_iv.mov")
-        );
-
-        Filme starWarsV = new Filme(
-            "Star Wars: O Império Contra-Ataca",
-            25.0,
-            criarTimeline(timelineBuilder, "star_wars_v.mov")
-        );
-
-        Filme starWarsVI = new Filme(
-            "Star Wars: O Retorno de Jedi",
-            25.0,
-            criarTimeline(timelineBuilder, "star_wars_vi.mov")
-        );
+        Filme starWarsIV = new Filme("Star Wars: Uma Nova Esperança", 25.0, criarTimeline(timelineBuilder, "starwarsiv.mov"));
+        Filme starWarsV = new Filme("Star Wars: O Império Contra-Ataca", 25.0, criarTimeline(timelineBuilder, "starwarsv.mov"));
+        Filme starWarsVI = new Filme("Star Wars: O Retorno de Jedi", 25.0, criarTimeline(timelineBuilder, "starwarsvi.mov"));
 
         Pacote pacoteStarWars = pacoteBuilder
             .reset()
@@ -88,40 +54,13 @@ public class ClienteAval3 {
             .adicionarProduto(starWarsVI)
             .build();
 
-        Episodio episodio1 = new Episodio(
-            "The National Anthem",
-            10.0,
-            1,
-            criarTimeline(timelineBuilder, "black_mirror_ep1.mov")
-        );
+        Episodio episodio1 = new Episodio("The National Anthem", 10.0, 1, criarTimeline(timelineBuilder, "blackmirror-ep1.mov"));
+        Episodio episodio2 = new Episodio("Fifteen Million Merits", 10.0, 2, criarTimeline(timelineBuilder, "blackmirror-ep2.mov"));
+        Episodio episodio3 = new Episodio("The Entire History of You", 10.0, 3, criarTimeline(timelineBuilder, "blackmirror-ep3.mov"));
 
-        Episodio episodio2 = new Episodio(
-            "Fifteen Million Merits",
-            10.0,
-            2,
-            criarTimeline(timelineBuilder, "black_mirror_ep2.mov")
-        );
+        Serie blackMirror = new Serie("Black Mirror", 1, episodio1, episodio2, episodio3);
 
-        Episodio episodio3 = new Episodio(
-            "The Entire History of You",
-            10.0,
-            3,
-            criarTimeline(timelineBuilder, "black_mirror_ep3.mov")
-        );
-
-        Serie blackMirror = new Serie(
-            "Black Mirror",
-            1,
-            episodio1,
-            episodio2,
-            episodio3
-        );
-
-        Filme bladeRunner = new Filme(
-            "Blade Runner",
-            30.0,
-            criarTimeline(timelineBuilder, "blade_runner.mov")
-        );
+        Filme bladeRunner = new Filme("Blade Runner", 30.0, criarTimeline(timelineBuilder, "bladerunner.mov"));
 
         Pacote colecaoSciFi = pacoteBuilder
             .reset()
@@ -133,13 +72,11 @@ public class ClienteAval3 {
             .adicionarProduto(bladeRunner)
             .build();
 
-        System.out.println("=== QUESTÃO I ===");
-
-        System.out.println("\nPacote vendido separadamente:");
-        System.out.println("Produto: " + trilogiaMatrixAvulsa.getTitulo());
+        System.out.println("===== QUESTÃO I =====");
+        System.out.println("Produto vendido separadamente: " + trilogiaMatrixAvulsa.getTitulo());
         System.out.printf("Preço com desconto: R$ %.2f%n", trilogiaMatrixAvulsa.getPreco());
+        System.out.println();
 
-        System.out.println("\nSuperpacote:");
         System.out.println("Produto: " + colecaoSciFi.getTitulo());
         System.out.printf("Preço total com desconto: R$ %.2f%n", colecaoSciFi.getPreco());
         System.out.println("Duração total: " + colecaoSciFi.getDuracao() + " segundos");
@@ -151,12 +88,12 @@ public class ClienteAval3 {
 
         Timeline timeline1 = timelineBuilder.reset()
             .addClassAdapterVideo("matrix.mov")
-            .addAudio("matrix_audio.wav")
+            .addAudio("matrix-audio.wav")
             .build();
 
         Timeline timeline2 = timelineBuilder.reset()
-            .addClassAdapterVideo("star_wars.mov")
-            .addAudio("star_wars_audio.wav")
+            .addClassAdapterVideo("blackmirror.mov")
+            .addAudio("blackmirror-audio.wav")
             .build();
 
         Filme filme = new Filme("Blade Runner", 30.0, timeline1);
@@ -170,22 +107,25 @@ public class ClienteAval3 {
         Playlist playlist = new Playlist();
         playlist.addItem(pacote);
         playlist.addItem(new MP3("Son Of A Gun", 1000));
-        playlist.addItem(new Video("Trailer", 500, "https://..."));
+        playlist.addItem(new Video("Trailer", 500, "https://exemplo.com/trailer"));
 
         VisitorLarguraBanda visitorBand = new VisitorLarguraBanda(1.5);
-        double total = visitorBand.calcularLarguraBanda(playlist);
-
-        VisitorExportadorXML visitorXml = new VisitorExportadorXML();
-        String xml = visitorXml.export(playlist);
+        playlist.accept(visitorBand);
+        double total = visitorBand.getLarguraBandaTotal();
 
         VisitorRelatorioNomes visitorRelatorio = new VisitorRelatorioNomes();
-        String relatorio = visitorRelatorio.gerarRelatorio(playlist);
+        playlist.accept(visitorRelatorio);
+        String relatorio = visitorRelatorio.getOutput();
 
-        System.out.println("\n=== QUESTÃO II ===");
-        System.out.println("Consumo de Largura de Banda: " + total);
-        System.out.println("\n=== RELATÓRIO DE NOMES ===");
+        VisitorExportadorXML visitorXml = new VisitorExportadorXML();
+        playlist.accept(visitorXml);
+        String xml = visitorXml.getOutput();
+
+        System.out.println("\n===== QUESTÃO II =====");
+        System.out.println("Consumo de Largura de Banda total: " + total);
+        System.out.println("\n===== RELATÓRIO DE NOMES =====");
         System.out.println(relatorio);
-        System.out.println("=== XML ===");
+        System.out.println("===== XML =====");
         System.out.println(xml);
     }
 
@@ -194,10 +134,7 @@ public class ClienteAval3 {
         runQuestaoII();
     }
 
-    private static Timeline criarTimeline(
-        TimelineBuilder builder,
-        String arquivo
-    ) {
+    private static Timeline criarTimeline(TimelineBuilder builder, String arquivo) {
         return builder
             .reset()
             .addClassAdapterVideo(arquivo)
