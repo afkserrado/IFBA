@@ -109,7 +109,7 @@ public class VisitorExportadorXML implements VisitorPlaylist {
 
         nivelIndentacao++;
 
-        for(PlaylistItem item : pacote.getPlaylistItens()) {
+        for(PlaylistItem item : pacote.getProdutos()) {
             item.accept(this);
         }
 

@@ -4,11 +4,10 @@ import ifba.inf011.p3_2026_1.avaliacao1.timeline.builder.Timeline;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
-import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
 // Leaf do Composite
 // Concrete Element do Visitor
-public class Filme extends AbstractProdutoComponent implements PlaylistItem {
+public class Filme extends AbstractProdutoComponent {
     
     private static final String MSG_PRECO_INVALIDO =
         "O preço do filme não pode ser nulo ou negativo.";

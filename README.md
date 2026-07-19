@@ -96,9 +96,7 @@ A classe `Playlist` foi tratada como a Object Structure do Visitor, pois ela é 
 
 - Como o enunciado afirma que as playlists podem combinar tanto elementos do catálogo comercial da operadora quanto elementos externos, como MP3 e pequenos videoclipes, a estrutura visitável foi definida a partir da interface `PlaylistItem`, que representa especificamente os elementos aceitos em playlist.
 
-- `PlaylistItem` e `ProdutoComponent` não foram unificados na mesma hierarquia principal, pois representam papéis distintos no domínio. `ProdutoComponent` modela a composição comercial de produtos; `PlaylistItem` modela a capacidade de um objeto participar de uma playlist e receber visitantes. Essa separação evita forçar todo produto comercial a ser, obrigatoriamente, um item de playlist.
-
-- Em virtude da decisão adotada no item anterior, a classe `Pacote` expõe o método `getPlaylistItens()` para permitir que apenas os elementos compatíveis com o contexto de playlist participem da travessia.
+- `ProdutoComponent` estende `PlaylistItem`, pois, de acordo com o enunciado, todo produto vendável também é "playlistável". Com isso, `Filme`, `Episodio`, `Serie` e `Pacote` participam tanto do domínio comercial quanto do domínio de playlists, enquanto `MP3` e `Video` permanecem restritos ao domínio de playlist.
 
 - A travessia foi concentrada nos próprios visitors concretos. Isso oferece flexibilidade para decidir como tratar objetos simples e compostos, inclusive controlando recursão, indentação textual e serialização XML de acordo com a necessidade da análise.
 

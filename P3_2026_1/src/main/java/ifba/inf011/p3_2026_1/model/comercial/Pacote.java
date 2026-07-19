@@ -12,7 +12,7 @@ import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 // Composite (objeto composto) do Composite
 // Product do Builder
 // Concrete Element do Visitor
-public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
+public class Pacote extends AbstractProdutoComponent {
 
 	private static final String MSG_DESCONTO_INVALIDO =
         "O desconto do pacote não pode ser nulo ou negativo.";
@@ -56,19 +56,6 @@ public class Pacote extends AbstractProdutoComponent implements PlaylistItem {
 
 	public List<ProdutoComponent> getProdutos() {
 		return List.copyOf(produtos);
-	}
-
-	public List<PlaylistItem> getPlaylistItens() {
-		
-		List<PlaylistItem> itens = new ArrayList<>();
-		
-		for(ProdutoComponent produto : produtos) {
-			if (produto instanceof PlaylistItem item) {
-				itens.add(item);
-			}
-		}
-
-		return List.copyOf(itens);
 	}
 
 	@Override
