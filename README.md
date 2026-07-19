@@ -4,6 +4,11 @@ Avaliação 3 da disciplina INF011 - Padrões de Projeto.
 
 Este projeto implementa as soluções da Avaliação III da disciplina INF011.
 
+Alunos:
+
+- Anderson Serrado
+- Anna Luisa
+
 ---
 
 ## Questão I: Composite + Builder
