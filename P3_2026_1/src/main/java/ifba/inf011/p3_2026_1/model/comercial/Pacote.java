@@ -7,7 +7,6 @@ import ifba.inf011.p3_2026_1.avaliacao3.composite.AbstractProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.composite.ProdutoComponent;
 import ifba.inf011.p3_2026_1.avaliacao3.util.ValidadorUtil;
 import ifba.inf011.p3_2026_1.avaliacao3.visitor.VisitorPlaylist;
-import ifba.inf011.p3_2026_1.model.playlist.PlaylistItem;
 
 // Composite (objeto composto) do Composite
 // Product do Builder

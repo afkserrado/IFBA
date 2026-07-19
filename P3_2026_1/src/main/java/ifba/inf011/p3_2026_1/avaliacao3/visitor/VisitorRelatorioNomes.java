@@ -79,7 +79,7 @@ public class VisitorRelatorioNomes implements VisitorPlaylist {
 
         nivelIndentacao++;
 
-        for(Episodio episodio : serie.getEpisodios()) {
+        for(PlaylistItem episodio : serie.getEpisodios()) {
             episodio.accept(this);
         }
 
