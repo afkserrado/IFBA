@@ -40,7 +40,7 @@ public class EmprestimoService {
         this.acervoClient = acervoClient;
     }
 
-    // --- SEUS MÉTODOS ORIGINAIS ---
+    // --- MÉTODOS ORIGINAIS ---
 
     private boolean mapToBoolean(long count) {
         return count > 0;
