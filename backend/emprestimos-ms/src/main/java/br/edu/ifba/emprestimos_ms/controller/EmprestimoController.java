@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
 import br.edu.ifba.emprestimos_ms.service.EmprestimoService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
