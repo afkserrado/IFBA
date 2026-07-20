@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifba.acervo_ms.client.EmprestimoClient;
+import br.edu.ifba.acervo_ms.dto.LivroCadastradoEvent;
+import br.edu.ifba.acervo_ms.dto.LivroDeletadoEvent;
 import br.edu.ifba.acervo_ms.dto.LivroRequestDTO;
 import br.edu.ifba.acervo_ms.dto.LivroResponseDTO;
 import br.edu.ifba.acervo_ms.dto.LivroResumoResponseDTO;
@@ -18,6 +20,7 @@ import br.edu.ifba.acervo_ms.enums.OrdenacaoLivro;
 import br.edu.ifba.acervo_ms.exception.LivroNaoEncontradoException;
 import br.edu.ifba.acervo_ms.exception.OperacaoNaoPermitidaException;
 import br.edu.ifba.acervo_ms.mapper.LivroMapper;
+import br.edu.ifba.acervo_ms.messaging.LivroProducer;
 import br.edu.ifba.acervo_ms.repository.LivroRepository;
 
 @Service
@@ -25,10 +28,12 @@ public class LivroService {
     
     private final LivroRepository livroRepository;
     private final EmprestimoClient emprestimoClient;
+    private final LivroProducer livroProducer;
 
-    public LivroService(LivroRepository livroRepository, EmprestimoClient emprestimoClient) {
+    public LivroService(LivroRepository livroRepository, EmprestimoClient emprestimoClient, LivroProducer livroProducer) {
         this.livroRepository = livroRepository;
         this.emprestimoClient = emprestimoClient;
+        this.livroProducer = livroProducer;
     }
 
     @Transactional
@@ -45,6 +50,14 @@ public class LivroService {
         );
 
         Livro livroSalvo = livroRepository.save(livro);
+
+        livroProducer.publicarLivroCadastrado(new LivroCadastradoEvent(
+            livroSalvo.getId(),
+            livroSalvo.getTitulo(),
+            livroSalvo.getAutor(),
+            livroSalvo.getIsbn()
+        ));
+
         return LivroMapper.converterEntidadeParaDto(livroSalvo);
     }
 
@@ -127,6 +140,10 @@ public class LivroService {
         }
 
         livroRepository.delete(livro);
+
+        livroProducer.publicarLivroDeletado(
+            new LivroDeletadoEvent(livro.getId())
+        );
     }
 
     public boolean estaDisponivel(Long id) {
