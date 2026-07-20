@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
-    // Regra 1: Conta quantos empréstimos ATIVOS o usuário possui
+    // Regra para contar quantos empréstimos ATIVOS o usuário possui
     @Query("SELECT COUNT(e) FROM Emprestimo e WHERE e.usuarioId = :usuarioId AND e.dataDevolucao IS NULL")
     long countEmprestimosAtivos(@Param("usuarioId") Long usuarioId);
 
-    // Regra 2: Verifica se o usuário possui alguma multa financeira em aberto
+    // Regra para verificar se o usuário possui alguma multa financeira em aberto
     @Query("SELECT COUNT(e) FROM Emprestimo e WHERE e.usuarioId = :usuarioId AND e.valorMulta > 0 AND e.multaPaga = false")
     long countMultasPendentes(@Param("usuarioId") Long usuarioId);
 
