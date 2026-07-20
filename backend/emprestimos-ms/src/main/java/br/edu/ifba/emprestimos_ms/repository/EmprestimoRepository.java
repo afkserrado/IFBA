@@ -15,13 +15,12 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     @Query("SELECT COUNT(e) FROM Emprestimo e WHERE e.usuarioId = :usuarioId AND e.dataDevolucao IS NULL")
     long countEmprestimosAtivos(@Param("usuarioId") Long usuarioId);
 
-    // Regra 2 (CORRIGIDA): Verifica se o usuário possui alguma multa financeira em aberto
+    // Regra 2: Verifica se o usuário possui alguma multa financeira em aberto
     @Query("SELECT COUNT(e) FROM Emprestimo e WHERE e.usuarioId = :usuarioId AND e.valorMulta > 0 AND e.multaPaga = false")
     long countMultasPendentes(@Param("usuarioId") Long usuarioId);
 
     // Regra para impedir exclusão do livro se houver empréstimo em andamento
-    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Emprestimo e WHERE e.livroId = :livroId AND e.dataDevolucao IS NULL")
-    boolean existsByLivroIdAndDataDevolucaoIsNull(@Param("livroId") Long livroId);
+    boolean existsByLivroIdAndDataDevolucaoIsNull(Long livroId);
 
     List<Emprestimo> findByUsuarioId(Long usuarioId);
 
