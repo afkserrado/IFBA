@@ -9,64 +9,47 @@ echo "================================================="
 docker exec -i biblioteca_postgres psql -U admin -d biblioteca <<EOF
 TRUNCATE TABLE emprestimos.emprestimos RESTART IDENTITY CASCADE;
 TRUNCATE TABLE acervo.livros RESTART IDENTITY CASCADE;
-TRUNCATE TABLE usuarios.usuarios RESTART IDENTITY CASCADE;
+
+DELETE FROM usuarios.usuarios
+WHERE email <> 'admin@biblioteca.com';
+
+ALTER SEQUENCE usuarios.usuarios_id_seq RESTART WITH 2;
 EOF
 
 
 request() {
+
   echo -e "\n\n$1"
   echo "$2 $3"
   echo "----------------------------------------"
 
+  AUTH_HEADER=""
+
+  if [ -n "$TOKEN" ]; then
+    AUTH_HEADER="-H \"Authorization: Bearer $TOKEN\""
+  fi
+
+
   if [ -z "$4" ]; then
-    curl -s -X "$2" "$BASE_URL$3" \
-      -H "Authorization: Bearer $TOKEN" | jq
+
+    eval curl -s -X "$2" "\"$BASE_URL$3\"" \
+      $AUTH_HEADER | jq
+
   else
-    curl -s -X "$2" "$BASE_URL$3" \
-      -H "Authorization: Bearer $TOKEN" \
-      -H "Content-Type: application/json" \
-      -d "$4" | jq
+
+    eval curl -s -X "$2" "\"$BASE_URL$3\"" \
+      $AUTH_HEADER \
+      -H "\"Content-Type: application/json\"" \
+      -d "'$4'" | jq
+
   fi
 }
 
 
-echo
-echo "================================================="
-echo " 1. CADASTRO DE USUÁRIOS"
-echo "================================================="
-
-
-request "1. Criar Anderson ADMIN" POST "/api/v1/usuarios" '
-{
-  "nome": "Anderson",
-  "email": "anderson@email.com",
-  "senha": "123456",
-  "role": "ADMIN"
-}'
-
-
-request "2. Criar Vinicius USER" POST "/api/v1/usuarios" '
-{
-  "nome": "Vinicius",
-  "email": "vinicius@email.com",
-  "senha": "123456",
-  "role": "USER"
-}'
-
-
-request "3. Criar Anna USER" POST "/api/v1/usuarios" '
-{
-  "nome": "Anna",
-  "email": "anna@email.com",
-  "senha": "123456",
-  "role": "USER"
-}'
-
-
 
 echo
 echo "================================================="
-echo " 2. LOGIN ADMIN"
+echo " 1. LOGIN ADMIN INICIAL"
 echo "================================================="
 
 
@@ -74,8 +57,8 @@ LOGIN=$(curl -s -X POST "$BASE_URL/auth/login" \
 -H "Content-Type: application/json" \
 -d '
 {
- "email":"anderson@email.com",
- "senha":"123456"
+ "email":"admin@biblioteca.com",
+ "senha":"SENHA_DO_ENV"
 }')
 
 
@@ -93,18 +76,46 @@ echo "$TOKEN"
 
 echo
 echo "================================================="
+echo " 2. CADASTRO DE USUÁRIOS"
+echo "================================================="
+
+
+request "1. Criar Vinicius USER" POST "/api/v1/usuarios" '
+{
+  "cpf":"22222222222",
+  "nome":"Vinicius",
+  "email":"vinicius@email.com",
+  "senha":"123456",
+  "role":"USER"
+}'
+
+
+request "2. Criar Anna USER" POST "/api/v1/usuarios" '
+{
+  "cpf":"33333333333",
+  "nome":"Anna",
+  "email":"anna@email.com",
+  "senha":"123456",
+  "role":"USER"
+}'
+
+
+
+echo
+echo "================================================="
 echo " 3. TESTES USUÁRIOS"
 echo "================================================="
 
 
-request "4. Buscar Anderson por ID" GET "/api/v1/usuarios/1"
+request "3. Buscar admin inicial por ID" GET "/api/v1/usuarios/1"
+
+request "4. Buscar Vinicius por ID" GET "/api/v1/usuarios/2"
 
 request "5. Listar usuários" GET "/api/v1/usuarios"
 
-request "6. Buscar por email" GET "/api/v1/usuarios/busca-email?email=vinicius@email.com"
+request "6. Buscar por email Vinicius" GET "/api/v1/usuarios/busca-email?email=vinicius@email.com"
 
-request "7. Validar situação cadastral" GET "/api/v1/usuarios/2/validar-situacao"
-
+request "7. Validar situação cadastral Vinicius" GET "/api/v1/usuarios/2/validar-situacao"
 
 
 request "8. Atualizar usuário Vinicius" PUT "/api/v1/usuarios/2" '
@@ -183,8 +194,6 @@ request "17. Buscar por autor" GET "/api/v1/livros/autor?autor=Robert"
 
 request "18. Ordenar livros" GET "/api/v1/livros?ordenacao=titulo"
 
-
-
 request "19. Ver disponibilidade livro 1" GET "/api/v1/livros/1/disponibilidade"
 
 
@@ -204,21 +213,13 @@ request "20. Criar empréstimo Vinicius livro 1" POST "/api/v1/emprestimos" '
 }'
 
 
-
 request "21. Listar empréstimos" GET "/api/v1/emprestimos"
-
 
 request "22. Buscar empréstimos usuário Vinicius" GET "/api/v1/emprestimos/usuario/2"
 
-
-
 request "23. Verificar livro emprestado" GET "/api/v1/emprestimos/livros/1/ativos/existe"
 
-
-
 request "24. Devolver livro" POST "/api/v1/emprestimos/1/devolucao"
-
-
 
 request "25. Verificar novamente disponibilidade" GET "/api/v1/livros/1/disponibilidade"
 
@@ -230,7 +231,7 @@ echo " 7. CANCELAMENTO"
 echo "================================================="
 
 
-request "26. Novo empréstimo para cancelar" POST "/api/v1/emprestimos" '
+request "26. Novo empréstimo Anna livro 2" POST "/api/v1/emprestimos" '
 {
  "usuarioId":3,
  "livroId":2,
@@ -259,7 +260,6 @@ request "28. Livro inválido" POST "/api/v1/livros" '
 
 
 request "29. Livro inexistente" GET "/api/v1/livros/isbn/000000"
-
 
 request "30. Usuário inexistente" GET "/api/v1/usuarios/999"
 
