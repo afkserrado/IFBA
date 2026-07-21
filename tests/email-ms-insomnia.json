@@ -1,0 +1,42 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-07-21T19:00:00.000Z",
+  "__export_source": "chatgpt.email-ms",
+  "resources": [
+    {
+      "_id": "wrk_email_ms",
+      "parentId": null,
+      "modified": 1753130000000,
+      "created": 1753130000000,
+      "name": "Email MS",
+      "description": "Testes do microserviço de envio de e-mails",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_enviar_email",
+      "parentId": "wrk_email_ms",
+      "modified": 1753130000000,
+      "created": 1753130000000,
+      "url": "http://localhost:8085/emails/enviar",
+      "name": "Enviar email",
+      "description": "Testa o endpoint de envio de e-mail",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"destinatario\": \"akserrado@gmail.com\",\n  \"assunto\": \"Teste Email MS\",\n  \"mensagem\": \"Este é um teste de envio pelo microserviço de email.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1,
+      "_type": "request"
+    }
+  ]
+}

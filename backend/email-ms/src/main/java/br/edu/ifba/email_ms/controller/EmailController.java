@@ -45,10 +45,10 @@ public class EmailController {
             content = @Content
         )
     })
-    public ResponseEntity<Void> enviarEmail(
+    public ResponseEntity<EmailRequest> enviarEmail(
             @RequestBody @Valid EmailRequest request
     ) {
         emailService.enviarEmail(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(request);
     }
 }
