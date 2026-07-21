@@ -23,7 +23,7 @@ import br.edu.ifba.emprestimos_ms.repository.EmprestimoRepository;
 
 @Service
 public class EmprestimoService {
-	private static final BigDecimal VALOR_MULTA_DIARIA = new BigDecimal("2.50");
+    private static final BigDecimal VALOR_MULTA_DIARIA = new BigDecimal("2.50");
 
     private final EmprestimoRepository emprestimoRepository;
     private final EmprestimoMapper emprestimoMapper;
@@ -31,9 +31,9 @@ public class EmprestimoService {
     private final AcervoClient acervoClient;
 
     public EmprestimoService(EmprestimoRepository emprestimoRepository,
-                             EmprestimoMapper emprestimoMapper,
-                             UsuarioClient usuarioClient,
-                             AcervoClient acervoClient) {
+            EmprestimoMapper emprestimoMapper,
+            UsuarioClient usuarioClient,
+            AcervoClient acervoClient) {
         this.emprestimoRepository = emprestimoRepository;
         this.emprestimoMapper = emprestimoMapper;
         this.usuarioClient = usuarioClient;
@@ -68,7 +68,7 @@ public class EmprestimoService {
         // 1. Confirma a existência e situação cadastral do usuário via OpenFeign
         try {
             if (!usuarioClient.validarSituacaoCadastral(request.usuarioId())) {
-                throw new IllegalStateException("Usuário em situação irregular ou bloqueado.");
+                throw new IllegalStateException("Usuário não cadastrado.");
             }
         } catch (IllegalStateException e) {
             throw e;
@@ -78,7 +78,8 @@ public class EmprestimoService {
 
         // 2. Verifica internamente se o usuário possui multas pendentes
         if (possuiMultasPendentes(request.usuarioId())) {
-            throw new MultaPendenteException("O usuário possui multas pendentes e não pode realizar novos empréstimos.");
+            throw new MultaPendenteException(
+                    "O usuário possui multas pendentes e não pode realizar novos empréstimos.");
         }
 
         // 3. Consulta e atualiza o acervo via OpenFeign
@@ -103,7 +104,8 @@ public class EmprestimoService {
     @Transactional
     public EmprestimoResponse registrarDevolucao(Long id) {
         Emprestimo emprestimo = emprestimoRepository.findById(id)
-            .orElseThrow(() -> new EmprestimoNaoEncontradoException("Empréstimo não encontrado com o ID: " + id));
+                .orElseThrow(() -> new EmprestimoNaoEncontradoException(
+                        "Empréstimo não encontrado com o ID: " + id));
 
         if (emprestimo.getStatus() == StatusEmprestimo.DEVOLVIDO) {
             throw new IllegalStateException("Este empréstimo já foi devolvido anteriormente.");
@@ -112,17 +114,20 @@ public class EmprestimoService {
         LocalDate hoje = LocalDate.now();
         emprestimo.setDataDevolucao(hoje);
 
-        // Verifica atraso para calcular multa
+        // Calcula multa, se houver atraso
         if (hoje.isAfter(emprestimo.getDataPrevistaDevolucao())) {
-            long diasAtraso = ChronoUnit.DAYS.between(emprestimo.getDataPrevistaDevolucao(), hoje);
+            long diasAtraso = ChronoUnit.DAYS.between(
+                    emprestimo.getDataPrevistaDevolucao(),
+                    hoje);
+
             BigDecimal multa = VALOR_MULTA_DIARIA.multiply(BigDecimal.valueOf(diasAtraso));
             emprestimo.setValorMulta(multa);
-            emprestimo.setStatus(StatusEmprestimo.ATRASADO);
-        } else {
-            emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);
         }
 
-        // Solicita o retorno do exemplar ao acervo via OpenFeign
+        // Sempre encerra o empréstimo como devolvido
+        emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);
+
+        // Atualiza o estoque do acervo
         try {
             acervoClient.aumentarEstoque(emprestimo.getLivroId());
         } catch (Exception e) {
@@ -137,15 +142,15 @@ public class EmprestimoService {
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> listarTodos() {
         return emprestimoRepository.findAll().stream()
-            .map(emprestimoMapper::toResponse)
-            .collect(Collectors.toList());
+                .map(emprestimoMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> consultarPorUsuario(Long usuarioId) {
         return emprestimoRepository.findByUsuarioId(usuarioId).stream()
-            .map(emprestimoMapper::toResponse)
-            .collect(Collectors.toList());
+                .map(emprestimoMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -153,18 +158,46 @@ public class EmprestimoService {
         return emprestimoRepository.existsByLivroIdAndDataDevolucaoIsNull(livroId);
     }
 
-    // Processo automático para verificar diariamente quem não devolveu o livro no prazo e virar o status para ATRASADO
+    @Transactional
+    public EmprestimoResponse cancelarEmprestimo(Long id) {
+
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new EmprestimoNaoEncontradoException(
+                        "Empréstimo não encontrado com o ID: " + id));
+
+        if (emprestimo.getStatus() != StatusEmprestimo.ATIVO) {
+            throw new IllegalStateException(
+                    "Apenas empréstimos com status ATIVO podem ser cancelados.");
+        }
+
+        // Devolve o exemplar ao acervo
+        try {
+            acervoClient.aumentarEstoque(emprestimo.getLivroId());
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                    "Erro ao notificar o acervo sobre o cancelamento do empréstimo.");
+        }
+
+        // Não preenche dataDevolucao
+        emprestimo.setStatus(StatusEmprestimo.CANCELADO);
+
+        emprestimo = emprestimoRepository.save(emprestimo);
+
+        return emprestimoMapper.toResponse(emprestimo);
+    }
+
+    // Processo automático para verificar diariamente quem não devolveu o livro no
+    // prazo e virar o status para ATRASADO
     @Scheduled(cron = "0 0 8 * * *")
     @Transactional
     public void processarAtrasos() {
         LocalDate hoje = LocalDate.now();
 
-        List<Emprestimo> vencidos = emprestimoRepository.findByStatusAndDataPrevistaDevolucaoBefore(StatusEmprestimo.ATIVO, hoje);
+        List<Emprestimo> vencidos = emprestimoRepository
+                .findByStatusAndDataPrevistaDevolucaoBefore(StatusEmprestimo.ATIVO, hoje);
         for (Emprestimo e : vencidos) {
             e.setStatus(StatusEmprestimo.ATRASADO);
             emprestimoRepository.save(e);
         }
     }
 }
-    
-    

@@ -4,7 +4,7 @@
 
 Até o momento foi realizada a implementação da infraestrutura base da arquitetura de microsserviços, contemplando autenticação compartilhada, documentação das APIs e integração entre os serviços.
 
-O projeto encontra-se funcional estruturalmente, restando principalmente testes integrados, melhorias de arquitetura e implementação das funcionalidades pendentes.
+O projeto encontra-se funcional estruturalmente, com os principais fluxos implementados, restando principalmente testes integrados, revisão das regras de autorização e implementação de funcionalidades complementares.
 
 ---
 
@@ -54,7 +54,7 @@ Foram configurados para utilizar:
 * configuração automática do Spring Security;
 * propriedades específicas de rotas públicas.
 
-Com isso, todos utilizam exatamente a mesma política de autenticação.
+Com isso, todos utilizam a mesma política de autenticação.
 
 ---
 
@@ -83,80 +83,154 @@ Isso permite que toda a API possa ser explorada visualmente pelo Swagger UI.
 
 ---
 
+# Funcionalidades Implementadas no emprestimos-ms
+
+As principais regras de negócio do microsserviço de empréstimos foram concluídas.
+
+## ✅ Devolução de livros
+
+Corrigido o fluxo de devolução:
+
+* empréstimo devolvido sempre recebe status `DEVOLVIDO`;
+* atrasos geram apenas multa;
+* status `ATRASADO` permanece apenas enquanto o livro não foi devolvido;
+* estoque do acervo é atualizado após a devolução.
+
+---
+
+## ✅ Cancelamento de empréstimos
+
+Implementado cancelamento de empréstimos:
+
+* somente empréstimos com status `ATIVO` podem ser cancelados;
+* exemplar retorna ao acervo;
+* status alterado para `CANCELADO`;
+* data de devolução não é preenchida;
+* histórico do empréstimo é preservado.
+
+---
+
+## ✅ Controle automático das datas
+
+Ajustado o fluxo de criação de empréstimos:
+
+* remoção da data prevista de devolução enviada pelo cliente;
+* prazo definido automaticamente pelo sistema;
+* data prevista calculada internamente.
+
+---
+
+## ✅ Integração com outros microsserviços
+
+O `emprestimos-ms` realiza chamadas síncronas para:
+
+### usuarios-ms
+
+Responsável por validar existência do usuário.
+
+### acervo-ms
+
+Responsável por:
+
+* verificar disponibilidade de livros;
+* reduzir estoque ao realizar empréstimo;
+* aumentar estoque em devoluções e cancelamentos.
+
+---
+
 # Pendências
 
 ## Testes
 
-* [X] Validar todo o fluxo de autenticação utilizando o Swagger.
-* [ ] Testar comunicação entre todos os microsserviços.
-* [X] Validar funcionamento das chamadas Feign.
-* [ ] Testar fluxo completo através do Gateway.
+* [X] Validar fluxo de autenticação utilizando Swagger.
+* [ ] Testar comunicação completa entre todos os microsserviços.
+* [ ] Testar fluxo completo utilizando Gateway.
+* [ ] Criar testes integrados dos principais fluxos de negócio.
 
 ---
 
 ## Swagger
 
 * [ ] Documentar todas as respostas de erro (400, 401, 403, 404, 409, 500...) de todos os endpoints.
+* [ ] Revisar descrições dos endpoints para refletir completamente as regras atuais.
 
 ---
 
-## Arquitetura
+# Revisão das Autorizações do Sistema
 
-* [ ] Implementar Service Discovery.
-* [ ] Configurar balanceamento de carga utilizando o Service Discovery.
-* [ ] Alterar configuração de CORS para permitir requisições provenientes do Frontend.
+## Pendência: validar permissões dos usuários
+
+É necessário revisar todas as regras de autorização para garantir que o sistema seja funcional tanto para administradores quanto para usuários comuns.
+
+### Pontos a validar:
+
+* [ ] Verificar se usuários comuns autenticados possuem permissões suficientes para utilizar as funcionalidades esperadas.
+* [ ] Revisar endpoints que atualmente exigem apenas autenticação, garantindo que não estejam bloqueando funcionalidades necessárias.
+* [ ] Revisar endpoints que devem ser exclusivos para administradores.
 
 ---
 
-## Serviço de Notificações
+## Fluxos esperados para usuário comum autenticado
+
+Um usuário comum (`ROLE_USER`) deve conseguir:
+
+### Acervo
+
+* [ ] Visualizar catálogo de livros disponíveis.
+* [ ] Consultar informações dos livros.
+* [ ] Consultar disponibilidade dos exemplares.
+
+---
+
+### Empréstimos
+
+* [ ] Visualizar seus próprios empréstimos.
+* [ ] Consultar data prevista de devolução.
+* [ ] Consultar histórico de empréstimos.
+* [ ] Visualizar multas pendentes.
+* [ ] Consultar situação dos seus empréstimos.
+
+---
+
+### Restrições esperadas
+
+Usuários comuns não devem conseguir:
+
+* [ ] Cadastrar novos livros.
+* [ ] Alterar informações de livros.
+* [ ] Remover usuários.
+* [ ] Visualizar empréstimos de outros usuários.
+* [ ] Executar operações administrativas.
+
+---
+
+# Serviço de Notificações
 
 * [ ] Implementar microsserviço de notificações.
-* [ ] Integrar o serviço às necessidades dos demais microsserviços.
+* [ ] Definir eventos que devem gerar notificações.
+* [ ] Integrar notificações aos fluxos de empréstimo.
+
+Possíveis eventos:
+
+* criação de empréstimo;
+* devolução registrada;
+* atraso de devolução;
+* multa gerada.
 
 ---
 
-# Pendências do emprestimos-ms (Andersson)
+# Mensageria
 
-* [ ] Corrigir o método `registrarDevolucao` do `EmprestimoService`, ajustando corretamente as regras de negócio referentes ao fluxo de devolução e atualização de status.
+## RabbitMQ
 
-* [ ] Corrigir o método `listarTodos`, substituindo:
+* [ ] Implementar publicação de eventos RabbitMQ.
 
-```java
-collect(Collectors.toList())
-```
+Eventos previstos:
 
-por
-
-```java
-.toList()
-```
-
-* [ ] Ajustar `EmprestimoRequest`, removendo o atributo `dataPrevistaDevolucao`.
-
-* [ ] Ajustar o `EmprestimoMapper`, removendo regras de negócio referentes às datas.
-
-* [ ] Preferencialmente mover para o `EmprestimoService` as regras:
-
-* dataEmprestimo = hoje;
-
-* dataPrevistaDevolucao = hoje + 7 dias;
-
-* dataDevolucao = null;
-
-* status = ATIVO;
-
-* valorMulta = 0;
-
-* multaPaga = false.
-
-Concentrando todas as regras de negócio na camada de serviço.
-
-* [ ] Implementar autenticação/autorização JWT no `emprestimos-ms`.
-
-* [ ] Implementar publicação de eventos RabbitMQ para:
-
-  * criação de empréstimo;
-  * devolução registrada.
+* criação de empréstimo;
+* devolução registrada;
+* cancelamento de empréstimo;
+* geração de multa.
 
 ---
 
@@ -166,11 +240,11 @@ Sempre que algum integrante iniciar uma atividade, atualizar este README indican
 
 Exemplo:
 
-* [ ] Documentar erros no Swagger *(Vinicius - Implementando)*
+* [ ] Revisar permissões do sistema *(Vinicius - Implementando)*
 
 ou
 
-* [ ] Implementar Service Discovery *(Andersson - Implementando)*
+* [ ] Implementar notificações *(Andersson - Implementando)*
 
 Dessa forma toda a equipe consegue acompanhar quem está responsável por cada tarefa, evitando retrabalho e mantendo o andamento do projeto organizado.
 
@@ -186,6 +260,8 @@ Dessa forma toda a equipe consegue acompanhar quem está responsável por cada t
 * [x] gateway-ms
 * [x] security-common
 
+---
+
 ## Infraestrutura
 
 * [x] Implementação do security-common
@@ -193,18 +269,29 @@ Dessa forma toda a equipe consegue acompanhar quem está responsável por cada t
 * [x] Integração dos microsserviços com o security-common
 * [x] Documentação Swagger dos controllers
 
-## Pendências
+---
 
-* [ ] Testar fluxo completo via Swagger
-* [ ] Testar comunicação entre microsserviços
-* [ ] Documentar erros dos endpoints no Swagger
-* [ ] Implementar Service Discovery
-* [ ] Implementar serviço de notificações
-* [ ] Alterar configuração de CORS para o Frontend
-* [ ] Corrigir pendências do emprestimos-ms
-* [ ] Implementar publicação de eventos RabbitMQ
-* [x] Validar autenticação completa em todos os microsserviços
+## Funcionalidades
+
+* [x] Cadastro de empréstimos
+* [x] Devolução de livros
+* [x] Cancelamento de empréstimos
+* [x] Controle automático de datas
+* [x] Comunicação entre microsserviços via Feign
+* [x] Autenticação JWT completa
 
 ---
 
-**Última atualização:** 20/Julho/2026.
+## Pendências
+
+* [ ] Testar fluxo completo via Gateway
+* [ ] Testar comunicação completa entre microsserviços
+* [ ] Revisar autorizações e permissões do sistema
+* [ ] Garantir funcionalidades do usuário comum autenticado
+* [ ] Documentar erros dos endpoints no Swagger
+* [ ] Implementar serviço de notificações
+* [ ] Implementar publicação de eventos RabbitMQ
+
+---
+
+**Última atualização:** 21/Julho/2026.

@@ -45,10 +45,14 @@ public class UsuarioService {
             return null;
         }
 
-        String email = authentication.getName(); 
+        String email = authentication.getName();
 
         return usuarioRepository.findByEmail(email)
                 .orElse(null);
+    }
+
+    public boolean existeUsuario(Long id) {
+        return usuarioRepository.existsById(id);
     }
 
     @Transactional

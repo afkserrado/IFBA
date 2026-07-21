@@ -36,9 +36,8 @@ public class UsuarioController {
     @PreAuthorize("permitAll()") // Totalmente público para auto-cadastro (Sign-up)
     @Operation(summary = "Cadastra um novo usuário", description = "Cria uma conta de usuário no sistema com validação de credenciais e e-mail único.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso",
-            content = @Content(schema = @Schema(implementation = UsuarioResponseDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Dados da requisição inválidos ou e-mail já cadastrado", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(schema = @Schema(implementation = UsuarioResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Dados da requisição inválidos ou e-mail já cadastrado", content = @Content)
     })
     public ResponseEntity<UsuarioResponseDTO> criarUsuario(@RequestBody @Valid UsuarioRequestDTO dto) {
         UsuarioResponseDTO response = usuarioService.criarUsuario(dto);
@@ -48,13 +47,12 @@ public class UsuarioController {
     @GetMapping("/{id}")
     @Operation(summary = "Busca um usuário por ID", description = "Retorna os detalhes completos do perfil de um usuário a partir do seu identificador numérico.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),
-        @ApiResponse(responseCode = "403", description = "Acesso negado para o ID informado", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o ID informado", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
     })
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(
-        @Parameter(description = "Identificador exclusivo do usuário") @PathVariable Long id
-    ) {
+            @Parameter(description = "Identificador exclusivo do usuário") @PathVariable Long id) {
         UsuarioResponseDTO response = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(response);
     }
@@ -62,8 +60,8 @@ public class UsuarioController {
     @GetMapping
     @Operation(summary = "Lista todos os usuários", description = "Retorna uma lista contendo todos os usuários registrados na base de dados.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de usuários recuperada com sucesso"),
-        @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Lista de usuários recuperada com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content)
     })
     public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
         List<UsuarioResponseDTO> response = usuarioService.buscarTodos();
@@ -73,33 +71,28 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza os dados de um usuário", description = "Modifica os dados cadastrais permitidos de um usuário existente.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário updated com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados fornecidos inválidos", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Acesso negado para alteração desse perfil", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Usuário não localizado", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Usuário updated com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados fornecidos inválidos", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para alteração desse perfil", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não localizado", content = @Content)
     })
     public ResponseEntity<UsuarioResponseDTO> editar(
-        @Parameter(description = "ID do usuário a ser editado") @PathVariable Long id, 
-        @RequestBody @Valid UsuarioUpdateRequestDTO dto
-    ) {
+            @Parameter(description = "ID do usuário a ser editado") @PathVariable Long id,
+            @RequestBody @Valid UsuarioUpdateRequestDTO dto) {
         UsuarioResponseDTO response = usuarioService.editar(id, dto);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(
-        summary = "Remove um usuário do sistema", 
-        description = "Deleta a conta do usuário caso ele não possua multas em aberto ou empréstimos ativos pendentes de devolução."
-    )
+    @Operation(summary = "Remove um usuário do sistema", description = "Deleta a conta do usuário caso ele não possua multas em aberto ou empréstimos ativos pendentes de devolução.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Exclusão recusada por pendências financeiras ou de acervo", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+            @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Exclusão recusada por pendências financeiras ou de acervo", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
     })
     public ResponseEntity<Void> remover(
-        @Parameter(description = "ID do usuário a ser excluído") @PathVariable Long id
-    ) {
+            @Parameter(description = "ID do usuário a ser excluído") @PathVariable Long id) {
         usuarioService.remover(id);
         return ResponseEntity.noContent().build();
     }
@@ -107,14 +100,25 @@ public class UsuarioController {
     @GetMapping("/busca-email")
     @Operation(summary = "Busca um usuário por e-mail", description = "Localiza o registro de um usuário através do seu endereço de e-mail exato.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),
-        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content),
-        @ApiResponse(responseCode = "404", description = "E-mail não cadastrado no sistema", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content),
+            @ApiResponse(responseCode = "404", description = "E-mail não cadastrado no sistema", content = @Content)
     })
     public ResponseEntity<UsuarioResponseDTO> buscarPorEmail(
-        @Parameter(description = "Endereço de e-mail do usuário procurado") @RequestParam String email
-    ) {
+            @Parameter(description = "Endereço de e-mail do usuário procurado") @RequestParam String email) {
         UsuarioResponseDTO response = usuarioService.buscarPorEmail(email);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/validar-situacao")
+    @Operation(summary = "Valida existência do usuário", description = "Verifica se existe um usuário cadastrado com o identificador informado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+    })
+    public ResponseEntity<Boolean> validarSituacaoCadastral(
+            @Parameter(description = "ID do usuário") @PathVariable Long id) {
+        boolean existe = usuarioService.existeUsuario(id);
+        return ResponseEntity.ok(existe);
     }
 }
