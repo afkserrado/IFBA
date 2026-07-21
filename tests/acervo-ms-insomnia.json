@@ -1,0 +1,144 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-07-21T20:00:00.000Z",
+  "__export_source": "chatgpt.acervo-ms",
+  "resources": [
+    {
+      "_id": "wrk_acervo_ms",
+      "parentId": null,
+      "name": "Acervo MS",
+      "description": "Testes dos endpoints do microserviço de gerenciamento de livros",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+
+    {
+      "_id": "req_cadastrar_livro",
+      "parentId": "wrk_acervo_ms",
+      "name": "1. Cadastrar livro",
+      "method": "POST",
+      "url": "http://localhost:8082/api/v1/livros",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"titulo\": \"Clean Code\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 5\n}"
+      },
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_listar_livros",
+      "parentId": "wrk_acervo_ms",
+      "name": "2. Listar livros paginado",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros?page=0&size=10",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_listar_ordenado",
+      "parentId": "wrk_acervo_ms",
+      "name": "3. Listar livros ordenados por título",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros?ordenacao=titulo_asc&page=0&size=10",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_buscar_isbn",
+      "parentId": "wrk_acervo_ms",
+      "name": "4. Buscar livro por ISBN",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros/isbn/9781234567890",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_buscar_titulo",
+      "parentId": "wrk_acervo_ms",
+      "name": "5. Buscar por título",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros/titulo?titulo=Clean&page=0&size=10",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_buscar_autor",
+      "parentId": "wrk_acervo_ms",
+      "name": "6. Buscar por autor",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros/autor?autor=Robert&page=0&size=10",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_verificar_disponibilidade",
+      "parentId": "wrk_acervo_ms",
+      "name": "7. Verificar disponibilidade",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros/1/disponibilidade",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_reduzir_estoque",
+      "parentId": "wrk_acervo_ms",
+      "name": "8. Reduzir estoque",
+      "method": "POST",
+      "url": "http://localhost:8082/api/v1/livros/1/reduzir-estoque",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_verificar_disponibilidade_pos_reducao",
+      "parentId": "wrk_acervo_ms",
+      "name": "9. Verificar disponibilidade após redução",
+      "method": "GET",
+      "url": "http://localhost:8082/api/v1/livros/1/disponibilidade",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_aumentar_estoque",
+      "parentId": "wrk_acervo_ms",
+      "name": "10. Aumentar estoque",
+      "method": "POST",
+      "url": "http://localhost:8082/api/v1/livros/1/aumentar-estoque",
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_atualizar_livro",
+      "parentId": "wrk_acervo_ms",
+      "name": "11. Atualizar livro",
+      "method": "PUT",
+      "url": "http://localhost:8082/api/v1/livros/1",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"titulo\": \"Clean Code Atualizado\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 10\n}"
+      },
+      "_type": "request"
+    },
+
+    {
+      "_id": "req_remover_livro",
+      "parentId": "wrk_acervo_ms",
+      "name": "12. Remover livro",
+      "method": "DELETE",
+      "url": "http://localhost:8082/api/v1/livros/1",
+      "_type": "request"
+    }
+  ]
+}
