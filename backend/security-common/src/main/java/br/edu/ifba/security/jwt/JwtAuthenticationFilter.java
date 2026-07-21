@@ -31,6 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         throws ServletException, IOException {
 
                 String authorization = request.getHeader("Authorization");
+
+                System.out.println(
+                                "RECEBIDO NO EMPRESTIMOS: "
+                                                + authorization);
                 /*
                  * Caso não exista token,
                  * deixa o Spring Security decidir

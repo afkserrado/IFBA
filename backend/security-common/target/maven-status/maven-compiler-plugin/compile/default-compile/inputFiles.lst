@@ -1,5 +1,7 @@
+C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\config\FeignSecurityConfig.java
 C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\config\SecurityAutoConfiguration.java
 C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\config\SecurityProperties.java
 C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\exception\InvalidJwtException.java
+C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\feign\FeignJwtInterceptor.java
 C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\jwt\JwtAuthenticationFilter.java
 C:\Users\Vinicius\Documents\Estudos\pweb\TRABALHO-PWEB\backend\security-common\src\main\java\br\edu\ifba\security\jwt\JwtService.java

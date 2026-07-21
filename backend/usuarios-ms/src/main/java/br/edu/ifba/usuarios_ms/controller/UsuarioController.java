@@ -46,7 +46,6 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id") // Apenas ADMIN ou o próprio usuário dono do ID
     @Operation(summary = "Busca um usuário por ID", description = "Retorna os detalhes completos do perfil de um usuário a partir do seu identificador numérico.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),
@@ -61,7 +60,6 @@ public class UsuarioController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')") // Apenas administradores podem listar todos os dados cadastrais
     @Operation(summary = "Lista todos os usuários", description = "Retorna uma lista contendo todos os usuários registrados na base de dados.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de usuários recuperada com sucesso"),
@@ -73,7 +71,6 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id") // Apenas ADMIN ou o usuário editando a própria conta
     @Operation(summary = "Atualiza os dados de um usuário", description = "Modifica os dados cadastrais permitidos de um usuário existente.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário updated com sucesso"),
@@ -90,7 +87,6 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')") // Apenas administradores podem realizar exclusões físicas/lógicas do sistema
     @Operation(
         summary = "Remove um usuário do sistema", 
         description = "Deleta a conta do usuário caso ele não possua multas em aberto ou empréstimos ativos pendentes de devolução."
@@ -109,7 +105,6 @@ public class UsuarioController {
     }
 
     @GetMapping("/busca-email")
-    @PreAuthorize("isAuthenticated()") // Exige apenas que o usuário esteja devidamente logado
     @Operation(summary = "Busca um usuário por e-mail", description = "Localiza o registro de um usuário através do seu endereço de e-mail exato.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso"),

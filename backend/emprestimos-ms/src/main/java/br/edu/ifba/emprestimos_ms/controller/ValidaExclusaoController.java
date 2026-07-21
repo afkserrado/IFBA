@@ -1,7 +1,6 @@
 package br.edu.ifba.emprestimos_ms.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/emprestimos/validar-exclusao")
@@ -27,7 +27,6 @@ public class ValidaExclusaoController {
     }
 
     @GetMapping("/usuario/{id}/ativos")
-    @PreAuthorize("hasAnyRole('SYSTEM', 'ADMIN')") // Garante acesso apenas para o sistema ou administradores
     @Operation(
         summary = "Verifica se o usuário possui empréstimos pendentes de devolução", 
         description = "Consumido internamente pelo microsserviço de usuários (via Feign) para impedir a exclusão de contas com pendências de acervo."
@@ -37,14 +36,16 @@ public class ValidaExclusaoController {
         @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiEmprestimosAtivos(
-        @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id
+        @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id,
+        HttpServletRequest request
     ) {
+        System.out.println("AUTH HEADER: "
+        + request.getHeader("Authorization"));
         boolean temAtivos = emprestimoService.possuiEmprestimosAtivos(id);
         return ResponseEntity.ok(temAtivos);
     }
 
     @GetMapping("/usuario/{id}/multas")
-    @PreAuthorize("hasAnyRole('SYSTEM', 'ADMIN')") // Garante acesso apenas para o sistema ou administradores
     @Operation(
         summary = "Verifica se o usuário possui multas financeiras em aberto", 
         description = "Consumido internamente pelo microsserviço de usuários (via Feign) para travar a exclusão de contas com débitos pendentes."
@@ -54,8 +55,11 @@ public class ValidaExclusaoController {
         @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiMultasPendentes(
-        @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id
+        @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id,
+        HttpServletRequest request
     ) {
+        System.out.println("AUTH HEADER: "
+        + request.getHeader("Authorization"));
         boolean temMultas = emprestimoService.possuiMultasPendentes(id);
         return ResponseEntity.ok(temMultas);
     }

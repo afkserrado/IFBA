@@ -1,7 +1,9 @@
 package br.edu.ifba.usuarios_ms.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +23,14 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final UsuarioProducer usuarioProducer;
     private final EmprestimoClient emprestimoClient;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, 
-                          BCryptPasswordEncoder passwordEncoder, 
-                          UsuarioProducer usuarioProducer, 
-                          EmprestimoClient emprestimoClient) {
+    public UsuarioService(UsuarioRepository usuarioRepository,
+            PasswordEncoder passwordEncoder,
+            UsuarioProducer usuarioProducer,
+            EmprestimoClient emprestimoClient) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioProducer = usuarioProducer;
@@ -37,11 +39,16 @@ public class UsuarioService {
 
     // Pega o usuario autenticado na sessao atual
     private Usuario getUsuarioLogado() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof Usuario) {
-            return (Usuario) principal;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
         }
-        return null; // Rota publica (cadastro inicial)
+
+        String email = authentication.getName(); 
+
+        return usuarioRepository.findByEmail(email)
+                .orElse(null);
     }
 
     @Transactional
@@ -82,7 +89,7 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public UsuarioResponseDTO buscarPorId(Long id) {
         Usuario usuarioLogado = getUsuarioLogado();
-        
+
         // Comum so vê o proprio perfil, admin vê tudo
         if (!usuarioLogado.getId().equals(id) && !"ADMIN".equalsIgnoreCase(usuarioLogado.getRole())) {
             throw new SecurityException("Você não tem permissão para visualizar os dados de outro usuário.");
@@ -96,7 +103,7 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> buscarTodos() {
         Usuario usuarioLogado = getUsuarioLogado();
-        
+
         if (!"ADMIN".equalsIgnoreCase(usuarioLogado.getRole())) {
             throw new SecurityException("Acesso negado. Apenas administradores podem listar os usuários.");
         }
@@ -110,7 +117,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponseDTO editar(Long id, UsuarioUpdateRequestDTO dto) {
         Usuario usuarioLogado = getUsuarioLogado();
-        
+
         if (!usuarioLogado.getId().equals(id) && !"ADMIN".equalsIgnoreCase(usuarioLogado.getRole())) {
             throw new SecurityException("Você não tem permissão para editar os dados de outro usuário.");
         }
@@ -129,7 +136,7 @@ public class UsuarioService {
 
         usuarioAlvo.setNome(dto.nome());
         usuarioAlvo.setEmail(dto.email());
-        
+
         if ("ADMIN".equalsIgnoreCase(usuarioLogado.getRole())) {
             usuarioAlvo.setRole(dto.role());
         }
@@ -156,7 +163,7 @@ public class UsuarioService {
         if (emprestimoClient.possuiEmprestimosAtivos(id)) {
             throw new IllegalStateException("Não é possível excluir a conta: existem empréstimos ativos.");
         }
-        
+
         if (emprestimoClient.possuiMultasPendentes(id)) {
             throw new IllegalStateException("Não é possível excluir a conta: existem multas financeiras pendentes.");
         }

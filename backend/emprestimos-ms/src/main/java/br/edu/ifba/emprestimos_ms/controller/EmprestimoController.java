@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +36,6 @@ public class EmprestimoController {
     }
 
     @PostMapping
-    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or #request.usuarioId == authentication.principal.id)")
     @Operation(summary = "Registra um novo empréstimo", description = "Cria um registro de empréstimo validando a disponibilidade do livro e situação do usuário.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Empréstimo registrado com sucesso",
@@ -52,7 +50,6 @@ public class EmprestimoController {
     }
 
     @PostMapping("/{id}/devolucao")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Registra a devolução de um livro", description = "Finaliza um empréstimo ativo mudando seu status e atualizando o estoque do acervo.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Devolução registrada com sucesso",
@@ -69,7 +66,6 @@ public class EmprestimoController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Lista todos os empréstimos", description = "Retorna o histórico completo de todos os empréstimos registrados no microsserviço.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso"),
@@ -80,7 +76,6 @@ public class EmprestimoController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    @PreAuthorize("hasRole('ADMIN') or #usuarioId == authentication.principal.id")
     @Operation(summary = "Consulta empréstimos de um usuário", description = "Retorna todos os empréstimos (ativos e encerrados) vinculados a um usuário específico.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de empréstimos do usuário gerada"),
@@ -94,7 +89,6 @@ public class EmprestimoController {
     }
 
     @GetMapping("/livros/{livroId}/ativos/existe")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SYSTEM') or isAuthenticated()")
     @Operation(summary = "Verifica empréstimo ativo por livro", description = "Consulta rápida para checar se uma unidade do livro informado está atualmente emprestada.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Verificação realizada com sucesso"),

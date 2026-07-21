@@ -1,5 +1,7 @@
+br\edu\ifba\security\exception\InvalidJwtException.class
+br\edu\ifba\security\jwt\JwtAuthenticationFilter.class
 br\edu\ifba\security\jwt\JwtService.class
 br\edu\ifba\security\config\SecurityAutoConfiguration.class
 br\edu\ifba\security\config\SecurityProperties.class
-br\edu\ifba\security\exception\InvalidJwtException.class
-br\edu\ifba\security\jwt\JwtAuthenticationFilter.class
+br\edu\ifba\security\feign\FeignJwtInterceptor.class
+br\edu\ifba\security\config\FeignSecurityConfig.class

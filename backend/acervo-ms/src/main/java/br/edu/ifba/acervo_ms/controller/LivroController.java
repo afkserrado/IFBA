@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.edu.ifba.acervo_ms.dto.LivroRequestDTO;
@@ -36,7 +35,6 @@ public class LivroController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Cadastra um novo livro", description = "Adiciona um livro ao acervo com validação de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Livro cadastrado com sucesso", content = @Content(schema = @Schema(implementation = LivroResponseDTO.class))),
@@ -50,7 +48,6 @@ public class LivroController {
     }
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Lista os livros de forma paginada", description = "Retorna uma lista resumida de livros cadastrados com paginação flexível.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
@@ -63,7 +60,6 @@ public class LivroController {
     }
 
     @GetMapping("/isbn/{isbn}")
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Busca um livro pelo código ISBN", description = "Busca os detalhes resumidos de um livro através do seu identificador ISBN único.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Livro localizado com sucesso"),
@@ -76,7 +72,6 @@ public class LivroController {
     }
 
     @GetMapping("/titulo")
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Busca livros por correspondência de título", description = "Retorna livros de forma paginada que coincidam parcial ou totalmente com o título informado.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
@@ -90,7 +85,6 @@ public class LivroController {
     }
 
     @GetMapping("/autor")
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Busca livros pelo nome do autor", description = "Retorna livros de forma paginada associados ao autor pesquisado.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
@@ -104,7 +98,6 @@ public class LivroController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Atualiza os dados de um livro existente", description = "Modifica completamente os dados de um livro a partir do seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Livro atualizado com sucesso"),
@@ -119,7 +112,6 @@ public class LivroController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Remove um livro do acervo", description = "Deleta o registro de um livro de forma permanente utilizando o ID informando.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Livro removido com sucesso"),
@@ -133,7 +125,6 @@ public class LivroController {
     }
 
     @GetMapping("/{id}/disponibilidade")
-    @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Verifica se um livro possui estoque disponível", description = "Retorna uma flag booleana indicando se existem unidades físicas do livro em estoque.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Consulta realizada"),
@@ -147,7 +138,6 @@ public class LivroController {
     }
 
     @PatchMapping("/{id}/reduzir-estoque")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SYSTEM') or isAuthenticated()")
     @Operation(summary = "Subtrai uma unidade do estoque do livro", description = "Decrementa o estoque do livro indicado em uma unidade (usado em novos empréstimos).")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estoque decrementado com sucesso"),
@@ -162,7 +152,6 @@ public class LivroController {
     }
 
     @PatchMapping("/{id}/aumentar-estoque")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SYSTEM') or isAuthenticated()")
     @Operation(summary = "Adiciona uma unidade ao estoque do livro", description = "Incrementa o estoque do livro indicado em uma unidade (usado na devolução de empréstimos).")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estoque incrementado com sucesso"),

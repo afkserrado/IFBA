@@ -1,12 +1,14 @@
 package br.edu.ifba.security.config;
 
+import br.edu.ifba.security.feign.FeignJwtInterceptor;
 import br.edu.ifba.security.jwt.JwtAuthenticationFilter;
 import br.edu.ifba.security.jwt.JwtService;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
+import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -14,7 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @AutoConfiguration
+@EnableMethodSecurity
 @EnableConfigurationProperties(SecurityProperties.class)
+@Import(FeignJwtInterceptor.class)
 public class SecurityAutoConfiguration {
 
         @Bean

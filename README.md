@@ -87,9 +87,9 @@ Isso permite que toda a API possa ser explorada visualmente pelo Swagger UI.
 
 ## Testes
 
-* [ ] Validar todo o fluxo de autenticação utilizando o Swagger.
+* [X] Validar todo o fluxo de autenticação utilizando o Swagger.
 * [ ] Testar comunicação entre todos os microsserviços.
-* [ ] Validar funcionamento das chamadas Feign.
+* [X] Validar funcionamento das chamadas Feign.
 * [ ] Testar fluxo completo através do Gateway.
 
 ---
@@ -203,7 +203,7 @@ Dessa forma toda a equipe consegue acompanhar quem está responsável por cada t
 * [ ] Alterar configuração de CORS para o Frontend
 * [ ] Corrigir pendências do emprestimos-ms
 * [ ] Implementar publicação de eventos RabbitMQ
-* [ ] Validar autenticação completa em todos os microsserviços
+* [x] Validar autenticação completa em todos os microsserviços
 
 ---
 
