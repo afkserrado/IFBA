@@ -45,7 +45,7 @@ public class EmailController {
             content = @Content
         )
     })
-    public ResponseEntity<Void> enviar(
+    public ResponseEntity<Void> enviarEmail(
             @RequestBody @Valid EmailRequest request
     ) {
         emailService.enviarEmail(request);
