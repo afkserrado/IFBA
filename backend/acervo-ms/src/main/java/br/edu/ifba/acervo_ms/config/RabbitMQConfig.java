@@ -42,7 +42,7 @@ public class RabbitMQConfig {
     }
 
     // Converte automaticamente objetos Java em JSON
-    // e JSON em objetos Java ao consumir mensagens.
+    // e JSON em objetos Java ao consumir mensagens
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
