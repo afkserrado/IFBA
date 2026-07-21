@@ -16,7 +16,7 @@ public class EmprestimoMapper {
         entity.setUsuarioId(request.usuarioId());
         entity.setLivroId(request.livroId());
         entity.setDataEmprestimo(LocalDate.now());
-        entity.setDataDevolucao(entity.getDataEmprestimo().plusDays(7));
+        entity.setDataPrevistaDevolucao(entity.getDataEmprestimo().plusDays(7));
         entity.setStatus(StatusEmprestimo.ATIVO);
         return entity;
     }

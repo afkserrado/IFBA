@@ -65,38 +65,107 @@ public class EmprestimoService {
 
     @Transactional
     public EmprestimoResponse cadastrarEmprestimo(EmprestimoRequest request) {
+
+        System.out.println("===== INICIO CADASTRO EMPRESTIMO =====");
+        System.out.println("Usuario ID: " + request.usuarioId());
+        System.out.println("Livro ID: " + request.livroId());
+
         // 1. Confirma a existência e situação cadastral do usuário via OpenFeign
         try {
-            if (!usuarioClient.validarSituacaoCadastral(request.usuarioId())) {
+            System.out.println("Consultando usuario-ms...");
+
+            boolean usuarioValido = usuarioClient.validarSituacaoCadastral(request.usuarioId());
+
+            System.out.println("Resposta usuario-ms: " + usuarioValido);
+
+            if (!usuarioValido) {
+                System.out.println("Usuario invalido.");
                 throw new IllegalStateException("Usuário não cadastrado.");
             }
+
+            System.out.println("Usuario validado com sucesso.");
+
         } catch (IllegalStateException e) {
+            System.out.println("Erro de regra usuario: " + e.getMessage());
             throw e;
+
         } catch (Exception e) {
-            throw new IllegalStateException("Erro ao consultar serviço de usuários ou serviço indisponível.");
+            System.out.println("Erro comunicando com usuario-ms:");
+            e.printStackTrace();
+
+            throw new IllegalStateException(
+                    "Erro ao consultar serviço de usuários ou serviço indisponível.");
         }
 
         // 2. Verifica internamente se o usuário possui multas pendentes
-        if (possuiMultasPendentes(request.usuarioId())) {
+        System.out.println("Verificando multas pendentes...");
+
+        boolean possuiMulta = possuiMultasPendentes(request.usuarioId());
+
+        System.out.println("Possui multa: " + possuiMulta);
+
+        if (possuiMulta) {
+            System.out.println("Emprestimo bloqueado por multa.");
+
             throw new MultaPendenteException(
                     "O usuário possui multas pendentes e não pode realizar novos empréstimos.");
         }
 
         // 3. Consulta e atualiza o acervo via OpenFeign
         try {
-            if (!acervoClient.estaDisponivel(request.livroId())) {
-                throw new IllegalStateException("Livro sem exemplares disponíveis para empréstimo.");
+
+            System.out.println("Consultando disponibilidade no acervo-ms...");
+
+            var disponibilidade = acervoClient.estaDisponivel(request.livroId());
+
+            System.out.println(
+                    "Resposta acervo disponibilidade: "
+                            + disponibilidade.disponivel());
+
+            if (!disponibilidade.disponivel()) {
+
+                System.out.println("Livro sem estoque.");
+
+                throw new IllegalStateException(
+                        "Livro sem exemplares disponíveis para empréstimo.");
             }
+
+            System.out.println("Livro disponível.");
+
+            System.out.println("Chamando reduzirEstoque no acervo-ms...");
+
             acervoClient.reduzirEstoque(request.livroId());
+
+            System.out.println("Estoque reduzido com sucesso.");
+
         } catch (IllegalStateException e) {
+
+            System.out.println(
+                    "Erro de regra no acervo: " + e.getMessage());
+
             throw e;
+
         } catch (Exception e) {
-            throw new IllegalStateException("Erro ao comunicar com o acervo para retirada do exemplar.");
+
+            System.out.println("Erro comunicando com acervo-ms:");
+
+            e.printStackTrace();
+
+            throw new IllegalStateException(
+                    "Erro ao comunicar com o acervo para retirada do exemplar.");
         }
 
         // 4. Cadastra o empréstimo no banco
+        System.out.println("Salvando emprestimo no banco...");
+
         Emprestimo emprestimo = emprestimoMapper.toEntity(request);
+
         emprestimo = emprestimoRepository.save(emprestimo);
+
+        System.out.println(
+                "Emprestimo salvo. ID: " + emprestimo.getId());
+
+        System.out.println("===== FIM CADASTRO EMPRESTIMO =====");
 
         return emprestimoMapper.toResponse(emprestimo);
     }

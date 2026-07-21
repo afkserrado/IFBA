@@ -8,6 +8,7 @@ import br.edu.ifba.acervo_ms.entity.Livro;
 // exceto na criação de livros
 public class LivroResumoResponseDTO {
 
+    private Long id;
     private String titulo;
     private String autor;
     private String isbn;
@@ -17,11 +18,20 @@ public class LivroResumoResponseDTO {
     public LivroResumoResponseDTO() {}
 
     public LivroResumoResponseDTO(Livro livro) {
+        this.id = livro.getId();
         this.titulo = livro.getTitulo();
         this.autor = livro.getAutor();
         this.isbn = livro.getIsbn();
         this.quantidadeDisponivel = livro.getQuantidadeDisponivel();
         this.dataAtualizacao = livro.getDataAtualizacao();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
