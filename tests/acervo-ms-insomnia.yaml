@@ -1,0 +1,870 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Acervo MS
+meta:
+  id: wrk_acervo_ms_yaml
+  created: 1784687000000
+  modified: 1784687000000
+  description: "Testes dos endpoints do microserviço de gerenciamento de livros"
+collection:
+  - url: http://localhost:8081/auth/login
+    name: 1. Login do ADMIN inicial
+    meta:
+      id: req_acervo_001
+      created: 1784687000001
+      modified: 1784687000001
+      isPrivate: false
+      description: ""
+      sortKey: -1784687001000
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "admin@biblioteca.com",
+          "senha": "admin123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_admin', json.token);
+          insomnia.environment.set('admin_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 2. Cadastrar livro 1
+    meta:
+      id: req_acervo_002
+      created: 1784687000002
+      modified: 1784687000002
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000990
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Clean Code",
+          "autor": "Robert C. Martin",
+          "isbn": "9781234567890",
+          "quantidadeTotal": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro1_id', json.id);
+          insomnia.environment.set('livro1_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 3. Cadastrar livro 2
+    meta:
+      id: req_acervo_003
+      created: 1784687000003
+      modified: 1784687000003
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000980
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Domain-Driven Design",
+          "autor": "Eric Evans",
+          "isbn": "9780321125217",
+          "quantidadeTotal": 3
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro2_id', json.id);
+          insomnia.environment.set('livro2_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 4. Cadastrar livro 3
+    meta:
+      id: req_acervo_004
+      created: 1784687000004
+      modified: 1784687000004
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000970
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Refactoring",
+          "autor": "Martin Fowler",
+          "isbn": "9780201485677",
+          "quantidadeTotal": 4
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro3_id', json.id);
+          insomnia.environment.set('livro3_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros?page=0&size=20
+    name: 5. Listar todos os livros com ADMIN
+    meta:
+      id: req_acervo_005
+      created: 1784687000005
+      modified: 1784687000005
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000960
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 6. Criar USER para testes do acervo
+    meta:
+      id: req_acervo_006
+      created: 1784687000006
+      modified: 1784687000006
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000950
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "33333333333",
+          "nome": "Leitor Acervo",
+          "email": "leitor.acervo@biblioteca.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_id', json.id);
+          insomnia.environment.set('user_email', json.email);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/auth/login
+    name: 7. Login do USER
+    meta:
+      id: req_acervo_007
+      created: 1784687000007
+      modified: 1784687000007
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000940
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "leitor.acervo@biblioteca.com",
+          "senha": "user123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_user', json.token);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 8. Cadastrar livro com USER
+    meta:
+      id: req_acervo_008
+      created: 1784687000008
+      modified: 1784687000008
+      isPrivate: false
+      description: "Esperado: 403 se o cadastro for restrito a ADMIN"
+      sortKey: -1784687000935
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Livro Criado por User",
+          "autor": "Usuario Comum",
+          "isbn": "9781111111111",
+          "quantidadeTotal": 2
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros?page=0&size=20
+    name: 9. Listar todos os livros com USER
+    meta:
+      id: req_acervo_009
+      created: 1784687000009
+      modified: 1784687000009
+      isPrivate: false
+      description: "Se listagem não for restrita por papel, deve retornar 200 para usuário autenticado"
+      sortKey: -1784687000930
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/isbn/{{ _.livro1_isbn }}
+    name: 10. Buscar livro por ISBN com ADMIN
+    meta:
+      id: req_acervo_010
+      created: 1784687000010
+      modified: 1784687000010
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000920
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/isbn/{{ _.livro1_isbn }}
+    name: 11. Buscar livro por ISBN com USER
+    meta:
+      id: req_acervo_011
+      created: 1784687000011
+      modified: 1784687000011
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000910
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/titulo?titulo=Clean&page=0&size=10
+    name: 12. Buscar por título com ADMIN
+    meta:
+      id: req_acervo_012
+      created: 1784687000012
+      modified: 1784687000012
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000900
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/titulo?titulo=Clean&page=0&size=10
+    name: 13. Buscar por título com USER
+    meta:
+      id: req_acervo_013
+      created: 1784687000013
+      modified: 1784687000013
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000890
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/autor?autor=Robert&page=0&size=10
+    name: 14. Buscar por autor com ADMIN
+    meta:
+      id: req_acervo_014
+      created: 1784687000014
+      modified: 1784687000014
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000880
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/autor?autor=Robert&page=0&size=10
+    name: 15. Buscar por autor com USER
+    meta:
+      id: req_acervo_015
+      created: 1784687000015
+      modified: 1784687000015
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000870
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/disponibilidade
+    name: 16. Verificar disponibilidade com ADMIN
+    meta:
+      id: req_acervo_016
+      created: 1784687000016
+      modified: 1784687000016
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000860
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/disponibilidade
+    name: 17. Verificar disponibilidade com USER
+    meta:
+      id: req_acervo_017
+      created: 1784687000017
+      modified: 1784687000017
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000850
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/reduzir-estoque
+    name: 18. Reduzir estoque com ADMIN
+    meta:
+      id: req_acervo_018
+      created: 1784687000018
+      modified: 1784687000018
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000840
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/reduzir-estoque
+    name: 19. Reduzir estoque com USER
+    meta:
+      id: req_acervo_019
+      created: 1784687000019
+      modified: 1784687000019
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000830
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/aumentar-estoque
+    name: 20. Aumentar estoque com ADMIN
+    meta:
+      id: req_acervo_020
+      created: 1784687000020
+      modified: 1784687000020
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000820
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/aumentar-estoque
+    name: 21. Aumentar estoque com USER
+    meta:
+      id: req_acervo_021
+      created: 1784687000021
+      modified: 1784687000021
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000810
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}
+    name: 22. Atualizar livro com ADMIN
+    meta:
+      id: req_acervo_022
+      created: 1784687000022
+      modified: 1784687000022
+      isPrivate: false
+      description: ""
+      sortKey: -1784687000800
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Clean Code 2a Edicao",
+          "autor": "Robert C. Martin",
+          "isbn": "9781234567890",
+          "quantidadeTotal": 8
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}
+    name: 23. Atualizar livro com USER
+    meta:
+      id: req_acervo_023
+      created: 1784687000023
+      modified: 1784687000023
+      isPrivate: false
+      description: "Esperado: 403 se a autorização por perfil estiver correta"
+      sortKey: -1784687000790
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Tentativa Update User",
+          "autor": "Robert C. Martin",
+          "isbn": "9781234567890",
+          "quantidadeTotal": 6
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro3_id }}
+    name: 24. Remover livro com USER
+    meta:
+      id: req_acervo_024
+      created: 1784687000024
+      modified: 1784687000024
+      isPrivate: false
+      description: "Esperado: 403 se a autorização por perfil estiver correta"
+      sortKey: -1784687000780
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro3_id }}
+    name: 25. Remover livro com ADMIN
+    meta:
+      id: req_acervo_025
+      created: 1784687000025
+      modified: 1784687000025
+      isPrivate: false
+      description: "Pode retornar 409 se houver empréstimo ativo ou falha ao consultar emprestimos-ms"
+      sortKey: -1784687000770
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_acervo_ms
+    created: 1784687001001
+    modified: 1784687001001
+
+environments:
+  name: Base Environment
+  meta:
+    id: env_acervo_ms
+    created: 1784687001002
+    modified: 1784687001002
+    isPrivate: false
+  data:
+    token_admin: ""
+    admin_id: ""
+    token_user: ""
+    user_id: ""
+    user_email: ""
+    livro1_id: ""
+    livro1_isbn: ""
+    livro2_id: ""
+    livro2_isbn: ""
+    livro3_id: ""
+    livro3_isbn: ""

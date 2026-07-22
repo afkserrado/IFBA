@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.Map;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/livros")
@@ -36,6 +36,7 @@ public class LivroController {
         }
 
         @PostMapping
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Cadastra um novo livro", description = "Adiciona um livro ao acervo com validação de dados.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Livro cadastrado com sucesso", content = @Content(schema = @Schema(implementation = LivroResponseDTO.class))),
@@ -99,6 +100,7 @@ public class LivroController {
         }
 
         @PutMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Atualiza os dados de um livro existente", description = "Modifica completamente os dados de um livro a partir do seu ID.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Livro atualizado com sucesso"),
@@ -113,6 +115,7 @@ public class LivroController {
         }
 
         @DeleteMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Remove um livro do acervo", description = "Deleta o registro de um livro de forma permanente utilizando o ID informando.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Livro removido com sucesso"),
@@ -142,12 +145,14 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/reduzir-estoque")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Subtrai uma unidade do estoque do livro", description = "Decrementa o estoque do livro indicado em uma unidade (usado em novos empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque decrementado com sucesso"),
                         @ApiResponse(responseCode = "400", description = "Estoque insuficiente", content = @Content),
                         @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content),
-                        @ApiResponse(responseCode = "404", description = "Livro não localizado", content = @Content)
+                        @ApiResponse(responseCode = "404", description = "Livro não localizado", content = @Content),
+                        @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content)
         })
         public ResponseEntity<Void> reduzirEstoque(
                         @Parameter(description = "Identificador numérico do livro") @PathVariable Long id) {
@@ -156,11 +161,13 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/aumentar-estoque")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Adiciona uma unidade ao estoque do livro", description = "Incrementa o estoque do livro indicado em uma unidade (usado na devolução de empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque incrementado com sucesso"),
                         @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content),
-                        @ApiResponse(responseCode = "404", description = "Livro não localizado", content = @Content)
+                        @ApiResponse(responseCode = "404", description = "Livro não localizado", content = @Content),
+                        @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content)
         })
         public ResponseEntity<Void> aumentarEstoque(
                         @Parameter(description = "Identificador numérico do livro") @PathVariable Long id) {
