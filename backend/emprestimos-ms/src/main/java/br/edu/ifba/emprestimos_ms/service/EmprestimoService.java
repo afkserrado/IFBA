@@ -106,7 +106,7 @@ public class EmprestimoService {
         System.out.println("Usuario ID: " + request.usuarioId());
         System.out.println("Livro ID: " + request.livroId());
 
-        validarPermissaoEmprestimo(request.usuarioId());
+        validarAdministrador(); // só administradores podem cadastrar empréstimo
 
         // Confirma a existência e situação cadastral do usuário via OpenFeign
         try {
@@ -212,7 +212,7 @@ public class EmprestimoService {
     public EmprestimoResponse registrarDevolucao(Long id) {
 
         validarAdministrador(); // apenas admin faz devolução
-        
+
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
                         "Empréstimo não encontrado com o ID: " + id));
