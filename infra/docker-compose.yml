@@ -45,7 +45,7 @@ services:
     ports:
       - "5433:5432"
 
-    # Volumes utilizados pelo PostgreSQL.
+    # Volume utilizado pelo PostgreSQL.
     volumes:
 
       # Volume nomeado.
@@ -54,27 +54,6 @@ services:
       # Dessa forma, mesmo que o contêiner seja removido,
       # os dados permanecem salvos.
       - postgres_data:/var/lib/postgresql/data
-
-      # Bind mount.
-      #
-      # O arquivo init.sql do computador é montado dentro do contêiner.
-      #
-      # Todo arquivo colocado em:
-      #
-      # /docker-entrypoint-initdb.d/
-      #
-      # é executado automaticamente pela imagem oficial do PostgreSQL
-      # durante a PRIMEIRA inicialização do banco.
-      #
-      # Neste projeto, esse script será responsável por criar os schemas:
-      #
-      # - usuarios
-      # - acervo
-      # - emprestimos
-      # - notificacoes
-      #
-      # O sufixo ":ro" significa Read Only (somente leitura).
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
     # Verificação de integridade (Health Check).
     #
@@ -109,6 +88,54 @@ services:
     # (quando executados também dentro do Docker)
     networks:
       - biblioteca_network
+
+
+  # Serviço responsável pela criação inicial dos schemas do banco.
+  #
+  # A criação dos schemas é feita por um container separado,
+  # evitando problemas de permissão em arquivos externos,
+  # especialmente em sistemas com partições NTFS.
+  db-init:
+
+    # Utiliza a mesma imagem do PostgreSQL apenas para executar
+    # o cliente psql responsável pela criação dos schemas.
+    image: postgres:17
+
+    # Nome atribuído ao container de inicialização.
+    container_name: biblioteca_db_init
+
+    # Este serviço só será iniciado após o PostgreSQL estar saudável.
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    # Variável utilizada pelo psql para autenticação.
+    environment:
+
+      # Senha do usuário admin do PostgreSQL.
+      PGPASSWORD: biblioteca
+
+    # Executa os comandos SQL de criação dos schemas.
+    #
+    # O host "postgres" é utilizado porque todos os serviços
+    # estão conectados na mesma rede Docker.
+    command: >
+      bash -c "
+      echo 'Criando schemas...';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS usuarios AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS acervo AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS emprestimos AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS notificacoes AUTHORIZATION admin;';
+      echo 'Schemas criados com sucesso!';
+      "
+
+    # O container executa uma única vez e é finalizado.
+    restart: "no"
+
+    # Utiliza a mesma rede do PostgreSQL.
+    networks:
+      - biblioteca_network
+
 
   # Serviço responsável pela mensageria da aplicação.
   rabbitmq:
@@ -163,6 +190,7 @@ services:
     networks:
       - biblioteca_network
 
+
 # Declaração dos volumes nomeados.
 #
 # São gerenciados automaticamente pelo Docker.
@@ -177,13 +205,14 @@ volumes:
   # Volume do RabbitMQ.
   rabbitmq_data:
 
+
 # Declaração das redes Docker.
 networks:
 
   # Rede virtual utilizada para comunicação entre os contêineres.
   #
   # Todos os microsserviços, PostgreSQL e RabbitMQ
-  # deverão ser conectados a essa rede.
+  # deverão ser conectados nessa rede.
   biblioteca_network:
 
     # Driver de rede padrão do Docker.
