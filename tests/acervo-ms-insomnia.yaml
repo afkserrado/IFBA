@@ -637,7 +637,7 @@ collection:
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
+        description: "Esperado: 403 - USER não pode reduzir estoque"
         disabled: false
       - name: Authorization
         value: Bearer {{ _.token_user }}
@@ -693,7 +693,7 @@ collection:
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
+        description: "Esperado: 403 - USER não pode aumentar estoque"
         disabled: false
       - name: Authorization
         value: Bearer {{ _.token_user }}
