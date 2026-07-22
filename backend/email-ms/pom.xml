@@ -50,6 +50,7 @@
     <!-- ============================ -->
     <properties>
         <java.version>21</java.version>
+        <spring-cloud.version>2025.0.3</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -134,6 +135,28 @@
         </dependency>
 
     </dependencies>
+
+    <!-- ============================ -->
+    <!-- Gerenciamento de dependências -->
+    <!-- Centraliza as versões das dependências do Spring Cloud -->
+    <!-- ============================ -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- ============================ -->
+            <!-- Spring Cloud BOM -->
+            <!-- Gerencia versões compatíveis das dependências Spring Cloud -->
+            <!-- ============================ -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <!-- ============================ -->
     <!-- Configurações de build -->

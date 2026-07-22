@@ -1,44 +1,81 @@
-# Exibe o título.
+#!/bin/bash
+
 echo "======================================================="
 echo " INICIALIZAÇÃO DOS MICROSSERVIÇOS SPRING BOOT"
 echo "======================================================="
 
 # Procura a pasta backend a partir do diretório atual.
 
-# Verifica se já está dentro da pasta backend.
 if [ "$(basename "$PWD")" = "backend" ]; then
 
     BACKEND_DIR="$PWD"
 
-# Verifica se está dentro de TRABALHO-PWEB e encontra backend.
 elif [ "$(basename "$PWD")" = "TRABALHO-PWEB" ] && [ -d "backend" ]; then
 
     BACKEND_DIR="$PWD/backend"
 
-# Verifica se encontra TRABALHO-PWEB/backend a partir do diretório atual.
 elif [ -d "TRABALHO-PWEB/backend" ]; then
 
     BACKEND_DIR="$PWD/TRABALHO-PWEB/backend"
 
 else
 
+    echo
     echo "Erro: não foi possível localizar TRABALHO-PWEB/backend"
+    echo
+    read -p "Pressione ENTER para fechar..."
     exit 1
 
 fi
 
-# Entra no diretório do backend.
+
 cd "$BACKEND_DIR" || exit
 
-# Exibe o diretório utilizado.
+
+echo
 echo "Executando na pasta:"
 pwd
 echo
 
-# Busca processos utilizando as portas dos microsserviços.
+
+# ======================================================
+# Compila biblioteca compartilhada
+# ======================================================
+
+if [ -d "security-common" ]; then
+
+    echo "Compilando security-common..."
+
+    cd security-common || exit
+
+    mvn clean install compile
+
+    if [ $? -ne 0 ]; then
+        echo
+        echo "Erro ao compilar security-common."
+        read -p "Pressione ENTER para fechar..."
+        exit 1
+    fi
+
+    echo "security-common compilado com sucesso."
+
+    cd "$BACKEND_DIR" || exit
+
+else
+
+    echo
+    echo "Aviso: security-common não encontrado."
+    echo
+
+fi
+
+
+# ======================================================
+# Encerra microsserviços antigos
+# ======================================================
+
 PIDS=$(lsof -t -i:8080 -i:8081 -i:8082 -i:8083 -i:8084 -i:8085)
 
-# Encerra os microsserviços em execução.
 if [ -n "$PIDS" ]; then
 
     kill $PIDS
@@ -50,7 +87,11 @@ else
 
 fi
 
-# Lista dos microsserviços que serão iniciados.
+
+# ======================================================
+# Inicialização dos microsserviços
+# ======================================================
+
 SERVICOS=(
     "usuarios-ms"
     "acervo-ms"
@@ -60,25 +101,25 @@ SERVICOS=(
     "gateway-ms"
 )
 
-# Inicia cada microsserviço.
+
 for servico in "${SERVICOS[@]}"; do
 
-    # Define o caminho do microsserviço atual.
     CAMINHO="$BACKEND_DIR/$servico"
 
-    # Verifica se o microsserviço existe.
+
     if [ -d "$CAMINHO" ]; then
 
         echo "Iniciando $servico..."
 
-        # Entra na pasta do serviço e inicia o Spring Boot.
-        # O log é salvo na pasta home do usuário.
         (
             cd "$CAMINHO" || exit
-            bash mvnw spring-boot:run > "$HOME/${servico}.log" 2>&1
+
+            bash mvnw clean spring-boot:run \
+            > "$HOME/${servico}.log" 2>&1
+
         ) &
 
-        # Aguarda antes de iniciar o próximo serviço.
+
         sleep 3
 
     else
@@ -89,8 +130,11 @@ for servico in "${SERVICOS[@]}"; do
 
 done
 
-# Exibe mensagem final.
+
 echo
 echo "Microsserviços iniciados."
+echo
 echo "Logs disponíveis em:"
 echo "$HOME/<nome-do-servico>.log"
+echo
+read -p "Pressione ENTER para fechar..."
