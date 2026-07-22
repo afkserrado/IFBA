@@ -128,11 +128,13 @@
         <!-- Security Common -->
         <!-- Responsável pela autenticação JWT compartilhada entre microsserviços -->
         <!-- ============================ -->
+        <!--
         <dependency>
             <groupId>br.edu.ifba</groupId>
             <artifactId>security-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        -->
 
     </dependencies>
 
