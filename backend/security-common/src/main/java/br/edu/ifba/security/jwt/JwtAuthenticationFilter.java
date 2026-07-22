@@ -35,10 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println(
                                 "RECEBIDO NO EMPRESTIMOS: "
                                                 + authorization);
+
                 /*
-                 * Caso não exista token,
-                 * deixa o Spring Security decidir
-                 * se a rota é pública ou privada.
+                 * Se não veio um token Bearer, o Spring Security continua
+                 * normalmente e decide se a rota exige autenticação.
                  */
                 if (authorization == null
                                 || !authorization.startsWith("Bearer ")) {
@@ -48,31 +48,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 try {
+
+                        // Remove o "Bearer " e fica somente com o JWT
                         String token = authorization.substring(7);
 
+                        // Valida o token e recupera todas as claims
                         Claims claims = jwtService.validarToken(token);
 
+                        // Recupera as informações que foram gravadas no JWT
+                        Long id = jwtService.getUserId(claims);
                         String email = jwtService.getEmail(claims);
-
                         String role = jwtService.getRole(claims);
 
+                        // Cria um objeto representando o usuário autenticado
+                        AuthenticatedUser principal = new AuthenticatedUser(id, email);
+
+                        // Converte a role para o formato esperado pelo Spring
                         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                                         new SimpleGrantedAuthority(
                                                         "ROLE_" + role));
 
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                                        email,
-                                        null,
-                                        authorities);
+                        // Cria o Authentication que ficará disponível durante a requisição
+                        UsernamePasswordAuthenticationToken authentication =
+                                        new UsernamePasswordAuthenticationToken(
+                                                        principal,
+                                                        null,
+                                                        authorities);
 
+                        // Salva o usuário autenticado no contexto de segurança
                         SecurityContextHolder
                                         .getContext()
                                         .setAuthentication(authentication);
+
                 } catch (Exception e) {
 
+                        // Se o token for inválido, remove qualquer autenticação
                         SecurityContextHolder.clearContext();
                 }
 
+                // Continua para o próximo filtro da cadeia
                 filterChain.doFilter(request, response);
         }
 }

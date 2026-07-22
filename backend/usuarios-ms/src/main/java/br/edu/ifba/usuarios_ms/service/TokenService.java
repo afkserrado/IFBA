@@ -39,6 +39,7 @@ public class TokenService {
                 .issuer("auth-api")
                 .subject(usuario.getEmail())
                 .claim("role", usuario.getRole())
+                .claim("id", usuario.getId())
                 .issuedAt(agora)
                 .expiration(expiracao)
                 .signWith(key)

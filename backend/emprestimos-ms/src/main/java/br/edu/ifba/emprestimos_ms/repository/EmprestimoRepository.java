@@ -20,7 +20,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     long countMultasPendentes(@Param("usuarioId") Long usuarioId);
 
     // Regra para impedir exclusão do livro se houver empréstimo em andamento
-    boolean existsByLivroIdAndDataDevolucaoIsNull(Long livroId);
+    boolean existsByLivroIdAndStatus(Long livroId, StatusEmprestimo status);
 
     List<Emprestimo> findByUsuarioId(Long usuarioId);
 

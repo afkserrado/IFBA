@@ -33,6 +33,10 @@ public class JwtService {
 
     }
 
+    public Long getUserId(Claims claims) {
+        return claims.get("id", Long.class);
+    }
+
     public String getRole(Claims claims) {
 
         return claims.get(

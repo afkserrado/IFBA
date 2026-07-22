@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +18,12 @@ import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
 import br.edu.ifba.emprestimos_ms.entity.StatusEmprestimo;
+import br.edu.ifba.emprestimos_ms.exception.BusinessException;
 import br.edu.ifba.emprestimos_ms.exception.EmprestimoNaoEncontradoException;
 import br.edu.ifba.emprestimos_ms.exception.MultaPendenteException;
 import br.edu.ifba.emprestimos_ms.mapper.EmprestimoMapper;
 import br.edu.ifba.emprestimos_ms.repository.EmprestimoRepository;
+import br.edu.ifba.security.jwt.AuthenticatedUser;
 
 @Service
 public class EmprestimoService {
@@ -40,7 +44,7 @@ public class EmprestimoService {
         this.acervoClient = acervoClient;
     }
 
-    // --- MÉTODOS ORIGINAIS ---
+    // --- MÉTODOS AUXILIARES ---
 
     private boolean mapToBoolean(long count) {
         return count > 0;
@@ -61,7 +65,39 @@ public class EmprestimoService {
         emprestimoRepository.deleteByUsuarioId(usuarioId);
     }
 
-    // --- MÉTODOS DE NEGÓCIO DE EMPRÉSTIMOS ---
+    private void validarPermissaoEmprestimo(Long usuarioIdRequest) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        AuthenticatedUser usuarioLogado = (AuthenticatedUser) authentication.getPrincipal();
+
+        boolean admin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        // Se não for administrador, só pode cadastrar para si mesmo
+        if (!admin && !usuarioLogado.getId().equals(usuarioIdRequest)) {
+            throw new BusinessException(
+                    "Você só pode cadastrar empréstimos para si mesmo.");
+        }
+
+    }
+
+    private void validarAdministrador() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        boolean admin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!admin) {
+            throw new BusinessException(
+                    "Apenas administradores podem acessar esta funcionalidade.");
+        }
+    }
+
+    // MÉTODOS DE NEGÓCIO DE EMPRÉSTIMOS
 
     @Transactional
     public EmprestimoResponse cadastrarEmprestimo(EmprestimoRequest request) {
@@ -70,7 +106,9 @@ public class EmprestimoService {
         System.out.println("Usuario ID: " + request.usuarioId());
         System.out.println("Livro ID: " + request.livroId());
 
-        // 1. Confirma a existência e situação cadastral do usuário via OpenFeign
+        validarPermissaoEmprestimo(request.usuarioId());
+
+        // Confirma a existência e situação cadastral do usuário via OpenFeign
         try {
             System.out.println("Consultando usuario-ms...");
 
@@ -97,7 +135,7 @@ public class EmprestimoService {
                     "Erro ao consultar serviço de usuários ou serviço indisponível.");
         }
 
-        // 2. Verifica internamente se o usuário possui multas pendentes
+        // Verifica internamente se o usuário possui multas pendentes
         System.out.println("Verificando multas pendentes...");
 
         boolean possuiMulta = possuiMultasPendentes(request.usuarioId());
@@ -111,7 +149,7 @@ public class EmprestimoService {
                     "O usuário possui multas pendentes e não pode realizar novos empréstimos.");
         }
 
-        // 3. Consulta e atualiza o acervo via OpenFeign
+        // Consulta e atualiza o acervo via OpenFeign
         try {
 
             System.out.println("Consultando disponibilidade no acervo-ms...");
@@ -155,7 +193,7 @@ public class EmprestimoService {
                     "Erro ao comunicar com o acervo para retirada do exemplar.");
         }
 
-        // 4. Cadastra o empréstimo no banco
+        // Cadastra o empréstimo no banco
         System.out.println("Salvando emprestimo no banco...");
 
         Emprestimo emprestimo = emprestimoMapper.toEntity(request);
@@ -172,6 +210,9 @@ public class EmprestimoService {
 
     @Transactional
     public EmprestimoResponse registrarDevolucao(Long id) {
+
+        validarAdministrador(); // apenas admin faz devolução
+        
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
                         "Empréstimo não encontrado com o ID: " + id));
@@ -210,6 +251,9 @@ public class EmprestimoService {
 
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> listarTodos() {
+
+        validarAdministrador(); // somente adminsitradores podem ter acesso a listagem de empréstimos
+
         return emprestimoRepository.findAll().stream()
                 .map(emprestimoMapper::toResponse)
                 .collect(Collectors.toList());
@@ -217,6 +261,10 @@ public class EmprestimoService {
 
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> consultarPorUsuario(Long usuarioId) {
+
+        // Garante que usuário comum consulte apenas os próprios empréstimos
+        validarPermissaoEmprestimo(usuarioId);
+
         return emprestimoRepository.findByUsuarioId(usuarioId).stream()
                 .map(emprestimoMapper::toResponse)
                 .collect(Collectors.toList());
@@ -224,11 +272,17 @@ public class EmprestimoService {
 
     @Transactional(readOnly = true)
     public boolean existeEmprestimoAtivoPorLivro(Long livroId) {
-        return emprestimoRepository.existsByLivroIdAndDataDevolucaoIsNull(livroId);
+
+        validarAdministrador();
+        return emprestimoRepository.existsByLivroIdAndStatus(
+            livroId,
+            StatusEmprestimo.ATIVO);
     }
 
     @Transactional
     public EmprestimoResponse cancelarEmprestimo(Long id) {
+
+        validarAdministrador(); // somente administrador pode cancelar empréstimo
 
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
