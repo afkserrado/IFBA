@@ -145,6 +145,7 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/reduzir-estoque")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Subtrai uma unidade do estoque do livro", description = "Decrementa o estoque do livro indicado em uma unidade (usado em novos empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque decrementado com sucesso"),
@@ -160,6 +161,7 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/aumentar-estoque")
+        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Adiciona uma unidade ao estoque do livro", description = "Incrementa o estoque do livro indicado em uma unidade (usado na devolução de empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque incrementado com sucesso"),
