@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext.js';
 import { Spinner } from 'react-bootstrap';
 
 // Adicionamos a propriedade "requireAdmin" (por padrão é falso)
@@ -20,14 +20,9 @@ export default function RotaProtegida({ children, requireAdmin = false }) {
     return <Navigate to="/login" replace />;
   }
 
-  // 2. REGRA DE OURO DO RBAC: Se a página exige ADMIN e a pessoa logada NÃO É ADMIN:
+  // 2. Se a página exige ADMIN e a pessoa logada não é administradora.
   if (requireAdmin && !isAdmin) {
-    // Usamos o setTimeout para o navegador não bloquear o pop-up do alert!
-    setTimeout(() => {
-      alert('⛔ ACESSO NEGADO! Esta área é de acesso exclusivo para Administradores, você não tem permissão para acessar.');
-    }, 100);
-    
-    return <Navigate to="/acervo" replace />; // Chuta o usuário comum de volta pro Acervo!
+    return <Navigate to="/acervo" replace state={{ mensagem: 'Acesso restrito a administradores.' }} />;
   }
 
   return children;

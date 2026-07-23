@@ -1,115 +1,72 @@
-import { createContext, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
+import { AuthContext } from './AuthContext';
+import api, { clearStoredSession, getApiErrorMessage } from '../services/api';
 
-export const AuthContext = createContext({});
+function tokenExpirado(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return !payload.exp || payload.exp * 1000 <= Date.now();
+  } catch {
+    return true;
+  }
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+function recuperarSessao() {
+  const token = localStorage.getItem('@Biblioteca:token');
+  const storedUser = localStorage.getItem('@Biblioteca:user');
+  try {
+    if (token && storedUser && !tokenExpirado(token)) return JSON.parse(storedUser);
+  } catch {
+    // A limpeza abaixo trata também dados antigos ou corrompidos do navegador.
+  }
+  clearStoredSession();
+  return null;
+}
 
-  // 1. Ao iniciar, carrega a sessão e garante que exista um ADMIN pré-cadastrado para seus testes!
-  useEffect(() => {
-    const storedUser = localStorage.getItem('@Biblioteca:user');
-    const storedToken = localStorage.getItem('@Biblioteca:token');
-    const usuariosSalvos = localStorage.getItem('@Biblioteca:usuarios');
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(recuperarSessao);
 
-    // Se ainda não existir o banco de usuários no navegador, criamos com o ADMIN padrão
-    if (!usuariosSalvos) {
-      const adminPadrao = [
-        {
-          id: 1,
-          nome: 'Administrador Principal',
-          cpf: '000.000.000-00',
-          email: 'admin@biblioteca.com',
-          senha: 'admin', // Senha simples para teste
-          role: 'ADMIN'
-        }
-      ];
-      localStorage.setItem('@Biblioteca:usuarios', JSON.stringify(adminPadrao));
+  const cadastrar = async ({ cpf, nome, email, senha }) => {
+    try {
+      const response = await api.post('/api/v1/usuarios', {
+        cpf: cpf.replace(/\D/g, ''),
+        nome: nome.trim(),
+        email: email.trim(),
+        senha,
+        role: 'USER',
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, 'Não foi possível cadastrar o usuário.'), { cause: error });
+    }
+  };
+
+  const login = async (email, senha) => {
+    if (!email || !senha) throw new Error('Preencha e-mail e senha.');
+    let data;
+    try {
+      ({ data } = await api.post('/auth/login', { email: email.trim(), senha }));
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error, 'E-mail ou senha inválidos.'), { cause: error });
     }
 
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    if (!data?.token || !data?.usuario) throw new Error('Resposta de autenticação inválida.');
+    localStorage.setItem('@Biblioteca:token', data.token);
+    localStorage.setItem('@Biblioteca:tipo', 'Bearer');
+    localStorage.setItem('@Biblioteca:user', JSON.stringify(data.usuario));
+    setUser(data.usuario);
+    return data.usuario;
+  };
+
+  const updateUser = useCallback((updatedUser) => {
+    localStorage.setItem('@Biblioteca:user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
   }, []);
 
-  // 2. NOVA FUNÇÃO DE CADASTRO: Salva o usuário no nosso "banco" temporário
-  const cadastrar = async (novoUsuario) => {
-    const usuariosSalvos = JSON.parse(localStorage.getItem('@Biblioteca:usuarios') || '[]');
-
-    // Verifica se o e-mail já existe
-    const emailJaExiste = usuariosSalvos.some(u => u.email.toLowerCase() === novoUsuario.email.toLowerCase());
-    if (emailJaExiste) {
-      throw new Error('Este e-mail já está cadastrado no sistema!');
-    }
-
-    // Regra do projeto: Usuário padrão que se registra sozinho vira sempre 'USER'
-    const usuarioParaSalvar = {
-      id: Date.now(), // Gera um ID único baseado no tempo
-      nome: novoUsuario.nome,
-      cpf: novoUsuario.cpf,
-      email: novoUsuario.email,
-      senha: novoUsuario.senha,
-      role: 'USER'
-    };
-
-    usuariosSalvos.push(usuarioParaSalvar);
-    localStorage.setItem('@Biblioteca:usuarios', JSON.stringify(usuariosSalvos));
-    return usuarioParaSalvar;
-  };
-
-  // 3. LOGIN ATUALIZADO: Agora valida de verdade se o usuário existe!
-  const login = async (email, senha) => {
-    if (!email || !senha) {
-      throw new Error('Por favor, preencha todos os campos!');
-    }
-
-    // Pega a lista de usuários salvos
-    const usuariosSalvos = JSON.parse(localStorage.getItem('@Biblioteca:usuarios') || '[]');
-
-    // Busca alguém com o mesmo e-mail E mesma senha
-    const usuarioEncontrado = usuariosSalvos.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.senha === senha
-    );
-
-    // SE NÃO ENCONTRAR, BLOQUEIA O LOGIN!
-    if (!usuarioEncontrado) {
-      throw new Error('E-mail ou senha incorretos! Verifique seus dados ou faça o cadastro.');
-    }
-
-    // Se encontrou, gera o token e salva a sessão
-    const mockToken = `jwt_simulado_${Math.random()}`;
-    const dadosSessao = {
-      id: usuarioEncontrado.id,
-      nome: usuarioEncontrado.nome,
-      email: usuarioEncontrado.email,
-      role: usuarioEncontrado.role
-    };
-
-    localStorage.setItem('@Biblioteca:token', mockToken);
-    localStorage.setItem('@Biblioteca:user', JSON.stringify(dadosSessao));
-    
-    setUser(dadosSessao);
-    return dadosSessao;
-  };
-
-  const logout = () => {
-    localStorage.removeItem('@Biblioteca:token');
-    localStorage.removeItem('@Biblioteca:user');
+  const logout = useCallback(() => {
+    clearStoredSession();
     setUser(null);
-  };
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{
-      signed: !!user,
-      user,
-      isAdmin: user?.role === 'ADMIN',
-      login,
-      cadastrar, // Disponibilizamos a função de cadastrar
-      logout,
-      loading
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  return <AuthContext.Provider value={{ signed: Boolean(user), user, isAdmin: user?.role === 'ADMIN', login, cadastrar, updateUser, logout, loading: false }}>{children}</AuthContext.Provider>;
+}

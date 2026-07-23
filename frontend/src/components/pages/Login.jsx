@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, Alert, Tab, Tabs, Spinner } from 'react-bootstrap';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext.js';
 
 export default function Login() {
   // Agora também puxamos a função cadastrar do Contexto!
@@ -31,7 +31,6 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
       await login(emailLogin, senhaLogin);
       navigate('/');
     } catch (err) {
@@ -51,16 +50,13 @@ export default function Login() {
       return setErro('As senhas não coincidem!');
     }
 
-    if (senhaCad.length < 4) {
-      return setErro('A senha deve ter pelo menos 4 caracteres.');
+    if (senhaCad.length < 6) {
+      return setErro('A senha deve ter pelo menos 6 caracteres.');
     }
 
     setLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      // SALVA DE VERDADE NO NOVO BANCO TEMPORÁRIO!
       await cadastrar({
         nome: nomeCad,
         cpf: cpfCad,

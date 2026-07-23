@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar as BootstrapNavbar, Nav, Container, Button, Badge } from 'react-bootstrap';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext.js';
 
 export default function Navbar() {
   // Puxamos os dados da sessão usando o Hook useContext!
@@ -34,6 +34,12 @@ export default function Navbar() {
               <Nav.Link as={Link} to="/meus-emprestimos">
                 <i className="bi bi-journal-check me-1"></i>
                 Empréstimos
+              </Nav.Link>
+            )}
+            {signed && (
+              <Nav.Link as={Link} to="/minha-conta">
+                <i className="bi bi-person-gear me-1"></i>
+                Minha Conta
               </Nav.Link>
             )}
           {/* OLHE AQUI: Só aparece no menu se o usuário for ADMIN! */}

@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // 2. Importando nosso Contexto de Autenticação (O Cérebro!)
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
 // 3. Nossos componentes no padrão da aula
 import Navbar from './components/Navbar';

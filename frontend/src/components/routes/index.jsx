@@ -6,6 +6,7 @@ import Acervo from '../pages/Acervo';
 import Login from '../pages/Login';
 import Emprestimos from '../pages/Emprestimos';
 import AdminDashboard from '../pages/AdminDashboard'; // 1. IMPORTAMOS A AQUI!
+import MinhaConta from '../pages/MinhaConta';
 
 import RotaProtegida from '../RotaProtegida';
 
@@ -17,6 +18,7 @@ export default function AppRoutes() {
       <Route path="/" element={<RotaProtegida><Home /></RotaProtegida>} />
       <Route path="/acervo" element={<RotaProtegida><Acervo /></RotaProtegida>} />
       <Route path="/meus-emprestimos" element={<RotaProtegida><Emprestimos /></RotaProtegida>} />
+      <Route path="/minha-conta" element={<RotaProtegida><MinhaConta /></RotaProtegida>} />
       
       {/* 2. ROTA SUPER PROTEGIDA: Exige o cargo de ADMIN! */}
       <Route 
@@ -27,6 +29,7 @@ export default function AppRoutes() {
           </RotaProtegida>
         } 
       />
+      <Route path="*" element={<RotaProtegida><Home /></RotaProtegida>} />
     </Routes>
   );
 }
