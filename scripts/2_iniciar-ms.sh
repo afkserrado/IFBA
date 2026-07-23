@@ -28,15 +28,12 @@ else
 
 fi
 
-
 cd "$BACKEND_DIR" || exit
-
 
 echo
 echo "Executando na pasta:"
 pwd
 echo
-
 
 # ======================================================
 # Compila biblioteca compartilhada
@@ -69,7 +66,6 @@ else
 
 fi
 
-
 # ======================================================
 # Encerra microsserviços antigos
 # ======================================================
@@ -87,7 +83,6 @@ else
 
 fi
 
-
 # ======================================================
 # Inicialização dos microsserviços
 # ======================================================
@@ -101,11 +96,9 @@ SERVICOS=(
     "gateway-ms"
 )
 
-
 for servico in "${SERVICOS[@]}"; do
 
     CAMINHO="$BACKEND_DIR/$servico"
-
 
     if [ -d "$CAMINHO" ]; then
 
@@ -119,7 +112,6 @@ for servico in "${SERVICOS[@]}"; do
 
         ) &
 
-
         sleep 3
 
     else
@@ -129,7 +121,6 @@ for servico in "${SERVICOS[@]}"; do
     fi
 
 done
-
 
 echo
 echo "Microsserviços iniciados."
