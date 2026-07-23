@@ -25,23 +25,18 @@ else
     exit 1
 fi
 
-
 # Entra no diretório da infraestrutura.
 cd "$INFRA_DIR" || exit
-
 
 # Exibe o diretório utilizado.
 echo "Executando na pasta:"
 pwd
 
-
 # Remove containers, rede e volumes existentes.
 docker compose down -v
 
-
 # Inicia os serviços em segundo plano.
 docker compose up -d
-
 
 # Aguarda o PostgreSQL ficar disponível.
 echo "Aguardando PostgreSQL iniciar..."
@@ -51,21 +46,16 @@ do
     sleep 2
 done
 
-
 echo "PostgreSQL iniciado!"
-
 
 # Aguarda o container responsável pela criação dos schemas finalizar.
 echo "Aguardando criação dos schemas..."
 
 docker wait biblioteca_db_init >/dev/null
 
-
 echo "Schemas criados!"
-
 
 # Lista os schemas existentes no banco.
 docker exec biblioteca_postgres psql -U admin -d biblioteca -c '\dn'
-
 
 echo "Infraestrutura iniciada com sucesso!"
