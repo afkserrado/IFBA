@@ -30,3 +30,5 @@ docker exec -it biblioteca_postgres psql -U admin -d biblioteca -c "
 SELECT id, nome, email, role
 FROM usuarios.usuarios;
 "
+
+clear

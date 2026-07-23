@@ -1,21 +1,21 @@
 type: collection.insomnia.rest/5.0
 schema_version: "5.1"
-name: Usuarios MS
+name: Usuarios MS - Suíte Completa de Testes
 meta:
-  id: wrk_fce6d703786243ed897096f812c0a272
+  id: wrk_usuarios_ms_completo
   created: 1784680877117
-  modified: 1784680877117
-  description: ""
+  modified: 1784739034569
+  description: "Testes dos endpoints do microsserviço de usuários cobrindo permissões para ADMIN e USER via API Gateway"
 collection:
   - url: http://localhost:8080/auth/login
-    name: 1. Login do admin inicial
+    name: 01. Login do ADMIN inicial
     meta:
-      id: req_60ae9220eeb243d3a48d52569a091280
+      id: req_usr_001
       created: 1784678512655
       modified: 1784681120990
       isPrivate: false
-      description: ""
-      sortKey: -1784678965077
+      description: "Obtém o token JWT do administrador padrão do sistema"
+      sortKey: -1000
     method: POST
     body:
       mimeType: application/json
@@ -29,12 +29,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 200) {
           insomnia.environment.set('token_admin', json.token);
           insomnia.environment.set('admin_id', json.usuario.id);
@@ -47,15 +44,16 @@ collection:
         send: true
         store: true
       rebuildPath: true
+
   - url: http://localhost:8080/api/v1/usuarios
-    name: 2. Criação de um USER
+    name: 02. Criação de USER (pelo ADMIN)
     meta:
-      id: req_2343d01141db4cac99704408bf2d155b
+      id: req_usr_002
       created: 1784678964977
       modified: 1784679169370
       isPrivate: false
-      description: ""
-      sortKey: -1784678964977
+      description: "Cria um usuário comum com perfil USER"
+      sortKey: -990
     method: POST
     body:
       mimeType: application/json
@@ -72,12 +70,14 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_id', json.id);
+        }
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -86,15 +86,16 @@ collection:
         send: true
         store: true
       rebuildPath: true
+
   - url: http://localhost:8080/api/v1/usuarios
-    name: 3. Criação de um segundo ADMIN
+    name: 03. Criação de ADMIN2 (pelo ADMIN)
     meta:
-      id: req_49fb1102277e4bcf9a57705babc221a3
+      id: req_usr_003
       created: 1784679179153
       modified: 1784679421959
       isPrivate: false
-      description: ""
-      sortKey: -1784678964877
+      description: "Cria um segundo admin para testar ações entre administradores"
+      sortKey: -980
     method: POST
     body:
       mimeType: application/json
@@ -111,12 +112,14 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('admin2_id', json.id);
+        }
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -125,69 +128,16 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
-    name: 4. Busca por ID
-    meta:
-      id: req_e2accd4e9aba4c1aa52e2c6eedc02061
-      created: 1784679475405
-      modified: 1784679496436
-      isPrivate: false
-      description: ""
-      sortKey: -1784677909932
-    method: GET
-    headers:
-      - name: User-Agent
-        value: insomnia/12.6.0
-        description: ""
-        disabled: false
-      - name: Authorization
-        value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios
-    name: 5. Listagem de usuários
-    meta:
-      id: req_b1e9d300d3ef482cb9e8febcb75af4b3
-      created: 1784679547366
-      modified: 1784679553932
-      isPrivate: false
-      description: ""
-      sortKey: -1784677382459.5
-    method: GET
-    headers:
-      - name: User-Agent
-        value: insomnia/12.6.0
-        description: ""
-        disabled: false
-      - name: Authorization
-        value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
+
   - url: http://localhost:8080/auth/login
-    name: 6. Login do USER
+    name: 04. Login do USER
     meta:
-      id: req_c98aed1e12844d02ac8b4fb1cbd39bbd
+      id: req_usr_004
       created: 1784679693113
       modified: 1784681185108
       isPrivate: false
-      description: ""
-      sortKey: -1784677118723.25
+      description: "Obtém o token JWT do usuário comum"
+      sortKey: -970
     method: POST
     body:
       mimeType: application/json
@@ -201,12 +151,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 200) {
           insomnia.environment.set('token_user', json.token);
           insomnia.environment.set('user_id', json.usuario.id);
@@ -219,52 +166,16 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
-    name: 7. Edição do próprio USER
-    meta:
-      id: req_1145c0b8a028459ba1f96caed1152b14
-      created: 1784679799183
-      modified: 1784679869463
-      isPrivate: false
-      description: ""
-      sortKey: -1784676986855.125
-    method: PUT
-    body:
-      mimeType: application/json
-      text: |-
-        {
-          "nome": "Usuario Teste Atualizado",
-          "email": "user.teste@biblioteca.com",
-          "role": "USER"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/12.6.0
-        description: ""
-        disabled: false
-      - name: Authorization
-        value: Bearer {{ _.token_user }}
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
+
   - url: http://localhost:8080/auth/login
-    name: 8. Login do segundo ADMIN
+    name: 05. Login do segundo ADMIN
     meta:
-      id: req_49d3b476b4dc4cab91e17ab4ea148b79
+      id: req_usr_005
       created: 1784679912756
       modified: 1784681193616
       isPrivate: false
-      description: ""
-      sortKey: -1784676986755.125
+      description: "Obtém o token JWT do admin secundário"
+      sortKey: -960
     method: POST
     body:
       mimeType: application/json
@@ -278,12 +189,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 200) {
           insomnia.environment.set('token_admin2', json.token);
           insomnia.environment.set('admin2_id', json.usuario.id);
@@ -296,35 +204,34 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
-    name: 9. Edição do próprio ADMIN
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 06. Criação de USER por USER (permitido - auto cadastro)
     meta:
-      id: req_a54747df9e7343f88ec2b888afe6297b
-      created: 1784679966004
-      modified: 1784680105652
+      id: req_usr_006
+      created: 1784682000000
+      modified: 1784739062119
       isPrivate: false
-      description: ""
-      sortKey: -1784676920871.0625
-    method: PUT
+      description: "Esperado: 201 Created. Usuário comum pode cadastrar outro usuário com role USER"
+      sortKey: -950
+    method: POST
     body:
       mimeType: application/json
       text: |-
         {
-          "nome": "Admin Secundario Atualizado",
-          "email": "admin2@biblioteca.com",
-          "role": "ADMIN"
+          "cpf": "33333333333",
+          "nome": "Usuario Criado por USER",
+          "email": "user.criado@biblioteca.com",
+          "senha": "user456",
+          "role": "USER"
         }
     headers:
       - name: Content-Type
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
-        value: Bearer {{ _.token_admin2 }}
-        description: ""
-        disabled: false
+        value: Bearer {{ _.token_user }}
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -333,15 +240,240 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
-    name: 10. Edição do USER pelo segundo ADMIN
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 07. Tentativa de criar ADMIN por USER (deve falhar - 403)
     meta:
-      id: req_d3669556abd64527baeb4d8cdcf8ad52
+      id: req_usr_007
+      created: 1784682100000
+      modified: 1784739067265
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Apenas administradores podem criar outro ADMIN"
+      sortKey: -940
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "44444444444",
+          "nome": "Tentativa Admin",
+          "email": "admin.tentativa@biblioteca.com",
+          "senha": "admin789",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 08. Busca por ID do USER (pelo ADMIN) - permitido
+    meta:
+      id: req_usr_008
+      created: 1784679475405
+      modified: 1784679496436
+      isPrivate: false
+      description: "Esperado: 200 OK. Admin pode visualizar perfil de qualquer usuário"
+      sortKey: -930
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 09. Busca por ID do próprio USER (pelo USER) - permitido
+    meta:
+      id: req_usr_009
+      created: 1784682200000
+      modified: 1784682200000
+      isPrivate: false
+      description: "Esperado: 200 OK. Usuário pode buscar seu próprio perfil"
+      sortKey: -920
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 10. Busca por ID de outro usuário (pelo USER) - deve falhar (403)
+    meta:
+      id: req_usr_010
+      created: 1784682300000
+      modified: 1784682300000
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Usuário comum não pode visualizar perfis de terceiros"
+      sortKey: -910
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 11. Listagem de usuários (pelo ADMIN) - permitido
+    meta:
+      id: req_usr_011
+      created: 1784679547366
+      modified: 1784679553932
+      isPrivate: false
+      description: "Esperado: 200 OK. Admin pode listar todos os usuários"
+      sortKey: -900
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 12. Listagem de usuários (pelo USER) - deve falhar (403)
+    meta:
+      id: req_usr_012
+      created: 1784682400000
+      modified: 1784682400000
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Usuário comum não pode listar a base de usuários"
+      sortKey: -890
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 13. Edição do próprio USER (pelo USER) - permitido
+    meta:
+      id: req_usr_013
+      created: 1784679799183
+      modified: 1784679869463
+      isPrivate: false
+      description: "Esperado: 200 OK. Usuário pode editar seus próprios dados cadastrais"
+      sortKey: -880
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Teste Atualizado (por si)",
+          "email": "user.teste@biblioteca.com",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 14. Edição do próprio ADMIN2 (pelo ADMIN2) - permitido
+    meta:
+      id: req_usr_014
+      created: 1784679966004
+      modified: 1784680105652
+      isPrivate: false
+      description: "Esperado: 200 OK. Admin pode editar a si mesmo"
+      sortKey: -870
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Admin Secundario Atualizado (por si)",
+          "email": "admin2@biblioteca.com",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_admin2 }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 15. Edição do USER pelo ADMIN2 - permitido
+    meta:
+      id: req_usr_015
       created: 1784680127677
       modified: 1784680139213
       isPrivate: false
-      description: ""
-      sortKey: -1784676887929.0312
+      description: "Esperado: 200 OK. Admin pode editar perfis de outros usuários"
+      sortKey: -860
     method: PUT
     body:
       mimeType: application/json
@@ -356,12 +488,8 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin2 }}
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -370,25 +498,56 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
-    name: 11. Busca por e-mail
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 16. Tentativa de editar ADMIN2 pelo USER (deve falhar - 403)
     meta:
-      id: req_09649bd699d44effb3c39f08bf6b4fe0
+      id: req_usr_016
+      created: 1784682500000
+      modified: 1784739073475
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Usuário comum não pode editar perfis de terceiros"
+      sortKey: -850
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Tentativa de editar admin",
+          "email": "admin2@biblioteca.com",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
+    name: 17. Busca por e-mail do USER (pelo ADMIN) - permitido
+    meta:
+      id: req_usr_017
       created: 1784680179618
       modified: 1784680366220
       isPrivate: false
-      description: ""
-      sortKey: -1784676871458.0156
+      description: "Esperado: 200 OK. Admin pode buscar qualquer conta por e-mail"
+      sortKey: -840
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -397,25 +556,70 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}/validar-situacao
-    name: 12. Validação de situação cadastral
+
+  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
+    name: 18. Busca por e-mail do próprio USER (pelo USER) - permitido
     meta:
-      id: req_90157951865f4ab7ad14889321ce315b
+      id: req_usr_018
+      created: 1784682600000
+      modified: 1784739075278
+      isPrivate: false
+      description: "Esperado: 200 OK. Usuário pode consultar seu próprio e-mail"
+      sortKey: -830
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=admin2@biblioteca.com
+    name: 19. Busca por e-mail de outro (pelo USER) - deve falhar (403)
+    meta:
+      id: req_usr_019
+      created: 1784682700000
+      modified: 1784739079793
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Usuário comum não pode buscar e-mail de terceiros"
+      sortKey: -820
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}/validar-situacao
+    name: 20. Validação de situação do USER (pelo ADMIN) - permitido
+    meta:
+      id: req_usr_020
       created: 1784680402847
       modified: 1784680410665
       isPrivate: false
-      description: ""
-      sortKey: -1784676863222.5078
+      description: "Esperado: 200 OK (true). Admin valida situação do usuário"
+      sortKey: -810
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -424,25 +628,94 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
-    name: 13. Remoção do USER
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}/validar-situacao
+    name: 21. Validação de situação de outro (pelo USER) - permitido
     meta:
-      id: req_d2239201eef14f148fa66d3ace954e69
+      id: req_usr_021
+      created: 1784682800000
+      modified: 1784739077839
+      isPrivate: false
+      description: "Esperado: 200 OK (true). Endpoint aberto a usuários autenticados para validação entre módulos"
+      sortKey: -800
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}/validar-situacao
+    name: 22. Validação de situação do próprio USER (pelo USER) - permitido
+    meta:
+      id: req_usr_022
+      created: 1784682900000
+      modified: 1784739081408
+      isPrivate: false
+      description: "Esperado: 200 OK (true). Usuário valida a si mesmo"
+      sortKey: -790
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 23. Tentativa de remover ADMIN2 (pelo USER) - deve falhar (403)
+    meta:
+      id: req_usr_023
+      created: 1784683000000
+      modified: 1784683000000
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Usuário comum não pode excluir perfil de terceiros"
+      sortKey: -780
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 24. Remoção do USER (pelo ADMIN) - permitido
+    meta:
+      id: req_usr_024
       created: 1784680459519
       modified: 1784680468096
       isPrivate: false
-      description: ""
-      sortKey: -1784676859104.754
+      description: "Esperado: 204 No Content. Admin remove o usuário comum"
+      sortKey: -770
     method: DELETE
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -451,25 +724,22 @@ collection:
         send: true
         store: true
       rebuildPath: true
+
   - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
-    name: 14. Remoção do ADMIN 2
+    name: 25. Remoção do ADMIN2 (pelo ADMIN) - permitido
     meta:
-      id: req_00674567a3a94c87b1bc139964e2f123
+      id: req_usr_025
       created: 1784680502779
       modified: 1784680516887
       isPrivate: false
-      description: ""
-      sortKey: -1784676857045.877
+      description: "Esperado: 204 No Content. Admin remove o admin secundário"
+      sortKey: -760
     method: DELETE
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
       - name: Authorization
         value: Bearer {{ _.token_admin }}
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -478,20 +748,131 @@ collection:
         send: true
         store: true
       rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 26. Criação de usuário para deleção própria (pelo ADMIN)
+    meta:
+      id: req_usr_026
+      created: 1784683100000
+      modified: 1784683100000
+      isPrivate: false
+      description: "Cria um usuário temporário para testar a remoção do próprio perfil"
+      sortKey: -750
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "55555555555",
+          "nome": "Usuario Auto Delete",
+          "email": "auto.delete@biblioteca.com",
+          "senha": "auto123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_to_delete_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/auth/login
+    name: 27. Login do usuário auto-delete
+    meta:
+      id: req_usr_027
+      created: 1784683200000
+      modified: 1784683200000
+      isPrivate: false
+      description: "Obtém token para autenticar a solicitação de auto-exclusão"
+      sortKey: -740
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "auto.delete@biblioteca.com",
+          "senha": "auto123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_auto_delete', json.token);
+          insomnia.environment.set('user_to_delete_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_to_delete_id }}
+    name: 28. Remoção do próprio usuário (pelo USER) - permitido
+    meta:
+      id: req_usr_028
+      created: 1784683300000
+      modified: 1784683300000
+      isPrivate: false
+      description: "Esperado: 204 No Content. Usuário remove sua própria conta"
+      sortKey: -730
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+      - name: Authorization
+        value: Bearer {{ _.token_auto_delete }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_0a8233c4079c4fe3ab1676f6d3a627fa
+    id: jar_677562a5e6a849c2a8d12960e8ee2dd4
     created: 1784678504953
-    modified: 1784681198243
+    modified: 1784739125029
+
 environments:
   name: Base Environment
   meta:
-    id: env_835a4e428f6842caaea602c47ebc22af
+    id: env_4cb462bff02d4259913162490fcc6512
     created: 1784678504952
-    modified: 1784681198245
+    modified: 1784739125030
     isPrivate: false
   data:
-    token_admin: eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6ImFkbWluQGJpYmxpb3RlY2EuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzg0NjgxMTk3LCJleHAiOjE3ODQ2ODgzOTd9.UKYeqFSt5ZNNOZDXCm4orKRsLeCqDL2bUyg4NaGtweKxOn2UxEWLkzyp_76F1271TrXAab5UhZLwgSN9QLuqPQ
+    token_admin: ""
+    admin_id: ""
     token_user: ""
+    user_id: ""
     token_admin2: ""
+    admin2_id: ""
+    token_auto_delete: ""
+    user_to_delete_id: ""

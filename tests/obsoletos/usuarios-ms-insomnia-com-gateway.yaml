@@ -7,7 +7,7 @@ meta:
   modified: 1784680877117
   description: ""
 collection:
-  - url: http://localhost:8081/auth/login
+  - url: http://localhost:8080/auth/login
     name: 1. Login do admin inicial
     meta:
       id: req_60ae9220eeb243d3a48d52569a091280
@@ -47,7 +47,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios
+  - url: http://localhost:8080/api/v1/usuarios
     name: 2. Criação de um USER
     meta:
       id: req_2343d01141db4cac99704408bf2d155b
@@ -78,6 +78,13 @@ collection:
         value: Bearer {{ _.token_admin }}
         description: ""
         disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_id', json.id);
+        }
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -86,7 +93,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios
+  - url: http://localhost:8080/api/v1/usuarios
     name: 3. Criação de um segundo ADMIN
     meta:
       id: req_49fb1102277e4bcf9a57705babc221a3
@@ -117,6 +124,13 @@ collection:
         value: Bearer {{ _.token_admin }}
         description: ""
         disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('admin2_id', json.id);
+        }
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -125,7 +139,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.user_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
     name: 4. Busca por ID
     meta:
       id: req_e2accd4e9aba4c1aa52e2c6eedc02061
@@ -152,7 +166,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios
+  - url: http://localhost:8080/api/v1/usuarios
     name: 5. Listagem de usuários
     meta:
       id: req_b1e9d300d3ef482cb9e8febcb75af4b3
@@ -179,7 +193,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/auth/login
+  - url: http://localhost:8080/auth/login
     name: 6. Login do USER
     meta:
       id: req_c98aed1e12844d02ac8b4fb1cbd39bbd
@@ -219,7 +233,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.user_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
     name: 7. Edição do próprio USER
     meta:
       id: req_1145c0b8a028459ba1f96caed1152b14
@@ -256,7 +270,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/auth/login
+  - url: http://localhost:8080/auth/login
     name: 8. Login do segundo ADMIN
     meta:
       id: req_49d3b476b4dc4cab91e17ab4ea148b79
@@ -296,7 +310,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.admin2_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
     name: 9. Edição do próprio ADMIN
     meta:
       id: req_a54747df9e7343f88ec2b888afe6297b
@@ -333,7 +347,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.user_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
     name: 10. Edição do USER pelo segundo ADMIN
     meta:
       id: req_d3669556abd64527baeb4d8cdcf8ad52
@@ -370,7 +384,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
+  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
     name: 11. Busca por e-mail
     meta:
       id: req_09649bd699d44effb3c39f08bf6b4fe0
@@ -397,7 +411,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.user_id }}/validar-situacao
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}/validar-situacao
     name: 12. Validação de situação cadastral
     meta:
       id: req_90157951865f4ab7ad14889321ce315b
@@ -424,7 +438,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.user_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
     name: 13. Remoção do USER
     meta:
       id: req_d2239201eef14f148fa66d3ace954e69
@@ -451,7 +465,7 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: http://localhost:8081/api/v1/usuarios/{{ _.admin2_id }}
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
     name: 14. Remoção do ADMIN 2
     meta:
       id: req_00674567a3a94c87b1bc139964e2f123
