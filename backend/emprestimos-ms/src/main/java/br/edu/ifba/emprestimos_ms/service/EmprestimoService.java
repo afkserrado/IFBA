@@ -316,9 +316,8 @@ public class EmprestimoService {
                     "Erro ao notificar o acervo sobre o cancelamento do empréstimo.");
         }
 
-        // Não preenche dataDevolucao
         emprestimo.setStatus(StatusEmprestimo.CANCELADO);
-
+        emprestimo.setDataDevolucao(LocalDate.now());
         emprestimo = emprestimoRepository.save(emprestimo);
 
         return emprestimoMapper.toResponse(emprestimo);
