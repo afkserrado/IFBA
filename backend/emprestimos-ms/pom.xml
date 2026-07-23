@@ -213,6 +213,10 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!-- ============================ -->
+        <!-- Security Common -->
+        <!-- Responsável pela autenticação JWT compartilhada entre microsserviços -->
+        <!-- ============================ -->
         <dependency>
             <groupId>br.edu.ifba</groupId>
             <artifactId>security-common</artifactId>
