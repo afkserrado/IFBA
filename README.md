@@ -165,7 +165,7 @@ ADMIN_PASSWORD=admin123
 ADMIN_CPF=00000000000
 ```
 
-### Passo 3: Compilar e instalar o Módulo Comum de Segurança
+### Passo 3: Compilar e instalar o módulo comum de segurança
 
 O módulo `security-common` deve ser compilado e instalado no seu repositório Maven local antes de iniciar os microsserviços:
 
@@ -187,7 +187,7 @@ mvn clean install
 
 _(Caso não possua o Maven instalado globalmente, substitua `mvn` por `mvnw.cmd`)_
 
-### Passo 4: Inicializar os Microsserviços Backend
+### Passo 4: Inicializar os microsserviços backend
 
 Abra terminais/janelas independentes para cada microsserviço e execute-os **estritamente na ordem abaixo**:
 
@@ -293,7 +293,7 @@ mvnw.cmd clean spring-boot:run
 
 - **Linux (Shell Script):**
 
-Você pode utilizar o script abaixo para executá-los em segundo plano dentro da pasta `backend` ou de alguma pasta pai:
+Você pode utilizar o script abaixo para executá-los em segundo plano dentro da pasta `backend` ou de alguma pasta pai. Basta copiá-lo e colá-lo no terminal.
 
 ```Bash
 #!/bin/bash
@@ -427,7 +427,7 @@ read -p "Pressione ENTER para fechar..."
 
 - **No Windows (Batch Script):**
 
-Salve o conteúdo abaixo em um arquivo chamado `iniciar_ms.bat` dentro da pasta `backend` e execute-o para abrir cada microsserviço em uma nova janela automaticamente:
+Salve o conteúdo abaixo em um arquivo chamado `iniciar_ms.bat` dentro da pasta `backend` e execute-o para abrir cada microsserviço em uma nova janela automaticamente.
 
 ```PowerShell
 @echo off
@@ -482,7 +482,7 @@ echo Microsserviços inicializados.
 pause
 ```
 
-### Passo 5: Executar a Aplicação Frontend
+### Passo 5: Executar a aplicação frontend
 
 Em um novo terminal, acesse a pasta do frontend, instale as dependências e inicie o servidor de desenvolvimento:
 
@@ -512,20 +512,21 @@ Você pode fazer login no usuário `FirstAdmin`:
 ## 5. Divisão das responsabilidades da equipe
 
 **Anderson**
-- Implementação da infraestrutura (docker compose com PostgreSQL e RabbitMQ);
-- Modelagem de template para o backend;
-- Implementação dos microsserviços `acervo-ms`, `email-ms` e `notificacoes-ms` (comunicação assíncrona com RabbitMQ);
-- Criação das coleções de testes;
-- Testes de requisição;
-- README.
+- Implementação da infraestrutura (Docker Compose com PostgreSQL e RabbitMQ);
+- Modelagem e padronização do template base para o backend;
+- Implementação e regra de negócio do microsserviço `acervo-ms`;
+- Implementação dos microsserviços `email-ms` e `notificacoes-ms` para comunicação assíncrona com RabbitMQ;
+- Criação e validação das coleções de testes das APIs (Insomnia);
+- Execução e validação dos testes de integração das requisições HTTP;
+- Elaboração da documentação técnica e das instruções de execução (README).
 
 **Anna Luisa**
-- Implementação do microsserviço `emprestimos-ms`;
-- Implementação do frontend.
+- Implementação e regra de negócio do microsserviço `emprestimos-ms`;
+- Desenvolvimento e componentes da interface do usuário no frontend React.
 
 **Vinícius Santos**
-- Implementação do `gateway-ms`;
-- Implementação do `security-common` (Spring Security com JWT);
-- Implementação do `usuarios-ms`;
-- Integração frontend x backend;
-- Testes de requisição.
+- Implementação e roteamento do `gateway-ms`;
+- Desenvolvimento do módulo de segurança centralizada `security-common` (Spring Security com JWT);
+- Implementação e regra de negócio do microsserviço `usuarios-ms` e controle de autenticação;
+- Integração das chamadas da API entre o frontend e o backend;
+- Execução e validação dos testes de requisições HTTP e permissões de acesso.
