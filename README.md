@@ -124,10 +124,16 @@ docker ps
 
 Para verificar os schemas criados no banco:
 
-- **Linux e Windows:**
+- **Linux:**
 
 ```Bash
 docker exec -it biblioteca_postgres psql -U admin -d biblioteca -c '\dn'
+```
+
+- **Windows:**
+
+```Bash
+docker exec -it biblioteca_postgres psql -U admin -d biblioteca -c "\dn"
 ```
 
 ### Passo 2: Criar um arquivo `.env` na raíz do projeto
