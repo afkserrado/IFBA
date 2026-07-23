@@ -87,7 +87,7 @@ __________________________|__________________________
 
 ## 4. Instruções de execução
 
-> **Observação:** As instruções consideram o projeto localizado no diretório `/home/<seu-usuario>/Downloads/TRABALHO-PWEB`. Substitua `<seu-usuario>` pelo nome de usuário no seu sistema operacional.
+> **Observação:** as instruções consideram o projeto localizado no diretório `/home/<seu-usuario>/Downloads/TRABALHO-PWEB` no Linux ou `C:\Users\<seu-usuario>\Downloads\TRABALHO-PWEB` no Windows. Substitua <seu-usuario> pelo nome de usuário no seu sistema operacional.
 
 ### Pré-requisitos
 
