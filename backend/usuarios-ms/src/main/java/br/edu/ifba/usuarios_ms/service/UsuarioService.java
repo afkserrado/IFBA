@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.edu.ifba.security.jwt.AuthenticatedUser;
 import br.edu.ifba.usuarios_ms.client.EmprestimoClient;
 import br.edu.ifba.usuarios_ms.dto.UsuarioRequestDTO;
 import br.edu.ifba.usuarios_ms.dto.UsuarioResponseDTO;
@@ -44,9 +45,13 @@ public class UsuarioService {
             return null;
         }
 
-        String email = authentication.getName();
+        Object principal = authentication.getPrincipal();
 
-        return usuarioRepository.findByEmail(email)
+        if (!(principal instanceof AuthenticatedUser authenticatedUser)) {
+            return null;
+        }
+
+        return usuarioRepository.findByEmail(authenticatedUser.getEmail())
                 .orElse(null);
     }
 
@@ -65,6 +70,13 @@ public class UsuarioService {
 
         Usuario usuarioLogado = getUsuarioLogado();
         String papelDefinido = "USER"; // Padrao comum
+
+        // log para identificar qual role está chegando aqui
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println(auth);
+        System.out.println(auth.getAuthorities());
+        System.out.println(auth.getName()); // apagar depois
 
         // Apenas admin cria outro admin
         if ("ADMIN".equalsIgnoreCase(dto.role())) {

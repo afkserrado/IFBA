@@ -78,7 +78,7 @@ public class EmprestimoService {
         // Se não for administrador, só pode cadastrar para si mesmo
         if (!admin && !usuarioLogado.getId().equals(usuarioIdRequest)) {
             throw new BusinessException(
-                    "Você só pode cadastrar empréstimos para si mesmo.");
+                    "Apenas Admin tem acesso a empréstimos de terceiros");
         }
 
     }
@@ -87,9 +87,24 @@ public class EmprestimoService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        System.out.println("Authentication: " + authentication);
+
+        if (authentication == null) {
+            System.out.println("Authentication é null");
+            throw new BusinessException("Não autenticado.");
+        }
+
+        System.out.println("Principal: " + authentication.getPrincipal());
+        System.out.println("Authorities: " + authentication.getAuthorities());
+
+        authentication.getAuthorities()
+                .forEach(a -> System.out.println("Authority: " + a.getAuthority()));
+
         boolean admin = authentication.getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        System.out.println("É admin? " + admin);
 
         if (!admin) {
             throw new BusinessException(
@@ -275,8 +290,8 @@ public class EmprestimoService {
 
         validarAdministrador();
         return emprestimoRepository.existsByLivroIdAndStatus(
-            livroId,
-            StatusEmprestimo.ATIVO);
+                livroId,
+                StatusEmprestimo.ATIVO);
     }
 
     @Transactional
