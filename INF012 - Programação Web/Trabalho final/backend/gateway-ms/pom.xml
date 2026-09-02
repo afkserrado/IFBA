@@ -74,38 +74,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ============================ -->
-        <!-- JJWT API -->
-        <!-- Fornece a API para criação e validação de tokens JWT -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- JJWT Implementation -->
-        <!-- Implementação utilizada em tempo de execução -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- JJWT Jackson -->
-        <!-- Permite serializar e desserializar o conteúdo JSON do token -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
     </dependencies>
 
     <!-- ============================ -->

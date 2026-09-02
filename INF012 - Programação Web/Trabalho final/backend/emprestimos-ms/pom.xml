@@ -93,16 +93,6 @@
         </dependency>
 
         <!-- ============================ -->
-        <!-- Spring Security -->
-        <!-- Fornece autenticação, autorização e proteção dos endpoints -->
-        <!-- Pode ser configurado para trabalhar com tokens JWT -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <!-- ============================ -->
         <!-- Java Mail Sender -->
         <!-- Permite enviar e-mails pela aplicação -->
         <!-- ============================ -->
@@ -153,54 +143,12 @@
         </dependency>
 
         <!-- ============================ -->
-        <!-- Spring Security Test -->
-        <!-- Fornece utilitários para testar autenticação e autorização -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- ============================ -->
         <!-- Spring AMQP / RabbitMQ -->
         <!-- Permite publicar e consumir mensagens utilizando RabbitMQ -->
         <!-- ============================ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- JJWT API -->
-        <!-- Fornece a API para criação e validação de tokens JWT -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- JJWT Implementation -->
-        <!-- Implementação utilizada em tempo de execução -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- JJWT Jackson -->
-        <!-- Permite serializar e desserializar o conteúdo JSON do token -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
         </dependency>
 
         <!-- ============================ -->
@@ -211,16 +159,6 @@
             <groupId>me.paulschwarz</groupId>
             <artifactId>spring-dotenv</artifactId>
             <version>3.0.0</version>
-        </dependency>
-
-        <!-- ============================ -->
-        <!-- Security Common -->
-        <!-- Responsável pela autenticação JWT compartilhada entre microsserviços -->
-        <!-- ============================ -->
-        <dependency>
-            <groupId>br.edu.ifba</groupId>
-            <artifactId>security-common</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
