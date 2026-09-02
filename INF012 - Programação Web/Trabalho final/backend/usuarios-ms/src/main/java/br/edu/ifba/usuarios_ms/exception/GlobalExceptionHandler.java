@@ -48,30 +48,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
-    // ausência ou token inválido
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorized(AuthenticationException ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                "UNAUTHORIZED",
-                "Ausência de credenciais ou token inválido.",
-                request.getRequestURI()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
-    }
-
-    // falta de permissão
-    @ExceptionHandler({SecurityException.class, AccessDeniedException.class})
-    public ResponseEntity<ErrorResponse> handleForbidden(Exception ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
-                HttpStatus.FORBIDDEN.value(),
-                "FORBIDDEN",
-                ex.getMessage() != null ? ex.getMessage() : "Você não possui permissão para acessar este recurso.",
-                request.getRequestURI()
-        );
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
-    }
-
     // recurso inexistente
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {

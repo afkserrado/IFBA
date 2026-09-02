@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +16,10 @@ import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
 import br.edu.ifba.emprestimos_ms.entity.StatusEmprestimo;
-import br.edu.ifba.emprestimos_ms.exception.BusinessException;
 import br.edu.ifba.emprestimos_ms.exception.EmprestimoNaoEncontradoException;
 import br.edu.ifba.emprestimos_ms.exception.MultaPendenteException;
 import br.edu.ifba.emprestimos_ms.mapper.EmprestimoMapper;
 import br.edu.ifba.emprestimos_ms.repository.EmprestimoRepository;
-import br.edu.ifba.security.jwt.AuthenticatedUser;
 
 @Service
 public class EmprestimoService {

@@ -3,7 +3,6 @@ package br.edu.ifba.usuarios_ms.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.edu.ifba.usuarios_ms.dto.UsuarioRequestDTO;
@@ -33,7 +32,6 @@ public class UsuarioController {
     }
 
     @PostMapping
-    @PreAuthorize("permitAll()") // Totalmente público para auto-cadastro (Sign-up)
     @Operation(summary = "Cadastra um novo usuário", description = "Cria uma conta de usuário no sistema com validação de credenciais e e-mail único.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(schema = @Schema(implementation = UsuarioResponseDTO.class))),

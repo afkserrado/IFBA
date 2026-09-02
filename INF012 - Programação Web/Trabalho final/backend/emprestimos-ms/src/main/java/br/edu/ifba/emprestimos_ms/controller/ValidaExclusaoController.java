@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/emprestimos/validar-exclusao")
@@ -36,11 +35,8 @@ public class ValidaExclusaoController {
         @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiEmprestimosAtivos(
-        @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id,
-        HttpServletRequest request
+        @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id
     ) {
-        System.out.println("AUTH HEADER: "
-        + request.getHeader("Authorization"));
         boolean temAtivos = emprestimoService.possuiEmprestimosAtivos(id);
         return ResponseEntity.ok(temAtivos);
     }
@@ -55,11 +51,8 @@ public class ValidaExclusaoController {
         @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiMultasPendentes(
-        @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id,
-        HttpServletRequest request
+        @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id
     ) {
-        System.out.println("AUTH HEADER: "
-        + request.getHeader("Authorization"));
         boolean temMultas = emprestimoService.possuiMultasPendentes(id);
         return ResponseEntity.ok(temMultas);
     }
