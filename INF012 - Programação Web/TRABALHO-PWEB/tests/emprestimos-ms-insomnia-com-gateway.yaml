@@ -1,0 +1,1022 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Emprestimos MS
+meta:
+  id: wrk_emprestimos_ms_yaml
+  created: 1784690000000
+  modified: 1784690000000
+  description: "Testes dos endpoints do microserviço de empréstimos e integrações com usuários e acervo"
+
+collection:
+  - url: http://localhost:8080/auth/login
+    name: 1. Login do ADMIN inicial
+    meta:
+      id: req_emprestimos_001
+      created: 1784690000001
+      modified: 1784690000001
+      isPrivate: false
+      description: "Esperado: 200 OK. Retorna token JWT de ADMIN e dados do usuário administrador."
+      sortKey: -1784690001000
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "admin@biblioteca.com",
+          "senha": "admin123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_admin', json.token);
+          insomnia.environment.set('admin_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 2. Criar USER para testes de empréstimo
+    meta:
+      id: req_emprestimos_002
+      created: 1784690000002
+      modified: 1784690000002
+      isPrivate: false
+      description: "Esperado: 201 Created. Cria um usuário comum para ser utilizado nos testes."
+      sortKey: -1784690000990
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "44444444444",
+          "nome": "Leitor Emprestimo",
+          "email": "leitor.emprestimo@biblioteca.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_id', json.id);
+          insomnia.environment.set('user_email', json.email);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/auth/login
+    name: 3. Login do USER
+    meta:
+      id: req_emprestimos_003
+      created: 1784690000003
+      modified: 1784690000003
+      isPrivate: false
+      description: "Esperado: 200 OK. Obtém o token JWT do usuário comum."
+      sortKey: -1784690000980
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "leitor.emprestimo@biblioteca.com",
+          "senha": "user123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_user', json.token);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros
+    name: 4. Cadastrar livro 1 para empréstimos
+    meta:
+      id: req_emprestimos_004
+      created: 1784690000004
+      modified: 1784690000004
+      isPrivate: false
+      description: "Esperado: 201 Created. Cadastra o livro A pelo ADMIN."
+      sortKey: -1784690000970
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Arquitetura Limpa",
+          "autor": "Robert C. Martin",
+          "isbn": "9788550804606",
+          "quantidadeTotal": 2
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_a_id', json.id);
+          insomnia.environment.set('livro_a_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros
+    name: 5. Cadastrar livro 2 para empréstimos
+    meta:
+      id: req_emprestimos_005
+      created: 1784690000005
+      modified: 1784690000005
+      isPrivate: false
+      description: "Esperado: 201 Created. Cadastra o livro B pelo ADMIN."
+      sortKey: -1784690000960
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Padrões de Projeto",
+          "autor": "Erich Gamma",
+          "isbn": "9788573076103",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_b_id', json.id);
+          insomnia.environment.set('livro_b_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros
+    name: 6. Cadastrar livro 3 para empréstimos
+    meta:
+      id: req_emprestimos_006
+      created: 1784690000006
+      modified: 1784690000006
+      isPrivate: false
+      description: "Esperado: 201 Created. Cadastra o livro C pelo ADMIN."
+      sortKey: -1784690000950
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Engenharia de Software",
+          "autor": "Ian Sommerville",
+          "isbn": "9788543024974",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_c_id', json.id);
+          insomnia.environment.set('livro_c_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 7. Cadastrar empréstimo do USER no livro A com USER
+    meta:
+      id: req_emprestimos_007
+      created: 1784690000007
+      modified: 1784690000007
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não possui permissão para cadastrar empréstimos."
+      sortKey: -1784690000940
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.user_id }},
+          "livroId": {{ _.livro_a_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 7b. Cadastrar empréstimo A do USER com ADMIN
+    meta:
+      id: req_emprestimos_007b
+      created: 1784690000075
+      modified: 1784690000075
+      isPrivate: false
+      description: "Esperado: 201 Created. ADMIN cadastra o empréstimo A do USER para permitir os testes subsequentes de devolução."
+      sortKey: -1784690000935
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.user_id }},
+          "livroId": {{ _.livro_a_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('emprestimo_a_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 8. Cadastrar empréstimo do USER no livro B com ADMIN
+    meta:
+      id: req_emprestimos_008
+      created: 1784690000008
+      modified: 1784690000008
+      isPrivate: false
+      description: "Esperado: 201 Created. ADMIN cadastra o empréstimo B para o USER e obtém emprestimo_b_id."
+      sortKey: -1784690000930
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.user_id }},
+          "livroId": {{ _.livro_b_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('emprestimo_b_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 9. Tentar empréstimo para outro usuário com USER
+    meta:
+      id: req_emprestimos_009
+      created: 1784690000009
+      modified: 1784690000009
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não pode realizar cadastros de empréstimo para terceiros."
+      sortKey: -1784690000920
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.admin_id }},
+          "livroId": {{ _.livro_c_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_a_id }}/ativos/existe
+    name: 10. Verificar empréstimo ativo do livro A com ADMIN
+    meta:
+      id: req_emprestimos_010
+      created: 1784690000010
+      modified: 1784690000010
+      isPrivate: false
+      description: "Esperado: 200 OK (true). ADMIN verifica que existe empréstimo ativo no livro A."
+      sortKey: -1784690000910
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_a_id }}/ativos/existe
+    name: 11. Verificar empréstimo ativo do livro A com USER
+    meta:
+      id: req_emprestimos_011
+      created: 1784690000011
+      modified: 1784690000011
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. Apenas administradores podem verificar se há empréstimo ativo por livro."
+      sortKey: -1784690000900
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 12. Listar todos os empréstimos com ADMIN
+    meta:
+      id: req_emprestimos_012
+      created: 1784690000012
+      modified: 1784690000012
+      isPrivate: false
+      description: "Esperado: 200 OK. ADMIN pode listar todos os empréstimos registrados."
+      sortKey: -1784690000890
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 13. Listar todos os empréstimos com USER
+    meta:
+      id: req_emprestimos_013
+      created: 1784690000013
+      modified: 1784690000013
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não possui permissão para listar a lista global de empréstimos."
+      sortKey: -1784690000880
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/usuario/{{ _.user_id }}
+    name: 14. Consultar empréstimos do USER com o próprio USER
+    meta:
+      id: req_emprestimos_014
+      created: 1784690000014
+      modified: 1784690000014
+      isPrivate: false
+      description: "Esperado: 200 OK. USER consulta seu próprio histórico de empréstimos."
+      sortKey: -1784690000870
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/usuario/{{ _.user_id }}
+    name: 15. Consultar empréstimos do USER com ADMIN
+    meta:
+      id: req_emprestimos_015
+      created: 1784690000015
+      modified: 1784690000015
+      isPrivate: false
+      description: "Esperado: 200 OK. ADMIN visualiza o histórico de empréstimos de qualquer usuário."
+      sortKey: -1784690000860
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/usuario/{{ _.admin_id }}
+    name: 16. Consultar empréstimos do ADMIN com USER
+    meta:
+      id: req_emprestimos_016
+      created: 1784690000016
+      modified: 1784690000016
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não pode visualizar histórico de empréstimos de terceiros."
+      sortKey: -1784690000850
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 17. Tentar excluir USER com empréstimos ativos
+    meta:
+      id: req_emprestimos_017
+      created: 1784690000017
+      modified: 1784690000017
+      isPrivate: false
+      description: "Esperado: 409 Conflict. Exclusão bloqueada via Feign por conter empréstimos pendentes."
+      sortKey: -1784690000840
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros/{{ _.livro_a_id }}
+    name: 18. Tentar excluir livro A emprestado com ADMIN
+    meta:
+      id: req_emprestimos_018
+      created: 1784690000018
+      modified: 1784690000018
+      isPrivate: false
+      description: "Esperado: 409 Conflict. Exclusão bloqueada pois o livro A possui empréstimo ativo."
+      sortKey: -1784690000830
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros/{{ _.livro_b_id }}
+    name: 19. Tentar excluir livro B emprestado com USER
+    meta:
+      id: req_emprestimos_019
+      created: 1784690000019
+      modified: 1784690000019
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não possui permissão para remover livros do acervo."
+      sortKey: -1784690000820
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_b_id }}/cancelamento
+    name: 20. Cancelar empréstimo B com USER
+    meta:
+      id: req_emprestimos_020
+      created: 1784690000020
+      modified: 1784690000020
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não possui permissão para cancelar empréstimos."
+      sortKey: -1784690000810
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_b_id }}/cancelamento
+    name: 21. Cancelar empréstimo B com ADMIN
+    meta:
+      id: req_emprestimos_021
+      created: 1784690000021
+      modified: 1784690000021
+      isPrivate: false
+      description: "Esperado: 200 OK. ADMIN cancela o empréstimo B e restaura o estoque."
+      sortKey: -1784690000800
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_b_id }}/ativos/existe
+    name: 22. Verificar empréstimo ativo do livro B após cancelamento com ADMIN
+    meta:
+      id: req_emprestimos_022
+      created: 1784690000022
+      modified: 1784690000022
+      isPrivate: false
+      description: "Esperado: 200 OK (false). Confirma que o livro B não tem mais empréstimos ativos."
+      sortKey: -1784690000790
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros/{{ _.livro_b_id }}
+    name: 23. Excluir livro B após cancelamento com ADMIN
+    meta:
+      id: req_emprestimos_023
+      created: 1784690000023
+      modified: 1784690000023
+      isPrivate: false
+      description: "Esperado: 204 No Content. O livro B é excluído após encerramento do empréstimo."
+      sortKey: -1784690000780
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 24. Devolver empréstimo A com USER
+    meta:
+      id: req_emprestimos_024
+      created: 1784690000024
+      modified: 1784690000024
+      isPrivate: false
+      description: "Esperado: 403 Forbidden. USER não possui permissão para registrar devoluções."
+      sortKey: -1784690000770
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 25. Devolver empréstimo A com ADMIN
+    meta:
+      id: req_emprestimos_025
+      created: 1784690000025
+      modified: 1784690000025
+      isPrivate: false
+      description: "Esperado: 200 OK. ADMIN registra a devolução e restaura o estoque."
+      sortKey: -1784690000760
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_a_id }}/ativos/existe
+    name: 26. Verificar empréstimo ativo do livro A após devolução
+    meta:
+      id: req_emprestimos_026
+      created: 1784690000026
+      modified: 1784690000026
+      isPrivate: false
+      description: "Esperado: 200 OK (false). ADMIN confirma que não há mais empréstimo ativo no livro A."
+      sortKey: -1784690000750
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 27. Excluir USER após encerrar empréstimos com ADMIN
+    meta:
+      id: req_emprestimos_027
+      created: 1784690000027
+      modified: 1784690000027
+      isPrivate: false
+      description: "Esperado: 204 No Content. Usuário sem pendências ativas é excluído do sistema."
+      sortKey: -1784690000740
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros/{{ _.livro_a_id }}
+    name: 28. Excluir livro A após devolução com ADMIN
+    meta:
+      id: req_emprestimos_028
+      created: 1784690000028
+      modified: 1784690000028
+      isPrivate: false
+      description: "Esperado: 204 No Content. Livro A sem pendências é excluído do acervo."
+      sortKey: -1784690000730
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+  - url: http://localhost:8080/api/v1/livros/{{ _.livro_c_id }}
+    name: 29. Excluir livro C sem empréstimo com ADMIN
+    meta:
+      id: req_emprestimos_029
+      created: 1784690000029
+      modified: 1784690000029
+      isPrivate: false
+      description: "Esperado: 204 No Content. Livro C sem histórico de empréstimo é removido."
+      sortKey: -1784690000720
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+        rebuildPath: true
+
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_emprestimos_ms
+    created: 1784690001001
+    modified: 1784690001001
+
+environments:
+  name: Base Environment
+  meta:
+    id: env_emprestimos_ms
+    created: 1784690001002
+    modified: 1784690001002
+    isPrivate: false
+  data:
+    token_admin: ""
+    admin_id: ""
+    token_user: ""
+    user_id: ""
+    user_email: ""
+    livro_a_id: ""
+    livro_a_isbn: ""
+    livro_b_id: ""
+    livro_b_isbn: ""
+    livro_c_id: ""
+    livro_c_isbn: ""
+    emprestimo_a_id: ""
+    emprestimo_b_id: ""

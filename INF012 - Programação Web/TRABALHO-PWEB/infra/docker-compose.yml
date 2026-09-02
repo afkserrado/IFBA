@@ -1,0 +1,222 @@
+# Define os serviços (contêineres) que serão criados e executados pelo Docker Compose.
+services:
+
+  # Serviço responsável pelo banco de dados PostgreSQL.
+  postgres:
+
+    # Imagem oficial do PostgreSQL que será baixada do Docker Hub.
+    # A versão 17 é utilizada para garantir que todos da equipe utilizem a mesma versão.
+    image: postgres:17
+
+    # Nome atribuído ao contêiner.
+    # Facilita a identificação do contêiner e sua utilização em comandos como:
+    # docker logs biblioteca_postgres
+    # docker exec -it biblioteca_postgres ...
+    container_name: biblioteca_postgres
+
+    # Política de reinicialização.
+    # O contêiner será iniciado automaticamente quando o Docker iniciar,
+    # exceto se tiver sido parado manualmente.
+    restart: unless-stopped
+
+    # Variáveis de ambiente utilizadas pela imagem oficial do PostgreSQL
+    # apenas na primeira inicialização do banco.
+    environment:
+
+      # Nome do banco de dados que será criado automaticamente.
+      POSTGRES_DB: biblioteca
+
+      # Usuário administrador do banco de dados.
+      POSTGRES_USER: admin
+
+      # Senha do usuário administrador.
+      POSTGRES_PASSWORD: biblioteca
+
+    # Mapeamento de portas.
+    #
+    # Formato:
+    # PORTA_DO_HOST:PORTA_DO_CONTÊINER
+    #
+    # A aplicação poderá acessar o banco através de:
+    #
+    # jdbc:postgresql://localhost:5433/biblioteca
+    #
+    # A porta interna padrão do PostgreSQL também é 5432.
+    ports:
+      - "5433:5432"
+
+    # Volume utilizado pelo PostgreSQL.
+    volumes:
+
+      # Volume nomeado.
+      #
+      # Armazena todos os arquivos físicos do banco de dados.
+      # Dessa forma, mesmo que o contêiner seja removido,
+      # os dados permanecem salvos.
+      - postgres_data:/var/lib/postgresql/data
+
+    # Verificação de integridade (Health Check).
+    #
+    # O Docker executará esse comando periodicamente para verificar
+    # se o PostgreSQL está pronto para receber conexões.
+    healthcheck:
+
+      # Executa o comando pg_isready.
+      #
+      # -U -> usuário
+      # -d -> banco de dados
+      test: ["CMD-SHELL", "pg_isready -U admin -d biblioteca"]
+
+      # Intervalo entre verificações.
+      interval: 10s
+
+      # Tempo máximo de espera por cada verificação.
+      timeout: 5s
+
+      # Número de tentativas antes de considerar o serviço indisponível.
+      retries: 5
+
+    # Rede Docker onde o serviço será conectado.
+    #
+    # Todos os microsserviços poderão acessar o banco utilizando
+    # o nome "postgres" como host.
+    #
+    # Exemplo:
+    #
+    # jdbc:postgresql://postgres:5432/biblioteca
+    #
+    # (quando executados também dentro do Docker)
+    networks:
+      - biblioteca_network
+
+
+  # Serviço responsável pela criação inicial dos schemas do banco.
+  #
+  # A criação dos schemas é feita por um container separado,
+  # evitando problemas de permissão em arquivos externos,
+  # especialmente em sistemas com partições NTFS.
+  db-init:
+
+    # Utiliza a mesma imagem do PostgreSQL apenas para executar
+    # o cliente psql responsável pela criação dos schemas.
+    image: postgres:17
+
+    # Nome atribuído ao container de inicialização.
+    container_name: biblioteca_db_init
+
+    # Este serviço só será iniciado após o PostgreSQL estar saudável.
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    # Variável utilizada pelo psql para autenticação.
+    environment:
+
+      # Senha do usuário admin do PostgreSQL.
+      PGPASSWORD: biblioteca
+
+    # Executa os comandos SQL de criação dos schemas.
+    #
+    # O host "postgres" é utilizado porque todos os serviços
+    # estão conectados na mesma rede Docker.
+    command: >
+      bash -c "
+      echo 'Criando schemas...';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS usuarios AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS acervo AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS emprestimos AUTHORIZATION admin;';
+      psql -h postgres -U admin -d biblioteca -c 'CREATE SCHEMA IF NOT EXISTS notificacoes AUTHORIZATION admin;';
+      echo 'Schemas criados com sucesso!';
+      "
+
+    # O container executa uma única vez e é finalizado.
+    restart: "no"
+
+    # Utiliza a mesma rede do PostgreSQL.
+    networks:
+      - biblioteca_network
+
+
+  # Serviço responsável pela mensageria da aplicação.
+  rabbitmq:
+
+    # Imagem oficial do RabbitMQ com o plugin de gerenciamento.
+    #
+    # O sufixo "-management" disponibiliza uma interface Web
+    # para visualizar filas, exchanges, mensagens etc.
+    image: rabbitmq:4-management
+
+    # Nome do contêiner.
+    container_name: biblioteca_rabbitmq
+
+    # Reinicia automaticamente, exceto quando parado manualmente.
+    restart: unless-stopped
+
+    # Usuário e senha padrão do RabbitMQ.
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: biblioteca
+
+    # Portas expostas.
+    ports:
+
+      # Porta utilizada pelos microsserviços para publicar
+      # e consumir mensagens.
+      - "5672:5672"
+
+      # Interface Web de administração.
+      #
+      # Acesso:
+      #
+      # http://localhost:15672
+      - "15672:15672"
+
+    # Volume responsável por persistir filas, exchanges
+    # e demais informações do RabbitMQ.
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    # Health Check do RabbitMQ.
+    #
+    # Executa um comando interno para verificar se o serviço
+    # está funcionando corretamente.
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    # Mesmo segmento de rede utilizado pelo PostgreSQL.
+    networks:
+      - biblioteca_network
+
+
+# Declaração dos volumes nomeados.
+#
+# São gerenciados automaticamente pelo Docker.
+#
+# Permanecem existindo mesmo que os contêineres sejam removidos,
+# evitando perda dos dados.
+volumes:
+
+  # Volume do PostgreSQL.
+  postgres_data:
+
+  # Volume do RabbitMQ.
+  rabbitmq_data:
+
+
+# Declaração das redes Docker.
+networks:
+
+  # Rede virtual utilizada para comunicação entre os contêineres.
+  #
+  # Todos os microsserviços, PostgreSQL e RabbitMQ
+  # deverão ser conectados nessa rede.
+  biblioteca_network:
+
+    # Driver de rede padrão do Docker.
+    #
+    # Permite que os contêineres se comuniquem entre si
+    # utilizando seus nomes como host.
+    driver: bridge

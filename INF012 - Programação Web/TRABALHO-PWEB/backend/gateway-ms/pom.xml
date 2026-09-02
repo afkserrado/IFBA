@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ============================ -->
+    <!-- Projeto pai do Spring Boot -->
+    <!-- Gerencia versões de dependências e configurações padrão do projeto -->
+    <!-- ============================ -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <!-- ============================ -->
+    <!-- Identificação do projeto -->
+    <!-- ============================ -->
+    <groupId>br.edu.ifba</groupId>
+    <artifactId>gateway-ms</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name/>
+    <description/>
+    <url/>
+
+    <licenses>
+        <license/>
+    </licenses>
+
+    <developers>
+        <developer/>
+    </developers>
+
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+
+    <!-- ============================ -->
+    <!-- Propriedades do projeto -->
+    <!-- Define as versões do Java e do Spring Cloud -->
+    <!-- ============================ -->
+    <properties>
+        <java.version>21</java.version>
+        <spring-cloud.version>2025.1.2</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ============================ -->
+        <!-- Spring Cloud Gateway Server WebMVC -->
+        <!-- Atua como API Gateway para roteamento de requisições HTTP e controle de tráfego -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway-server-webmvc</artifactId>
+        </dependency>
+
+        <!-- ============================ -->
+        <!-- Spring Boot Test -->
+        <!-- Fornece suporte para testes automatizados com Spring Boot -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ============================ -->
+        <!-- JJWT API -->
+        <!-- Fornece a API para criação e validação de tokens JWT -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+
+        <!-- ============================ -->
+        <!-- JJWT Implementation -->
+        <!-- Implementação utilizada em tempo de execução -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ============================ -->
+        <!-- JJWT Jackson -->
+        <!-- Permite serializar e desserializar o conteúdo JSON do token -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ============================ -->
+    <!-- Gerenciamento de dependências -->
+    <!-- Centraliza as versões das dependências do Spring Cloud -->
+    <!-- ============================ -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- ============================ -->
+            <!-- Spring Cloud BOM -->
+            <!-- Gerencia versões compatíveis das dependências Spring Cloud -->
+            <!-- ============================ -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- ============================ -->
+    <!-- Configurações de build -->
+    <!-- ============================ -->
+    <build>
+        <plugins>
+
+            <!-- ============================ -->
+            <!-- Spring Boot Maven Plugin -->
+            <!-- Permite empacotar e executar a aplicação Spring Boot -->
+            <!-- ============================ -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

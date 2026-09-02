@@ -1,0 +1,511 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Usuarios MS
+meta:
+  id: wrk_fce6d703786243ed897096f812c0a272
+  created: 1784680877117
+  modified: 1784680877117
+  description: ""
+collection:
+  - url: http://localhost:8080/auth/login
+    name: 1. Login do admin inicial
+    meta:
+      id: req_60ae9220eeb243d3a48d52569a091280
+      created: 1784678512655
+      modified: 1784681120990
+      isPrivate: false
+      description: ""
+      sortKey: -1784678965077
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "admin@biblioteca.com",
+          "senha": "admin123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_admin', json.token);
+          insomnia.environment.set('admin_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 2. Criação de um USER
+    meta:
+      id: req_2343d01141db4cac99704408bf2d155b
+      created: 1784678964977
+      modified: 1784679169370
+      isPrivate: false
+      description: ""
+      sortKey: -1784678964977
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "11111111111",
+          "nome": "Usuario Teste",
+          "email": "user.teste@biblioteca.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 3. Criação de um segundo ADMIN
+    meta:
+      id: req_49fb1102277e4bcf9a57705babc221a3
+      created: 1784679179153
+      modified: 1784679421959
+      isPrivate: false
+      description: ""
+      sortKey: -1784678964877
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "22222222222",
+          "nome": "Admin Secundario",
+          "email": "admin2@biblioteca.com",
+          "senha": "admin234",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('admin2_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 4. Busca por ID
+    meta:
+      id: req_e2accd4e9aba4c1aa52e2c6eedc02061
+      created: 1784679475405
+      modified: 1784679496436
+      isPrivate: false
+      description: ""
+      sortKey: -1784677909932
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 5. Listagem de usuários
+    meta:
+      id: req_b1e9d300d3ef482cb9e8febcb75af4b3
+      created: 1784679547366
+      modified: 1784679553932
+      isPrivate: false
+      description: ""
+      sortKey: -1784677382459.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/auth/login
+    name: 6. Login do USER
+    meta:
+      id: req_c98aed1e12844d02ac8b4fb1cbd39bbd
+      created: 1784679693113
+      modified: 1784681185108
+      isPrivate: false
+      description: ""
+      sortKey: -1784677118723.25
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "user.teste@biblioteca.com",
+          "senha": "user123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_user', json.token);
+          insomnia.environment.set('user_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 7. Edição do próprio USER
+    meta:
+      id: req_1145c0b8a028459ba1f96caed1152b14
+      created: 1784679799183
+      modified: 1784679869463
+      isPrivate: false
+      description: ""
+      sortKey: -1784676986855.125
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Teste Atualizado",
+          "email": "user.teste@biblioteca.com",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_user }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/auth/login
+    name: 8. Login do segundo ADMIN
+    meta:
+      id: req_49d3b476b4dc4cab91e17ab4ea148b79
+      created: 1784679912756
+      modified: 1784681193616
+      isPrivate: false
+      description: ""
+      sortKey: -1784676986755.125
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "admin2@biblioteca.com",
+          "senha": "admin234"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 200) {
+          insomnia.environment.set('token_admin2', json.token);
+          insomnia.environment.set('admin2_id', json.usuario.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 9. Edição do próprio ADMIN
+    meta:
+      id: req_a54747df9e7343f88ec2b888afe6297b
+      created: 1784679966004
+      modified: 1784680105652
+      isPrivate: false
+      description: ""
+      sortKey: -1784676920871.0625
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Admin Secundario Atualizado",
+          "email": "admin2@biblioteca.com",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin2 }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 10. Edição do USER pelo segundo ADMIN
+    meta:
+      id: req_d3669556abd64527baeb4d8cdcf8ad52
+      created: 1784680127677
+      modified: 1784680139213
+      isPrivate: false
+      description: ""
+      sortKey: -1784676887929.0312
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Editado Pelo Admin",
+          "email": "user.teste@biblioteca.com",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin2 }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/busca-email?email=user.teste@biblioteca.com
+    name: 11. Busca por e-mail
+    meta:
+      id: req_09649bd699d44effb3c39f08bf6b4fe0
+      created: 1784680179618
+      modified: 1784680366220
+      isPrivate: false
+      description: ""
+      sortKey: -1784676871458.0156
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}/validar-situacao
+    name: 12. Validação de situação cadastral
+    meta:
+      id: req_90157951865f4ab7ad14889321ce315b
+      created: 1784680402847
+      modified: 1784680410665
+      isPrivate: false
+      description: ""
+      sortKey: -1784676863222.5078
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.user_id }}
+    name: 13. Remoção do USER
+    meta:
+      id: req_d2239201eef14f148fa66d3ace954e69
+      created: 1784680459519
+      modified: 1784680468096
+      isPrivate: false
+      description: ""
+      sortKey: -1784676859104.754
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.admin2_id }}
+    name: 14. Remoção do ADMIN 2
+    meta:
+      id: req_00674567a3a94c87b1bc139964e2f123
+      created: 1784680502779
+      modified: 1784680516887
+      isPrivate: false
+      description: ""
+      sortKey: -1784676857045.877
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer {{ _.token_admin }}
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_0a8233c4079c4fe3ab1676f6d3a627fa
+    created: 1784678504953
+    modified: 1784681198243
+environments:
+  name: Base Environment
+  meta:
+    id: env_835a4e428f6842caaea602c47ebc22af
+    created: 1784678504952
+    modified: 1784681198245
+    isPrivate: false
+  data:
+    token_admin: eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLWFwaSIsInN1YiI6ImFkbWluQGJpYmxpb3RlY2EuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzg0NjgxMTk3LCJleHAiOjE3ODQ2ODgzOTd9.UKYeqFSt5ZNNOZDXCm4orKRsLeCqDL2bUyg4NaGtweKxOn2UxEWLkzyp_76F1271TrXAab5UhZLwgSN9QLuqPQ
+    token_user: ""
+    token_admin2: ""
