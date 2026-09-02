@@ -1,7 +1,0 @@
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/config/FeignSecurityConfig.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/config/SecurityAutoConfiguration.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/config/SecurityProperties.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/feign/FeignJwtInterceptor.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/jwt/AuthenticatedUser.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/jwt/JwtAuthenticationFilter.java
-/mnt/Arquivos_D0P6LA/Codes/TRABALHO-PWEB/backend/security-common/src/main/java/br/edu/ifba/security/jwt/JwtService.java
