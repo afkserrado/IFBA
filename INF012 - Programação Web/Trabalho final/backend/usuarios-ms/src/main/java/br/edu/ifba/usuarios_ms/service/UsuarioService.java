@@ -49,6 +49,7 @@ public class UsuarioService {
         usuario.setCpf(dto.cpf());
         usuario.setNome(dto.nome());
         usuario.setEmail(dto.email());
+        usuario.setSenha(dto.senha());
         usuario.setRole(papelDefinido);
         usuario.setCreatedAt(LocalDateTime.now());
         usuario.setUpdatedAt(LocalDateTime.now());
@@ -88,7 +89,7 @@ public class UsuarioService {
 
         usuarioAlvo.setNome(dto.nome());
         usuarioAlvo.setEmail(dto.email());
-
+        usuarioAlvo.setRole(dto.role());
         usuarioAlvo.setUpdatedAt(LocalDateTime.now());
 
         Usuario usuarioAtualizado = usuarioRepository.save(usuarioAlvo);

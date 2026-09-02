@@ -9,7 +9,6 @@ import br.edu.ifba.emprestimos_ms.service.EmprestimoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +31,6 @@ public class ValidaExclusaoController {
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso. Retorna true se houver empréstimos ativos."),
-        @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiEmprestimosAtivos(
         @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id
@@ -48,7 +46,6 @@ public class ValidaExclusaoController {
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso. Retorna true se houver multas em aberto."),
-        @ApiResponse(responseCode = "403", description = "Acesso negado. Apenas o microsserviço de usuários ou administradores podem consultar.", content = @Content)
     })
     public ResponseEntity<Boolean> possuiMultasPendentes(
         @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id
