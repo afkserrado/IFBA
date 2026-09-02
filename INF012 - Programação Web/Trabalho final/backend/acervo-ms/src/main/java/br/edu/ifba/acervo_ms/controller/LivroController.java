@@ -36,7 +36,6 @@ public class LivroController {
         }
 
         @PostMapping
-        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Cadastra um novo livro", description = "Adiciona um livro ao acervo com validação de dados.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Livro cadastrado com sucesso", content = @Content(schema = @Schema(implementation = LivroResponseDTO.class))),
@@ -100,7 +99,6 @@ public class LivroController {
         }
 
         @PutMapping("/{id}")
-        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Atualiza os dados de um livro existente", description = "Modifica completamente os dados de um livro a partir do seu ID.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Livro atualizado com sucesso"),
@@ -115,7 +113,6 @@ public class LivroController {
         }
 
         @DeleteMapping("/{id}")
-        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Remove um livro do acervo", description = "Deleta o registro de um livro de forma permanente utilizando o ID informando.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Livro removido com sucesso"),
@@ -145,7 +142,6 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/reduzir-estoque")
-        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Subtrai uma unidade do estoque do livro", description = "Decrementa o estoque do livro indicado em uma unidade (usado em novos empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque decrementado com sucesso"),
@@ -161,7 +157,6 @@ public class LivroController {
         }
 
         @PostMapping("/{id}/aumentar-estoque")
-        @PreAuthorize("hasRole('ADMIN')")
         @Operation(summary = "Adiciona uma unidade ao estoque do livro", description = "Incrementa o estoque do livro indicado em uma unidade (usado na devolução de empréstimos).")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Estoque incrementado com sucesso"),

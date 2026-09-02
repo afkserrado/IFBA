@@ -40,7 +40,6 @@ public class EmprestimoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Empréstimo registrado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
             @ApiResponse(responseCode = "400", description = "Dados da requisição inválidos ou livro indisponível", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso negado ou tentativa de criar empréstimo para outro usuário", content = @Content),
             @ApiResponse(responseCode = "404", description = "Usuário ou Livro não localizados", content = @Content)
     })
     public ResponseEntity<EmprestimoResponse> cadastrar(@Valid @RequestBody EmprestimoRequest request) {
@@ -53,7 +52,6 @@ public class EmprestimoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Devolução registrada com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
             @ApiResponse(responseCode = "400", description = "Empréstimo já foi devolvido anteriormente", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content),
             @ApiResponse(responseCode = "404", description = "Identificador de empréstimo não encontrado", content = @Content)
     })
     public ResponseEntity<EmprestimoResponse> devolver(
@@ -66,7 +64,6 @@ public class EmprestimoController {
     @Operation(summary = "Lista todos os empréstimos", description = "Retorna o histórico completo de todos os empréstimos registrados no microsserviço.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso"),
-            @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content)
     })
     public ResponseEntity<List<EmprestimoResponse>> listarTodos() {
         return ResponseEntity.ok(emprestimoService.listarTodos());
@@ -76,7 +73,6 @@ public class EmprestimoController {
     @Operation(summary = "Consulta empréstimos de um usuário", description = "Retorna todos os empréstimos (ativos e encerrados) vinculados a um usuário específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de empréstimos do usuário gerada"),
-            @ApiResponse(responseCode = "403", description = "Acesso negado para o histórico deste usuário", content = @Content),
             @ApiResponse(responseCode = "404", description = "Usuário não localizado", content = @Content)
     })
     public ResponseEntity<List<EmprestimoResponse>> consultarPorUsuario(
@@ -89,7 +85,6 @@ public class EmprestimoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empréstimo cancelado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
             @ApiResponse(responseCode = "400", description = "O empréstimo não está com status ATIVO e não pode ser cancelado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso restrito a administradores", content = @Content),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado", content = @Content)
     })
     public ResponseEntity<EmprestimoResponse> cancelar(
@@ -102,7 +97,6 @@ public class EmprestimoController {
     @Operation(summary = "Verifica empréstimo ativo por livro", description = "Consulta rápida para checar se uma unidade do livro informado está atualmente emprestada.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Verificação realizada com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Usuário ou serviço não autenticado", content = @Content)
     })
     public ResponseEntity<Boolean> existeEmprestimoAtivoPorLivro(
             @Parameter(description = "ID do livro avaliado") @PathVariable Long livroId) {

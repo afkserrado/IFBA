@@ -65,53 +65,6 @@ public class EmprestimoService {
         emprestimoRepository.deleteByUsuarioId(usuarioId);
     }
 
-    private void validarPermissaoEmprestimo(Long usuarioIdRequest) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        AuthenticatedUser usuarioLogado = (AuthenticatedUser) authentication.getPrincipal();
-
-        boolean admin = authentication.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        // Se não for administrador, só pode cadastrar para si mesmo
-        if (!admin && !usuarioLogado.getId().equals(usuarioIdRequest)) {
-            throw new BusinessException(
-                    "Apenas Admin tem acesso a empréstimos de terceiros");
-        }
-
-    }
-
-    private void validarAdministrador() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println("Authentication: " + authentication);
-
-        if (authentication == null) {
-            System.out.println("Authentication é null");
-            throw new BusinessException("Não autenticado.");
-        }
-
-        System.out.println("Principal: " + authentication.getPrincipal());
-        System.out.println("Authorities: " + authentication.getAuthorities());
-
-        authentication.getAuthorities()
-                .forEach(a -> System.out.println("Authority: " + a.getAuthority()));
-
-        boolean admin = authentication.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        System.out.println("É admin? " + admin);
-
-        if (!admin) {
-            throw new BusinessException(
-                    "Apenas administradores podem acessar esta funcionalidade.");
-        }
-    }
-
     // MÉTODOS DE NEGÓCIO DE EMPRÉSTIMOS
 
     @Transactional
@@ -120,8 +73,6 @@ public class EmprestimoService {
         System.out.println("===== INICIO CADASTRO EMPRESTIMO =====");
         System.out.println("Usuario ID: " + request.usuarioId());
         System.out.println("Livro ID: " + request.livroId());
-
-        validarAdministrador(); // só administradores podem cadastrar empréstimo
 
         // Confirma a existência e situação cadastral do usuário via OpenFeign
         try {
@@ -226,8 +177,6 @@ public class EmprestimoService {
     @Transactional
     public EmprestimoResponse registrarDevolucao(Long id) {
 
-        validarAdministrador(); // apenas admin faz devolução
-
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
                         "Empréstimo não encontrado com o ID: " + id));
@@ -267,8 +216,6 @@ public class EmprestimoService {
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> listarTodos() {
 
-        validarAdministrador(); // somente adminsitradores podem ter acesso a listagem de empréstimos
-
         return emprestimoRepository.findAll().stream()
                 .map(emprestimoMapper::toResponse)
                 .collect(Collectors.toList());
@@ -276,9 +223,6 @@ public class EmprestimoService {
 
     @Transactional(readOnly = true)
     public List<EmprestimoResponse> consultarPorUsuario(Long usuarioId) {
-
-        // Garante que usuário comum consulte apenas os próprios empréstimos
-        validarPermissaoEmprestimo(usuarioId);
 
         return emprestimoRepository.findByUsuarioId(usuarioId).stream()
                 .map(emprestimoMapper::toResponse)
@@ -288,7 +232,6 @@ public class EmprestimoService {
     @Transactional(readOnly = true)
     public boolean existeEmprestimoAtivoPorLivro(Long livroId) {
 
-        validarAdministrador();
         return emprestimoRepository.existsByLivroIdAndStatus(
                 livroId,
                 StatusEmprestimo.ATIVO);
@@ -296,8 +239,6 @@ public class EmprestimoService {
 
     @Transactional
     public EmprestimoResponse cancelarEmprestimo(Long id) {
-
-        validarAdministrador(); // somente administrador pode cancelar empréstimo
 
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
