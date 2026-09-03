@@ -1,0 +1,698 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Acervo MS (Sem Segurança)
+meta:
+  id: wrk_acervo_ms_yaml_clean
+  created: 1784687000000
+  modified: 1784687000000
+  description: "Testes diretos dos endpoints do microserviço de gerenciamento de livros (Porta 8082) incluindo Caminhos de Erro"
+collection:
+  - url: http://localhost:8082/api/v1/livros
+    name: 1. Cadastrar livro 1
+    meta:
+      id: req_acervo_001
+      created: 1784687000002
+      modified: 1784687000002
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000990
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Clean Code",
+          "autor": "Robert C. Martin",
+          "isbn": "9781234567890",
+          "quantidadeTotal": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro1_id', json.id);
+          insomnia.environment.set('livro1_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 2. Cadastrar livro 2
+    meta:
+      id: req_acervo_002
+      created: 1784687000003
+      modified: 1784687000003
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000980
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Domain-Driven Design",
+          "autor": "Eric Evans",
+          "isbn": "9780321125217",
+          "quantidadeTotal": 3
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro2_id', json.id);
+          insomnia.environment.set('livro2_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 3. Cadastrar livro 3
+    meta:
+      id: req_acervo_003
+      created: 1784687000004
+      modified: 1784687000004
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000970
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Refactoring",
+          "autor": "Martin Fowler",
+          "isbn": "9780201485677",
+          "quantidadeTotal": 4
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro3_id', json.id);
+          insomnia.environment.set('livro3_isbn', json.isbn);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros?page=0&size=20
+    name: 4. Listar todos os livros
+    meta:
+      id: req_acervo_004
+      created: 1784687000005
+      modified: 1784687000005
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000960
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/isbn/{{ _.livro1_isbn }}
+    name: 5. Buscar livro por ISBN
+    meta:
+      id: req_acervo_005
+      created: 1784687000010
+      modified: 1784687000010
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000920
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/titulo?titulo=Clean&page=0&size=10
+    name: 6. Buscar por título
+    meta:
+      id: req_acervo_006
+      created: 1784687000012
+      modified: 1784687000012
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000900
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/autor?autor=Robert&page=0&size=10
+    name: 7. Buscar por autor
+    meta:
+      id: req_acervo_007
+      created: 1784687000014
+      modified: 1784687000014
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000880
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/disponibilidade
+    name: 8. Verificar disponibilidade
+    meta:
+      id: req_acervo_008
+      created: 1784687000016
+      modified: 1784687000016
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000860
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/reduzir-estoque
+    name: 9. Reduzir estoque
+    meta:
+      id: req_acervo_009
+      created: 1784687000018
+      modified: 1784687000018
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000840
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/aumentar-estoque
+    name: 10. Aumentar estoque
+    meta:
+      id: req_acervo_010
+      created: 1784687000020
+      modified: 1784687000020
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000820
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}
+    name: 11. Atualizar livro
+    meta:
+      id: req_acervo_011
+      created: 1784687000022
+      modified: 1784687000022
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000800
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Clean Code 2a Edicao",
+          "autor": "Robert C. Martin",
+          "isbn": "9781234567890",
+          "quantidadeTotal": 8
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro3_id }}
+    name: 12. Remover livro
+    meta:
+      id: req_acervo_012
+      created: 1784687000025
+      modified: 1784687000025
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000770
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 13. [Erro 400] Cadastrar livro com payload inválido
+    meta:
+      id: req_acervo_013
+      created: 1784687000030
+      modified: 1784687000030
+      isPrivate: false
+      description: "Espera-se erro 400 devido à falta de título e autor, e quantidade negativa"
+      sortKey: -1784687000760
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "isbn": "123456789",
+          "quantidadeTotal": -1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros
+    name: 14. [Erro 409] Cadastrar livro com ISBN duplicado
+    meta:
+      id: req_acervo_014
+      created: 1784687000035
+      modified: 1784687000035
+      isPrivate: false
+      description: "Espera-se erro 409 pois o ISBN do Livro 1 já existe no banco"
+      sortKey: -1784687000750
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Clean Code Clone",
+          "autor": "Robert C. Martin",
+          "isbn": "{{ _.livro1_isbn }}",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/isbn/0000000000000
+    name: 15. [Erro 404] Buscar livro por ISBN inexistente
+    meta:
+      id: req_acervo_015
+      created: 1784687000040
+      modified: 1784687000040
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ISBN não existe no banco"
+      sortKey: -1784687000740
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro2_id }}
+    name: 16. [Erro 400] Atualizar livro com payload inválido
+    meta:
+      id: req_acervo_016
+      created: 1784687000045
+      modified: 1784687000045
+      isPrivate: false
+      description: "Espera-se erro 400 devido à falta de dados no PUT"
+      sortKey: -1784687000730
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/999999
+    name: 17. [Erro 404] Atualizar livro com ID inexistente
+    meta:
+      id: req_acervo_017
+      created: 1784687000050
+      modified: 1784687000050
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000720
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Livro Fantasma",
+          "autor": "Desconhecido",
+          "isbn": "9999999999999",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro2_id }}
+    name: 18. [Erro 409] Atualizar livro para usar ISBN de outro livro
+    meta:
+      id: req_acervo_018
+      created: 1784687000055
+      modified: 1784687000055
+      isPrivate: false
+      description: "Espera-se erro 409 pois tenta usar o ISBN que já pertence ao Livro 1"
+      sortKey: -1784687000710
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Update do Livro 2",
+          "autor": "Eric Evans",
+          "isbn": "{{ _.livro1_isbn }}",
+          "quantidadeTotal": 3
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/999999/disponibilidade
+    name: 19. [Erro 404] Verificar disponibilidade de ID inexistente
+    meta:
+      id: req_acervo_019
+      created: 1784687000060
+      modified: 1784687000060
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000700
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro2_id }}/aumentar-estoque
+    name: 20. [Erro 409] Aumentar estoque além da quantidade total
+    meta:
+      id: req_acervo_020
+      created: 1784687000065
+      modified: 1784687000065
+      isPrivate: false
+      description: "Espera-se erro 409, pois o Livro 2 já está com sua disponibilidade no limite total"
+      sortKey: -1784687000690
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/999999/reduzir-estoque
+    name: 21. [Erro 404] Reduzir estoque de ID inexistente
+    meta:
+      id: req_acervo_021
+      created: 1784687000070
+      modified: 1784687000070
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000680
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/999999/aumentar-estoque
+    name: 22. [Erro 404] Aumentar estoque de ID inexistente
+    meta:
+      id: req_acervo_022
+      created: 1784687000075
+      modified: 1784687000075
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000670
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/999999
+    name: 23. [Erro 404] Remover livro inexistente
+    meta:
+      id: req_acervo_023
+      created: 1784687000080
+      modified: 1784687000080
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000660
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_acervo_ms_clean
+    created: 1784687001001
+    modified: 1784687001001
+
+environments:
+  name: Base Environment
+  meta:
+    id: env_acervo_ms_clean
+    created: 1784687001002
+    modified: 1784687001002
+    isPrivate: false
+  data:
+    livro1_id: ""
+    livro1_isbn: ""
+    livro2_id: ""
+    livro2_isbn: ""
+    livro3_id: ""
+    livro3_isbn: ""
