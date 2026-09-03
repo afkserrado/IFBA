@@ -1,0 +1,48 @@
+# Define os serviços (contêineres) específicos do microsserviço de acervo.
+services:
+
+  # Serviço responsável pelo gerenciamento de livros e estoque.
+  acervo-ms:
+
+    # Configuração de build da imagem do contêiner.
+    # O contexto aponta para o diretório raiz do código-fonte do microsserviço.
+    # O Docker procurará um arquivo 'Dockerfile' nesta pasta.
+    build: 
+      context: ../backend/acervo-ms 
+      
+    # Nome atribuído ao contêiner para facilitar a identificação e comandos via terminal.
+    container_name: biblioteca_acervo_ms
+    
+    # Política de reinicialização.
+    # Se o microsserviço falhar (ex: erro temporário de conexão), 
+    # o Docker tentará reiniciá-lo automaticamente sem derrubar os demais contêineres.
+    restart: on-failure
+    
+    # Mapeamento de portas.
+    # Formato: PORTA_DO_HOST:PORTA_DO_CONTÊINER
+    # O serviço estará acessível externamente pela porta 8082.
+    ports:
+      - "8082:8082"
+      
+    # Variáveis de ambiente que sobrescrevem as configurações do application.properties.
+    # Isso permite que o serviço se conecte à infraestrutura rodando dentro do Docker.
+    # O Spring Boot faz a tradução automática entre o SPRING_DATASOURCE_URL do docker-compose e o spring.datasource.url do application.properties.
+    environment:
+      # URL de conexão com o banco de dados.
+      # Utiliza o nome do serviço "postgres" definido na rede Docker.
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/biblioteca?currentSchema=acervo
+      # Host do RabbitMQ na rede Docker.
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      
+    # Ordem de inicialização.
+    # Garante que o microsserviço só tente iniciar DEPOIS que o banco de dados 
+    # e a mensageria estiverem completamente saudáveis e prontos para uso.
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+        
+    # Rede Docker onde o serviço será conectado, permitindo comunicação com a infraestrutura.
+    networks:
+      - biblioteca_network
