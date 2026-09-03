@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,10 +45,7 @@ public class LivroService {
                 "Já existe um livro com esse ISBN");
         }
 
-        Livro livro = Objects.requireNonNull(
-            LivroMapper.converterDtoParaEntidade(dto),
-            "Erro ao converter DTO para entidade Livro."
-        );
+        Livro livro = LivroMapper.converterDtoParaEntidade(dto);
 
         Livro livroSalvo = livroRepository.save(livro);
 
@@ -88,7 +86,7 @@ public class LivroService {
     }
 
     @Transactional
-    public LivroResumoResponseDTO atualizarLivro(Long id, LivroRequestDTO dto) {
+    public LivroResumoResponseDTO atualizarLivro(@NonNull Long id, LivroRequestDTO dto) {
 
         if(livroRepository.existsByIsbnAndIdNot(dto.getIsbn(), id)) {
             throw new OperacaoNaoPermitidaException(
@@ -113,12 +111,11 @@ public class LivroService {
     }
 
     @Transactional
-    public void removerLivro(Long id) {
+    public void removerLivro(@NonNull Long id) {
         
         Livro livro = obterLivro(id);
 
         try {
-
             Boolean possuiEmprestimosAtivos = emprestimoClient.existeEmprestimoAtivoPorLivro(id);
 
             if(Boolean.TRUE.equals(possuiEmprestimosAtivos)) {
@@ -146,13 +143,13 @@ public class LivroService {
         );
     }
 
-    public boolean estaDisponivel(Long id) {
+    public boolean estaDisponivel(@NonNull Long id) {
         Livro livro = obterLivro(id);
         return livro.getQuantidadeDisponivel() > 0;
     }
 
     @Transactional
-    public void reduzirEstoque(Long id) {
+    public void reduzirEstoque(@NonNull Long id) {
         
         Livro livro = obterLivro(id);
 
@@ -166,7 +163,7 @@ public class LivroService {
     }
 
     @Transactional
-    public void aumentarEstoque(Long id) {
+    public void aumentarEstoque(@NonNull Long id) {
         
         Livro livro = obterLivro(id);
         
@@ -179,6 +176,7 @@ public class LivroService {
         livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
     }
 
+    @NonNull
     private Pageable criarPageableComOrdenacao(Pageable pageable, String ordenacao) {
         
         Sort sort = OrdenacaoLivro.resolverSort(ordenacao);
@@ -190,8 +188,11 @@ public class LivroService {
         );
     }
 
-    private Livro obterLivro(Long id) {
-        return livroRepository.findById(id)
+    @NonNull
+    private Livro obterLivro(@NonNull Long id) {
+        Livro livro = livroRepository.findById(id)
             .orElseThrow(LivroNaoEncontradoException::new);
+
+        return Objects.requireNonNull(livro);
     }
 }

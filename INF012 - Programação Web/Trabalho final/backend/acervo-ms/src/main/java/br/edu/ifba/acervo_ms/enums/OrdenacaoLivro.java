@@ -1,6 +1,7 @@
 package br.edu.ifba.acervo_ms.enums;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 
 public enum OrdenacaoLivro {
     
@@ -10,9 +11,11 @@ public enum OrdenacaoLivro {
     AUTOR_DESC("autor_desc", Sort.by("autor").descending());
 
     private final String valor;
+
+    @NonNull
     private final Sort sort;
 
-    OrdenacaoLivro(String valor, Sort sort) {
+    OrdenacaoLivro(String valor, @NonNull Sort sort) {
         this.valor = valor;
         this.sort = sort;
     }
@@ -21,10 +24,12 @@ public enum OrdenacaoLivro {
         return valor;
     }
 
+    @NonNull
     public Sort getSort() {
         return sort;
     }
 
+    @NonNull
     public static Sort resolverSort(String valor) {
         
         if (valor == null || valor.isBlank()) {
