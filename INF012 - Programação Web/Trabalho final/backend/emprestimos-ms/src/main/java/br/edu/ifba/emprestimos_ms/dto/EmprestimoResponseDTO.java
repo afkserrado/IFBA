@@ -1,77 +1,41 @@
-package br.edu.ifba.emprestimos_ms.entity;
+package br.edu.ifba.emprestimos_ms.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
 import br.edu.ifba.emprestimos_ms.enums.StatusEmprestimo;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-// Representa a entidade "emprestimos" no banco de dados
-@Entity
-@Table(name = "emprestimos")
-public class Emprestimo {
+// DTO para retorno de dados de empréstimo nas respostas da API
+public class EmprestimoResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private Long usuarioId;
-
-    @Column(nullable = false)
     private Long livroId;
-
-    @Column(nullable = false)
     private LocalDate dataEmprestimo;
-
-    @Column(nullable = false)
     private LocalDate dataPrevistaDevolucao;
-
     private LocalDate dataDevolucao;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private StatusEmprestimo status;
-
-    @Column(nullable = false)
     private BigDecimal valorMulta;
-
-    @Column(nullable = false)
     private Boolean multaPaga;
-
-    @Column(
-        nullable = false,
-        updatable = false
-    )
     private LocalDateTime dataCriacao;
-
-    @Column(nullable = false)
     private LocalDateTime dataAtualizacao;
 
-    // Construtor utilizado pelo JPA/Hibernate para reconstruir
-    // a partir dos dados do banco
-    public Emprestimo() {}
+    public EmprestimoResponseDTO() {}
 
-    // Construtor utilizado pelo mapper correspondente
-    // para construir um objeto a partir dos dados de um dto
-    public Emprestimo(Long usuarioId, Long livroId) {
-        this.usuarioId = usuarioId;
-        this.livroId = livroId;
-        this.dataEmprestimo = LocalDate.now();
-        this.dataPrevistaDevolucao = this.dataEmprestimo.plusDays(7);
-        this.status = StatusEmprestimo.ATIVO;
-        this.valorMulta = BigDecimal.ZERO;
-        this.multaPaga = false;
-        this.dataCriacao = LocalDateTime.now();
-        this.dataAtualizacao = LocalDateTime.now();
+    public EmprestimoResponseDTO(Emprestimo emprestimo) {
+        this.id = emprestimo.getId();
+        this.usuarioId = emprestimo.getUsuarioId();
+        this.livroId = emprestimo.getLivroId();
+        this.dataEmprestimo = emprestimo.getDataEmprestimo();
+        this.dataPrevistaDevolucao = emprestimo.getDataPrevistaDevolucao();
+        this.dataDevolucao = emprestimo.getDataDevolucao();
+        this.status = emprestimo.getStatus();
+        this.valorMulta = emprestimo.getValorMulta();
+        this.multaPaga = emprestimo.getMultaPaga();
+        this.dataCriacao = emprestimo.getDataCriacao();
+        this.dataAtualizacao = emprestimo.getDataAtualizacao();
     }
 
     public Long getId() {

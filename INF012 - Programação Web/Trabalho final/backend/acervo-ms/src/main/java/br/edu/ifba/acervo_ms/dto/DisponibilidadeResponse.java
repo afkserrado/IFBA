@@ -1,5 +1,5 @@
 package br.edu.ifba.acervo_ms.dto;
 
-public record DisponibilidadeResponse(
+public record DisponibilidadeResponse (
         Boolean disponivel
 ) {}

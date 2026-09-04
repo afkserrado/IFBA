@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequestDTO;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponseDTO;
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
-import br.edu.ifba.emprestimos_ms.entity.StatusEmprestimo;
+import br.edu.ifba.emprestimos_ms.enums.StatusEmprestimo;
 
 @Component
 public class EmprestimoMapper {
-	public Emprestimo toEntity(EmprestimoRequest request) {
+	public Emprestimo toEntity(EmprestimoRequestDTO request) {
         Emprestimo entity = new Emprestimo();
         entity.setUsuarioId(request.usuarioId());
         entity.setLivroId(request.livroId());
@@ -21,8 +21,8 @@ public class EmprestimoMapper {
         return entity;
     }
 
-    public EmprestimoResponse toResponse(Emprestimo entity) {
-        return new EmprestimoResponse(
+    public EmprestimoResponseDTO toResponse(Emprestimo entity) {
+        return new EmprestimoResponseDTO(
             entity.getId(),
             entity.getUsuarioId(),
             entity.getLivroId(),

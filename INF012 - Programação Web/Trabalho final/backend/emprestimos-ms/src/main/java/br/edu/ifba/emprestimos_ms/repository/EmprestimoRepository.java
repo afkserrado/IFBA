@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
-import br.edu.ifba.emprestimos_ms.entity.StatusEmprestimo;
+import br.edu.ifba.emprestimos_ms.enums.StatusEmprestimo;
 
 import java.time.LocalDate;
 import java.util.List;

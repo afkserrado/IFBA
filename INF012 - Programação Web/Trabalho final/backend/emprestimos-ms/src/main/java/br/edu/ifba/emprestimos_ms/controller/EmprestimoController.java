@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequestDTO;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponseDTO;
 import br.edu.ifba.emprestimos_ms.service.EmprestimoService;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
@@ -38,25 +38,25 @@ public class EmprestimoController {
     @PostMapping
     @Operation(summary = "Registra um novo empréstimo", description = "Cria um registro de empréstimo validando a disponibilidade do livro e situação do usuário.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empréstimo registrado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
+            @ApiResponse(responseCode = "201", description = "Empréstimo registrado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Dados da requisição inválidos ou livro indisponível", content = @Content),
             @ApiResponse(responseCode = "404", description = "Usuário ou Livro não localizados", content = @Content)
     })
-    public ResponseEntity<EmprestimoResponse> cadastrar(@Valid @RequestBody EmprestimoRequest request) {
-        EmprestimoResponse response = emprestimoService.cadastrarEmprestimo(request);
+    public ResponseEntity<EmprestimoResponseDTO> cadastrar(@Valid @RequestBody EmprestimoRequestDTO request) {
+        EmprestimoResponseDTO response = emprestimoService.cadastrarEmprestimo(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/{id}/devolucao")
     @Operation(summary = "Registra a devolução de um livro", description = "Finaliza um empréstimo ativo mudando seu status e atualizando o estoque do acervo.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Devolução registrada com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Devolução registrada com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Empréstimo já foi devolvido anteriormente", content = @Content),
             @ApiResponse(responseCode = "404", description = "Identificador de empréstimo não encontrado", content = @Content)
     })
-    public ResponseEntity<EmprestimoResponse> devolver(
+    public ResponseEntity<EmprestimoResponseDTO> devolver(
             @Parameter(description = "ID do empréstimo a ser encerrado") @PathVariable Long id) {
-        EmprestimoResponse response = emprestimoService.registrarDevolucao(id);
+        EmprestimoResponseDTO response = emprestimoService.registrarDevolucao(id);
         return ResponseEntity.ok(response);
     }
 
@@ -65,7 +65,7 @@ public class EmprestimoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso"),
     })
-    public ResponseEntity<List<EmprestimoResponse>> listarTodos() {
+    public ResponseEntity<List<EmprestimoResponseDTO>> listarTodos() {
         return ResponseEntity.ok(emprestimoService.listarTodos());
     }
 
@@ -75,7 +75,7 @@ public class EmprestimoController {
             @ApiResponse(responseCode = "200", description = "Lista de empréstimos do usuário gerada"),
             @ApiResponse(responseCode = "404", description = "Usuário não localizado", content = @Content)
     })
-    public ResponseEntity<List<EmprestimoResponse>> consultarPorUsuario(
+    public ResponseEntity<List<EmprestimoResponseDTO>> consultarPorUsuario(
             @Parameter(description = "ID do usuário consultado") @PathVariable Long usuarioId) {
         return ResponseEntity.ok(emprestimoService.consultarPorUsuario(usuarioId));
     }
@@ -83,13 +83,13 @@ public class EmprestimoController {
     @PostMapping("/{id}/cancelamento")
     @Operation(summary = "Cancela um empréstimo", description = "Cancela um empréstimo com status ATIVO, devolvendo o exemplar ao acervo e alterando o status para CANCELADO. A data de devolução não é preenchida.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empréstimo cancelado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Empréstimo cancelado com sucesso", content = @Content(schema = @Schema(implementation = EmprestimoResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "O empréstimo não está com status ATIVO e não pode ser cancelado", content = @Content),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado", content = @Content)
     })
-    public ResponseEntity<EmprestimoResponse> cancelar(
+    public ResponseEntity<EmprestimoResponseDTO> cancelar(
             @Parameter(description = "ID do empréstimo a ser cancelado") @PathVariable Long id) {
-        EmprestimoResponse response = emprestimoService.cancelarEmprestimo(id);
+        EmprestimoResponseDTO response = emprestimoService.cancelarEmprestimo(id);
         return ResponseEntity.ok(response);
     }
 

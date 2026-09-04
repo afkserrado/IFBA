@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifba.emprestimos_ms.client.AcervoClient;
 import br.edu.ifba.emprestimos_ms.client.UsuarioClient;
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequest;
-import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponse;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoRequestDTO;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoResponseDTO;
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
-import br.edu.ifba.emprestimos_ms.entity.StatusEmprestimo;
+import br.edu.ifba.emprestimos_ms.enums.StatusEmprestimo;
 import br.edu.ifba.emprestimos_ms.exception.EmprestimoNaoEncontradoException;
 import br.edu.ifba.emprestimos_ms.exception.MultaPendenteException;
 import br.edu.ifba.emprestimos_ms.mapper.EmprestimoMapper;
@@ -64,7 +64,7 @@ public class EmprestimoService {
     // MÉTODOS DE NEGÓCIO DE EMPRÉSTIMOS
 
     @Transactional
-    public EmprestimoResponse cadastrarEmprestimo(EmprestimoRequest request) {
+    public EmprestimoResponseDTO cadastrarEmprestimo(EmprestimoRequestDTO request) {
 
         System.out.println("===== INICIO CADASTRO EMPRESTIMO =====");
         System.out.println("Usuario ID: " + request.usuarioId());
@@ -171,7 +171,7 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public EmprestimoResponse registrarDevolucao(Long id) {
+    public EmprestimoResponseDTO registrarDevolucao(Long id) {
 
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
@@ -210,7 +210,7 @@ public class EmprestimoService {
     }
 
     @Transactional(readOnly = true)
-    public List<EmprestimoResponse> listarTodos() {
+    public List<EmprestimoResponseDTO> listarTodos() {
 
         return emprestimoRepository.findAll().stream()
                 .map(emprestimoMapper::toResponse)
@@ -218,7 +218,7 @@ public class EmprestimoService {
     }
 
     @Transactional(readOnly = true)
-    public List<EmprestimoResponse> consultarPorUsuario(Long usuarioId) {
+    public List<EmprestimoResponseDTO> consultarPorUsuario(Long usuarioId) {
 
         return emprestimoRepository.findByUsuarioId(usuarioId).stream()
                 .map(emprestimoMapper::toResponse)
@@ -234,7 +234,7 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public EmprestimoResponse cancelarEmprestimo(Long id) {
+    public EmprestimoResponseDTO cancelarEmprestimo(Long id) {
 
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new EmprestimoNaoEncontradoException(
