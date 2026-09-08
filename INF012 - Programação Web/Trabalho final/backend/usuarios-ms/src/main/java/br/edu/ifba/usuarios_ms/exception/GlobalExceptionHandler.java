@@ -1,84 +1,118 @@
 package br.edu.ifba.usuarios_ms.exception;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.edu.ifba.usuarios_ms.dto.ErrorResponseDTO;
+import br.edu.ifba.usuarios_ms.dto.ErroResponseDTO;
+import br.edu.ifba.usuarios_ms.dto.ErroValidationDTO;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // dados inválidos 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        Map<String, String> errosMapeados = ex.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        error -> error.getDefaultMessage() != null ? error.getDefaultMessage() : "Campo inválido",
-                        (antigo, novo) -> antigo // aqui eu optei por evitar duplicidade se houver mais de uma falha no mesmo campo
-                ));
-
-        ErrorResponseDTO erro = new ErrorResponseDTO(
-                HttpStatus.BAD_REQUEST.value(),
-                "DADOS_INVALIDOS",
-                errosMapeados,
-                request.getRequestURI()
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErroResponseDTO> usuarioNaoEncontrado(
+        UsuarioNaoEncontradoException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(resposta);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroValidationDTO> erroValidacao(
+        MethodArgumentNotValidException ex
+    ) {
+        Map<String, List<String>> campos = new HashMap<>();
+
+        ex.getBindingResult()
+          .getFieldErrors()
+          .forEach(erro ->
+            campos.computeIfAbsent(erro.getField(), k -> new ArrayList<>())
+                  .add(erro.getDefaultMessage())
+        );
+
+        ErroValidationDTO resposta = new ErroValidationDTO(
+            LocalDateTime.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            campos
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(resposta);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
-        ErrorResponseDTO erro = new ErrorResponseDTO(
-                HttpStatus.BAD_REQUEST.value(),
-                "DADOS_INVALIDOS",
-                ex.getMessage(),
-                request.getRequestURI()
+    public ResponseEntity<ErroResponseDTO> dadosInvalidos(
+        IllegalArgumentException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(resposta);
     }
 
-    // recurso inexistente
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
-        ErrorResponseDTO erro = new ErrorResponseDTO(
-                HttpStatus.NOT_FOUND.value(),
-                "NOT_FOUND",
-                ex.getMessage(),
-                request.getRequestURI()
-                );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
-    }
-
-    // violação de regra de negócio
-    @ExceptionHandler({BusinessException.class, IllegalStateException.class})
-    public ResponseEntity<ErrorResponseDTO> handleConflict(Exception ex, HttpServletRequest request) {
-        ErrorResponseDTO erro = new ErrorResponseDTO(
-                HttpStatus.CONFLICT.value(),
-                "CONFLITO",
-                ex.getMessage(),
-                request.getRequestURI()
+    @ExceptionHandler({OperacaoNaoPermitidaException.class, IllegalStateException.class})
+    public ResponseEntity<ErroResponseDTO> regraNegocio(
+        RuntimeException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.CONFLICT.value(),
+            HttpStatus.CONFLICT.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(resposta);
     }
 
-    // erro inesperado
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleGeneralException(Exception ex, HttpServletRequest request) {
-        ErrorResponseDTO erro = new ErrorResponseDTO(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "INTERNAL_SERVER_ERROR",
-                "Ocorreu um erro inesperado no sistema. Tente novamente mais tarde.",
-                request.getRequestURI()
+    public ResponseEntity<ErroResponseDTO> erroInterno(
+        Exception ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+            "Ocorreu um erro inesperado no sistema.",
+            request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(resposta);
     }
 }
