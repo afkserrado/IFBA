@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import br.edu.ifba.usuarios_ms.dto.ErrorResponse;
+import br.edu.ifba.usuarios_ms.dto.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     // dados inválidos 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errosMapeados = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(
                         FieldError::getField,
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                         (antigo, novo) -> antigo // aqui eu optei por evitar duplicidade se houver mais de uma falha no mesmo campo
                 ));
 
-        ErrorResponse erro = new ErrorResponse(
+        ErrorResponseDTO erro = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "DADOS_INVALIDOS",
                 errosMapeados,
@@ -36,8 +36,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
+    public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        ErrorResponseDTO erro = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "DADOS_INVALIDOS",
                 ex.getMessage(),
@@ -48,8 +48,8 @@ public class GlobalExceptionHandler {
 
     // recurso inexistente
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
+    public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
+        ErrorResponseDTO erro = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "NOT_FOUND",
                 ex.getMessage(),
@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
 
     // violação de regra de negócio
     @ExceptionHandler({BusinessException.class, IllegalStateException.class})
-    public ResponseEntity<ErrorResponse> handleConflict(Exception ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
+    public ResponseEntity<ErrorResponseDTO> handleConflict(Exception ex, HttpServletRequest request) {
+        ErrorResponseDTO erro = new ErrorResponseDTO(
                 HttpStatus.CONFLICT.value(),
                 "CONFLITO",
                 ex.getMessage(),
@@ -72,8 +72,8 @@ public class GlobalExceptionHandler {
 
     // erro inesperado
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, HttpServletRequest request) {
-        ErrorResponse erro = new ErrorResponse(
+    public ResponseEntity<ErrorResponseDTO> handleGeneralException(Exception ex, HttpServletRequest request) {
+        ErrorResponseDTO erro = new ErrorResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "INTERNAL_SERVER_ERROR",
                 "Ocorreu um erro inesperado no sistema. Tente novamente mais tarde.",
