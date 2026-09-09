@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import br.edu.ifba.usuarios_ms.config.RabbitMQConfig;
 import br.edu.ifba.usuarios_ms.dto.UsuarioCriadoEvent;
 import br.edu.ifba.usuarios_ms.dto.UsuarioDeletadoEvent;
+import br.edu.ifba.usuarios_ms.enums.Role;
 
 @Component
 public class UsuarioProducer {
@@ -16,8 +17,8 @@ public class UsuarioProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void dispararUsuarioCriado(Long id, String nome, String email) {
-        UsuarioCriadoEvent evento = new UsuarioCriadoEvent(id, nome, email);
+    public void dispararUsuarioCriado(Long id, String nome, String email, Role role) {
+        UsuarioCriadoEvent evento = new UsuarioCriadoEvent(id, nome, email, role);
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_USUARIO_CRIADO, RabbitMQConfig.ROUTING_KEY_CRIADO, evento);
     }
 
