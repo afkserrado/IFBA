@@ -82,4 +82,22 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(resposta);
     }
+
+        @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroResponseDTO> erroInterno(
+        Exception ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+            "Ocorreu um erro inesperado no sistema.",
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(resposta);
+    }
 }
