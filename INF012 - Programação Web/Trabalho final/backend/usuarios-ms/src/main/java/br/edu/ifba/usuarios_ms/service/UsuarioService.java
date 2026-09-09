@@ -83,8 +83,14 @@ public class UsuarioService {
         
         Usuario usuario = obterUsuario(id);
 
+        // Valida e-mail duplicado
         if (!usuario.getEmail().equals(dto.getEmail()) && usuarioRepository.existsByEmail(dto.getEmail())) {
             throw new OperacaoNaoPermitidaException("E-mail já está em uso por outro usuário.");
+        }
+        
+        // Valida CPF duplicado
+        if (dto.getCpf() != null && !usuario.getCpf().equals(dto.getCpf()) && usuarioRepository.existsByCpf(dto.getCpf())) {
+            throw new OperacaoNaoPermitidaException("CPF já está em uso por outro usuário.");
         }
 
         Usuario usuarioAtualizado = UsuarioMapper.converterUpdateDtoParaEntidade(usuario, dto);

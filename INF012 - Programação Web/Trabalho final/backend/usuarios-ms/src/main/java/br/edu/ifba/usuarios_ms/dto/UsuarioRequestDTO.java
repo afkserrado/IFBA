@@ -3,6 +3,7 @@ package br.edu.ifba.usuarios_ms.dto;
 import br.edu.ifba.usuarios_ms.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 // DTO para requisições de criação de usuário
@@ -35,7 +36,7 @@ public class UsuarioRequestDTO {
     )
     private String senha;
 
-    @NotBlank(message = "O papel (role) do usuário é obrigatório.")
+    @NotNull(message = "O papel (role) do usuário é obrigatório.")
     private Role role;
 
     // Construtor utilizado pelo Jackson

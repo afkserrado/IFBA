@@ -1,0 +1,645 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Usuarios MS (Sem Segurança)
+meta:
+  id: wrk_usuarios_ms_yaml_clean
+  created: 1784687000000
+  modified: 1784687000000
+  description: "Testes diretos dos endpoints do microserviço de usuários (Porta 8081) incluindo Caminhos de Erro"
+collection:
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 1. Cadastrar USER 1
+    meta:
+      id: req_usr_001
+      created: 1784687000001
+      modified: 1784687000001
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687001000
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "11111111111",
+          "nome": "Usuario Teste 1",
+          "email": "user1@biblioteca.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user1_id', json.id);
+          insomnia.environment.set('user1_email', json.email);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 2. Cadastrar USER 2
+    meta:
+      id: req_usr_002
+      created: 1784687000002
+      modified: 1784687000002
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000990
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "22222222222",
+          "nome": "Usuario Teste 2",
+          "email": "user2@biblioteca.com",
+          "senha": "user456",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('user2_id', json.id);
+          insomnia.environment.set('user2_email', json.email);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 3. Cadastrar ADMIN
+    meta:
+      id: req_usr_003
+      created: 1784687000003
+      modified: 1784687000003
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000980
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "33333333333",
+          "nome": "Admin Teste",
+          "email": "admin@biblioteca.com",
+          "senha": "admin123",
+          "role": "ADMIN"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('admin_id', json.id);
+          insomnia.environment.set('admin_email', json.email);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 4. Listar todos os usuários
+    meta:
+      id: req_usr_004
+      created: 1784687000004
+      modified: 1784687000004
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000970
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}
+    name: 5. Buscar usuário por ID
+    meta:
+      id: req_usr_005
+      created: 1784687000005
+      modified: 1784687000005
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000960
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/busca-email?email={{ _.user1_email }}
+    name: 6. Buscar usuário por e-mail
+    meta:
+      id: req_usr_006
+      created: 1784687000006
+      modified: 1784687000006
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000950
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}/validar-situacao
+    name: 7. Validar situação do usuário
+    meta:
+      id: req_usr_007
+      created: 1784687000007
+      modified: 1784687000007
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000940
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}
+    name: 8. Atualizar usuário
+    meta:
+      id: req_usr_008
+      created: 1784687000008
+      modified: 1784687000008
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000930
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Teste 1 Atualizado",
+          "email": "user1@biblioteca.com",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 9. [Erro 400] Cadastrar usuário com payload inválido
+    meta:
+      id: req_usr_010
+      created: 1784687000010
+      modified: 1784687000010
+      isPrivate: false
+      description: "Espera-se erro 400 devido à falta de campos obrigatórios e CPF inválido"
+      sortKey: -1784687000910
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Invalido"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 10. [Erro 409] Cadastrar usuário com CPF duplicado
+    meta:
+      id: req_usr_011
+      created: 1784687000011
+      modified: 1784687000011
+      isPrivate: false
+      description: "Espera-se erro 409 pois o CPF do USER 1 já existe no banco"
+      sortKey: -1784687000900
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "11111111111",
+          "nome": "Usuario Duplicado",
+          "email": "duplicado@biblioteca.com",
+          "senha": "dup123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 11. [Erro 409] Cadastrar usuário com e-mail duplicado
+    meta:
+      id: req_usr_012
+      created: 1784687000012
+      modified: 1784687000012
+      isPrivate: false
+      description: "Espera-se erro 409 pois o e-mail do USER 1 já existe no banco"
+      sortKey: -1784687000890
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "44444444444",
+          "nome": "Usuario Duplicado Email",
+          "email": "{{ _.user1_email }}",
+          "senha": "dup456",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/999999
+    name: 12. [Erro 404] Buscar usuário por ID inexistente
+    meta:
+      id: req_usr_013
+      created: 1784687000013
+      modified: 1784687000013
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000880
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/busca-email?email=inexistente@biblioteca.com
+    name: 13. [Erro 404] Buscar usuário por e-mail inexistente
+    meta:
+      id: req_usr_014
+      created: 1784687000014
+      modified: 1784687000014
+      isPrivate: false
+      description: "Espera-se erro 404 pois o e-mail não existe"
+      sortKey: -1784687000870
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/999999/validar-situacao
+    name: 14. [Caminho Feliz] Validar situação de ID inexistente
+    meta:
+      id: req_usr_015
+      created: 1784687000015
+      modified: 1784687000015
+      isPrivate: false
+      description: "Espera-se resposta 200 com false pois o endpoint retorna um boolean indicando se o usuário existe"
+      sortKey: -1784687000860
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}
+    name: 15. [Caminho Feliz] Atualizar usuário com payload vazio
+    meta:
+      id: req_usr_016
+      description: "Espera-se 200 OK, pois campos opcionais permitem update parcial. Payload vazio não altera nada."
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/999999
+    name: 16. [Erro 404] Atualizar usuário com ID inexistente
+    meta:
+      id: req_usr_017
+      created: 1784687000017
+      modified: 1784687000017
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000840
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Fantasma",
+          "email": "fantasma@biblioteca.com",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}
+    name: 17. [Erro 409] Atualizar usuário para usar CPF de outro usuário
+    meta:
+      id: req_usr_018
+      created: 1784687000018
+      modified: 1784687000018
+      isPrivate: false
+      description: "Espera-se erro 409 pois tenta usar o CPF que já pertence ao USER 2"
+      sortKey: -1784687000830
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Teste 1",
+          "email": "user1@biblioteca.com",
+          "role": "USER",
+          "cpf": "22222222222"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user1_id }}
+    name: 18. [Erro 409] Atualizar usuário para usar e-mail de outro usuário
+    meta:
+      id: req_usr_019
+      created: 1784687000019
+      modified: 1784687000019
+      isPrivate: false
+      description: "Espera-se erro 409 pois tenta usar o e-mail que já pertence ao USER 2"
+      sortKey: -1784687000820
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nome": "Usuario Teste 1",
+          "email": "{{ _.user2_email }}",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.user2_id }}
+    name: 19. Remover usuário
+    meta:
+      id: req_usr_009
+      created: 1784687000009
+      modified: 1784687000009
+      isPrivate: false
+      description: "Caminho Feliz"
+      sortKey: -1784687000810
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/999999
+    name: 20. [Erro 404] Remover usuário inexistente
+    meta:
+      id: req_usr_020
+      created: 1784687000020
+      modified: 1784687000020
+      isPrivate: false
+      description: "Espera-se erro 404 pois o ID não existe"
+      sortKey: -1784687000800
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_usuarios_ms_clean
+    created: 1784687001001
+    modified: 1784687001001
+
+environments:
+  name: Base Environment
+  meta:
+    id: env_usuarios_ms_clean
+    created: 1784687001002
+    modified: 1784687001002
+    isPrivate: false
+  data:
+    user1_id: ""
+    user1_email: ""
+    user2_id: ""
+    user2_email: ""
+    admin_id: ""
+    admin_email: ""
