@@ -1,6 +1,5 @@
 package br.edu.ifba.usuarios_ms.messaging;
 
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import br.edu.ifba.usuarios_ms.config.RabbitMQConfig;

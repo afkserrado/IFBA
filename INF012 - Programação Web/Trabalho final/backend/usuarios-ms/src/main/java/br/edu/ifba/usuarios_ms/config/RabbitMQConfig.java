@@ -5,24 +5,32 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration // Informa ao Spring que a classe contém métodos @Bean
 public class RabbitMQConfig {
 
-    // Exchange é como se fosse uma agênciad de troca de mensagens. 
-    // Neste caso, estamos abrindo duas agências, uma para informar criação e outra para exclusão
+    // A Exchange funciona como uma agência de correios,
+    // recebendo mensagens do produtor e decidindo para quais
+    // filas elas serão encaminhadas
     public static final String EXCHANGE_USUARIO_CRIADO = "usuario.criado.exchange";
     public static final String EXCHANGE_USUARIO_DELETADO = "usuario.deletado.exchange";
 
-    
+    // Routing Key é a chave de roteamento usada pela Exchange para decidir
+    // para quais filas encaminhar a mensagem
     public static final String ROUTING_KEY_CRIADO = "usuario.evento.criado";
     public static final String ROUTING_KEY_DELETADO = "usuario.evento.deletado";
 
-
     /*
-    TopicExchange é um tipo de agência flexível do RabbitMQ. 
-    Ela permite enviar mensagens usando padrões de texto 
-    (como palavras separadas por pontos), 
-    facilitando que outros microsserviços filtrem o que querem receber no futuro.
+    TopicExchange é um tipo de Exchange que permite padrões como:
+        usuario.*
+        usuario.evento.#
+
+    O caractere * substitui exatamente uma palavra.
+    O caractere # substitui zero ou mais palavras.
+
+    Assim, uma fila vinculada com usuario.evento.# pode receber eventos de:
+        usuario.evento.criado
+        usuario.evento.deletado
+        usuario.evento.atualizado
     */
     @Bean
     public TopicExchange exchangeUsuarioCriado() {
@@ -34,7 +42,8 @@ public class RabbitMQConfig {
         return new TopicExchange(EXCHANGE_USUARIO_DELETADO);
     }
 
-    // Configura o Spring para transformar automaticamente os objetos Java (Records) em JSON
+    // Converte automaticamente objetos Java em JSON
+    // e JSON em objetos Java ao consumir mensagens
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();

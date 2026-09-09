@@ -36,10 +36,6 @@ public class UsuarioService {
         this.emprestimoClient = emprestimoClient;
     }
 
-    public boolean existeUsuario(@NonNull Long id) {
-        return usuarioRepository.existsById(id);
-    }
-
     @Transactional
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto) {
 
@@ -130,6 +126,10 @@ public class UsuarioService {
             ));
 
         return UsuarioMapper.converterEntidadeParaDto(usuario);
+    }
+
+    public boolean existeUsuario(@NonNull Long id) {
+        return usuarioRepository.existsById(id);
     }
 
     @NonNull
