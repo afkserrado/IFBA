@@ -1,34 +1,52 @@
-# Apagar registros (exceto ADMIN inicial)
 docker exec -it biblioteca_postgres psql -U admin -d biblioteca -c "
 DO \$\$
-DECLARE
-    admin_email TEXT := 'admin@biblioteca.com';
 BEGIN
 
-    -- Remove dados dependentes primeiro
-    TRUNCATE TABLE 
-        emprestimos.emprestimos,
-        acervo.livros
-    RESTART IDENTITY CASCADE;
+    -- Limpa empréstimos
+    BEGIN
+        TRUNCATE TABLE emprestimos.emprestimos RESTART IDENTITY CASCADE;
+        RAISE NOTICE 'Tabela emprestimos.emprestimos limpa com sucesso.';
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Não foi possível limpar emprestimos.emprestimos: %', SQLERRM;
+    END;
 
-    -- Remove usuários exceto o admin inicial
-    DELETE FROM usuarios.usuarios
-    WHERE email <> admin_email;
+    -- Limpa livros
+    BEGIN
+        TRUNCATE TABLE acervo.livros RESTART IDENTITY CASCADE;
+        RAISE NOTICE 'Tabela acervo.livros limpa com sucesso.';
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Não foi possível limpar acervo.livros: %', SQLERRM;
+    END;
 
-    -- Reinicia sequência da tabela de usuários
-    PERFORM setval(
-        pg_get_serial_sequence('usuarios.usuarios', 'id'),
-        COALESCE((SELECT MAX(id) FROM usuarios.usuarios), 1)
-    );
+    -- Limpa usuários, preservando o ADMIN inicial
+    BEGIN
+        DELETE FROM usuarios.usuarios
+        WHERE email <> 'admin@biblioteca.com';
+
+        RAISE NOTICE 'Usuários não-admin removidos com sucesso.';
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Não foi possível limpar usuarios.usuarios: %', SQLERRM;
+    END;
+
+    -- Reinicia a sequência de usuários
+    BEGIN
+        PERFORM setval(
+            pg_get_serial_sequence('usuarios.usuarios', 'id'),
+            COALESCE((SELECT MAX(id) FROM usuarios.usuarios), 1)
+        );
+
+        RAISE NOTICE 'Sequência de usuarios.usuarios reiniciada com sucesso.';
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Não foi possível reiniciar a sequência de usuarios.usuarios: %', SQLERRM;
+    END;
 
 END
 \$\$;
 "
 
-# Conferir
+# Conferir usuários
 docker exec -it biblioteca_postgres psql -U admin -d biblioteca -c "
 SELECT id, nome, email, role
-FROM usuarios.usuarios;
+FROM usuarios.usuarios
+ORDER BY id;
 "
-
-clear
