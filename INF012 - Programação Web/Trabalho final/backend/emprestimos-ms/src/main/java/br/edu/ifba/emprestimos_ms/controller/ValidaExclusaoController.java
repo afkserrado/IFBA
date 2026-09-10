@@ -1,11 +1,13 @@
 package br.edu.ifba.emprestimos_ms.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.edu.ifba.emprestimos_ms.service.EmprestimoService; 
+
+import br.edu.ifba.emprestimos_ms.service.EmprestimoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,8 +16,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/v1/emprestimos/validar-exclusao")
-@Tag(name = "Validação de Exclusão (Inter-módulos)", description = "Endpoints internos consumidos via Feign Client para validação de integridade antes da exclusão de dados")
+@RequestMapping("/api/v1/emprestimos/validar-exclusao/usuario/{id}")
+@Tag(
+    name = "Validação de Exclusão",
+    description = "Endpoints internos para validação de pendências antes da exclusão de usuários"
+)
 public class ValidaExclusaoController {
 
     private final EmprestimoService emprestimoService;
@@ -24,33 +29,41 @@ public class ValidaExclusaoController {
         this.emprestimoService = emprestimoService;
     }
 
-    @GetMapping("/usuario/{id}/ativos")
+    @GetMapping("/ativos")
     @Operation(
-        summary = "Verifica se o usuário possui empréstimos pendentes de devolução", 
-        description = "Consumido internamente pelo microsserviço de usuários (via Feign) para impedir a exclusão de contas com pendências de acervo."
+        summary = "Verifica empréstimos ativos do usuário",
+        description = "Endpoint interno consumido pelo usuarios-ms para verificar se o usuário possui empréstimos pendentes de devolução."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso. Retorna true se houver empréstimos ativos."),
+        @ApiResponse(
+            responseCode = "200",
+            description = "Consulta realizada com sucesso. Retorna true quando existem empréstimos ativos."
+        )
     })
-    public ResponseEntity<Boolean> possuiEmprestimosAtivos(
-        @Parameter(description = "ID do usuário que deseja se excluir") @PathVariable Long id
+    public ResponseEntity<Boolean> verificarEmprestimosAtivos(
+        @Parameter(description = "Identificador do usuário")
+        @PathVariable @NonNull Long id
     ) {
-        boolean temAtivos = emprestimoService.possuiEmprestimosAtivos(id);
-        return ResponseEntity.ok(temAtivos);
+        boolean possuiEmprestimos = emprestimoService.possuiEmprestimosAtivos(id);
+        return ResponseEntity.ok(possuiEmprestimos);
     }
 
-    @GetMapping("/usuario/{id}/multas")
+    @GetMapping("/multas")
     @Operation(
-        summary = "Verifica se o usuário possui multas financeiras em aberto", 
-        description = "Consumido internamente pelo microsserviço de usuários (via Feign) para travar a exclusão de contas com débitos pendentes."
+        summary = "Verifica multas pendentes do usuário",
+        description = "Endpoint interno consumido pelo usuarios-ms para verificar se o usuário possui multas financeiras em aberto."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso. Retorna true se houver multas em aberto."),
+        @ApiResponse(
+            responseCode = "200",
+            description = "Consulta realizada com sucesso. Retorna true quando existem multas pendentes."
+        )
     })
-    public ResponseEntity<Boolean> possuiMultasPendentes(
-        @Parameter(description = "ID do usuário sob análise de exclusão") @PathVariable Long id
+    public ResponseEntity<Boolean> verificarMultasPendentes(
+        @Parameter(description = "Identificador do usuário")
+        @PathVariable @NonNull Long id
     ) {
-        boolean temMultas = emprestimoService.possuiMultasPendentes(id);
-        return ResponseEntity.ok(temMultas);
+        boolean possuiMultas = emprestimoService.possuiMultasPendentes(id);
+        return ResponseEntity.ok(possuiMultas);
     }
 }

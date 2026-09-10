@@ -37,6 +37,24 @@ public class GlobalExceptionHandler {
                 .body(resposta);
     }
 
+    @ExceptionHandler(LivroNaoEncontradoException.class)
+    public ResponseEntity<ErroResponseDTO> livroNaoEncontrado(
+        LivroNaoEncontradoException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(resposta);
+    }
+
     @ExceptionHandler(MultaPendenteException.class)
     public ResponseEntity<ErroResponseDTO> multaPendente(
         MultaPendenteException ex,
@@ -52,6 +70,24 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(resposta);
+    }
+
+    @ExceptionHandler(ServicoIndisponivelException.class)
+    public ResponseEntity<ErroResponseDTO> servicoIndisponivel(
+        ServicoIndisponivelException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.SERVICE_UNAVAILABLE.value(),
+            HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(resposta);
     }
 

@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
     name = "emprestimos-ms",
-    url = "${microservice.emprestimos.url}"
+    url = "${services.emprestimos.url}"
 )
 public interface EmprestimoClient {
 
     @GetMapping("/api/v1/emprestimos/validar-exclusao/usuario/{id}/ativos")
-    boolean possuiEmprestimosAtivos(@PathVariable("id") Long usuarioId);
+    Boolean possuiEmprestimosAtivos(@PathVariable("id") Long usuarioId);
 
     @GetMapping("/api/v1/emprestimos/validar-exclusao/usuario/{id}/multas")
-    boolean possuiMultasPendentes(@PathVariable("id") Long usuarioId);
+    Boolean possuiMultasPendentes(@PathVariable("id") Long usuarioId);
 }

@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import br.edu.ifba.emprestimos_ms.dto.DisponibilidadeResponse;
 
 @FeignClient(
-    name = "acervo-ms", 
-    url = "${microservice.acervo.url}"
+    name = "acervo-ms",
+    url = "${services.acervo.url}"
 )
 public interface AcervoClient {
+
     @GetMapping("/api/v1/livros/{id}/disponibilidade")
     DisponibilidadeResponse estaDisponivel(@PathVariable("id") Long id);
 
