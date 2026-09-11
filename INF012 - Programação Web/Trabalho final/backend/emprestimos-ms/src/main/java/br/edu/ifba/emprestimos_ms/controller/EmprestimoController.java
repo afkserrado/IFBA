@@ -101,6 +101,36 @@ public class EmprestimoController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{id}/pagar-multa")
+    @Operation(
+        summary = "Registra o pagamento de uma multa",
+        description = "Marca uma multa de empréstimo como paga, permitindo que o usuário realize novos empréstimos e possa ser excluído."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Multa paga com sucesso",
+            content = @Content(schema = @Schema(implementation = EmprestimoResponseDTO.class))
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Empréstimo não encontrado",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "409",
+            description = "Empréstimo não possui multa ou multa já foi paga",
+            content = @Content
+        )
+    })
+    public ResponseEntity<EmprestimoResponseDTO> pagarMulta(
+        @Parameter(description = "ID do empréstimo com multa a pagar")
+        @PathVariable @NonNull Long id
+    ) {
+        EmprestimoResponseDTO response = emprestimoService.pagarMulta(id);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/livros/{livroId}/ativos/existe")
     @Operation(summary = "Verifica empréstimo ativo por livro", description = "Consulta rápida para checar se uma unidade do livro informado está atualmente emprestada.")
     @ApiResponses(value = {

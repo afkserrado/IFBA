@@ -2,6 +2,7 @@ package br.edu.ifba.emprestimos_ms.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Supplier;
@@ -174,6 +175,33 @@ public class EmprestimoService {
         emprestimoRepository.save(emprestimo);
 
         return EmprestimoMapper.converterEntidadeParaDto(emprestimo);
+    }
+
+    @Transactional
+    public EmprestimoResponseDTO pagarMulta(@NonNull Long id) {
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
+            .orElseThrow(() -> new EmprestimoNaoEncontradoException(
+                "Empréstimo não encontrado com o ID: " + id
+            ));
+
+        if (emprestimo.getValorMulta().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new OperacaoNaoPermitidaException(
+                "Este empréstimo não possui multa a pagar."
+            );
+        }
+
+        if (emprestimo.getMultaPaga()) {
+            throw new OperacaoNaoPermitidaException(
+                "Esta multa já foi paga."
+            );
+        }
+
+        emprestimo.setMultaPaga(true);
+        emprestimo.setDataAtualizacao(LocalDateTime.now());
+
+        return EmprestimoMapper.converterEntidadeParaDto(
+            emprestimoRepository.save(emprestimo)
+        );
     }
 
     // ##### MÉTODOS AUXILIARES #####
