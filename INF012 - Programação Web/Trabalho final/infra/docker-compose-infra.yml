@@ -220,3 +220,5 @@ networks:
     # Permite que os contêineres se comuniquem entre si
     # utilizando seus nomes como host.
     driver: bridge
+
+    name: infra_biblioteca_network

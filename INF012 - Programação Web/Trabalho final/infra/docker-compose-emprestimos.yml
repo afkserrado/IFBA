@@ -20,7 +20,7 @@ services:
     
     # Mapeamento de portas.
     # Formato: PORTA_DO_HOST:PORTA_DO_CONTÊINER
-    # O serviço estará acessível externamente pela porta 8082.
+    # O serviço estará acessível externamente pela porta 8083.
     ports:
       - "8083:8083"
       

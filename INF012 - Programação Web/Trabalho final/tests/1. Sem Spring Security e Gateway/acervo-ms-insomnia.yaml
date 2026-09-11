@@ -6,7 +6,56 @@ meta:
   created: 1784687000000
   modified: 1784687000000
   description: "Testes diretos dos endpoints do microserviço de gerenciamento de livros (Porta 8082) incluindo Caminhos de Erro"
+
 collection:
+  # =====================
+  # PREPARAÇÃO: USUÁRIO E EMPRÉSTIMO
+  # =====================
+
+  - url: http://localhost:8081/api/v1/usuarios
+    name: 0. Criar usuário para testes de empréstimo
+    meta:
+      id: req_acervo_000
+      created: 1784687000000
+      modified: 1784687000000
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created."
+    sortKey: -1784687001000
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "22222222222",
+          "nome": "Usuario Teste Acervo",
+          "email": "teste.acervo@biblioteca.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('usuario_acervo_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  # =====================
+  # LIVROS
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros
     name: 1. Cadastrar livro 1
     meta:
@@ -14,8 +63,8 @@ collection:
       created: 1784687000002
       modified: 1784687000002
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000990
+    description: "Caminho Feliz"
+    sortKey: -1784687000990
     method: POST
     body:
       mimeType: application/json
@@ -31,12 +80,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 201) {
           insomnia.environment.set('livro1_id', json.id);
           insomnia.environment.set('livro1_isbn', json.isbn);
@@ -57,8 +103,8 @@ collection:
       created: 1784687000003
       modified: 1784687000003
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000980
+    description: "Caminho Feliz"
+    sortKey: -1784687000980
     method: POST
     body:
       mimeType: application/json
@@ -74,12 +120,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 201) {
           insomnia.environment.set('livro2_id', json.id);
           insomnia.environment.set('livro2_isbn', json.isbn);
@@ -100,8 +143,8 @@ collection:
       created: 1784687000004
       modified: 1784687000004
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000970
+    description: "Caminho Feliz"
+    sortKey: -1784687000970
     method: POST
     body:
       mimeType: application/json
@@ -117,12 +160,9 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     scripts:
       afterResponse: |-
         const json = insomnia.response.json();
-
         if (insomnia.response.code === 201) {
           insomnia.environment.set('livro3_id', json.id);
           insomnia.environment.set('livro3_isbn', json.isbn);
@@ -136,6 +176,90 @@ collection:
         store: true
       rebuildPath: true
 
+  - url: http://localhost:8082/api/v1/livros
+    name: 3b. Cadastrar livro com empréstimo (para teste de exclusão)
+    meta:
+      id: req_acervo_003b
+      created: 1784687000004
+      modified: 1784687000004
+      isPrivate: false
+    description: "Caminho Feliz — Livro que terá empréstimo ativo para testar exclusão bloqueada."
+    sortKey: -1784687000969
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Livro com Emprestimo",
+          "autor": "Autor Teste",
+          "isbn": "9781111111111",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_com_emprestimo_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  # =====================
+  # EMPRÉSTIMO (INTEGRAÇÃO)
+  # =====================
+
+  - url: http://localhost:8083/api/v1/emprestimos
+    name: 3c. Criar empréstimo do livro com empréstimo
+    meta:
+      id: req_acervo_003c
+      created: 1784687000004
+      modified: 1784687000004
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created. Empréstimo ativo para testar bloqueio de exclusão."
+    sortKey: -1784687000968
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.usuario_acervo_id }},
+          "livroId": {{ _.livro_com_emprestimo_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('emprestimo_livro_com_emprestimo_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  # =====================
+  # OPERAÇÕES DE LISTAGEM E CONSULTA
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros?page=0&size=20
     name: 4. Listar todos os livros
     meta:
@@ -143,14 +267,12 @@ collection:
       created: 1784687000005
       modified: 1784687000005
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000960
+    description: "Caminho Feliz"
+    sortKey: -1784687000960
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -167,14 +289,12 @@ collection:
       created: 1784687000010
       modified: 1784687000010
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000920
+    description: "Caminho Feliz"
+    sortKey: -1784687000920
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -191,14 +311,12 @@ collection:
       created: 1784687000012
       modified: 1784687000012
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000900
+    description: "Caminho Feliz"
+    sortKey: -1784687000900
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -215,14 +333,12 @@ collection:
       created: 1784687000014
       modified: 1784687000014
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000880
+    description: "Caminho Feliz"
+    sortKey: -1784687000880
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -239,14 +355,12 @@ collection:
       created: 1784687000016
       modified: 1784687000016
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000860
+    description: "Caminho Feliz"
+    sortKey: -1784687000860
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -256,6 +370,10 @@ collection:
         store: true
       rebuildPath: true
 
+  # =====================
+  # ESTOQUE
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}/reduzir-estoque
     name: 9. Reduzir estoque
     meta:
@@ -263,14 +381,12 @@ collection:
       created: 1784687000018
       modified: 1784687000018
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000840
+    description: "Caminho Feliz"
+    sortKey: -1784687000840
     method: POST
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -287,14 +403,12 @@ collection:
       created: 1784687000020
       modified: 1784687000020
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000820
+    description: "Caminho Feliz"
+    sortKey: -1784687000820
     method: POST
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -304,6 +418,10 @@ collection:
         store: true
       rebuildPath: true
 
+  # =====================
+  # ATUALIZAÇÃO E EXCLUSÃO (CAMINHOS FELIZES)
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros/{{ _.livro1_id }}
     name: 11. Atualizar livro
     meta:
@@ -311,8 +429,8 @@ collection:
       created: 1784687000022
       modified: 1784687000022
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000800
+    description: "Caminho Feliz"
+    sortKey: -1784687000800
     method: PUT
     body:
       mimeType: application/json
@@ -328,8 +446,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -340,20 +456,43 @@ collection:
       rebuildPath: true
 
   - url: http://localhost:8082/api/v1/livros/{{ _.livro3_id }}
-    name: 12. Remover livro
+    name: 12. Remover livro sem empréstimo
     meta:
       id: req_acervo_012
       created: 1784687000025
       modified: 1784687000025
       isPrivate: false
-      description: "Caminho Feliz"
-      sortKey: -1784687000770
+    description: "Caminho Feliz — Esperado: 204 No Content."
+    sortKey: -1784687000770
     method: DELETE
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+      rebuildPath: true
+
+  # =====================
+  # EXCLUSÃO BLOQUEADA POR EMPRÉSTIMO (409)
+  # =====================
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro_com_emprestimo_id }}
+    name: 12b. [Erro 409] Tentar remover livro com empréstimo ativo
+    meta:
+      id: req_acervo_012b
+      created: 1784687000025
+      modified: 1784687000025
+      isPrivate: false
+    description: "Espera-se erro 409 pois o livro possui empréstimo ativo."
+    sortKey: -1784687000769
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -363,6 +502,58 @@ collection:
         store: true
       rebuildPath: true
 
+  # =====================
+  # DESBLOQUEAR EXCLUSÃO: CANCELAR EMPRÉSTIMO E REMOVER LIVRO
+  # =====================
+
+  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_livro_com_emprestimo_id }}/cancelamento
+    name: 12c. Cancelar empréstimo do livro com empréstimo
+    meta:
+      id: req_acervo_012c
+      created: 1784687000025
+      modified: 1784687000025
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK. Cancela empréstimo para liberar exclusão do livro."
+    sortKey: -1784687000768
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8082/api/v1/livros/{{ _.livro_com_emprestimo_id }}
+    name: 12d. Remover livro após cancelar empréstimo
+    meta:
+      id: req_acervo_012d
+      created: 1784687000025
+      modified: 1784687000025
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 204 No Content. Livro sem empréstimo ativo pode ser excluído."
+    sortKey: -1784687000767
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  # =====================
+  # ERROS DE VALIDAÇÃO (400/409)
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros
     name: 13. [Erro 400] Cadastrar livro com payload inválido
     meta:
@@ -370,8 +561,8 @@ collection:
       created: 1784687000030
       modified: 1784687000030
       isPrivate: false
-      description: "Espera-se erro 400 devido à falta de título e autor, e quantidade negativa"
-      sortKey: -1784687000760
+    description: "Espera-se erro 400 devido à falta de título e autor, e quantidade negativa"
+    sortKey: -1784687000760
     method: POST
     body:
       mimeType: application/json
@@ -385,8 +576,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -403,8 +592,8 @@ collection:
       created: 1784687000035
       modified: 1784687000035
       isPrivate: false
-      description: "Espera-se erro 409 pois o ISBN do Livro 1 já existe no banco"
-      sortKey: -1784687000750
+    description: "Espera-se erro 409 pois o ISBN do Livro 1 já existe no banco"
+    sortKey: -1784687000750
     method: POST
     body:
       mimeType: application/json
@@ -420,8 +609,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -431,6 +618,10 @@ collection:
         store: true
       rebuildPath: true
 
+  # =====================
+  # ERROS 404
+  # =====================
+
   - url: http://localhost:8082/api/v1/livros/isbn/0000000000000
     name: 15. [Erro 404] Buscar livro por ISBN inexistente
     meta:
@@ -438,14 +629,12 @@ collection:
       created: 1784687000040
       modified: 1784687000040
       isPrivate: false
-      description: "Espera-se erro 404 pois o ISBN não existe no banco"
-      sortKey: -1784687000740
+    description: "Espera-se erro 404 pois o ISBN não existe no banco"
+    sortKey: -1784687000740
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -462,8 +651,8 @@ collection:
       created: 1784687000045
       modified: 1784687000045
       isPrivate: false
-      description: "Espera-se erro 400 devido à falta de dados no PUT"
-      sortKey: -1784687000730
+    description: "Espera-se erro 400 devido à falta de dados no PUT"
+    sortKey: -1784687000730
     method: PUT
     body:
       mimeType: application/json
@@ -474,8 +663,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -492,8 +679,8 @@ collection:
       created: 1784687000050
       modified: 1784687000050
       isPrivate: false
-      description: "Espera-se erro 404 pois o ID não existe"
-      sortKey: -1784687000720
+    description: "Espera-se erro 404 pois o ID não existe"
+    sortKey: -1784687000720
     method: PUT
     body:
       mimeType: application/json
@@ -509,8 +696,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -527,8 +712,8 @@ collection:
       created: 1784687000055
       modified: 1784687000055
       isPrivate: false
-      description: "Espera-se erro 409 pois tenta usar o ISBN que já pertence ao Livro 1"
-      sortKey: -1784687000710
+    description: "Espera-se erro 409 pois tenta usar o ISBN que já pertence ao Livro 1"
+    sortKey: -1784687000710
     method: PUT
     body:
       mimeType: application/json
@@ -544,8 +729,6 @@ collection:
         value: application/json
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -562,14 +745,12 @@ collection:
       created: 1784687000060
       modified: 1784687000060
       isPrivate: false
-      description: "Espera-se erro 404 pois o ID não existe"
-      sortKey: -1784687000700
+    description: "Espera-se erro 404 pois o ID não existe"
+    sortKey: -1784687000700
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -586,14 +767,12 @@ collection:
       created: 1784687000065
       modified: 1784687000065
       isPrivate: false
-      description: "Espera-se erro 409, pois o Livro 2 já está com sua disponibilidade no limite total"
-      sortKey: -1784687000690
+    description: "Espera-se erro 409, pois o Livro 2 já está com sua disponibilidade no limite total"
+    sortKey: -1784687000690
     method: POST
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -610,14 +789,12 @@ collection:
       created: 1784687000070
       modified: 1784687000070
       isPrivate: false
-      description: "Espera-se erro 404 pois o ID não existe"
-      sortKey: -1784687000680
+    description: "Espera-se erro 404 pois o ID não existe"
+    sortKey: -1784687000680
     method: POST
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -634,14 +811,12 @@ collection:
       created: 1784687000075
       modified: 1784687000075
       isPrivate: false
-      description: "Espera-se erro 404 pois o ID não existe"
-      sortKey: -1784687000670
+    description: "Espera-se erro 404 pois o ID não existe"
+    sortKey: -1784687000670
     method: POST
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -658,14 +833,12 @@ collection:
       created: 1784687000080
       modified: 1784687000080
       isPrivate: false
-      description: "Espera-se erro 404 pois o ID não existe"
-      sortKey: -1784687000660
+    description: "Espera-se erro 404 pois o ID não existe"
+    sortKey: -1784687000660
     method: DELETE
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
-        description: ""
-        disabled: false
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -690,9 +863,12 @@ environments:
     modified: 1784687001002
     isPrivate: false
   data:
+    usuario_acervo_id: ""
     livro1_id: ""
     livro1_isbn: ""
     livro2_id: ""
     livro2_isbn: ""
     livro3_id: ""
     livro3_isbn: ""
+    livro_com_emprestimo_id: ""
+    emprestimo_livro_com_emprestimo_id: ""
