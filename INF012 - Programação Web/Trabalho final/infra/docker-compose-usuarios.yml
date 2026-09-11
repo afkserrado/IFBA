@@ -1,4 +1,4 @@
-# Define os serviços (contêineres) específicos do microsserviço de acervo.
+# Define os serviços (contêineres) específicos do microsserviço de usuários.
 services:
 
   # Serviço responsável pelo gerenciamento de usuários.
@@ -33,6 +33,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/biblioteca?currentSchema=usuarios
       # Host do RabbitMQ na rede Docker.
       - SPRING_RABBITMQ_HOST=rabbitmq
+
+      # URLs dos outros microsserviços na rede Docker
+      - SERVICES_EMPRESTIMOS_URL=http://emprestimos-ms:8083
       
     # Ordem de inicialização.
     # Garante que o microsserviço só tente iniciar DEPOIS que o banco de dados 
