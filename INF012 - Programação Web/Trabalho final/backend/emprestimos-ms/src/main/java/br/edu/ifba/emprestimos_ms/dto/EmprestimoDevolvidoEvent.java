@@ -1,7 +1,7 @@
 package br.edu.ifba.emprestimos_ms.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record EmprestimoDevolvidoEvent(
         Long emprestimoId,
@@ -9,7 +9,7 @@ public record EmprestimoDevolvidoEvent(
         String nomeUsuario,
         String emailUsuario,
         Long livroId,
-        LocalDate dataDevolucao,
+        LocalDateTime dataDevolucao,
         BigDecimal valorMulta
 ) {
 }

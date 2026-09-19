@@ -1,7 +1,6 @@
 package br.edu.ifba.emprestimos_ms.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.edu.ifba.emprestimos_ms.enums.StatusEmprestimo;
@@ -30,12 +29,12 @@ public class Emprestimo {
     private Long livroId;
 
     @Column(nullable = false)
-    private LocalDate dataEmprestimo;
+    private LocalDateTime dataEmprestimo;
 
     @Column(nullable = false)
-    private LocalDate dataPrevistaDevolucao;
+    private LocalDateTime dataPrevistaDevolucao;
 
-    private LocalDate dataDevolucao;
+    private LocalDateTime dataDevolucao;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -65,7 +64,7 @@ public class Emprestimo {
     public Emprestimo(Long usuarioId, Long livroId) {
         this.usuarioId = usuarioId;
         this.livroId = livroId;
-        this.dataEmprestimo = LocalDate.now();
+        this.dataEmprestimo = LocalDateTime.now();
         this.dataPrevistaDevolucao = this.dataEmprestimo.plusDays(7);
         this.status = StatusEmprestimo.ATIVO;
         this.valorMulta = BigDecimal.ZERO;
@@ -98,27 +97,27 @@ public class Emprestimo {
         this.livroId = livroId;
     }
 
-    public LocalDate getDataEmprestimo() {
+    public LocalDateTime getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+    public void setDataEmprestimo(LocalDateTime dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public LocalDate getDataPrevistaDevolucao() {
+    public LocalDateTime getDataPrevistaDevolucao() {
         return dataPrevistaDevolucao;
     }
 
-    public void setDataPrevistaDevolucao(LocalDate dataPrevistaDevolucao) {
+    public void setDataPrevistaDevolucao(LocalDateTime dataPrevistaDevolucao) {
         this.dataPrevistaDevolucao = dataPrevistaDevolucao;
     }
 
-    public LocalDate getDataDevolucao() {
+    public LocalDateTime getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(LocalDate dataDevolucao) {
+    public void setDataDevolucao(LocalDateTime dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 

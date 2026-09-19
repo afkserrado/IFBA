@@ -1,7 +1,6 @@
 package br.edu.ifba.emprestimos_ms.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.edu.ifba.emprestimos_ms.entity.Emprestimo;
@@ -13,9 +12,9 @@ public class EmprestimoResponseDTO {
     private Long id;
     private Long usuarioId;
     private Long livroId;
-    private LocalDate dataEmprestimo;
-    private LocalDate dataPrevistaDevolucao;
-    private LocalDate dataDevolucao;
+    private LocalDateTime dataEmprestimo;
+    private LocalDateTime dataPrevistaDevolucao;
+    private LocalDateTime dataDevolucao;
     private StatusEmprestimo status;
     private BigDecimal valorMulta;
     private Boolean multaPaga;
@@ -62,27 +61,27 @@ public class EmprestimoResponseDTO {
         this.livroId = livroId;
     }
 
-    public LocalDate getDataEmprestimo() {
+    public LocalDateTime getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+    public void setDataEmprestimo(LocalDateTime dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public LocalDate getDataPrevistaDevolucao() {
+    public LocalDateTime getDataPrevistaDevolucao() {
         return dataPrevistaDevolucao;
     }
 
-    public void setDataPrevistaDevolucao(LocalDate dataPrevistaDevolucao) {
+    public void setDataPrevistaDevolucao(LocalDateTime dataPrevistaDevolucao) {
         this.dataPrevistaDevolucao = dataPrevistaDevolucao;
     }
 
-    public LocalDate getDataDevolucao() {
+    public LocalDateTime getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(LocalDate dataDevolucao) {
+    public void setDataDevolucao(LocalDateTime dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 

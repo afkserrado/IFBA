@@ -1,6 +1,6 @@
 package br.edu.ifba.emprestimos_ms.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -168,7 +168,7 @@ public class EmprestimoController {
             @Parameter(description = "ID do empréstimo")
             @PathVariable @NonNull Long id,
             @Parameter(description = "Nova data prevista de devolução (deve ser uma data passada)")
-            @RequestParam @NonNull LocalDate dataPrevistaDevolucao) {
+            @RequestParam @NonNull LocalDateTime dataPrevistaDevolucao) {
 
         EmprestimoResponseDTO response = emprestimoService.simularAtraso(id, dataPrevistaDevolucao);
         return ResponseEntity.ok(response);

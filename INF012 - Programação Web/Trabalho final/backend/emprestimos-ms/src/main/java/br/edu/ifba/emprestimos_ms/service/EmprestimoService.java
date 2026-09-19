@@ -1,7 +1,6 @@
 package br.edu.ifba.emprestimos_ms.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -135,7 +134,7 @@ public class EmprestimoService {
                 () -> usuarioClient.buscarUsuarioPorId(emprestimo.getUsuarioId())
         );
 
-        LocalDate hoje = LocalDate.now();
+        LocalDateTime hoje = LocalDateTime.now();
         emprestimo.setDataDevolucao(hoje);
 
         // Calcula multa, se houver atraso
@@ -232,7 +231,7 @@ public class EmprestimoService {
         });
 
         emprestimo.setStatus(StatusEmprestimo.CANCELADO);
-        emprestimo.setDataDevolucao(LocalDate.now());
+        emprestimo.setDataDevolucao(LocalDateTime.now());
         emprestimoRepository.save(emprestimo);
 
         return EmprestimoMapper.converterEntidadeParaDto(emprestimo);
@@ -267,7 +266,7 @@ public class EmprestimoService {
 
     // Apenas para testes
     @Transactional
-    public EmprestimoResponseDTO simularAtraso(@NonNull Long id, @NonNull LocalDate dataPrevistaDevolucao) {
+    public EmprestimoResponseDTO simularAtraso(@NonNull Long id, @NonNull LocalDateTime dataPrevistaDevolucao) {
         Emprestimo emprestimo = emprestimoRepository.findById(id)
             .orElseThrow(() -> new EmprestimoNaoEncontradoException(
                 "Empréstimo não encontrado com o ID: " + id

@@ -1,5 +1,7 @@
 package br.edu.ifba.notificacoes_ms.service;
 
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ import br.edu.ifba.notificacoes_ms.dto.UsuarioDeletadoEvent;
 
 @Service
 public class NotificacaoService {
+
+    private static final DateTimeFormatter FORMATADOR_DATA_HORA =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final EmailClient emailClient;
     private final String destinatario;
@@ -47,7 +52,6 @@ public class NotificacaoService {
         enviar(email);
     }
 
-
     public void notificarLivroDeletado(LivroDeletadoEvent event) {
 
         EmailRequest email = new EmailRequest(
@@ -62,7 +66,6 @@ public class NotificacaoService {
 
         enviar(email);
     }
-
 
     public void notificarUsuarioCriado(UsuarioCriadoEvent event) {
 
@@ -82,7 +85,6 @@ public class NotificacaoService {
 
         enviar(email);
     }
-
 
     public void notificarUsuarioDeletado(UsuarioDeletadoEvent event) {
 
@@ -112,8 +114,8 @@ public class NotificacaoService {
                 Data prevista para devolução: %s
                 """.formatted(
                         event.emprestimoId(),
-                        event.dataEmprestimo(),
-                        event.dataPrevistaDevolucao()
+                        event.dataEmprestimo().format(FORMATADOR_DATA_HORA),
+                        event.dataPrevistaDevolucao().format(FORMATADOR_DATA_HORA)
                 )
         );
 
@@ -132,7 +134,7 @@ public class NotificacaoService {
                 Data da devolução: %s
                 """.formatted(
                         event.emprestimoId(),
-                        event.dataDevolucao()
+                        event.dataDevolucao().format(FORMATADOR_DATA_HORA)
                 )
         );
 

@@ -1,6 +1,6 @@
 package br.edu.ifba.emprestimos_ms.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record EmprestimoCriadoEvent(
         Long emprestimoId,
@@ -8,7 +8,7 @@ public record EmprestimoCriadoEvent(
         String nomeUsuario,
         String emailUsuario,
         Long livroId,
-        LocalDate dataEmprestimo,
-        LocalDate dataPrevistaDevolucao
+        LocalDateTime dataEmprestimo,
+        LocalDateTime dataPrevistaDevolucao
 ) {
 }
