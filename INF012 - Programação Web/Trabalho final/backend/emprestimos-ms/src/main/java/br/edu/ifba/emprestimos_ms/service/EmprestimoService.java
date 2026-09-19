@@ -26,6 +26,9 @@ import br.edu.ifba.emprestimos_ms.exception.ServicoIndisponivelException;
 import br.edu.ifba.emprestimos_ms.mapper.EmprestimoMapper;
 import br.edu.ifba.emprestimos_ms.repository.EmprestimoRepository;
 import feign.FeignException;
+import br.edu.ifba.emprestimos_ms.dto.UsuarioResponseDTO;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoCriadoEvent;
+import br.edu.ifba.emprestimos_ms.dto.EmprestimoDevolvidoEvent;
 
 @Service
 public class EmprestimoService {
@@ -35,15 +38,18 @@ public class EmprestimoService {
     private final EmprestimoRepository emprestimoRepository;
     private final UsuarioClient usuarioClient;
     private final AcervoClient acervoClient;
+    private final OutboxService outboxService;
 
     public EmprestimoService(
-        EmprestimoRepository emprestimoRepository,
-        UsuarioClient usuarioClient,
-        AcervoClient acervoClient
+            EmprestimoRepository emprestimoRepository,
+            UsuarioClient usuarioClient,
+            AcervoClient acervoClient,
+            OutboxService outboxService
     ) {
         this.emprestimoRepository = emprestimoRepository;
         this.usuarioClient = usuarioClient;
         this.acervoClient = acervoClient;
+        this.outboxService = outboxService;
     }
 
     // ##### MÉTODOS DE NEGÓCIO DE EMPRÉSTIMOS #####
@@ -51,14 +57,11 @@ public class EmprestimoService {
     @Transactional
     public EmprestimoResponseDTO cadastrarEmprestimo(EmprestimoRequestDTO dto) {
 
-        // Valida situação cadastral do usuário via usuarios-ms
-        boolean usuarioValido = callUsuarioService(
-            () -> usuarioClient.validarSituacaoCadastral(dto.getUsuarioId())
+        // Busca o usuário antes de modificar estoque ou persistir o empréstimo
+        // Se usuarios-ms falhar ou o usuário não existir, nada foi alterado ainda
+        UsuarioResponseDTO usuario = callUsuarioService(
+                () -> usuarioClient.buscarUsuarioPorId(dto.getUsuarioId())
         );
-
-        if (!usuarioValido) {
-            throw new IllegalStateException("Usuário não cadastrado ou situação cadastral inválida.");
-        }
 
         // Verifica multas pendentes internamente
         if (possuiMultasPendentes(dto.getUsuarioId())) {
@@ -76,16 +79,42 @@ public class EmprestimoService {
             throw new OperacaoNaoPermitidaException("Livro sem exemplares disponíveis para empréstimo.");
         }
 
-        callAcervoService(() -> {
-            acervoClient.reduzirEstoque(dto.getLivroId());
-            return null; // Supplier precisa retornar algo, mas não usamos o retorno
-        });
+        boolean estoqueReduzido = false;
 
-        // Salva o empréstimo
-        Emprestimo emprestimo = EmprestimoMapper.converterDtoParaEntidade(dto);
-        emprestimoRepository.save(emprestimo);
+        try {
+            callAcervoService(() -> {
+                acervoClient.reduzirEstoque(dto.getLivroId());
+                return null; // Supplier precisa retornar algo, mas não usamos o retorno
+            });
 
-        return EmprestimoMapper.converterEntidadeParaDto(emprestimo);
+            estoqueReduzido = true;
+
+            // Salva o empréstimo
+            Emprestimo emprestimo = EmprestimoMapper.converterDtoParaEntidade(dto);
+            Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+
+            EmprestimoCriadoEvent evento = new EmprestimoCriadoEvent(
+                    emprestimoSalvo.getId(),
+                    emprestimoSalvo.getUsuarioId(),
+                    usuario.getNome(),
+                    usuario.getEmail(),
+                    emprestimoSalvo.getLivroId(),
+                    emprestimoSalvo.getDataEmprestimo(),
+                    emprestimoSalvo.getDataPrevistaDevolucao()
+            );
+
+            outboxService.registrarEmprestimoCriado(evento);
+
+            return EmprestimoMapper.converterEntidadeParaDto(emprestimoSalvo);
+        }
+
+        catch (RuntimeException ex) {
+            if (estoqueReduzido) {
+                compensarReducaoEstoque(dto.getLivroId(), ex);
+            }
+
+            throw ex;
+        }
     }
 
     @Transactional
@@ -99,6 +128,12 @@ public class EmprestimoService {
         if (emprestimo.getStatus() == StatusEmprestimo.DEVOLVIDO) {
             throw new OperacaoNaoPermitidaException("Este empréstimo já foi devolvido anteriormente.");
         }
+
+        // Busca os dados necessários à notificação antes de alterar
+        // o empréstimo ou devolver o exemplar ao acervo.
+        UsuarioResponseDTO usuario = callUsuarioService(
+                () -> usuarioClient.buscarUsuarioPorId(emprestimo.getUsuarioId())
+        );
 
         LocalDate hoje = LocalDate.now();
         emprestimo.setDataDevolucao(hoje);
@@ -117,15 +152,41 @@ public class EmprestimoService {
         // Encerra o empréstimo como devolvido
         emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);
 
-        // Atualiza o estoque do acervo
-        callAcervoService(() -> {
-            acervoClient.aumentarEstoque(emprestimo.getLivroId()); // método void
-            return null;
-        });
+        boolean estoqueAumentado = false;
 
-        emprestimoRepository.save(emprestimo);
+        try {
+            // Atualiza o estoque do acervo
+            callAcervoService(() -> {
+                acervoClient.aumentarEstoque(emprestimo.getLivroId()); // método void
+                return null;
+            });
 
-        return EmprestimoMapper.converterEntidadeParaDto(emprestimo);
+            estoqueAumentado = true;
+
+            Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+
+            EmprestimoDevolvidoEvent evento = new EmprestimoDevolvidoEvent(
+                emprestimoSalvo.getId(),
+                emprestimoSalvo.getUsuarioId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                emprestimoSalvo.getLivroId(),
+                emprestimoSalvo.getDataDevolucao(),
+                emprestimoSalvo.getValorMulta()
+            );
+
+            outboxService.registrarEmprestimoDevolvido(evento);
+
+            return EmprestimoMapper.converterEntidadeParaDto(emprestimoSalvo);
+        }
+
+        catch (RuntimeException ex) {
+            if (estoqueAumentado) {
+                compensarAumentoEstoque(emprestimo.getLivroId(), ex);
+            }
+
+            throw ex;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -235,6 +296,32 @@ public class EmprestimoService {
     @Transactional
     public void limparRegistrosDeUsuarioDeletado(Long usuarioId) {
         emprestimoRepository.deleteByUsuarioId(usuarioId);
+    }
+
+    private void compensarReducaoEstoque(Long livroId, RuntimeException causaOriginal) {
+        try {
+            acervoClient.aumentarEstoque(livroId);
+        } catch (Exception ex) {
+            causaOriginal.addSuppressed(
+                    new IllegalStateException(
+                            "Falha ao compensar a redução de estoque do livro: " + livroId,
+                            ex
+                    )
+            );
+        }
+    }
+
+    private void compensarAumentoEstoque(Long livroId, RuntimeException causaOriginal) {
+        try {
+            acervoClient.reduzirEstoque(livroId);
+        } catch (Exception ex) {
+            causaOriginal.addSuppressed(
+                    new IllegalStateException(
+                            "Falha ao compensar o aumento de estoque do livro: " + livroId,
+                            ex
+                    )
+            );
+        }
     }
 
     // ##### MÉTODOS DE INTEGRAÇÃO COM TRATAMENTO PADRÃO #####
