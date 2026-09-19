@@ -32,6 +32,12 @@ services:
       # Senha do usuário administrador.
       POSTGRES_PASSWORD: biblioteca
 
+      # Fuso horário do sistema do container (America/Bahia = UTC-3)
+      TZ: America/Bahia
+
+      # Fuso horário usado pelo PostgreSQL para timestamps
+      PGTZ: America/Bahia
+
     # Mapeamento de portas.
     #
     # Formato:

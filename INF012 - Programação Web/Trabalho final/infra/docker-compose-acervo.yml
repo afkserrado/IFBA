@@ -36,6 +36,12 @@ services:
 
       # URLs dos outros microsserviços na rede Docker
       - SERVICES_EMPRESTIMOS_URL=http://emprestimos-ms:8083
+
+      # Fuso horário do sistema do container (America/Bahia = UTC-3)
+      - TZ=America/Bahia
+
+      # Fuso horário usado pelo PostgreSQL para timestamps
+      - PGTZ=America/Bahia
       
     # Ordem de inicialização.
     # Garante que o microsserviço só tente iniciar DEPOIS que o banco de dados 

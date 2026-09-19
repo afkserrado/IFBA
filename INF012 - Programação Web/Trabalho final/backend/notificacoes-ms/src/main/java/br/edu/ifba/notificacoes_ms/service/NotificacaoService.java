@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifba.notificacoes_ms.client.EmailClient;
 import br.edu.ifba.notificacoes_ms.dto.EmailRequest;
+import br.edu.ifba.notificacoes_ms.dto.EmprestimoCriadoEvent;
+import br.edu.ifba.notificacoes_ms.dto.EmprestimoDevolvidoEvent;
 import br.edu.ifba.notificacoes_ms.dto.LivroCadastradoEvent;
 import br.edu.ifba.notificacoes_ms.dto.LivroDeletadoEvent;
 import br.edu.ifba.notificacoes_ms.dto.UsuarioCriadoEvent;
@@ -97,11 +99,50 @@ public class NotificacaoService {
         enviar(email);
     }
 
+    public void notificarEmprestimoCriado(EmprestimoCriadoEvent event) {
+
+        EmailRequest email = new EmailRequest(
+                event.emailUsuario(),
+                "Empréstimo realizado com sucesso",
+                """
+                Seu empréstimo foi realizado com sucesso.
+
+                Empréstimo ID: %d
+                Data do empréstimo: %s
+                Data prevista para devolução: %s
+                """.formatted(
+                        event.emprestimoId(),
+                        event.dataEmprestimo(),
+                        event.dataPrevistaDevolucao()
+                )
+        );
+
+        enviar(email);
+    }
+
+    public void notificarEmprestimoDevolvido(EmprestimoDevolvidoEvent event) {
+
+        EmailRequest email = new EmailRequest(
+                event.emailUsuario(),
+                "Devolução registrada",
+                """
+                A devolução do seu empréstimo foi registrada.
+
+                Empréstimo ID: %d
+                Data da devolução: %s
+                """.formatted(
+                        event.emprestimoId(),
+                        event.dataDevolucao()
+                )
+        );
+
+        enviar(email);
+    }
+
     private void enviar(EmailRequest email) {
 
         try {
             emailClient.enviarEmail(email);
-
         } 
         
         catch (Exception e) {

@@ -10,6 +10,14 @@ BEGIN
         RAISE NOTICE 'Não foi possível limpar emprestimos.emprestimos: %', SQLERRM;
     END;
 
+    -- Limpa eventos da Outbox
+    BEGIN
+        TRUNCATE TABLE emprestimos.outbox_eventos RESTART IDENTITY CASCADE;
+        RAISE NOTICE 'Tabela emprestimos.outbox_eventos limpa com sucesso.';
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Não foi possível limpar emprestimos.outbox_eventos: %', SQLERRM;
+    END;
+
     -- Limpa livros
     BEGIN
         TRUNCATE TABLE acervo.livros RESTART IDENTITY CASCADE;

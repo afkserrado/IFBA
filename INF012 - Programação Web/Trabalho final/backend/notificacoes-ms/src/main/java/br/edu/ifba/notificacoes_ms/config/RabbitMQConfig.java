@@ -16,18 +16,23 @@ public class RabbitMQConfig {
     public static final String EXCHANGE_LIVRO = "livro.exchange";
     public static final String EXCHANGE_USUARIO_CRIADO = "usuario.criado.exchange";
     public static final String EXCHANGE_USUARIO_DELETADO = "usuario.deletado.exchange";
+    public static final String EXCHANGE_EMPRESTIMO = "emprestimo.exchange";
 
     // Routing keys utilizadas pelos produtores
     public static final String ROUTING_KEY_LIVRO_CADASTRADO = "livro.evento.cadastrado";
     public static final String ROUTING_KEY_LIVRO_DELETADO = "livro.evento.deletado";
     public static final String ROUTING_KEY_USUARIO_CRIADO = "usuario.evento.criado";
     public static final String ROUTING_KEY_USUARIO_DELETADO = "usuario.evento.deletado";
+    public static final String ROUTING_KEY_EMPRESTIMO_CRIADO = "emprestimo.evento.criado";
+    public static final String ROUTING_KEY_EMPRESTIMO_DEVOLVIDO = "emprestimo.evento.devolvido";
 
     // Filas do microsserviço consumidor
     public static final String FILA_LIVRO_CADASTRADO = "notificacoes.livro.cadastrado.queue";
     public static final String FILA_LIVRO_DELETADO = "notificacoes.livro.deletado.queue";
     public static final String FILA_USUARIO_CRIADO = "notificacoes.usuario.criado.queue";
     public static final String FILA_USUARIO_DELETADO = "notificacoes.usuario.deletado.queue";
+    public static final String FILA_EMPRESTIMO_CRIADO = "notificacoes.emprestimo.criado.queue";
+    public static final String FILA_EMPRESTIMO_DEVOLVIDO = "notificacoes.emprestimo.devolvido.queue";
 
     // Exchanges declaradas pelos produtores
     // Se já foram criadas pelos produtores, o consumidor passa a referenciá-las
@@ -47,6 +52,12 @@ public class RabbitMQConfig {
     public TopicExchange usuarioDeletadoExchange() {
         return new TopicExchange(EXCHANGE_USUARIO_DELETADO);
     }
+
+    @Bean
+    public TopicExchange emprestimoExchange() {
+        return new TopicExchange(EXCHANGE_EMPRESTIMO);
+    }
+
 
     // Criam as filas nas quais as mensagens enviadas pelos produtores
     // serão roteadas pela exchange e, se houver binding compatível, serão entregues à fila
@@ -68,6 +79,16 @@ public class RabbitMQConfig {
     @Bean
     public Queue filaUsuarioDeletado() {
         return new Queue(FILA_USUARIO_DELETADO, true);
+    }
+
+    @Bean
+    public Queue filaEmprestimoCriado() {
+        return new Queue(FILA_EMPRESTIMO_CRIADO, true);
+    }
+
+    @Bean
+    public Queue filaEmprestimoDevolvido() {
+        return new Queue(FILA_EMPRESTIMO_DEVOLVIDO, true);
     }
 
     // Fazem a ligação entre as filas e os exchanges usando uma
@@ -102,6 +123,22 @@ public class RabbitMQConfig {
                 .bind(filaUsuarioDeletado())
                 .to(usuarioDeletadoExchange())
                 .with(ROUTING_KEY_USUARIO_DELETADO);
+    }
+
+    @Bean
+    public Binding bindingEmprestimoCriado() {
+        return BindingBuilder
+                .bind(filaEmprestimoCriado())
+                .to(emprestimoExchange())
+                .with(ROUTING_KEY_EMPRESTIMO_CRIADO);
+    }
+
+    @Bean
+    public Binding bindingEmprestimoDevolvido() {
+        return BindingBuilder
+                .bind(filaEmprestimoDevolvido())
+                .to(emprestimoExchange())
+                .with(ROUTING_KEY_EMPRESTIMO_DEVOLVIDO);
     }
 
     // Converte automaticamente objetos Java em JSON

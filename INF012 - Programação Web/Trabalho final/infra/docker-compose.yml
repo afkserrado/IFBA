@@ -8,3 +8,5 @@ include:
   - docker-compose-acervo.yml
   - docker-compose-usuarios.yml
   - docker-compose-emprestimos.yml
+  - docker-compose-email.yml
+  - docker-compose-notificacoes.yml

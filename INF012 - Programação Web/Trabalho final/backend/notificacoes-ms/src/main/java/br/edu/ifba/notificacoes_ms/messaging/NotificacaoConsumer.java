@@ -4,6 +4,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import br.edu.ifba.notificacoes_ms.config.RabbitMQConfig;
+import br.edu.ifba.notificacoes_ms.dto.EmprestimoCriadoEvent;
+import br.edu.ifba.notificacoes_ms.dto.EmprestimoDevolvidoEvent;
 import br.edu.ifba.notificacoes_ms.dto.LivroCadastradoEvent;
 import br.edu.ifba.notificacoes_ms.dto.LivroDeletadoEvent;
 import br.edu.ifba.notificacoes_ms.dto.UsuarioCriadoEvent;
@@ -43,5 +45,15 @@ public class NotificacaoConsumer {
     @RabbitListener(queues = RabbitMQConfig.FILA_USUARIO_DELETADO)
     public void consumirUsuarioDeletado(UsuarioDeletadoEvent event) {
         notificacaoService.notificarUsuarioDeletado(event);
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.FILA_EMPRESTIMO_CRIADO)
+    public void consumirEmprestimoCriado(EmprestimoCriadoEvent event) {
+        notificacaoService.notificarEmprestimoCriado(event);
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.FILA_EMPRESTIMO_DEVOLVIDO)
+    public void consumirEmprestimoDevolvido(EmprestimoDevolvidoEvent event) {
+        notificacaoService.notificarEmprestimoDevolvido(event);
     }
 }
