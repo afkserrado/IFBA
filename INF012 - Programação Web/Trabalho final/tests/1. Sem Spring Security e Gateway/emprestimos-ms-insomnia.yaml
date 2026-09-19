@@ -323,22 +323,37 @@ collection:
       rebuildPath: true
 
   # =====================
-  # DEVOLUÇÃO E CANCELAMENTO
+  # SIMULAÇÃO DE ATRASO
   # =====================
 
-  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
-    name: 7. Registrar devolução do empréstimo A
+  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_a_id }}/simular-atraso?dataPrevistaDevolucao=2026-09-01
+    name: 6a. Simular atraso no empréstimo A
     meta:
-      id: req_emprestimos_clean_007
+      id: req_emprestimos_clean_006a
       created: 1784691000007
       modified: 1784691000007
       isPrivate: false
-    description: "Caminho Feliz — Esperado: 200 OK."
-    sortKey: -1784690000940
-    method: POST
+    description: "Apenas para testes — altera a data prevista para uma data passada. Esperado: 200 OK."
+    sortKey: -1784690000945
+    method: PUT
     headers:
       - name: User-Agent
         value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+        const json = insomnia.response.json();
+
+        if (json.dataPrevistaDevolucao !== "2026-09-01") {
+          throw new Error(
+            "A data prevista de devolução não foi atualizada corretamente."
+          );
+        }
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -346,6 +361,296 @@ collection:
       cookies:
         send: true
         store: true
+      rebuildPath: true
+
+  # =====================
+  # DEVOLUÇÃO E CANCELAMENTO
+  # =====================
+
+  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 7. Registrar devolução do empréstimo A com atraso
+    meta:
+      id: req_emprestimos_clean_007
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "Devolve o empréstimo após a simulação de atraso. Esperado: 200 OK com multa pendente."
+    sortKey: -1784690000940
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+        const json = insomnia.response.json();
+
+        if (json.status !== "DEVOLVIDO") {
+          throw new Error(
+            `Esperado status DEVOLVIDO, recebido ${json.status}`
+          );
+        }
+
+        if (Number(json.valorMulta) <= 0) {
+          throw new Error(
+            "A devolução deveria ter gerado uma multa maior que zero."
+          );
+        }
+
+        if (json.multaPaga !== false) {
+          throw new Error(
+            "A multa deveria estar pendente após a devolução."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 7a. [Erro 409] Devolver novamente o empréstimo A
+    meta:
+      id: req_emprestimos_clean_007a
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "O empréstimo já foi devolvido. Esperado: 409 Conflict."
+    sortKey: -1784690000935
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 409) {
+          throw new Error(
+            `Esperado HTTP 409, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8083/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/multas
+    name: 7b. Verificar multa pendente após devolução atrasada
+    meta:
+      id: req_emprestimos_clean_007b
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "Esperado: 200 OK com true."
+    sortKey: -1784690000930
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+        const possuiMulta = insomnia.response.json();
+
+        if (possuiMulta !== true) {
+          throw new Error(
+            "O usuário deveria possuir uma multa pendente."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  # =====================
+  # EXCLUSÃO COM MULTA PENDENTE
+  # =====================
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.usuario_id }}
+    name: 8a. [Erro 409] Tentar remover usuário com multa pendente
+    meta:
+      id: req_emprestimos_clean_008a
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "O usuário possui multa pendente. Esperado: 409 Conflict."
+    sortKey: -1784690000925
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 409) {
+          throw new Error(
+            `Esperado HTTP 409, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_a_id }}/pagar-multa
+    name: 8b. Pagar multa do empréstimo A
+    meta:
+      id: req_emprestimos_clean_008b
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Marca a multa como paga. Esperado: 200 OK."
+    sortKey: -1784690000920
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+        const json = insomnia.response.json();
+
+        if (json.multaPaga !== true) {
+          throw new Error(
+            "A resposta não confirmou o pagamento da multa."
+          );
+        }
+
+        if (Number(json.valorMulta) <= 0) {
+          throw new Error(
+            "O valor da multa deveria permanecer registrado."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8083/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/multas
+    name: 8c. Verificar multa após pagamento
+    meta:
+      id: req_emprestimos_clean_008c
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Após o pagamento, não deve haver multa pendente. Esperado: 200 OK com false."
+    sortKey: -1784690000915
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+        const possuiMulta = insomnia.response.json();
+
+        if (possuiMulta !== false) {
+          throw new Error(
+            "A multa ainda está sendo considerada pendente."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.usuario_id }}
+    name: 8d. Remover usuário após pagar a multa
+    meta:
+      id: req_emprestimos_clean_008d
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Após quitar a multa, a exclusão deve ser permitida. Esperado: 204 No Content."
+    sortKey: -1784690000910
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 204) {
+          throw new Error(
+            `Esperado HTTP 204, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+  - url: http://localhost:8081/api/v1/usuarios/{{ _.usuario_id }}
+    name: 8e. [Erro 404] Consultar usuário excluído
+    meta:
+      id: req_emprestimos_clean_008e
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "O usuário foi excluído. Esperado: 404 Not Found."
+    sortKey: -1784690000905
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 404) {
+          throw new Error(
+            `Esperado HTTP 404, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+      store: true
       rebuildPath: true
 
   - url: http://localhost:8083/api/v1/emprestimos/{{ _.emprestimo_b_id }}/cancelamento

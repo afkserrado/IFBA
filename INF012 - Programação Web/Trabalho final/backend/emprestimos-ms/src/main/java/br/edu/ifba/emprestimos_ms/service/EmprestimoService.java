@@ -204,6 +204,22 @@ public class EmprestimoService {
         );
     }
 
+    // Apenas para testes
+    @Transactional
+    public EmprestimoResponseDTO simularAtraso(@NonNull Long id, @NonNull LocalDate dataPrevistaDevolucao) {
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
+            .orElseThrow(() -> new EmprestimoNaoEncontradoException(
+                "Empréstimo não encontrado com o ID: " + id
+            ));
+
+        emprestimo.setDataPrevistaDevolucao(dataPrevistaDevolucao);
+        emprestimo.setDataAtualizacao(LocalDateTime.now());
+
+        return EmprestimoMapper.converterEntidadeParaDto(
+            emprestimoRepository.save(emprestimo)
+        );
+    }
+
     // ##### MÉTODOS AUXILIARES #####
 
     @Transactional(readOnly = true)

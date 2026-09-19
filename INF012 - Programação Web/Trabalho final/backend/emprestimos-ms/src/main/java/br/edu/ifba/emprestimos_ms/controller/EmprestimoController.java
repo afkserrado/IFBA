@@ -1,5 +1,6 @@
 package br.edu.ifba.emprestimos_ms.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -141,5 +144,33 @@ public class EmprestimoController {
     ) {
         boolean existe = emprestimoService.existeEmprestimoAtivoPorLivro(livroId);
         return ResponseEntity.ok(existe);
+    }
+
+    // Apenas para testes
+    @PutMapping("/{id}/simular-atraso")
+    @Operation(
+        summary = "Simula atraso na devolução (apenas para testes)",
+        description = "Altera a data prevista de devolução de um empréstimo. Use apenas em ambiente de testes para simular multas."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Data alterada com sucesso",
+            content = @Content(schema = @Schema(implementation = EmprestimoResponseDTO.class))
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Empréstimo não encontrado",
+            content = @Content
+        )
+    })
+    public ResponseEntity<EmprestimoResponseDTO> simularAtraso(
+            @Parameter(description = "ID do empréstimo")
+            @PathVariable @NonNull Long id,
+            @Parameter(description = "Nova data prevista de devolução (deve ser uma data passada)")
+            @RequestParam @NonNull LocalDate dataPrevistaDevolucao) {
+
+        EmprestimoResponseDTO response = emprestimoService.simularAtraso(id, dataPrevistaDevolucao);
+        return ResponseEntity.ok(response);
     }
 }
