@@ -2,6 +2,7 @@ package br.edu.ifba.usuarios_ms.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,13 @@ import br.edu.ifba.usuarios_ms.dto.UsuarioUpdateRequestDTO;
 import br.edu.ifba.usuarios_ms.entity.Usuario;
 import br.edu.ifba.usuarios_ms.enums.Role;
 import br.edu.ifba.usuarios_ms.exception.OperacaoNaoPermitidaException;
+import br.edu.ifba.usuarios_ms.exception.ServicoIndisponivelException;
 import br.edu.ifba.usuarios_ms.exception.UsuarioNaoEncontradoException;
 import br.edu.ifba.usuarios_ms.mapper.UsuarioMapper;
 import br.edu.ifba.usuarios_ms.messaging.UsuarioProducer;
 import br.edu.ifba.usuarios_ms.repository.UsuarioRepository;
+import feign.FeignException;
+import feign.RetryableException;
 
 @Service
 public class UsuarioService {
@@ -107,13 +111,13 @@ public class UsuarioService {
         Usuario usuario = obterUsuario(id);
 
         // Valida se há pendências em empréstimos antes de apagar
-        if (emprestimoClient.possuiEmprestimosAtivos(id)) {
+        if (callEmprestimoService(() -> emprestimoClient.possuiEmprestimosAtivos(id))) {
             throw new OperacaoNaoPermitidaException(
                 "Não é possível excluir a conta: existem empréstimos ativos."
             );
         }
 
-        if (emprestimoClient.possuiMultasPendentes(id)) {
+        if (callEmprestimoService(() -> emprestimoClient.possuiMultasPendentes(id))) {
             throw new OperacaoNaoPermitidaException(
                 "Não é possível excluir a conta: existem multas financeiras pendentes."
             );
@@ -146,5 +150,41 @@ public class UsuarioService {
             ));
 
         return Objects.requireNonNull(usuario);
+    }
+
+    private Boolean callEmprestimoService(Supplier<Boolean> call) {
+        
+        try {
+            return call.get();
+        }
+        
+        catch (RetryableException ex) {
+            if (ex.status() == -1) {
+                throw new ServicoIndisponivelException(
+                    "Não foi possível obter resposta do serviço de empréstimos.",
+                    ex
+                );
+            }
+
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de empréstimos indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
+        }
+        
+        catch (FeignException ex) {
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de empréstimos indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
+        }
     }
 }

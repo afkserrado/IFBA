@@ -1,4 +1,4 @@
-package br.edu.ifba.acervo_ms.exception;
+package br.edu.ifba.usuarios_ms.exception;
 
 public class ServicoIndisponivelException extends RuntimeException {
     

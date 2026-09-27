@@ -115,4 +115,22 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(resposta);
     }
+
+    @ExceptionHandler(ServicoIndisponivelException.class)
+    public ResponseEntity<ErroResponseDTO> servicoIndisponivel(
+        ServicoIndisponivelException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.SERVICE_UNAVAILABLE.value(),
+            HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(resposta);
+    }
 }
