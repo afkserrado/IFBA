@@ -37,6 +37,24 @@ public class GlobalExceptionHandler {
                 .body(resposta);
     }
 
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErroResponseDTO> usuarioNaoEncontrado(
+        UsuarioNaoEncontradoException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_FOUND.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(resposta);
+    }
+
     @ExceptionHandler(LivroNaoEncontradoException.class)
     public ResponseEntity<ErroResponseDTO> livroNaoEncontrado(
         LivroNaoEncontradoException ex,

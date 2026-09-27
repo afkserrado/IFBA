@@ -22,9 +22,11 @@ import br.edu.ifba.emprestimos_ms.exception.LivroNaoEncontradoException;
 import br.edu.ifba.emprestimos_ms.exception.MultaPendenteException;
 import br.edu.ifba.emprestimos_ms.exception.OperacaoNaoPermitidaException;
 import br.edu.ifba.emprestimos_ms.exception.ServicoIndisponivelException;
+import br.edu.ifba.emprestimos_ms.exception.UsuarioNaoEncontradoException;
 import br.edu.ifba.emprestimos_ms.mapper.EmprestimoMapper;
 import br.edu.ifba.emprestimos_ms.repository.EmprestimoRepository;
 import feign.FeignException;
+import feign.RetryableException;
 import br.edu.ifba.emprestimos_ms.dto.UsuarioResponseDTO;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoCriadoEvent;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoDevolvidoEvent;
@@ -325,25 +327,6 @@ public class EmprestimoService {
     // ##### MÉTODOS DE INTEGRAÇÃO COM TRATAMENTO PADRÃO #####
 
     /**
-     * Envolve chamada ao usuarios-ms com tratamento padrão de exceções.
-     */
-    private <T> T callUsuarioService(Supplier<T> call) {
-        try {
-            return call.get();
-        } catch (FeignException ex) {
-            throw new ServicoIndisponivelException(
-                "Serviço de usuários indisponível no momento.",
-                ex
-            );
-        } catch (Exception ex) {
-            throw new ServicoIndisponivelException(
-                "Erro de comunicação com o serviço de usuários.",
-                ex
-            );
-        }
-    }
-
-    /**
      * Envolve chamada ao acervo-ms com tratamento padrão de exceções.
      */
     private <T> T callAcervoService(Supplier<T> call) {
@@ -370,6 +353,51 @@ public class EmprestimoService {
                 "Erro de comunicação com o serviço de acervo.",
                 ex
             );
+        }
+    }
+
+    /**
+     * Envolve chamada ao usuarios-ms com tratamento padrão de exceções.
+     */
+    private <T> T callUsuarioService(Supplier<T> call) {
+        try {
+            return call.get();
+        } 
+        
+        catch (FeignException.NotFound ex) {
+            throw new UsuarioNaoEncontradoException(
+                "Usuário não encontrado no serviço de usuários.",
+                ex
+            );
+        } 
+        
+        catch (RetryableException ex) {
+            if (ex.status() == -1) {
+                throw new ServicoIndisponivelException(
+                    "Não foi possível obter resposta do serviço de usuários.",
+                    ex
+                );
+            }
+
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de usuários indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
+        } 
+        
+        catch (FeignException ex) {
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de usuários indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
         }
     }
 }
