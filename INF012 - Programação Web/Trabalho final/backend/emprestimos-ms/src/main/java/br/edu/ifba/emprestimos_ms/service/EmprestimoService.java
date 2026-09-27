@@ -231,7 +231,6 @@ public class EmprestimoService {
         });
 
         emprestimo.setStatus(StatusEmprestimo.CANCELADO);
-        emprestimo.setDataDevolucao(LocalDateTime.now());
         emprestimoRepository.save(emprestimo);
 
         return EmprestimoMapper.converterEntidadeParaDto(emprestimo);
