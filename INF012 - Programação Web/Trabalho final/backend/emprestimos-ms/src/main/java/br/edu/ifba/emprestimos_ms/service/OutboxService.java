@@ -10,6 +10,7 @@ import br.edu.ifba.emprestimos_ms.dto.EmprestimoCriadoEvent;
 import br.edu.ifba.emprestimos_ms.dto.EmprestimoDevolvidoEvent;
 import br.edu.ifba.emprestimos_ms.entity.OutboxEvent;
 import br.edu.ifba.emprestimos_ms.enums.TipoEventoOutbox;
+import br.edu.ifba.emprestimos_ms.exception.SerializacaoEventoException;
 import br.edu.ifba.emprestimos_ms.repository.OutboxEventRepository;
 
 // Converte cada evento em JSON e persiste um OutboxEvent com status PENDENTE
@@ -61,7 +62,7 @@ public class OutboxService {
         }
         
         catch (JsonProcessingException ex) {
-            throw new IllegalStateException(
+            throw new SerializacaoEventoException(
                     "Não foi possível serializar o evento de empréstimo.",
                     ex
             );

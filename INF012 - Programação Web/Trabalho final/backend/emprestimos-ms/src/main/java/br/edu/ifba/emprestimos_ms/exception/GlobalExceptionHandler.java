@@ -151,4 +151,23 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(resposta);
     }
+
+    @ExceptionHandler(SerializacaoEventoException.class)
+    public ResponseEntity<ErroResponseDTO> erroSerializacaoEvento(
+        SerializacaoEventoException ex,
+        HttpServletRequest request
+    ) {
+
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+            "Não foi possível processar o evento de empréstimo.",
+            request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(resposta);
+    }
 }
