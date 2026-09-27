@@ -20,9 +20,12 @@ import br.edu.ifba.acervo_ms.entity.Livro;
 import br.edu.ifba.acervo_ms.enums.OrdenacaoLivro;
 import br.edu.ifba.acervo_ms.exception.LivroNaoEncontradoException;
 import br.edu.ifba.acervo_ms.exception.OperacaoNaoPermitidaException;
+import br.edu.ifba.acervo_ms.exception.ServicoIndisponivelException;
 import br.edu.ifba.acervo_ms.mapper.LivroMapper;
 import br.edu.ifba.acervo_ms.messaging.LivroProducer;
 import br.edu.ifba.acervo_ms.repository.LivroRepository;
+import feign.FeignException;
+import feign.RetryableException;
 
 @Service
 public class LivroService {
@@ -112,27 +115,48 @@ public class LivroService {
 
     @Transactional
     public void removerLivro(@NonNull Long id) {
-        
+
         Livro livro = obterLivro(id);
+        Boolean possuiEmprestimosAtivos;
 
         try {
-            Boolean possuiEmprestimosAtivos = emprestimoClient.existeEmprestimoAtivoPorLivro(id);
-
-            if(Boolean.TRUE.equals(possuiEmprestimosAtivos)) {
-                throw new OperacaoNaoPermitidaException(
-                "O livro não pode ser excluído, pois possui empréstimos ativos."
-                );  
+            possuiEmprestimosAtivos =
+                emprestimoClient.existeEmprestimoAtivoPorLivro(id);
+        }
+        
+        catch (RetryableException ex) {
+            if (ex.status() == -1) {
+                throw new ServicoIndisponivelException(
+                    "Não foi possível obter resposta do serviço de empréstimos.",
+                    ex
+                );
             }
-        } 
 
-        catch (OperacaoNaoPermitidaException ex) {
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de empréstimos indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
+
+        }
+        
+        catch (FeignException ex) {
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de empréstimos indisponível no momento.",
+                    ex
+                );
+            }
+
             throw ex;
         }
 
-        // Falha de conexão com emprestimos-ms
-        catch(Exception ex) {
+        if (Boolean.TRUE.equals(possuiEmprestimosAtivos)) {
             throw new OperacaoNaoPermitidaException(
-            "Não foi possível validar os empréstimos ativos do livro no momento."
+                "O livro não pode ser excluído, pois possui empréstimos ativos."
             );
         }
 

@@ -2,6 +2,10 @@ package br.edu.ifba.acervo_ms.exception;
 
 public class ServicoIndisponivelException extends RuntimeException {
     
+    public ServicoIndisponivelException() {
+        super("Operação não permitida.");
+    }
+
     public ServicoIndisponivelException(String mensagem) {
         super(mensagem);
     }

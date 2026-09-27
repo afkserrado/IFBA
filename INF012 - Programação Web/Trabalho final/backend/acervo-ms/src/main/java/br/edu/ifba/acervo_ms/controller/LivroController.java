@@ -111,7 +111,8 @@ public class LivroController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Livro removido com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro não encontrado para exclusão", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Conflito: Livro não pode ser excluído por possuir empréstimos ativos", content = @Content)
+            @ApiResponse(responseCode = "409", description = "Conflito: Livro não pode ser excluído por possuir empréstimos ativos", content = @Content),
+            @ApiResponse(responseCode = "503", description = "Serviço de empréstimos indisponível para validar a exclusão", content = @Content)
     })
     public ResponseEntity<Void> removerLivro(
             @Parameter(description = "Identificador numérico do livro") @PathVariable @NonNull Long id) {
