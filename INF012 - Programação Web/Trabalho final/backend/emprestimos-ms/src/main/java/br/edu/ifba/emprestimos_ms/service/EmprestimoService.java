@@ -333,26 +333,49 @@ public class EmprestimoService {
         
         try {
             return call.get();
-        } 
+        }
         
         catch (FeignException.NotFound ex) {
             throw new LivroNaoEncontradoException(
-                "Livro não encontrado no serviço de acervo."
-            );
-        } 
-        
-        catch (FeignException ex) {
-            throw new ServicoIndisponivelException(
-                "Serviço de acervo indisponível no momento.",
+                "Livro não encontrado no serviço de acervo.",
                 ex
             );
         }
         
-        catch (Exception ex) {
-            throw new ServicoIndisponivelException(
-                "Erro de comunicação com o serviço de acervo.",
+        catch (FeignException.Conflict ex) {
+            throw new OperacaoNaoPermitidaException(
+                "O acervo não permitiu a alteração do estoque do livro.",
                 ex
             );
+        }
+        
+        catch (RetryableException ex) {
+            if (ex.status() == -1) {
+                throw new ServicoIndisponivelException(
+                    "Não foi possível obter resposta do serviço de acervo.",
+                    ex
+                );
+            }
+
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de acervo indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
+        }
+        
+        catch (FeignException ex) {
+            if (ex.status() == 503) {
+                throw new ServicoIndisponivelException(
+                    "Serviço de acervo indisponível no momento.",
+                    ex
+                );
+            }
+
+            throw ex;
         }
     }
 
@@ -362,14 +385,14 @@ public class EmprestimoService {
     private <T> T callUsuarioService(Supplier<T> call) {
         try {
             return call.get();
-        } 
+        }
         
         catch (FeignException.NotFound ex) {
             throw new UsuarioNaoEncontradoException(
                 "Usuário não encontrado no serviço de usuários.",
                 ex
             );
-        } 
+        }
         
         catch (RetryableException ex) {
             if (ex.status() == -1) {
@@ -387,7 +410,7 @@ public class EmprestimoService {
             }
 
             throw ex;
-        } 
+        }
         
         catch (FeignException ex) {
             if (ex.status() == 503) {

@@ -9,4 +9,9 @@ public class LivroNaoEncontradoException extends RuntimeException {
     public LivroNaoEncontradoException(String mensagem) {
         super(mensagem);
     }
+
+    // Preserva a exceção do Feign como causa da exceção local
+    public LivroNaoEncontradoException(String mensagem, Throwable causa) {
+        super(mensagem, causa);
+    }
 }
