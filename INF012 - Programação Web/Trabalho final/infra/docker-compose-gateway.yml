@@ -1,0 +1,42 @@
+# Define o contêiner responsável pela entrada HTTP da aplicação.
+services:
+
+  # Recebe as requisições externas e as encaminha aos microsserviços.
+  gateway-ms:
+
+    # O Dockerfile está na raiz do código-fonte do gateway.
+    build:
+      context: ../backend/gateway-ms
+
+    # Mantém o padrão de identificação dos demais contêineres.
+    container_name: biblioteca_gateway_ms
+
+    # Reinicia o serviço em caso de falha.
+    restart: on-failure
+
+    # Disponibiliza o gateway na porta 8080 do host.
+    ports:
+      - "8080:8080"
+
+    # Endereços internos dos microsserviços na rede Docker.
+    # São utilizados pelas propriedades ${SERVICES_..._URL:...}
+    # do application.properties do gateway.
+    environment:
+      - SERVICES_USUARIOS_URL=http://usuarios-ms:8081
+      - SERVICES_ACERVO_URL=http://acervo-ms:8082
+      - SERVICES_EMPRESTIMOS_URL=http://emprestimos-ms:8083
+      - TZ=America/Bahia
+
+    # Os serviços precisam ser iniciados, mas o gateway não depende
+    # de PostgreSQL ou RabbitMQ diretamente.
+    depends_on:
+      usuarios-ms:
+        condition: service_started
+      acervo-ms:
+        condition: service_started
+      emprestimos-ms:
+        condition: service_started
+
+    # Mesma rede utilizada pelos demais componentes.
+    networks:
+      - biblioteca_network

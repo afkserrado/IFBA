@@ -10,3 +10,4 @@ include:
   - docker-compose-emprestimos.yml
   - docker-compose-email.yml
   - docker-compose-notificacoes.yml
+  - docker-compose-gateway.yml
