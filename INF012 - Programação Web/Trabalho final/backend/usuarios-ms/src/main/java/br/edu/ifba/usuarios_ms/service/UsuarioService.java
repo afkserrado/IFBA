@@ -68,14 +68,14 @@ public class UsuarioService {
         return UsuarioMapper.converterEntidadeParaDto(usuarioSalvo);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public UsuarioResponseDTO buscarUsuarioPorId(@NonNull Long id) {
         Usuario usuario = obterUsuario(id);
 
         return UsuarioMapper.converterEntidadeParaDto(usuario);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public List<UsuarioResponseDTO> buscarUsuarios() {
         return usuarioRepository.findAll().stream()
             .map(UsuarioMapper::converterEntidadeParaDto)
@@ -128,7 +128,7 @@ public class UsuarioService {
         usuarioProducer.dispararUsuarioDeletado(usuario.getId());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public UsuarioResponseDTO buscarUsuarioPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new UsuarioNaoEncontradoException(
@@ -138,6 +138,7 @@ public class UsuarioService {
         return UsuarioMapper.converterEntidadeParaDto(usuario);
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public boolean existeUsuario(@NonNull Long id) {
         return usuarioRepository.existsById(id);
     }

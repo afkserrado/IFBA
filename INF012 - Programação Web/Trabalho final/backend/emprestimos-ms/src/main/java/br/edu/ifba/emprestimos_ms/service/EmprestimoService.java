@@ -190,21 +190,21 @@ public class EmprestimoService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public List<EmprestimoResponseDTO> listarTodos() {
         return emprestimoRepository.findAll().stream()
             .map(EmprestimoMapper::converterEntidadeParaDto)
             .toList();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public List<EmprestimoResponseDTO> consultarPorUsuario(Long usuarioId) {
         return emprestimoRepository.findByUsuarioId(usuarioId).stream()
             .map(EmprestimoMapper::converterEntidadeParaDto)
             .toList();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public boolean existeEmprestimoAtivoPorLivro(Long livroId) {
         return emprestimoRepository.existsByLivroIdAndStatus(
             livroId,
@@ -283,12 +283,12 @@ public class EmprestimoService {
 
     // ##### MÉTODOS AUXILIARES #####
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public boolean possuiEmprestimosAtivos(Long usuarioId) {
         return emprestimoRepository.countEmprestimosAtivos(usuarioId) > 0;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public boolean possuiMultasPendentes(Long usuarioId) {
         return emprestimoRepository.countMultasPendentes(usuarioId) > 0;
     }

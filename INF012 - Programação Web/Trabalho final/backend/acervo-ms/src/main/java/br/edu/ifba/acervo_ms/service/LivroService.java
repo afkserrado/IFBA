@@ -62,12 +62,14 @@ public class LivroService {
         return LivroMapper.converterEntidadeParaDto(livroSalvo);
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public Page<LivroResumoResponseDTO> buscarLivros(String ordenacao, Pageable pageable) {
         Pageable pageableComSort = criarPageableComOrdenacao(pageable, ordenacao);
         Page<Livro> livros = livroRepository.findAll(pageableComSort);
         return LivroMapper.converterEntidadesParaDtoResumido(livros);
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public LivroResumoResponseDTO buscarLivroPorIsbn(String isbn) {
         
         Livro livro = livroRepository.findByIsbn(isbn)
@@ -76,12 +78,14 @@ public class LivroService {
         return LivroMapper.converterEntidadeParaDtoResumido(livro);
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public Page<LivroResumoResponseDTO> buscarLivrosPorAutor(String autor, String ordenacao, Pageable pageable) {
         Pageable pageableComSort = criarPageableComOrdenacao(pageable, ordenacao);
         Page<Livro> livros = livroRepository.findByAutorContainingIgnoreCase(autor, pageableComSort);
         return LivroMapper.converterEntidadesParaDtoResumido(livros);
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public Page<LivroResumoResponseDTO> buscarLivrosPorTitulo(String titulo, String ordenacao, Pageable pageable) {
         Pageable pageableComSort = criarPageableComOrdenacao(pageable, ordenacao);
         Page<Livro> livros = livroRepository.findByTituloContainingIgnoreCase(titulo, pageableComSort);
@@ -167,6 +171,7 @@ public class LivroService {
         );
     }
 
+    @Transactional(readOnly = true) // Otimiza consultas ao banco
     public boolean estaDisponivel(@NonNull Long id) {
         Livro livro = obterLivro(id);
         return livro.getQuantidadeDisponivel() > 0;
