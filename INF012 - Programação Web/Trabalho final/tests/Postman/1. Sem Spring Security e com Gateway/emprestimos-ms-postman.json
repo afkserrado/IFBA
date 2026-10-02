@@ -1,0 +1,1154 @@
+{
+  "info": {
+    "_postman_id": "wrk_emprestimos_ms_yaml_clean",
+    "name": "Emprestimos MS (Sem Segurança e com Gateway)",
+    "description": "Testes via Gateway dos endpoints do microserviço de gerenciamento de empréstimos, incluindo Caminhos de Erro",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "usuario_id",
+      "value": ""
+    },
+    {
+      "key": "usuario_b_id",
+      "value": ""
+    },
+    {
+      "key": "livro_a_id",
+      "value": ""
+    },
+    {
+      "key": "livro_b_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_a_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_b_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00. [201] Criar usuário A (Gmail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"11111111111\",\n  \"nome\": \"Anderson Serrado\",\n  \"email\": \"akserrado@gmail.com\",\n  \"senha\": \"user123\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('usuario_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. [201] Criar usuário B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"22222222222\",\n  \"nome\": \"Anderson Serrado Outlook\",\n  \"email\": \"akserrado+usuario-b@gmail.com\",\n  \"senha\": \"user123\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('usuario_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. [201] Criar livro A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "livros"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Arquitetura Limpa\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9788550804606\",\n  \"quantidadeTotal\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro_a_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. [201] Criar livro B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "livros"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Padrões de Projeto\",\n  \"autor\": \"Erich Gamma\",\n  \"isbn\": \"9788573076103\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. [201] Cadastrar empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Empréstimo do usuário no livro A.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_id}},\n  \"livroId\": {{livro_a_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('emprestimo_a_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. [201] Cadastrar empréstimo B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Empréstimo do segundo usuário no livro B.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_b_id}},\n  \"livroId\": {{livro_b_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('emprestimo_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. [200] Listar todos os empréstimos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "07. [200] Consultar empréstimos do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/usuario/{{usuario_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "usuario",
+            "{{usuario_id}}"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "08. [200] Verificar empréstimo ativo no livro A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/{{livro_a_id}}/ativos/existe",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "livros",
+            "{{livro_a_id}}",
+            "ativos",
+            "existe"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK (true)."
+      },
+      "response": []
+    },
+    {
+      "name": "09. [200] Verificar empréstimos ativos do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/ativos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "{{usuario_id}}",
+            "ativos"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK (true)."
+      },
+      "response": []
+    },
+    {
+      "name": "10. [200] Verificar multas pendentes do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "{{usuario_id}}",
+            "multas"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK (false)."
+      },
+      "response": []
+    },
+    {
+      "name": "11. [200] Simular atraso no empréstimo A",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/simular-atraso?dataPrevistaDevolucao=2026-09-01T00:00:00",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_a_id}}",
+            "simular-atraso"
+          ],
+          "query": [
+            {
+              "key": "dataPrevistaDevolucao",
+              "value": "2026-09-01T00:00:00"
+            }
+          ]
+        },
+        "description": "Apenas para testes — altera a data prevista para uma data passada. Esperado: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "12. [200] Registrar devolução do empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_a_id}}",
+            "devolucao"
+          ]
+        },
+        "description": "Devolve o empréstimo após a simulação de atraso. Esperado: 200 OK com multa pendente."
+      },
+      "response": []
+    },
+    {
+      "name": "13. [Erro 409] Tentar devolver A novamente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_a_id}}",
+            "devolucao"
+          ]
+        },
+        "description": "O empréstimo já foi devolvido. Esperado: 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "14. [200] Verificar multa pendente do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "{{usuario_id}}",
+            "multas"
+          ]
+        },
+        "description": "Esperado: 200 OK com true."
+      },
+      "response": []
+    },
+    {
+      "name": "15. [200] Cancelar empréstimo B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/cancelamento",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_b_id}}",
+            "cancelamento"
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "16. [Erro 409] Tentar remover usuário A com multa pendente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuario_id}}"
+          ]
+        },
+        "description": "O usuário possui multa pendente. Esperado: 409 Conflict."
+      },
+      "response": []
+    },
+    {
+      "name": "17. [200] Pagar multa do empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/pagar-multa",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_a_id}}",
+            "pagar-multa"
+          ]
+        },
+        "description": "Marca a multa como paga. Esperado: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "18. [200] Verificar multa após pagamento",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "{{usuario_id}}",
+            "multas"
+          ]
+        },
+        "description": "Após o pagamento, não deve haver multa pendente. Esperado: 200 OK com false."
+      },
+      "response": []
+    },
+    {
+      "name": "19. [204] Remover usuário A",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuario_id}}"
+          ]
+        },
+        "description": "Após quitar a multa, a exclusão deve ser permitida. Esperado: 204 No Content."
+      },
+      "response": []
+    },
+    {
+      "name": "20. [Erro 404] Consultar usuário A excluído",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuario_id}}"
+          ]
+        },
+        "description": "O usuário foi excluído. Esperado: 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "21. [Erro 400] Cadastrar empréstimo com payload vazio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos"
+          ]
+        },
+        "description": "Espera-se erro 400 por ausência dos campos obrigatórios.",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "22. [Erro 400] Cadastrar empréstimo com JSON inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos"
+          ]
+        },
+        "description": "Espera-se erro 400 por JSON malformado.",
+        "body": {
+          "mode": "raw",
+          "raw": "{",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "23. [Erro 404] Consultar rota inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "999999"
+          ]
+        },
+        "description": "Espera-se erro 404 para rota não mapeada."
+      },
+      "response": []
+    },
+    {
+      "name": "24. [Erro 404] Devolver empréstimo inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999/devolucao",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "999999",
+            "devolucao"
+          ]
+        },
+        "description": "Espera-se erro 404 porque o empréstimo não existe."
+      },
+      "response": []
+    },
+    {
+      "name": "25. [Erro 404] Cancelar empréstimo inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999/cancelamento",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "999999",
+            "cancelamento"
+          ]
+        },
+        "description": "Espera-se erro 404 porque o empréstimo não existe."
+      },
+      "response": []
+    },
+    {
+      "name": "26. [200] Verificar livro inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/999999/ativos/existe",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "livros",
+            "999999",
+            "ativos",
+            "existe"
+          ]
+        },
+        "description": "O controller não valida a existência do livro; espera-se 200 OK com false."
+      },
+      "response": []
+    },
+    {
+      "name": "27. [200] Validar usuário inexistente — ativos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/ativos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "999999",
+            "ativos"
+          ]
+        },
+        "description": "Espera-se 200 OK com false."
+      },
+      "response": []
+    },
+    {
+      "name": "28. [200] Validar usuário inexistente — multas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/multas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "validar-exclusao",
+            "usuario",
+            "999999",
+            "multas"
+          ]
+        },
+        "description": "Espera-se 200 OK com false."
+      },
+      "response": []
+    },
+    {
+      "name": "29. [Erro 409] Tentar devolver A já devolvido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_a_id}}",
+            "devolucao"
+          ]
+        },
+        "description": "Execute depois da requisição 7. Espera-se erro 409 por regra de negócio."
+      },
+      "response": []
+    },
+    {
+      "name": "30. [Erro 409] Tentar cancelar B já cancelado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/cancelamento",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "{{emprestimo_b_id}}",
+            "cancelamento"
+          ]
+        },
+        "description": "Execute depois da requisição 8. Espera-se erro 409 por regra de negócio."
+      },
+      "response": []
+    },
+    {
+      "name": "31. [200] Verificar ausência de empréstimo ativo no livro B",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/{{livro_b_id}}/ativos/existe",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "emprestimos",
+            "livros",
+            "{{livro_b_id}}",
+            "ativos",
+            "existe"
+          ]
+        },
+        "description": "Esperado: 200 OK com false para livro sem empréstimo ativo."
+      },
+      "response": []
+    }
+  ]
+}

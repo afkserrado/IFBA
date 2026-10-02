@@ -1,0 +1,914 @@
+{
+  "info": {
+    "_postman_id": "wrk_acervo_ms_yaml_clean",
+    "name": "Acervo MS (Sem Segurança e com Gateway)",
+    "description": "Testes via Gateway dos endpoints do microserviço de gerenciamento de livros, incluindo Caminhos de Erro",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "usuario_acervo_id",
+      "value": ""
+    },
+    {
+      "key": "livro1_id",
+      "value": ""
+    },
+    {
+      "key": "livro1_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro2_id",
+      "value": ""
+    },
+    {
+      "key": "livro2_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro3_id",
+      "value": ""
+    },
+    {
+      "key": "livro3_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro_com_emprestimo_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_livro_com_emprestimo_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00. [201] Criar usuário para testes de empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"22222222222\",\n  \"nome\": \"Anderson\",\n  \"email\": \"akserrado@gmail.com\",\n  \"senha\": \"user123\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('usuario_acervo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. [201] Cadastrar livro 1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro1_id', json.id);",
+              "  pm.environment.set('livro1_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. [201] Cadastrar livro 2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Domain-Driven Design\",\n  \"autor\": \"Eric Evans\",\n  \"isbn\": \"9780321125217\",\n  \"quantidadeTotal\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro2_id', json.id);",
+              "  pm.environment.set('livro2_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. [201] Cadastrar livro 3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Refactoring\",\n  \"autor\": \"Martin Fowler\",\n  \"isbn\": \"9780201485677\",\n  \"quantidadeTotal\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro3_id', json.id);",
+              "  pm.environment.set('livro3_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. [201] Cadastrar livro com empréstimo (para teste de exclusão)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Livro que terá empréstimo ativo para testar exclusão bloqueada.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro com Emprestimo\",\n  \"autor\": \"Autor Teste\",\n  \"isbn\": \"9781111111111\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('livro_com_emprestimo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. [201] Criar empréstimo do livro com empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Empréstimo ativo para testar bloqueio de exclusão.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_acervo_id}},\n  \"livroId\": {{livro_com_emprestimo_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.environment.set('emprestimo_livro_com_emprestimo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. [200] Listar todos os livros",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"],
+          "query": [
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "20" }
+          ]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "07. [200] Buscar livro por ISBN",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/isbn/{{livro1_isbn}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "isbn", "{{livro1_isbn}}"]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "08. [200] Buscar por título",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/titulo?titulo=Clean&page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "titulo"],
+          "query": [
+            { "key": "titulo", "value": "Clean" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "10" }
+          ]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "09. [200] Buscar por autor",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/autor?autor=Robert&page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "autor"],
+          "query": [
+            { "key": "autor", "value": "Robert" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "10" }
+          ]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "10. [200] Verificar disponibilidade",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/disponibilidade",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "disponibilidade"]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "11. [200] Reduzir estoque",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "reduzir-estoque"]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "12. [200] Aumentar estoque",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "aumentar-estoque"]
+        },
+        "description": "Caminho Feliz"
+      },
+      "response": []
+    },
+    {
+      "name": "13. [200] Atualizar livro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}"]
+        },
+        "description": "Caminho Feliz",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code 2a Edicao\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "14. [204] Remover livro sem empréstimo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro3_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro3_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 204 No Content."
+      },
+      "response": []
+    },
+    {
+      "name": "15. [Erro 409] Tentar remover livro com empréstimo ativo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro_com_emprestimo_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro_com_emprestimo_id}}"]
+        },
+        "description": "Espera-se erro 409 pois o livro possui empréstimo ativo."
+      },
+      "response": []
+    },
+    {
+      "name": "16. [200] Cancelar empréstimo do livro com empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_livro_com_emprestimo_id}}/cancelamento",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_livro_com_emprestimo_id}}", "cancelamento"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Cancela empréstimo para liberar exclusão do livro."
+      },
+      "response": []
+    },
+    {
+      "name": "17. [204] Remover livro após cancelar empréstimo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro_com_emprestimo_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro_com_emprestimo_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 204 No Content. Livro sem empréstimo ativo pode ser excluído."
+      },
+      "response": []
+    },
+    {
+      "name": "18. [Erro 400] Cadastrar livro com payload inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Espera-se erro 400 devido à falta de título e autor, e quantidade negativa",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"123456789\",\n  \"quantidadeTotal\": -1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "19. [Erro 409] Cadastrar livro com ISBN duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Espera-se erro 409 pois o ISBN do Livro 1 já existe no banco",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code Clone\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"{{livro1_isbn}}\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "20. [Erro 404] Buscar livro por ISBN inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/isbn/0000000000000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "isbn", "0000000000000"]
+        },
+        "description": "Espera-se erro 404 pois o ISBN não existe no banco"
+      },
+      "response": []
+    },
+    {
+      "name": "21. [Erro 400] Atualizar livro com payload inválido",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Espera-se erro 400 devido à falta de dados no PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "22. [Erro 404] Atualizar livro com ID inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999"]
+        },
+        "description": "Espera-se erro 404 pois o ID não existe",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro Fantasma\",\n  \"autor\": \"Desconhecido\",\n  \"isbn\": \"9999999999999\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "23. [Erro 409] Atualizar livro para usar ISBN de outro livro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Espera-se erro 409 pois tenta usar o ISBN que já pertence ao Livro 1",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Update do Livro 2\",\n  \"autor\": \"Eric Evans\",\n  \"isbn\": \"{{livro1_isbn}}\",\n  \"quantidadeTotal\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "24. [Erro 404] Verificar disponibilidade de ID inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/disponibilidade",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "disponibilidade"]
+        },
+        "description": "Espera-se erro 404 pois o ID não existe"
+      },
+      "response": []
+    },
+    {
+      "name": "25. [Erro 409] Aumentar estoque além da quantidade total",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}", "aumentar-estoque"]
+        },
+        "description": "Espera-se erro 409, pois o Livro 2 já está com sua disponibilidade no limite total"
+      },
+      "response": []
+    },
+    {
+      "name": "26. [Erro 404] Reduzir estoque de ID inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "reduzir-estoque"]
+        },
+        "description": "Espera-se erro 404 pois o ID não existe"
+      },
+      "response": []
+    },
+    {
+      "name": "27. [Erro 404] Aumentar estoque de ID inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "aumentar-estoque"]
+        },
+        "description": "Espera-se erro 404 pois o ID não existe"
+      },
+      "response": []
+    },
+    {
+      "name": "28. [Erro 404] Remover livro inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999"]
+        },
+        "description": "Espera-se erro 404 pois o ID não existe"
+      },
+      "response": []
+    }
+  ]
+}
