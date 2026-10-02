@@ -27,8 +27,8 @@ collection:
       text: |-
         {
           "cpf": "22222222222",
-          "nome": "Usuario Teste Acervo",
-          "email": "teste.acervo@biblioteca.com",
+          "nome": "Anderson",
+          "email": "akserrado@gmail.com",
           "senha": "user123",
           "role": "USER"
         }

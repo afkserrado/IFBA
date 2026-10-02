@@ -1,0 +1,1067 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Emprestimos MS (Sem Segurança e com Gateway)
+meta:
+  id: wrk_emprestimos_ms_yaml_clean
+  created: 1784691000000
+  modified: 1784691000000
+  description: "Testes via Gateway dos endpoints do microserviço de gerenciamento de empréstimos, incluindo Caminhos de Erro"
+
+
+collection:
+  # =====================
+  # PREPARAÇÃO DE DADOS
+  # =====================
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 00. Criar usuário A (Gmail)
+    meta:
+      id: req_emprestimos_clean_000
+      created: 1784691000000
+      modified: 1784691000000
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created."
+    sortKey: -1784690001010
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "11111111111",
+          "nome": "Anderson Serrado",
+          "email": "akserrado@gmail.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('usuario_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/usuarios
+    name: 00a. Criar usuário B (Outlook)
+    meta:
+      id: req_emprestimos_clean_000a
+      created: 1784691000000
+      modified: 1784691000000
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created."
+    sortKey: -1784690001009.5
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "cpf": "22222222222",
+          "nome": "Anderson Serrado Outlook",
+          "email": "andersonserrado@outlook.com",
+          "senha": "user123",
+          "role": "USER"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('usuario_b_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/livros
+    name: 00b. Criar livro A
+    meta:
+      id: req_emprestimos_clean_000b
+      created: 1784691000000
+      modified: 1784691000000
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created."
+    sortKey: -1784690001009
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Arquitetura Limpa",
+          "autor": "Robert C. Martin",
+          "isbn": "9788550804606",
+          "quantidadeTotal": 2
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_a_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/livros
+    name: 00c. Criar livro B
+    meta:
+      id: req_emprestimos_clean_000c
+      created: 1784691000000
+      modified: 1784691000000
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created."
+    sortKey: -1784690001008
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "titulo": "Padrões de Projeto",
+          "autor": "Erich Gamma",
+          "isbn": "9788573076103",
+          "quantidadeTotal": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('livro_b_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # EMPRÉSTIMOS
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 01. Cadastrar empréstimo A
+    meta:
+      id: req_emprestimos_clean_001
+      created: 1784691000001
+      modified: 1784691000001
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created. Empréstimo do usuário no livro A."
+    sortKey: -1784690001000
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.usuario_id }},
+          "livroId": {{ _.livro_a_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('emprestimo_a_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 01a. Cadastrar empréstimo B
+    meta:
+      id: req_emprestimos_clean_001b
+      created: 1784691000001
+      modified: 1784691000001
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 201 Created. Empréstimo do segundo usuário no livro B."
+    sortKey: -1784690000999
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "usuarioId": {{ _.usuario_b_id }},
+          "livroId": {{ _.livro_b_id }}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        const json = insomnia.response.json();
+        if (insomnia.response.code === 201) {
+          insomnia.environment.set('emprestimo_b_id', json.id);
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 02. Listar todos os empréstimos
+    meta:
+      id: req_emprestimos_clean_002
+      created: 1784691000002
+      modified: 1784691000002
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK."
+    sortKey: -1784690000990
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/usuario/{{ _.usuario_id }}
+    name: 03. Consultar empréstimos do usuário A
+    meta:
+      id: req_emprestimos_clean_003
+      created: 1784691000003
+      modified: 1784691000003
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK."
+    sortKey: -1784690000980
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_a_id }}/ativos/existe
+    name: 04. Verificar empréstimo ativo no livro A
+    meta:
+      id: req_emprestimos_clean_004
+      created: 1784691000004
+      modified: 1784691000004
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK (true)."
+    sortKey: -1784690000970
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # VALIDAÇÃO DE EXCLUSÃO
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/ativos
+    name: 05. Verificar empréstimos ativos do usuário A
+    meta:
+      id: req_emprestimos_clean_005
+      created: 1784691000005
+      modified: 1784691000005
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK (true)."
+    sortKey: -1784690000960
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/multas
+    name: 06. Verificar multas pendentes do usuário A
+    meta:
+      id: req_emprestimos_clean_006
+      created: 1784691000006
+      modified: 1784691000006
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK (false)."
+    sortKey: -1784690000950
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # SIMULAÇÃO DE ATRASO
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/simular-atraso?dataPrevistaDevolucao=2026-09-01T00:00:00
+    name: 06a. Simular atraso no empréstimo A
+    meta:
+      id: req_emprestimos_clean_006a
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "Apenas para testes — altera a data prevista para uma data passada. Esperado: 200 OK."
+    sortKey: -1784690000945
+    method: PUT
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+
+        const json = insomnia.response.json();
+
+
+        if (json.dataPrevistaDevolucao !== "2026-09-01T00:00:00") {
+          throw new Error(
+            "A data prevista de devolução não foi atualizada corretamente."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # DEVOLUÇÃO E CANCELAMENTO
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 07. Registrar devolução do empréstimo A
+    meta:
+      id: req_emprestimos_clean_007
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "Devolve o empréstimo após a simulação de atraso. Esperado: 200 OK com multa pendente."
+    sortKey: -1784690000940
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+
+        const json = insomnia.response.json();
+
+
+        if (json.status !== "DEVOLVIDO") {
+          throw new Error(
+            `Esperado status DEVOLVIDO, recebido ${json.status}`
+          );
+        }
+
+
+        if (Number(json.valorMulta) <= 0) {
+          throw new Error(
+            "A devolução deveria ter gerado uma multa maior que zero."
+          );
+        }
+
+
+        if (json.multaPaga !== false) {
+          throw new Error(
+            "A multa deveria estar pendente após a devolução."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 07a. Tentar devolver A novamente
+    meta:
+      id: req_emprestimos_clean_007a
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "O empréstimo já foi devolvido. Esperado: 409 Conflict."
+    sortKey: -1784690000935
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 409) {
+          throw new Error(
+            `Esperado HTTP 409, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/multas
+    name: 07b. Verificar multa pendente do usuário A
+    meta:
+      id: req_emprestimos_clean_007b
+      created: 1784691000007
+      modified: 1784691000007
+      isPrivate: false
+    description: "Esperado: 200 OK com true."
+    sortKey: -1784690000930
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+
+        const possuiMulta = insomnia.response.json();
+
+
+        if (possuiMulta !== true) {
+          throw new Error(
+            "O usuário deveria possuir uma multa pendente."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_b_id }}/cancelamento
+    name: 08. Cancelar empréstimo B
+    meta:
+      id: req_emprestimos_clean_008
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Caminho Feliz — Esperado: 200 OK."
+    sortKey: -1784690000927
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # EXCLUSÃO COM MULTA PENDENTE
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.usuario_id }}
+    name: 08a. Tentar remover usuário A com multa pendente
+    meta:
+      id: req_emprestimos_clean_008a
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "O usuário possui multa pendente. Esperado: 409 Conflict."
+    sortKey: -1784690000925
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 409) {
+          throw new Error(
+            `Esperado HTTP 409, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/pagar-multa
+    name: 08b. Pagar multa do empréstimo A
+    meta:
+      id: req_emprestimos_clean_008b
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Marca a multa como paga. Esperado: 200 OK."
+    sortKey: -1784690000920
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+
+        const json = insomnia.response.json();
+
+
+        if (json.multaPaga !== true) {
+          throw new Error(
+            "A resposta não confirmou o pagamento da multa."
+          );
+        }
+
+
+        if (Number(json.valorMulta) <= 0) {
+          throw new Error(
+            "O valor da multa deveria permanecer registrado."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{ _.usuario_id }}/multas
+    name: 08c. Verificar multa após pagamento
+    meta:
+      id: req_emprestimos_clean_008c
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Após o pagamento, não deve haver multa pendente. Esperado: 200 OK com false."
+    sortKey: -1784690000915
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 200) {
+          throw new Error(
+            `Esperado HTTP 200, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+
+
+        const possuiMulta = insomnia.response.json();
+
+
+        if (possuiMulta !== false) {
+          throw new Error(
+            "A multa ainda está sendo considerada pendente."
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.usuario_id }}
+    name: 08d. Remover usuário A
+    meta:
+      id: req_emprestimos_clean_008d
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "Após quitar a multa, a exclusão deve ser permitida. Esperado: 204 No Content."
+    sortKey: -1784690000910
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 204) {
+          throw new Error(
+            `Esperado HTTP 204, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/usuarios/{{ _.usuario_id }}
+    name: 08e. Consultar usuário A excluído
+    meta:
+      id: req_emprestimos_clean_008e
+      created: 1784691000008
+      modified: 1784691000008
+      isPrivate: false
+    description: "O usuário foi excluído. Esperado: 404 Not Found."
+    sortKey: -1784690000905
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    scripts:
+      afterResponse: |-
+        if (insomnia.response.code !== 404) {
+          throw new Error(
+            `Esperado HTTP 404, recebido HTTP ${insomnia.response.code}`
+          );
+        }
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # ERROS DE VALIDAÇÃO (400)
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 09. Cadastrar empréstimo com payload vazio
+    meta:
+      id: req_emprestimos_clean_009
+      created: 1784691000009
+      modified: 1784691000009
+      isPrivate: false
+    description: "Espera-se erro 400 por ausência dos campos obrigatórios."
+    sortKey: -1784690000900
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos
+    name: 10. Cadastrar empréstimo com JSON inválido
+    meta:
+      id: req_emprestimos_clean_010
+      created: 1784691000010
+      modified: 1784691000010
+      isPrivate: false
+    description: "Espera-se erro 400 por JSON malformado."
+    sortKey: -1784690000890
+    method: POST
+    body:
+      mimeType: application/json
+      text: "{"
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # ERROS DE ROTA (404)
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/999999
+    name: 11. Consultar rota inexistente
+    meta:
+      id: req_emprestimos_clean_011
+      created: 1784691000011
+      modified: 1784691000011
+      isPrivate: false
+    description: "Espera-se erro 404 para rota não mapeada."
+    sortKey: -1784690000880
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/999999/devolucao
+    name: 12. Devolver empréstimo inexistente
+    meta:
+      id: req_emprestimos_clean_012
+      created: 1784691000012
+      modified: 1784691000012
+      isPrivate: false
+    description: "Espera-se erro 404 porque o empréstimo não existe."
+    sortKey: -1784690000870
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/999999/cancelamento
+    name: 13. Cancelar empréstimo inexistente
+    meta:
+      id: req_emprestimos_clean_013
+      created: 1784691000013
+      modified: 1784691000013
+      isPrivate: false
+    description: "Espera-se erro 404 porque o empréstimo não existe."
+    sortKey: -1784690000860
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/999999/ativos/existe
+    name: 14. Verificar livro inexistente
+    meta:
+      id: req_emprestimos_clean_014
+      created: 1784691000014
+      modified: 1784691000014
+      isPrivate: false
+    description: "O controller não valida a existência do livro; espera-se 200 OK com false."
+    sortKey: -1784690000850
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # VALIDAÇÃO DE EXCLUSÃO — USUÁRIO INEXISTENTE
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/ativos
+    name: 15. Validar usuário inexistente — ativos
+    meta:
+      id: req_emprestimos_clean_015
+      created: 1784691000015
+      modified: 1784691000015
+      isPrivate: false
+    description: "Espera-se 200 OK com false."
+    sortKey: -1784690000840
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/multas
+    name: 16. Validar usuário inexistente — multas
+    meta:
+      id: req_emprestimos_clean_016
+      created: 1784691000016
+      modified: 1784691000016
+      isPrivate: false
+    description: "Espera-se 200 OK com false."
+    sortKey: -1784690000830
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # ERROS DE REGRA DE NEGÓCIO (409)
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_a_id }}/devolucao
+    name: 17. Tentar devolver A já devolvido
+    meta:
+      id: req_emprestimos_clean_017
+      created: 1784691000017
+      modified: 1784691000017
+      isPrivate: false
+    description: "Execute depois da requisição 7. Espera-se erro 409 por regra de negócio."
+    sortKey: -1784690000820
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/{{ _.emprestimo_b_id }}/cancelamento
+    name: 18. Tentar cancelar B já cancelado
+    meta:
+      id: req_emprestimos_clean_018
+      created: 1784691000018
+      modified: 1784691000018
+      isPrivate: false
+    description: "Execute depois da requisição 8. Espera-se erro 409 por regra de negócio."
+    sortKey: -1784690000810
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+  # =====================
+  # VERIFICAÇÃO FINAL
+  # =====================
+
+
+  - url: http://localhost:8080/api/v1/emprestimos/livros/{{ _.livro_b_id }}/ativos/existe
+    name: 19. Verificar ausência de empréstimo ativo no livro B
+    meta:
+      id: req_emprestimos_clean_019
+      created: 1784691000019
+      modified: 1784691000019
+      isPrivate: false
+    description: "Esperado: 200 OK com false para livro sem empréstimo ativo."
+    sortKey: -1784690000800
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+
+
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_emprestimos_ms_clean
+    created: 1784691001001
+    modified: 1784691001001
+
+
+environments:
+  name: Base Environment
+  meta:
+    id: env_emprestimos_ms_clean
+    created: 1784691001002
+    modified: 1784691001002
+    isPrivate: false
+  data:
+    usuario_id: ""
+    usuario_b_id: ""
+    livro_a_id: ""
+    livro_b_id: ""
+    emprestimo_a_id: ""
+    emprestimo_b_id: ""
