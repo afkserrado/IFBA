@@ -98,6 +98,23 @@ public class GlobalExceptionHandler {
                 .body(resposta);
     }
 
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<ErroResponseDTO> credenciaisInvalidas(
+        CredenciaisInvalidasException ex,
+        HttpServletRequest request
+    ) {
+        ErroResponseDTO resposta = new ErroResponseDTO(
+            LocalDateTime.now(),
+            HttpStatus.UNAUTHORIZED.value(),
+            HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+            ex.getMessage(),
+            request.getRequestURI()
+        );
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(resposta);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponseDTO> erroInterno(
         Exception ex,

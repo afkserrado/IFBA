@@ -22,6 +22,7 @@ import br.edu.ifba.usuarios_ms.messaging.UsuarioProducer;
 import br.edu.ifba.usuarios_ms.repository.UsuarioRepository;
 import feign.FeignException;
 import feign.RetryableException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioService {
@@ -30,14 +31,21 @@ public class UsuarioService {
     private final UsuarioProducer usuarioProducer;
     private final EmprestimoClient emprestimoClient;
 
+    // Codificador usado para gerar e comparar hashes de senha com BCrypt
+    private final PasswordEncoder passwordEncoder;
+
     public UsuarioService(
         UsuarioRepository usuarioRepository,
         UsuarioProducer usuarioProducer,
-        EmprestimoClient emprestimoClient
+        EmprestimoClient emprestimoClient,
+        PasswordEncoder passwordEncoder
     ) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioProducer = usuarioProducer;
         this.emprestimoClient = emprestimoClient;
+
+        // Spring injeta o BCryptPasswordEncoder definido no SecurityConfig
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -53,6 +61,12 @@ public class UsuarioService {
 
         // Força o papel como USER, ignorando o role enviado no DTO
         dto.setRole(Role.USER);
+
+        // A senha nunca deve ser persistida em texto puro.
+        // O BCrypt gera um hash unilateral a partir da senha informada.
+        // Esse hash será salvo no banco e usado posteriormente
+        // pelo AuthService para validar o login.
+        dto.setSenha(passwordEncoder.encode(dto.getSenha()));
 
         Usuario usuario = UsuarioMapper.converterDtoParaEntidade(dto);
 

@@ -23,6 +23,12 @@ services:
     # O serviço estará acessível externamente pela porta 8081.
     ports:
       - "8081:8081"
+
+    # Carrega variáveis definidas no arquivo .env do microsserviço.
+    # O Docker Compose lê este arquivo no momento da criação do container
+    # e disponibiliza as variáveis como variáveis de ambiente.
+    env_file:
+      - ../backend/usuarios-ms/.env
       
     # Variáveis de ambiente que sobrescrevem as configurações do application.properties.
     # Isso permite que o serviço se conecte à infraestrutura rodando dentro do Docker.
