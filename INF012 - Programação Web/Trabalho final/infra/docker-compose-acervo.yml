@@ -23,6 +23,12 @@ services:
     # O serviço estará acessível externamente pela porta 8082.
     ports:
       - "8082:8082"
+
+    # Carrega variáveis definidas no arquivo .env do microsserviço de acervo.
+    # O Docker Compose disponibiliza essas variáveis como variáveis de ambiente
+    # dentro do contêiner.
+    env_file:
+      - ../backend/acervo-ms/.env
       
     # Variáveis de ambiente que sobrescrevem as configurações do application.properties.
     # Isso permite que o serviço se conecte à infraestrutura rodando dentro do Docker.

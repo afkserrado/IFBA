@@ -1,21 +1,32 @@
 package br.edu.ifba.usuarios_ms.config;
 
+import java.nio.charset.StandardCharsets;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import io.jsonwebtoken.security.Keys;
 
 /*
  * Classe central de configuração de segurança do usuarios-ms.
  *
- * Por enquanto, ela tem duas responsabilidades:
+ * Ela tem as seguintes responsabilidades:
  *
  * 1. Criar o PasswordEncoder usado para hash e comparação de senhas.
- * 2. Manter todas as rotas públicas temporariamente,
- *    para permitir testar o login antes de proteger os endpoints.
+ * 2. Configurar o JwtDecoder responsável por validar os tokens recebidos.
+ * 3. Definir as rotas públicas e as rotas que exigem autenticação.
  */
 @Configuration
 @EnableWebSecurity
@@ -45,41 +56,107 @@ public class SecurityConfig {
     /*
      * Define a cadeia de filtros de segurança.
      *
-     * Esta configuração é temporária.
+     * A partir desta etapa, o serviço valida JWTs recebidos
+     * no cabeçalho Authorization.
      *
-     * anyRequest().permitAll() permite que todos os endpoints
-     * continuem acessíveis enquanto implementamos o login.
-     *
-     * Nas próximas etapas, substituiremos esta regra por:
-     * - rotas públicas, como login e cadastro;
-     * - rotas autenticadas;
-     * - rotas restritas a ADMIN.
+     * Regras atuais:
+     * - POST /api/v1/auth/login permanece público;
+     * - POST /api/v1/usuarios permanece público;
+     * - qualquer outra rota exige um JWT válido.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+        HttpSecurity http,
+        JwtDecoder jwtDecoder
+    ) throws Exception {
 
         http
             /*
              * Desabilita CSRF temporariamente.
              *
              * CSRF é relevante principalmente para aplicações que usam
-             * autenticação por cookie/sessão. Nossa API usará Bearer Token,
+             * autenticação por cookie/sessão. A API usará Bearer Token,
              * então essa proteção não é necessária neste momento.
              */
             .csrf(csrf -> csrf.disable())
 
             /*
+             * Conecta o Resource Server JWT à cadeia de filtros.
+             *
+             * O Spring usará o bean JwtDecoder criado nesta mesma classe
+             * para validar a assinatura, o emissor e a expiração do token.
+             */
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.decoder(jwtDecoder))
+            )
+
+            /*
              * Define as regras de autorização.
              *
-             * Por enquanto, qualquer requisição é permitida.
+             * As rotas de autenticação e cadastro são públicas.
+             * Todas as demais exigem um token válido.
              */
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
+                .requestMatchers(
+                    org.springframework.http.HttpMethod.POST,
+                    "/api/v1/auth/login",
+                    "/api/v1/usuarios"
+                ).permitAll()
+
+
+                .anyRequest().authenticated()
             );
 
         /*
          * Constrói e retorna a cadeia de filtros configurada.
          */
         return http.build();
+    }
+
+    /*
+     * Registra o componente responsável por validar os JWTs.
+     *
+     * Usa o mesmo segredo e a mesma conversão para bytes
+     * utilizados pelo JwtService na emissão do token.
+     */
+    @Bean
+    public JwtDecoder jwtDecoder(
+        @Value("${app.security.jwt.secret}") String segredo,
+        @Value("${app.security.jwt.issuer}") String emissor
+    ) {
+        /*
+         * Converte o texto do segredo para bytes UTF-8.
+         *
+         * O JwtService atual também utiliza os bytes do texto. 
+         * Os dois lados precisam usar exatamente o mesmo 
+         * material de chave.
+         */
+        SecretKey chaveAssinatura = Keys.hmacShaKeyFor(
+            segredo.getBytes(StandardCharsets.UTF_8)
+        );
+
+        /*
+         * Cria o decoder com a chave compartilhada.
+         *
+         * Aceita explicitamente HS256, o mesmo algoritmo
+         * usado pelo JwtService para assinar os tokens.
+         */
+        NimbusJwtDecoder decoder = NimbusJwtDecoder
+            .withSecretKey(chaveAssinatura)
+            .macAlgorithm(MacAlgorithm.HS256)
+            .build();
+
+        /*
+         * Adiciona a verificação de "iss" aos validadores padrão,
+         * incluindo as verificações temporais de "exp" e "nbf".
+         *
+         * "iat" indica quando o token foi emitido, mas não deve-se
+         * afirmar que seu valor é validado automaticamente aqui.
+         */
+        decoder.setJwtValidator(
+            JwtValidators.createDefaultWithIssuer(emissor)
+        );
+
+        return decoder;
     }
 }
