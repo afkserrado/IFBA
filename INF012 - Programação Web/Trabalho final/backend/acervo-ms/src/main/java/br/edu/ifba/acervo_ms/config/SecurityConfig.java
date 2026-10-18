@@ -83,8 +83,16 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/livros/**")
                     .hasRole("ADMIN")
 
-                // Exige autenticação para qualquer outra requisição,
-                // incluindo os endpoints internos de estoque.
+                // Exige o papel ADMIN para reduzir o estoque durante um empréstimo.
+                .requestMatchers(HttpMethod.POST, "/api/v1/livros/*/reduzir-estoque")
+                    .hasRole("ADMIN")
+
+                // Exige o papel ADMIN para aumentar o estoque durante uma devolução.
+                .requestMatchers(HttpMethod.POST, "/api/v1/livros/*/aumentar-estoque")
+                    .hasRole("ADMIN")
+
+                // Exige autenticação para qualquer outra requisição
+                // que não tenha sido liberada ou restrita anteriormente.
                 .anyRequest().authenticated()
             );
 
