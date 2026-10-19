@@ -29,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequestMapping("/api/v1/emprestimos")
 @Tag(name = "Empréstimos", description = "Endpoints para gerenciamento do ciclo de vida de empréstimos de livros")
@@ -78,13 +80,29 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoService.listarTodos());
     }
 
+    /**
+     * Consulta os empréstimos vinculados a um usuário.
+     *
+     * Um ADMIN pode consultar os empréstimos de qualquer usuário.
+     * Um USER pode consultar somente os próprios empréstimos,
+     * comparando o usuarioId da claim do JWT com o usuarioId recebido na URL.
+     */
     @GetMapping("/usuario/{usuarioId}")
-    @Operation(summary = "Consulta empréstimos de um usuário", description = "Retorna todos os empréstimos (ativos e encerrados) vinculados a um usuário específico.")
+    @PreAuthorize(
+        "hasRole('ADMIN') or " +
+        "(hasRole('USER') and authentication.token.claims['usuarioId'] == #usuarioId)"
+    )
+    @Operation(
+        summary = "Consulta empréstimos de um usuário",
+        description = "Retorna todos os empréstimos, ativos e encerrados, vinculados a um usuário específico."
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de empréstimos do usuário gerada"),
+        @ApiResponse(responseCode = "403", description = "Usuário sem permissão para consultar estes empréstimos")
     })
     public ResponseEntity<List<EmprestimoResponseDTO>> consultarEmprestimosPorUsuario(
-        @Parameter(description = "ID do usuário consultado") @PathVariable Long usuarioId
+        @Parameter(description = "ID do usuário consultado")
+        @PathVariable Long usuarioId
     ) {
         return ResponseEntity.ok(emprestimoService.consultarPorUsuario(usuarioId));
     }
