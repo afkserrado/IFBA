@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,7 +112,18 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Atualiza os dados de um usuário.
+     *
+     * Um ADMIN pode atualizar qualquer usuário.
+     * Um USER pode atualizar apenas a própria conta,
+     * comparando o usuarioId da claim do JWT com o id recebido na URL.
+     */
     @PutMapping("/{id}")
+    @PreAuthorize(
+        "hasRole('ADMIN') or " +
+        "(hasRole('USER') and authentication.token.claims['usuarioId']?.toString() == #id.toString())"
+    )
     @Operation(
         summary = "Atualiza os dados de um usuário existente",
         description = "Modifica os dados cadastrais permitidos de um usuário existente a partir do seu ID."
@@ -147,7 +159,18 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Remove um usuário do sistema.
+     *
+     * Um ADMIN pode remover qualquer usuário.
+     * Um USER pode remover apenas a própria conta,
+     * comparando o usuarioId da claim do JWT com o id recebido na URL.
+     */
     @DeleteMapping("/{id}")
+    @PreAuthorize(
+        "hasRole('ADMIN') or " +
+        "(hasRole('USER') and authentication.token.claims['usuarioId']?.toString() == #id.toString())"
+    )
     @Operation(
         summary = "Remove um usuário do sistema",
         description = "Deleta a conta do usuário caso ele não possua multas em aberto ou empréstimos ativos pendentes de devolução."
@@ -204,17 +227,13 @@ public class UsuarioController {
     @GetMapping("/{id}/validar-situacao")
     @Operation(
         summary = "Valida existência do usuário",
-        description = "Verifica se existe um usuário cadastrado com o identificador informado."
+        description = "Retorna true se existir um usuário cadastrado com o identificador informado; caso contrário, retorna false."
     )
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Usuário encontrado"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Usuário não encontrado",
-            content = @Content
+            description = "Resultado da verificação de existência do usuário",
+            content = @Content(schema = @Schema(implementation = Boolean.class))
         )
     })
     public ResponseEntity<Boolean> validarSituacaoCadastral(

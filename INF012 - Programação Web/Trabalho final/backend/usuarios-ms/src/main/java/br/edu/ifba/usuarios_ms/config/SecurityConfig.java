@@ -7,6 +7,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +17,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import io.jsonwebtoken.security.Keys;
@@ -30,6 +33,7 @@ import io.jsonwebtoken.security.Keys;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     /*
@@ -67,7 +71,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
         HttpSecurity http,
-        JwtDecoder jwtDecoder
+        JwtDecoder jwtDecoder,
+        JwtAuthenticationConverter jwtAuthenticationConverter
     ) throws Exception {
 
         http
@@ -87,7 +92,10 @@ public class SecurityConfig {
              * para validar a assinatura, o emissor e a expiração do token.
              */
             .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.decoder(jwtDecoder))
+                .jwt(jwt -> jwt
+                    .decoder(jwtDecoder)
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter)
+                )
             )
 
             /*
@@ -97,13 +105,33 @@ public class SecurityConfig {
              * Todas as demais exigem um token válido.
              */
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    org.springframework.http.HttpMethod.POST,
-                    "/api/v1/auth/login",
-                    "/api/v1/usuarios"
-                ).permitAll()
+                // Login e cadastro permanecem públicos.
+                // O cadastro sempre cria usuários com papel USER.
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/usuarios")
+                    .permitAll()
 
+                // Apenas ADMIN pode listar todos os usuários.
+                .requestMatchers(HttpMethod.GET, "/api/v1/usuarios")
+                    .hasRole("ADMIN")
 
+                // Apenas ADMIN pode buscar usuários por e-mail.
+                .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/busca-email")
+                    .hasRole("ADMIN")
+
+                // Apenas ADMIN pode buscar usuários por ID.
+                // Um USER não pode consultar nem o próprio perfil por ID.
+                .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/*")
+                    .hasRole("ADMIN")
+
+                // Endpoint interno utilizado pelo emprestimos-ms.
+                // Como o emprestimos-ms propaga o token do funcionário ADMIN,
+                // apenas ADMIN pode validar a situação cadastral de um usuário.
+                .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/*/validar-situacao")
+                    .hasRole("ADMIN")
+
+                // Qualquer outra requisição exige autenticação.
+                // As regras de acesso à própria conta serão definidas
+                // com @PreAuthorize no UsuarioController.
                 .anyRequest().authenticated()
             );
 

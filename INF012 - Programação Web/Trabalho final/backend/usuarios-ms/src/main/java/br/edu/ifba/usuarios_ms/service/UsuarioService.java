@@ -22,7 +22,11 @@ import br.edu.ifba.usuarios_ms.messaging.UsuarioProducer;
 import br.edu.ifba.usuarios_ms.repository.UsuarioRepository;
 import feign.FeignException;
 import feign.RetryableException;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 @Service
 public class UsuarioService {
@@ -100,6 +104,14 @@ public class UsuarioService {
     public UsuarioResponseDTO atualizarUsuario(@NonNull Long id, UsuarioUpdateRequestDTO dto) {
         
         Usuario usuario = obterUsuario(id);
+
+        // Impede que um usuário comum altere o próprio papel.
+        // Apenas um ADMIN pode promover ou rebaixar usuários.
+        if (!isAdmin() && dto.getRole() != null && dto.getRole() != usuario.getRole()) {
+            throw new OperacaoNaoPermitidaException(
+                "Apenas administradores podem alterar o papel do usuário."
+            );
+        }
 
         // Valida e-mail duplicado
         if (!usuario.getEmail().equals(dto.getEmail()) && usuarioRepository.existsByEmail(dto.getEmail())) {
@@ -201,5 +213,24 @@ public class UsuarioService {
 
             throw ex;
         }
+    }
+
+    /**
+     * Verifica se o usuário autenticado possui o papel ADMIN.
+     *
+     * O token JWT é obtido a partir do contexto de segurança do Spring.
+     * A claim "role" foi convertida pelo JwtAuthenticationConverter
+     * na autoridade ROLE_ADMIN.
+     */
+    private boolean isAdmin() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuthentication) {
+            return jwtAuthentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+        }
+
+        return false;
     }
 }
