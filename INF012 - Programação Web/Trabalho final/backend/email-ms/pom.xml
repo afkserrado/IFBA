@@ -124,6 +124,15 @@
             <version>2.8.16</version>
         </dependency>
 
+        <!-- ============================ -->
+        <!-- OAuth 2.0 Resource Server -->
+        <!-- Permite validar Bearer Tokens/JWTs recebidos nas requisições -->
+        <!-- ============================ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!-- ============================ -->
