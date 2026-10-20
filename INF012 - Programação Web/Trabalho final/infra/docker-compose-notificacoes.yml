@@ -23,6 +23,12 @@ services:
     # O serviço estará acessível externamente pela porta 8084.
     ports:
       - "8084:8084"
+
+    # Carrega variáveis definidas no arquivo .env do microsserviço de notificações.
+    # O Docker Compose disponibiliza essas variáveis como variáveis de ambiente
+    # dentro do contêiner.
+    env_file:
+      - ../backend/notificacoes-ms/.env
       
     # Variáveis de ambiente que sobrescrevem as configurações do application.properties.
     # Isso permite que o serviço se conecte à infraestrutura rodando dentro do Docker.
@@ -43,6 +49,10 @@ services:
 
       # URL do email-ms dentro da rede Docker.
       - MICROSERVICE_EMAIL_URL=http://email-ms:8085
+
+      # URL do usuarios-ms dentro da rede Docker.
+      # Necessária para o notificacoes-ms realizar login e obter o JWT.
+      - MICROSERVICE_USUARIOS_URL=http://usuarios-ms:8081
 
       # Destinatário padrão configurado para as notificações.
       - EMAIL_DESTINATARIO=${EMAIL_NOTIFICACAO_DESTINO}

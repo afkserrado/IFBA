@@ -13,6 +13,7 @@ import br.edu.ifba.notificacoes_ms.dto.LivroCadastradoEvent;
 import br.edu.ifba.notificacoes_ms.dto.LivroDeletadoEvent;
 import br.edu.ifba.notificacoes_ms.dto.UsuarioCriadoEvent;
 import br.edu.ifba.notificacoes_ms.dto.UsuarioDeletadoEvent;
+import feign.FeignException;
 
 @Service
 public class NotificacaoService {
@@ -21,13 +22,20 @@ public class NotificacaoService {
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final EmailClient emailClient;
+
+    // Serviço responsável por obter, reutilizar e invalidar o JWT
+    // utilizado nas chamadas ao email-ms.
+    private final ServiceTokenService serviceTokenService;
+
     private final String destinatario;
 
     public NotificacaoService(
             EmailClient emailClient,
+            ServiceTokenService serviceTokenService,
             @Value("${email.destinatario}") String destinatario
     ) {
         this.emailClient = emailClient;
+        this.serviceTokenService = serviceTokenService;
         this.destinatario = destinatario;
     }
 
@@ -141,12 +149,32 @@ public class NotificacaoService {
         enviar(email);
     }
 
+     /*
+     * Envia o e-mail por meio do email-ms.
+     *
+     * O cabeçalho Authorization é adicionado automaticamente
+     * pelo EmailFeignInterceptor.
+     *
+     * Se o email-ms retornar 401 Unauthorized, o token atual
+     * é invalidado. Assim, a próxima notificação fará login
+     * novamente no usuarios-ms e obterá um novo JWT.
+     */
     private void enviar(EmailRequest email) {
 
         try {
             emailClient.enviarEmail(email);
-        } 
-        
+        }
+
+        // O email-ms rejeitou o token: ele pode estar expirado ou inválido
+        catch (FeignException.Unauthorized e) {
+
+            serviceTokenService.invalidateToken();
+
+            throw new RuntimeException(
+                    "Token do notificacoes-ms inválido ou expirado ao chamar o email-ms", e
+            );
+        }
+
         catch (Exception e) {
             throw new RuntimeException(
                     "Erro ao enviar notificação por e-mail", e
