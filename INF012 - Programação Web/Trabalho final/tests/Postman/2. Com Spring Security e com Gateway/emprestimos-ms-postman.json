@@ -1,0 +1,1817 @@
+{
+  "info": {
+    "_postman_id": "wrk_emprestimos_ms_jwt_gateway",
+    "name": "Emprestimos MS (Com Segurança JWT e Gateway)",
+    "description": "Testes via Gateway dos endpoints do microserviço de gerenciamento de empréstimos, incluindo Caminhos de Erro, autenticação JWT e autorização por papel.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "admin_email",
+      "value": "admin@biblioteca.com"
+    },
+    {
+      "key": "admin_senha",
+      "value": "YyoPaTiToa"
+    },
+    {
+      "key": "usuario_a_email",
+      "value": "akserrado@gmail.com"
+    },
+    {
+      "key": "usuario_a_senha",
+      "value": "user123"
+    },
+    {
+      "key": "admin_token",
+      "value": ""
+    },
+    {
+      "key": "usuario_a_token",
+      "value": ""
+    },
+    {
+      "key": "usuario_id",
+      "value": ""
+    },
+    {
+      "key": "usuario_b_id",
+      "value": ""
+    },
+    {
+      "key": "livro_a_id",
+      "value": ""
+    },
+    {
+      "key": "livro_b_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_a_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_b_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00. [200] Login como ADMIN",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "auth", "login"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Obtém o JWT ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"senha\": \"{{admin_senha}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Token JWT foi retornado', function () {",
+              "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    pm.environment.set('admin_token', json.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. [201] Criar usuário A (Gmail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Cadastro de usuário é público.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"11111111111\",\n  \"nome\": \"Anderson Serrado\",\n  \"email\": \"{{usuario_a_email}}\",\n  \"senha\": \"{{usuario_a_senha}}\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201 ou 409 se o usuário já existir', function () {",
+              "    pm.expect([201, 409]).to.include(pm.response.code);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('usuario_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. [200] Login como usuário A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "auth", "login"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Obtém o JWT do usuário A para consultar os próprios empréstimos.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{usuario_a_email}}\",\n  \"senha\": \"{{usuario_a_senha}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Token JWT foi retornado', function () {",
+              "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    pm.environment.set('usuario_a_token', json.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. [201] Criar usuário B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Cadastro de usuário é público.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"22222222222\",\n  \"nome\": \"Anderson Serrado Outlook\",\n  \"email\": \"akserrado+usuario-b@gmail.com\",\n  \"senha\": \"user123\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201 ou 409 se o usuário já existir', function () {",
+              "    pm.expect([201, 409]).to.include(pm.response.code);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('usuario_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. [201] Criar livro A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Arquitetura Limpa\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9788550804606\",\n  \"quantidadeTotal\": 2\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro_a_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. [201] Criar livro B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Padrões de Projeto\",\n  \"autor\": \"Erich Gamma\",\n  \"isbn\": \"9788573076103\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. [201] Cadastrar empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Empréstimo do usuário A no livro A. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_id}},\n  \"livroId\": {{livro_a_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('emprestimo_a_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. [201] Cadastrar empréstimo B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Empréstimo do usuário B no livro B. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_b_id}},\n  \"livroId\": {{livro_b_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('emprestimo_b_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. [200] Listar todos os empréstimos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. [200] Consultar empréstimos do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{usuario_a_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/usuario/{{usuario_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "usuario", "{{usuario_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. O usuário A consulta os próprios empréstimos."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. [Erro 403] Usuário A tentar consultar empréstimos do usuário B",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{usuario_a_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/usuario/{{usuario_b_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "usuario", "{{usuario_b_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden. Um USER só pode consultar os próprios empréstimos."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. [200] Verificar empréstimo ativo no livro A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/{{livro_a_id}}/ativos/existe",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "livros", "{{livro_a_id}}", "ativos", "existe"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com true."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Existe empréstimo ativo', function () {",
+              "    pm.expect(pm.response.json()).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. [200] Verificar empréstimos ativos do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/ativos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "{{usuario_id}}", "ativos"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com true."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Usuário possui empréstimo ativo', function () {",
+              "    pm.expect(pm.response.json()).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. [200] Verificar multas pendentes do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "{{usuario_id}}", "multas"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Usuário não possui multa pendente', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. [200] Simular atraso no empréstimo A",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/simular-atraso?dataPrevistaDevolucao=2026-09-01T00:00:00",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_a_id}}", "simular-atraso"],
+          "query": [
+            {
+              "key": "dataPrevistaDevolucao",
+              "value": "2026-09-01T00:00:00"
+            }
+          ]
+        },
+        "description": "Apenas para testes — Esperado: 200 OK. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. [200] Registrar devolução do empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_a_id}}", "devolucao"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com multa pendente. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16. [Erro 409] Tentar devolver A novamente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_a_id}}", "devolucao"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois o empréstimo já foi devolvido."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. [200] Verificar multa pendente do usuário A",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "{{usuario_id}}", "multas"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com true."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Usuário possui multa pendente', function () {",
+              "    pm.expect(pm.response.json()).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18. [200] Cancelar empréstimo B",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/cancelamento",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_b_id}}", "cancelamento"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19. [Erro 409] Tentar remover usuário A com multa pendente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios", "{{usuario_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois o usuário possui multa pendente."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20. [200] Pagar multa do empréstimo A",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/pagar-multa",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_a_id}}", "pagar-multa"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21. [200] Verificar multa após pagamento",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/{{usuario_id}}/multas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "{{usuario_id}}", "multas"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Usuário não possui multa pendente', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22. [204] Remover usuário A",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios", "{{usuario_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 204 No Content. Requer papel ADMIN ou ser o próprio usuário."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23. [Erro 404] Consultar usuário A excluído",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios/{{usuario_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios", "{{usuario_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o usuário foi excluído."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24. [Erro 401] Cadastrar empréstimo sem token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_b_id}},\n  \"livroId\": {{livro_a_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25. [Erro 403] Cadastrar empréstimo com token USER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{usuario_a_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN cadastra empréstimos.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_b_id}},\n  \"livroId\": {{livro_a_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26. [Erro 401] Listar empréstimos sem token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27. [Erro 403] Listar empréstimos com token USER",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{usuario_a_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN lista todos os empréstimos."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28. [Erro 401] Devolver empréstimo sem token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_b_id}}", "devolucao"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29. [Erro 403] Devolver empréstimo com token USER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{usuario_a_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_b_id}}", "devolucao"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN registra devolução."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30. [Erro 400] Cadastrar empréstimo com payload vazio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 400 Bad Request por ausência dos campos obrigatórios.",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31. [Erro 400] Cadastrar empréstimo com JSON inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho de Erro — Esperado: 400 Bad Request por JSON malformado.",
+        "body": {
+          "mode": "raw",
+          "raw": "{",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32. [Erro 404] Consultar rota inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "999999"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found para rota não mapeada."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33. [Erro 404] Devolver empréstimo inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "999999", "devolucao"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "34. [Erro 404] Cancelar empréstimo inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/999999/cancelamento",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "999999", "cancelamento"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "35. [200] Verificar livro inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/999999/ativos/existe",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "livros", "999999", "ativos", "existe"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false. O controller não valida a existência do livro."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Não existe empréstimo ativo', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "36. [200] Validar usuário inexistente — ativos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/ativos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "999999", "ativos"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Não existe empréstimo ativo', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "37. [200] Validar usuário inexistente — multas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/validar-exclusao/usuario/999999/multas",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "validar-exclusao", "usuario", "999999", "multas"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Não existe multa pendente', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "38. [Erro 409] Tentar devolver A já devolvido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_a_id}}/devolucao",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_a_id}}", "devolucao"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict por regra de negócio."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "39. [Erro 409] Tentar cancelar B já cancelado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_b_id}}/cancelamento",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_b_id}}", "cancelamento"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict por regra de negócio."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "40. [200] Verificar ausência de empréstimo ativo no livro B",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/livros/{{livro_b_id}}/ativos/existe",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "livros", "{{livro_b_id}}", "ativos", "existe"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK com false."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Não existe empréstimo ativo', function () {",
+              "    pm.expect(pm.response.json()).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

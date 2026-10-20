@@ -1,0 +1,1348 @@
+{
+	"id": "e0f50c47-3953-4833-9890-d0a94a09a733",
+	"name": "Usuarios MS (Com Segurança JWT e Gateway)",
+	"timestamp": "2026-10-20T18:26:59.696Z",
+	"collection_id": "58689098-16c85d37-f846-41c9-8fb5-82b211476651",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 46,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-10-20T18:26:58.014Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "ff9db26a-08b6-4c16-9fab-fd16738b4b68",
+			"name": "00. [200] Login como ADMIN inicial",
+			"url": "http://localhost:8080/api/v1/auth/login",
+			"time": 76,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true,
+				"Token JWT foi retornado": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token JWT foi retornado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				76
+			],
+			"allTests": [
+				{
+					"Status code é 200": true,
+					"Token JWT foi retornado": true
+				}
+			]
+		},
+		{
+			"id": "af3e4f08-5513-4976-abda-5907b1edcfbf",
+			"name": "01. [201] Criar livro para testes de empréstimo",
+			"url": "http://localhost:8080/api/v1/livros",
+			"time": 22,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				22
+			],
+			"allTests": [
+				{
+					"Status code é 201": true
+				}
+			]
+		},
+		{
+			"id": "9a11377d-3b7c-4b1c-aada-a76c31e927c6",
+			"name": "02. [201] Cadastrar USER 1",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 75,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201 ou 409 se o usuário já existir": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201 ou 409 se o usuário já existir": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				75
+			],
+			"allTests": [
+				{
+					"Status code é 201 ou 409 se o usuário já existir": true
+				}
+			]
+		},
+		{
+			"id": "6118bb1b-7deb-4ef9-9b38-2effffa2ebd8",
+			"name": "03. [200] Login como USER 1",
+			"url": "http://localhost:8080/api/v1/auth/login",
+			"time": 73,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true,
+				"Token JWT foi retornado": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token JWT foi retornado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				73
+			],
+			"allTests": [
+				{
+					"Status code é 200": true,
+					"Token JWT foi retornado": true
+				}
+			]
+		},
+		{
+			"id": "5a19f7e8-4b68-4314-9163-d55967f39abe",
+			"name": "04. [201] Cadastrar USER 2",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 90,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201 ou 409 se o usuário já existir": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201 ou 409 se o usuário já existir": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				90
+			],
+			"allTests": [
+				{
+					"Status code é 201 ou 409 se o usuário já existir": true
+				}
+			]
+		},
+		{
+			"id": "9d35aada-bded-42f4-9952-b6030f2caf93",
+			"name": "05. [201] Cadastrar ADMIN de teste",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 10,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 201 ou 409 se o usuário já existir": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201 ou 409 se o usuário já existir": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code é 201 ou 409 se o usuário já existir": true
+				}
+			]
+		},
+		{
+			"id": "b138f205-37d7-4520-bdfb-5de2503c1468",
+			"name": "06. [201] Cadastrar USER com empréstimo ativo",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 92,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201 ou 409 se o usuário já existir": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201 ou 409 se o usuário já existir": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				92
+			],
+			"allTests": [
+				{
+					"Status code é 201 ou 409 se o usuário já existir": true
+				}
+			]
+		},
+		{
+			"id": "bf090a9d-784f-4e77-ba6f-1aff595dac38",
+			"name": "07. [201] Cadastrar USER com multa pendente",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 78,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201 ou 409 se o usuário já existir": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201 ou 409 se o usuário já existir": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				78
+			],
+			"allTests": [
+				{
+					"Status code é 201 ou 409 se o usuário já existir": true
+				}
+			]
+		},
+		{
+			"id": "68a0e835-37d3-450a-a28b-9dce4802dd4b",
+			"name": "08. [201] Criar empréstimo ativo para user_com_emprestimo",
+			"url": "http://localhost:8080/api/v1/emprestimos",
+			"time": 40,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				40
+			],
+			"allTests": [
+				{
+					"Status code é 201": true
+				}
+			]
+		},
+		{
+			"id": "419484bd-2183-4bed-a782-16f2d8040615",
+			"name": "09. [201] Criar empréstimo com multa para user_com_multa",
+			"url": "http://localhost:8080/api/v1/emprestimos",
+			"time": 39,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code é 201": true
+			},
+			"testPassFailCounts": {
+				"Status code é 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				39
+			],
+			"allTests": [
+				{
+					"Status code é 201": true
+				}
+			]
+		},
+		{
+			"id": "233cd6cb-22f0-49ab-a631-ca40b6139a7e",
+			"name": "10. [200] Simular atraso para gerar multa",
+			"url": "http://localhost:8080/api/v1/emprestimos/2/simular-atraso?dataPrevistaDevolucao=2026-09-01T00:00:00",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "3c4d6730-8059-446f-b3e3-b5385575e235",
+			"name": "11. [200] Devolver empréstimo com multa",
+			"url": "http://localhost:8080/api/v1/emprestimos/2/devolucao",
+			"time": 23,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "a275f5be-b4ff-4f75-8685-95d5a7f47ebb",
+			"name": "12. [200] Listar todos os usuários",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "a1bd5944-2172-447c-a18c-c8ef865deae9",
+			"name": "13. [200] Buscar usuário por ID",
+			"url": "http://localhost:8080/api/v1/usuarios/4",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "4fc7391e-bbe9-4ed7-afea-9b8c64b304e1",
+			"name": "14. [Erro 403] USER 1 tentar buscar USER 2 por ID",
+			"url": "http://localhost:8080/api/v1/usuarios/5",
+			"time": 5,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code é 403": true
+			},
+			"testPassFailCounts": {
+				"Status code é 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code é 403": true
+				}
+			]
+		},
+		{
+			"id": "b885aefc-f6d0-460e-ad53-62b63d467002",
+			"name": "15. [200] Buscar usuário por e-mail",
+			"url": "http://localhost:8080/api/v1/usuarios/busca-email?email=akserrado@gmail.com",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "213ad2ec-571b-4d86-9233-58a576c0adf1",
+			"name": "16. [200] Validar situação do usuário",
+			"url": "http://localhost:8080/api/v1/usuarios/4/validar-situacao",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true,
+				"Usuário existe": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Usuário existe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code é 200": true,
+					"Usuário existe": true
+				}
+			]
+		},
+		{
+			"id": "eadcac43-aa8a-400c-bc94-5c5157292b22",
+			"name": "17. [200] USER 1 atualizar a própria conta",
+			"url": "http://localhost:8080/api/v1/usuarios/4",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "c2b4280a-904d-47b4-a720-d229e9d8eeb6",
+			"name": "18. [Erro 403] USER 1 tentar atualizar USER 2",
+			"url": "http://localhost:8080/api/v1/usuarios/5",
+			"time": 8,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code é 403": true
+			},
+			"testPassFailCounts": {
+				"Status code é 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 403": true
+				}
+			]
+		},
+		{
+			"id": "cdbf59c8-03e4-4546-adab-c26fc94ee9da",
+			"name": "19. [Erro 409] Tentar remover usuário com empréstimo ativo",
+			"url": "http://localhost:8080/api/v1/usuarios/6",
+			"time": 12,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "35758e5f-95f0-423a-8107-fb61d801a4c4",
+			"name": "20. [Erro 409] Tentar remover usuário com multa pendente",
+			"url": "http://localhost:8080/api/v1/usuarios/7",
+			"time": 15,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "df28d6f2-7a97-432e-a452-755ff3021f60",
+			"name": "21. [200] Cancelar empréstimo do user_com_emprestimo",
+			"url": "http://localhost:8080/api/v1/emprestimos/1/cancelamento",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "2c28eefa-5814-4dee-9761-ba6d6fedc830",
+			"name": "22. [204] Remover usuário após cancelar empréstimo",
+			"url": "http://localhost:8080/api/v1/usuarios/6",
+			"time": 15,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code é 204": true
+			},
+			"testPassFailCounts": {
+				"Status code é 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code é 204": true
+				}
+			]
+		},
+		{
+			"id": "cc566d9d-c7a0-4408-8c8b-3c249ae211e1",
+			"name": "23. [200] Pagar multa do user_com_multa",
+			"url": "http://localhost:8080/api/v1/emprestimos/2/pagar-multa",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "0abe4eff-e929-4d30-933e-a75a14026614",
+			"name": "24. [204] Remover usuário após quitar multa",
+			"url": "http://localhost:8080/api/v1/usuarios/7",
+			"time": 18,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code é 204": true
+			},
+			"testPassFailCounts": {
+				"Status code é 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code é 204": true
+				}
+			]
+		},
+		{
+			"id": "d2fb1894-7077-4f33-af17-47773c89961b",
+			"name": "25. [Erro 400] Cadastrar usuário com payload inválido",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 6,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code é 400": true
+			},
+			"testPassFailCounts": {
+				"Status code é 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				6
+			],
+			"allTests": [
+				{
+					"Status code é 400": true
+				}
+			]
+		},
+		{
+			"id": "85c498a6-4034-4ca6-978d-0a37c0f6bdd8",
+			"name": "26. [Erro 409] Cadastrar usuário com CPF duplicado",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 10,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "379c4b2f-653f-409b-91b7-95297a49cedd",
+			"name": "27. [Erro 409] Cadastrar usuário com e-mail duplicado",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 8,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "a9eabb6a-e135-42cf-97c5-fc549f0f7f14",
+			"name": "28. [Erro 401] Listar usuários sem token",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 5,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code é 401": true
+			},
+			"testPassFailCounts": {
+				"Status code é 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code é 401": true
+				}
+			]
+		},
+		{
+			"id": "c0f270c5-d1d8-411a-81a7-1192aa95c856",
+			"name": "29. [Erro 403] Listar usuários com token USER",
+			"url": "http://localhost:8080/api/v1/usuarios",
+			"time": 5,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code é 403": true
+			},
+			"testPassFailCounts": {
+				"Status code é 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code é 403": true
+				}
+			]
+		},
+		{
+			"id": "60ce39b2-2a3c-4b8d-9b55-42bb20c3a132",
+			"name": "30. [Erro 401] Buscar usuário por e-mail sem token",
+			"url": "http://localhost:8080/api/v1/usuarios/busca-email?email=akserrado@gmail.com",
+			"time": 6,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code é 401": true
+			},
+			"testPassFailCounts": {
+				"Status code é 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				6
+			],
+			"allTests": [
+				{
+					"Status code é 401": true
+				}
+			]
+		},
+		{
+			"id": "072d1471-3932-4c65-b9e1-af9324a27d34",
+			"name": "31. [Erro 404] Buscar usuário por ID inexistente",
+			"url": "http://localhost:8080/api/v1/usuarios/999999",
+			"time": 7,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code é 404": true
+			},
+			"testPassFailCounts": {
+				"Status code é 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code é 404": true
+				}
+			]
+		},
+		{
+			"id": "77b1843a-783c-4096-83c5-db12b15572b7",
+			"name": "32. [Erro 404] Buscar usuário por e-mail inexistente",
+			"url": "http://localhost:8080/api/v1/usuarios/busca-email?email=akserrado+inexistente@gmail.com",
+			"time": 8,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code é 404": true
+			},
+			"testPassFailCounts": {
+				"Status code é 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 404": true
+				}
+			]
+		},
+		{
+			"id": "350df4c2-1f89-4fb8-a6ed-ccf38a12aaca",
+			"name": "33. [200] Validar situação de ID inexistente",
+			"url": "http://localhost:8080/api/v1/usuarios/999999/validar-situacao",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true,
+				"Usuário não existe": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Usuário não existe": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 200": true,
+					"Usuário não existe": true
+				}
+			]
+		},
+		{
+			"id": "6d448807-a078-4f2b-8c15-723d376e999d",
+			"name": "34. [200] ADMIN atualizar usuário com payload vazio",
+			"url": "http://localhost:8080/api/v1/usuarios/4",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code é 200": true
+			},
+			"testPassFailCounts": {
+				"Status code é 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code é 200": true
+				}
+			]
+		},
+		{
+			"id": "e4dbfb61-46d4-45d6-bede-cb626d9b1a42",
+			"name": "35. [Erro 404] Atualizar usuário com ID inexistente",
+			"url": "http://localhost:8080/api/v1/usuarios/999999",
+			"time": 9,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code é 404": true
+			},
+			"testPassFailCounts": {
+				"Status code é 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status code é 404": true
+				}
+			]
+		},
+		{
+			"id": "8f122043-a4f0-4e9b-b178-3948eb5b4dec",
+			"name": "36. [Erro 409] Atualizar usuário para usar CPF de outro usuário",
+			"url": "http://localhost:8080/api/v1/usuarios/4",
+			"time": 10,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "de877191-95f6-4665-b1bb-308d03b4ea1c",
+			"name": "37. [Erro 409] Atualizar usuário para usar e-mail de outro usuário",
+			"url": "http://localhost:8080/api/v1/usuarios/4",
+			"time": 10,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status code é 409": true
+			},
+			"testPassFailCounts": {
+				"Status code é 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code é 409": true
+				}
+			]
+		},
+		{
+			"id": "32df5687-380b-4f57-b5d0-af46d2847a71",
+			"name": "38. [Erro 401] Remover usuário sem token",
+			"url": "http://localhost:8080/api/v1/usuarios/5",
+			"time": 5,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code é 401": true
+			},
+			"testPassFailCounts": {
+				"Status code é 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code é 401": true
+				}
+			]
+		},
+		{
+			"id": "1cdd31f1-b9ac-48b7-bf82-ffab00f26bc1",
+			"name": "39. [Erro 403] USER 1 tentar remover USER 2",
+			"url": "http://localhost:8080/api/v1/usuarios/5",
+			"time": 8,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code é 403": true
+			},
+			"testPassFailCounts": {
+				"Status code é 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 403": true
+				}
+			]
+		},
+		{
+			"id": "3ea5dd0c-6fc0-470c-b6e8-d4904c17ee61",
+			"name": "40. [204] Remover usuário 2",
+			"url": "http://localhost:8080/api/v1/usuarios/5",
+			"time": 19,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code é 204": true
+			},
+			"testPassFailCounts": {
+				"Status code é 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status code é 204": true
+				}
+			]
+		},
+		{
+			"id": "a5644db2-c492-4dda-b4f1-318b254d3180",
+			"name": "41. [Erro 404] Remover usuário inexistente",
+			"url": "http://localhost:8080/api/v1/usuarios/999999",
+			"time": 8,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code é 404": true
+			},
+			"testPassFailCounts": {
+				"Status code é 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code é 404": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 934,
+	"collection": {
+		"requests": [
+			{
+				"id": "ff9db26a-08b6-4c16-9fab-fd16738b4b68",
+				"method": "POST"
+			},
+			{
+				"id": "af3e4f08-5513-4976-abda-5907b1edcfbf",
+				"method": "POST"
+			},
+			{
+				"id": "9a11377d-3b7c-4b1c-aada-a76c31e927c6",
+				"method": "POST"
+			},
+			{
+				"id": "6118bb1b-7deb-4ef9-9b38-2effffa2ebd8",
+				"method": "POST"
+			},
+			{
+				"id": "5a19f7e8-4b68-4314-9163-d55967f39abe",
+				"method": "POST"
+			},
+			{
+				"id": "9d35aada-bded-42f4-9952-b6030f2caf93",
+				"method": "POST"
+			},
+			{
+				"id": "b138f205-37d7-4520-bdfb-5de2503c1468",
+				"method": "POST"
+			},
+			{
+				"id": "bf090a9d-784f-4e77-ba6f-1aff595dac38",
+				"method": "POST"
+			},
+			{
+				"id": "68a0e835-37d3-450a-a28b-9dce4802dd4b",
+				"method": "POST"
+			},
+			{
+				"id": "419484bd-2183-4bed-a782-16f2d8040615",
+				"method": "POST"
+			},
+			{
+				"id": "233cd6cb-22f0-49ab-a631-ca40b6139a7e",
+				"method": "PUT"
+			},
+			{
+				"id": "3c4d6730-8059-446f-b3e3-b5385575e235",
+				"method": "POST"
+			},
+			{
+				"id": "a275f5be-b4ff-4f75-8685-95d5a7f47ebb",
+				"method": "GET"
+			},
+			{
+				"id": "a1bd5944-2172-447c-a18c-c8ef865deae9",
+				"method": "GET"
+			},
+			{
+				"id": "4fc7391e-bbe9-4ed7-afea-9b8c64b304e1",
+				"method": "GET"
+			},
+			{
+				"id": "b885aefc-f6d0-460e-ad53-62b63d467002",
+				"method": "GET"
+			},
+			{
+				"id": "213ad2ec-571b-4d86-9233-58a576c0adf1",
+				"method": "GET"
+			},
+			{
+				"id": "eadcac43-aa8a-400c-bc94-5c5157292b22",
+				"method": "PUT"
+			},
+			{
+				"id": "c2b4280a-904d-47b4-a720-d229e9d8eeb6",
+				"method": "PUT"
+			},
+			{
+				"id": "cdbf59c8-03e4-4546-adab-c26fc94ee9da",
+				"method": "DELETE"
+			},
+			{
+				"id": "35758e5f-95f0-423a-8107-fb61d801a4c4",
+				"method": "DELETE"
+			},
+			{
+				"id": "df28d6f2-7a97-432e-a452-755ff3021f60",
+				"method": "POST"
+			},
+			{
+				"id": "2c28eefa-5814-4dee-9761-ba6d6fedc830",
+				"method": "DELETE"
+			},
+			{
+				"id": "cc566d9d-c7a0-4408-8c8b-3c249ae211e1",
+				"method": "POST"
+			},
+			{
+				"id": "0abe4eff-e929-4d30-933e-a75a14026614",
+				"method": "DELETE"
+			},
+			{
+				"id": "d2fb1894-7077-4f33-af17-47773c89961b",
+				"method": "POST"
+			},
+			{
+				"id": "85c498a6-4034-4ca6-978d-0a37c0f6bdd8",
+				"method": "POST"
+			},
+			{
+				"id": "379c4b2f-653f-409b-91b7-95297a49cedd",
+				"method": "POST"
+			},
+			{
+				"id": "a9eabb6a-e135-42cf-97c5-fc549f0f7f14",
+				"method": "GET"
+			},
+			{
+				"id": "c0f270c5-d1d8-411a-81a7-1192aa95c856",
+				"method": "GET"
+			},
+			{
+				"id": "60ce39b2-2a3c-4b8d-9b55-42bb20c3a132",
+				"method": "GET"
+			},
+			{
+				"id": "072d1471-3932-4c65-b9e1-af9324a27d34",
+				"method": "GET"
+			},
+			{
+				"id": "77b1843a-783c-4096-83c5-db12b15572b7",
+				"method": "GET"
+			},
+			{
+				"id": "350df4c2-1f89-4fb8-a6ed-ccf38a12aaca",
+				"method": "GET"
+			},
+			{
+				"id": "6d448807-a078-4f2b-8c15-723d376e999d",
+				"method": "PUT"
+			},
+			{
+				"id": "e4dbfb61-46d4-45d6-bede-cb626d9b1a42",
+				"method": "PUT"
+			},
+			{
+				"id": "8f122043-a4f0-4e9b-b178-3948eb5b4dec",
+				"method": "PUT"
+			},
+			{
+				"id": "de877191-95f6-4665-b1bb-308d03b4ea1c",
+				"method": "PUT"
+			},
+			{
+				"id": "32df5687-380b-4f57-b5d0-af46d2847a71",
+				"method": "DELETE"
+			},
+			{
+				"id": "1cdd31f1-b9ac-48b7-bf82-ffab00f26bc1",
+				"method": "DELETE"
+			},
+			{
+				"id": "3ea5dd0c-6fc0-470c-b6e8-d4904c17ee61",
+				"method": "DELETE"
+			},
+			{
+				"id": "a5644db2-c492-4dda-b4f1-318b254d3180",
+				"method": "DELETE"
+			}
+		]
+	}
+}

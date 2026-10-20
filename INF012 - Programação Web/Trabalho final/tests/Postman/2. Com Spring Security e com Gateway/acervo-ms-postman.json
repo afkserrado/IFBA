@@ -1,0 +1,1871 @@
+{
+  "info": {
+    "_postman_id": "wrk_acervo_ms_jwt_gateway",
+    "name": "Acervo MS (Com Segurança JWT e Gateway)",
+    "description": "Testes via Gateway dos endpoints do microserviço de gerenciamento de livros, incluindo Caminhos de Erro, autenticação JWT e autorização por papel.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "admin_email",
+      "value": "admin@biblioteca.com"
+    },
+    {
+      "key": "admin_senha",
+      "value": "YyoPaTiToa"
+    },
+    {
+      "key": "user_email",
+      "value": "akserrado@gmail.com"
+    },
+    {
+      "key": "user_senha",
+      "value": "user123"
+    },
+    {
+      "key": "admin_token",
+      "value": ""
+    },
+    {
+      "key": "user_token",
+      "value": ""
+    },
+    {
+      "key": "usuario_acervo_id",
+      "value": ""
+    },
+    {
+      "key": "livro1_id",
+      "value": ""
+    },
+    {
+      "key": "livro1_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro2_id",
+      "value": ""
+    },
+    {
+      "key": "livro2_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro3_id",
+      "value": ""
+    },
+    {
+      "key": "livro3_isbn",
+      "value": ""
+    },
+    {
+      "key": "livro_com_emprestimo_id",
+      "value": ""
+    },
+    {
+      "key": "emprestimo_livro_com_emprestimo_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00. [200] Login como ADMIN",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "auth", "login"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Obtém o JWT do usuário ADMIN para as operações protegidas.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"senha\": \"{{admin_senha}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Token JWT foi retornado', function () {",
+              "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    pm.environment.set('admin_token', json.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01. [201] Criar usuário USER para testes de empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/usuarios",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "usuarios"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. O cadastro de usuário é público.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"22222222222\",\n  \"nome\": \"Anderson\",\n  \"email\": \"{{user_email}}\",\n  \"senha\": \"{{user_senha}}\",\n  \"role\": \"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201 ou 409 se o usuário já existir', function () {",
+              "    pm.expect([201, 409]).to.include(pm.response.code);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('usuario_acervo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. [200] Login como USER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "auth", "login"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Obtém o JWT do usuário USER para testes de autorização.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"senha\": \"{{user_senha}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Token JWT foi retornado', function () {",
+              "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    pm.environment.set('user_token', json.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. [201] Cadastrar livro 1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro1_id', json.id);",
+              "    pm.environment.set('livro1_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. [201] Cadastrar livro 2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Domain-Driven Design\",\n  \"autor\": \"Eric Evans\",\n  \"isbn\": \"9780321125217\",\n  \"quantidadeTotal\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro2_id', json.id);",
+              "    pm.environment.set('livro2_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. [201] Cadastrar livro 3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Refactoring\",\n  \"autor\": \"Martin Fowler\",\n  \"isbn\": \"9780201485677\",\n  \"quantidadeTotal\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro3_id', json.id);",
+              "    pm.environment.set('livro3_isbn', json.isbn);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. [201] Cadastrar livro com empréstimo (para teste de exclusão)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Livro que terá empréstimo ativo para testar exclusão bloqueada.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro com Emprestimo\",\n  \"autor\": \"Autor Teste\",\n  \"isbn\": \"9781111111111\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('livro_com_emprestimo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. [201] Criar empréstimo do livro com empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos"]
+        },
+        "description": "Caminho Feliz — Esperado: 201 Created. Cria empréstimo ativo para testar bloqueio de exclusão do livro.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{usuario_acervo_id}},\n  \"livroId\": {{livro_com_emprestimo_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "    pm.environment.set('emprestimo_livro_com_emprestimo_id', json.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. [200] Listar todos os livros",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros?page=0&size=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Consultas de livros são públicas, mas o teste usa token USER."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. [200] Buscar livro por ISBN",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/isbn/{{livro1_isbn}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "isbn", "{{livro1_isbn}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. [200] Buscar por título",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/titulo?titulo=Clean&page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "titulo"],
+          "query": [
+            {
+              "key": "titulo",
+              "value": "Clean"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. [200] Buscar por autor",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/autor?autor=Robert&page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "autor"],
+          "query": [
+            {
+              "key": "autor",
+              "value": "Robert"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. [200] Verificar disponibilidade",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/disponibilidade",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "disponibilidade"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. [200] Reduzir estoque",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "reduzir-estoque"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. [200] Aumentar estoque",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}", "aumentar-estoque"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. [200] Atualizar livro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Requer papel ADMIN.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code 2a Edicao\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16. [204] Remover livro sem empréstimo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro3_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro3_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 204 No Content. Requer papel ADMIN."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. [Erro 409] Tentar remover livro com empréstimo ativo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro_com_emprestimo_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro_com_emprestimo_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois o livro possui empréstimo ativo."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18. [200] Cancelar empréstimo do livro com empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/emprestimos/{{emprestimo_livro_com_emprestimo_id}}/cancelamento",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "emprestimos", "{{emprestimo_livro_com_emprestimo_id}}", "cancelamento"]
+        },
+        "description": "Caminho Feliz — Esperado: 200 OK. Cancela o empréstimo para liberar a exclusão do livro.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19. [204] Remover livro após cancelar empréstimo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro_com_emprestimo_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro_com_emprestimo_id}}"]
+        },
+        "description": "Caminho Feliz — Esperado: 204 No Content. Livro sem empréstimo ativo pode ser excluído."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20. [Erro 401] Cadastrar livro sem token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized, pois a criação de livro exige JWT.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro Sem Token\",\n  \"autor\": \"Autor Sem Token\",\n  \"isbn\": \"9784444444444\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21. [Erro 403] Cadastrar livro com token USER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN pode cadastrar livros.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro USER\",\n  \"autor\": \"Autor USER\",\n  \"isbn\": \"9785555555555\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22. [Erro 401] Atualizar livro sem token",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized, pois a atualização exige JWT.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Atualizacao Sem Token\",\n  \"autor\": \"Autor Sem Token\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23. [Erro 403] Atualizar livro com token USER",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro1_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro1_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN pode atualizar livros.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Atualizacao USER\",\n  \"autor\": \"Autor USER\",\n  \"isbn\": \"9781234567890\",\n  \"quantidadeTotal\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24. [Erro 401] Remover livro sem token",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized, pois a exclusão exige JWT."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25. [Erro 403] Remover livro com token USER",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN pode remover livros."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26. [Erro 400] Cadastrar livro com payload inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho de Erro — Esperado: 400 Bad Request devido à falta de título e autor e à quantidade negativa.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"123456789\",\n  \"quantidadeTotal\": -1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27. [Erro 409] Cadastrar livro com ISBN duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois o ISBN do Livro 1 já existe.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Clean Code Clone\",\n  \"autor\": \"Robert C. Martin\",\n  \"isbn\": \"{{livro1_isbn}}\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28. [Erro 404] Buscar livro por ISBN inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/isbn/0000000000000",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "isbn", "0000000000000"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ISBN não existe."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29. [Erro 400] Atualizar livro com payload inválido",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 400 Bad Request devido à falta de dados obrigatórios no PUT.",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30. [Erro 404] Atualizar livro com ID inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ID não existe.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Livro Fantasma\",\n  \"autor\": \"Desconhecido\",\n  \"isbn\": \"9999999999999\",\n  \"quantidadeTotal\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31. [Erro 409] Atualizar livro para usar ISBN de outro livro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois tenta usar o ISBN que já pertence ao Livro 1.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Update do Livro 2\",\n  \"autor\": \"Eric Evans\",\n  \"isbn\": \"{{livro1_isbn}}\",\n  \"quantidadeTotal\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32. [Erro 404] Verificar disponibilidade de ID inexistente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/disponibilidade",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "disponibilidade"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ID não existe."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33. [Erro 409] Aumentar estoque além da quantidade total",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}", "aumentar-estoque"]
+        },
+        "description": "Caminho de Erro — Esperado: 409 Conflict, pois o Livro 2 já está com a disponibilidade no limite total.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 409', function () {",
+              "    pm.response.to.have.status(409);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "34. [Erro 401] Reduzir estoque sem token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}", "reduzir-estoque"]
+        },
+        "description": "Caminho de Erro — Esperado: 401 Unauthorized, pois a redução de estoque exige JWT.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "35. [Erro 403] Reduzir estoque com token USER",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{user_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/{{livro2_id}}/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "{{livro2_id}}", "reduzir-estoque"]
+        },
+        "description": "Caminho de Erro — Esperado: 403 Forbidden, pois apenas ADMIN pode reduzir estoque.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 403', function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "36. [Erro 404] Reduzir estoque de ID inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/reduzir-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "reduzir-estoque"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ID não existe.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "37. [Erro 404] Aumentar estoque de ID inexistente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999/aumentar-estoque",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999", "aumentar-estoque"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ID não existe.",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "38. [Erro 404] Remover livro inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "insomnia/12.6.0"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/livros/999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "livros", "999999"]
+        },
+        "description": "Caminho de Erro — Esperado: 404 Not Found, pois o ID não existe."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code é 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
