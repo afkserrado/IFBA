@@ -11,15 +11,15 @@ from config import MODELOS_DISPONIVEIS
 from leitor_documentos import extrair_texto_documento
 from prompts import TipoDocumento, montar_prompt_extracao
 
-
 class AplicacaoAuditoria(tk.Tk):
     """Janela principal para seleção de parâmetros, execução da análise e visualização do JSON."""
 
+    # Construtor
     def __init__(self) -> None:
         super().__init__()
         self.title("Extrator de Documentos de Auditoria (Ollama)")
-        self.geometry("820x640")
-        self.minsize(720, 540)
+        self.geometry("820x640") # Tamanho inicial
+        self.minsize(720, 540)  # Tamanho mínimo
 
         # Mapeia o texto amigável exibido no Combobox para o membro correspondente do Enum
         self._mapa_rotulo_para_tipo: dict[str, TipoDocumento] = {
@@ -252,7 +252,6 @@ def main() -> None:
     """Inicializa a aplicação gráfica."""
     app = AplicacaoAuditoria()
     app.mainloop()
-
 
 if __name__ == "__main__":
     main()
