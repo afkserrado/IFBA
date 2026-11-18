@@ -1,5 +1,6 @@
 """Módulo responsável pela extração de texto (nativo e via OCR) de documentos .docx e .pdf."""
 
+from collections.abc import Sequence
 from importlib import import_module
 from pathlib import Path
 import zipfile
@@ -192,3 +193,32 @@ def extrair_texto_documento(caminho_arquivo: str | Path) -> str:
         )
 
     return conteudo
+
+def extrair_textos_multiplos_documentos(caminhos: Sequence[str | Path]) -> str:
+    """Extrai e consolida o texto de múltiplos documentos de referência.
+
+    Cada documento é delimitado por marcadores explícitos com índice e nome do arquivo para preservar a rastreabilidade das fontes no prompt enviado ao modelo.
+
+    Args:
+        caminhos: Sequência de caminhos (.docx ou .pdf) dos documentos de referência.
+
+    Returns:
+        Texto consolidado de todos os documentos com delimitadores de fronteira.
+
+    Raises:
+        ValueError: Se a lista de caminhos estiver vazia.
+    """
+    if not caminhos:
+        raise ValueError("Nenhum documento de referência foi informado para extração.")
+
+    blocos: list[str] = []
+    for idx, caminho_item in enumerate(caminhos, start=1):
+        caminho = Path(caminho_item)
+        texto = extrair_texto_documento(caminho)
+        blocos.append(
+            f"=== DOCUMENTO DE REFERÊNCIA {idx}: {caminho.name} ===\n"
+            f"{texto}\n"
+            f"=== FIM DO DOCUMENTO DE REFERÊNCIA {idx} ==="
+        )
+
+    return "\n\n".join(blocos)
