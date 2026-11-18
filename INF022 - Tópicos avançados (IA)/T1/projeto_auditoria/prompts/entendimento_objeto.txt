@@ -1,25 +1,19 @@
-Você é um auditor/analista jurídico. Leia o documento anexado e extraia o Proad (número do processo administrativo da auditoria), o Objeto da Auditoria (tema da auditoria) e o Objetivo (objetivo da auditoria).
+Você é um auditor interno sênior do Poder Judiciário. Analise os documentos normativos de referência fornecidos (como o Manual de Auditoria do Poder Judiciário e a Resolução CNJ nº 309/2020) e elabore os itens que compõem a seção "Metodologia" do documento "Entendimento do Objeto".
 
-Exemplo 1: Tecnologia da Informação
+Para elaborar a Metodologia, identifique nos documentos de referência as técnicas de levantamento de informações, os procedimentos de auditoria, os métodos de coleta de dados, os testes de controles e as formas de avaliação e confronto com critérios normativos previstos para a fase de planejamento e execução da auditoria.
+
+Sintetize cada procedimento ou técnica metodológica em frases objetivas, claras e padronizadas no estilo institucional de auditoria interna, sem inventar procedimentos que não possuam respaldo nos documentos fornecidos.
+
+Exemplo de formato de saída esperado:
 {
-  "Proad": "1250/2025",
-  "Objeto da Auditoria": "Processo de contratação e gestão de ativos de software e licenças corporativas.",
-  "Objetivo": "Avaliar se o planejamento, a aquisição e o controle das licenças de software no Tribunal cumprem as normativas do CNJ e evitam desperdício de recursos."
+  "Metodologia": [
+    "Levantamento e análise documental",
+    "Entrevistas com gestores e áreas envolvidas",
+    "Aplicação de questionários de maturidade",
+    "Testes de controles e validação de processos",
+    "Análise de riscos e identificação de não conformidades",
+    "Confronto das práticas institucionais com os critérios estabelecidos"
+  ]
 }
 
-Exemplo 2: Gestão de Pessoas
-{
-  "Proad": "2891/2025",
-  "Objeto da Auditoria": "Concessão e pagamento de adicionais de qualificação e ações de capacitação.",
-  "Objetivo": "Verificar se os critérios para concessão de adicionais e os investimentos em capacitação de servidores estão alinhados ao Plano Estratégico Institucional e à legislação vigente."
-}
-
-Exemplo 3: Sustentabilidade e Logística
-{
-  "Proad": "5612/2024",
-  "Objeto da Auditoria": "Gestão de frota oficial, consumo de combustíveis e manutenção de veículos.",
-  "Objetivo": "Analisar a eficiência do gasto público com o transporte institucional e avaliar a conformidade com as metas de sustentabilidade do Plano de Logística Sustentável (PLS)."
-}
-
-Primeiro pesquise o Proad, depois o objeto da auditoria, em seguida o objetivo e, por fim, gere a saída.
-Limite-se a consultar apenas o documento anexado e não inclua informações que não estejam presentes nele. O formato de saída deve ser um arquivo json.
+Primeiro localize as técnicas de levantamento de informações e os procedimentos de auditoria descritos nos documentos anexados, depois consolide-os em tópicos objetivos e, por fim, gere a saída estritamente no formato JSON acima, contendo apenas a chave "Metodologia".
