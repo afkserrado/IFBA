@@ -1,0 +1,1 @@
+Para entrar no ambiente virtual Python: source .venv/bin/activate
