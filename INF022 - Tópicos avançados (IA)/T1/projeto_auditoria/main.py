@@ -7,10 +7,15 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 from cliente_ollama import consultar_ollama, detectar_servidor_ativo, salvar_resultado_json
-from config import MODELOS_DISPONIVEIS
+from config import (
+    MODELOS_DISPONIVEIS,
+    TEMPERATURA_PADRAO,
+    TOP_K_PADRAO,
+    TOP_P_PADRAO,
+    obter_pasta_downloads,
+)
 from leitor_documentos import extrair_textos_multiplos_documentos
 from prompts import TipoDocumento, listar_tipos_disponiveis, montar_prompt_extracao
-from config import obter_pasta_downloads
 
 class AplicacaoAuditoria(tk.Tk):
     """Janela principal para seleção de parâmetros, execução da análise e visualização do JSON."""
@@ -29,6 +34,9 @@ class AplicacaoAuditoria(tk.Tk):
 
         self._var_tipo_doc = tk.StringVar()
         self._var_modelo = tk.StringVar()
+        self._var_temperatura = tk.DoubleVar(value=TEMPERATURA_PADRAO)
+        self._var_top_p = tk.DoubleVar(value=TOP_P_PADRAO)
+        self._var_top_k = tk.IntVar(value=TOP_K_PADRAO)
         self._caminhos_arquivos: list[Path] = []
         self._var_status = tk.StringVar(value="Pronto para iniciar.")
 
@@ -92,6 +100,55 @@ class AplicacaoAuditoria(tk.Tk):
             command=self._limpar_arquivos,
         )
         self._btn_limpar.pack(fill=tk.X)
+
+        # Parâmetros de Geração (Temperatura, Top-P, Top-K)
+        ttk.Label(quadro_config, text="Geração:").grid(
+            row=3, column=0, sticky=tk.W, padx=(0, 8), pady=6
+        )
+        quadro_parametros = ttk.Frame(quadro_config)
+        quadro_parametros.grid(row=3, column=1, columnspan=2, sticky=tk.EW, pady=6)
+
+        ttk.Label(quadro_parametros, text="Temperatura:").pack(side=tk.LEFT, padx=(0, 4))
+        self._spin_temperatura = ttk.Spinbox(
+            quadro_parametros,
+            from_=0.0,
+            to=1.0,
+            increment=0.05,
+            textvariable=self._var_temperatura,
+            width=6,
+            format="%.2f",
+        )
+        self._spin_temperatura.pack(side=tk.LEFT, padx=(0, 12))
+
+        ttk.Label(quadro_parametros, text="Top-P:").pack(side=tk.LEFT, padx=(0, 4))
+        self._spin_top_p = ttk.Spinbox(
+            quadro_parametros,
+            from_=0.1,
+            to=1.0,
+            increment=0.05,
+            textvariable=self._var_top_p,
+            width=6,
+            format="%.2f",
+        )
+        self._spin_top_p.pack(side=tk.LEFT, padx=(0, 12))
+
+        ttk.Label(quadro_parametros, text="Top-K:").pack(side=tk.LEFT, padx=(0, 4))
+        self._spin_top_k = ttk.Spinbox(
+            quadro_parametros,
+            from_=1,
+            to=100,
+            increment=5,
+            textvariable=self._var_top_k,
+            width=6,
+        )
+        self._spin_top_k.pack(side=tk.LEFT, padx=(0, 12))
+
+        self._btn_padrao = ttk.Button(
+            quadro_parametros,
+            text="Padrão",
+            command=self._restaurar_parametros_padrao,
+        )
+        self._btn_padrao.pack(side=tk.LEFT)
 
         # --- Bloco 2: Ação e Progresso ---
         quadro_acoes = ttk.Frame(quadro_principal)
@@ -170,6 +227,13 @@ class AplicacaoAuditoria(tk.Tk):
         self._lista_arquivos.delete(0, tk.END)
         self._var_status.set("Lista de documentos limpa.")
 
+    def _restaurar_parametros_padrao(self) -> None:
+        """Restaura Temperatura, Top-P e Top-K para os valores padrão de config.py."""
+        self._var_temperatura.set(TEMPERATURA_PADRAO)
+        self._var_top_p.set(TOP_P_PADRAO)
+        self._var_top_k.set(TOP_K_PADRAO)
+        self._var_status.set("Parâmetros de geração restaurados para o padrão.")
+
     def _alternar_estado_controles(self, processando: bool) -> None:
         """Habilita ou desabilita botões durante a inferência para evitar cliques duplicados."""
         estado_botao = tk.DISABLED if processando else tk.NORMAL
@@ -178,6 +242,10 @@ class AplicacaoAuditoria(tk.Tk):
         self._btn_executar.config(state=estado_botao)
         self._btn_adicionar.config(state=estado_botao)
         self._btn_limpar.config(state=estado_botao)
+        self._btn_padrao.config(state=estado_botao)
+        self._spin_temperatura.config(state=estado_botao)
+        self._spin_top_p.config(state=estado_botao)
+        self._spin_top_k.config(state=estado_botao)
         self._combo_tipo_doc.config(state=estado_combo)
         self._combo_modelo.config(state=estado_combo)
 
@@ -210,6 +278,17 @@ class AplicacaoAuditoria(tk.Tk):
             messagebox.showerror("Erro", "Tipo de documento inválido.")
             return
 
+        try:
+            temperatura = float(self._var_temperatura.get())
+            top_p = float(self._var_top_p.get())
+            top_k = int(self._var_top_k.get())
+        except (tk.TclError, ValueError):
+            messagebox.showerror(
+                "Erro",
+                "Valores inválidos para Temperatura, Top-P ou Top-K.",
+            )
+            return
+
         self._alternar_estado_controles(processando=True)
         self._exibir_json_na_tela("")
         self._var_status.set(
@@ -218,7 +297,14 @@ class AplicacaoAuditoria(tk.Tk):
 
         thread = threading.Thread(
             target=self._executar_pipeline,
-            args=(tipo_documento, modelo, list(self._caminhos_arquivos)),
+            args=(
+                tipo_documento,
+                modelo,
+                list(self._caminhos_arquivos),
+                temperatura,
+                top_p,
+                top_k,
+            ),
             daemon=True,
         )
         thread.start()
@@ -228,6 +314,9 @@ class AplicacaoAuditoria(tk.Tk):
         tipo_documento: TipoDocumento,
         modelo: str,
         caminhos_arquivos: list[Path],
+        temperatura: float,
+        top_p: float,
+        top_k: int,
     ) -> None:
         """Executa o fluxo completo em segundo plano: leitura -> prompt -> Ollama -> salvamento."""
         try:
@@ -254,6 +343,9 @@ class AplicacaoAuditoria(tk.Tk):
                 prompt_completo=prompt_final,
                 modelo=modelo,
                 url_servidor=servidor,
+                temperatura=temperatura,
+                top_k=top_k,
+                top_p=top_p,
             )
 
             # 4. Salvamento automático na pasta Downloads

@@ -20,6 +20,8 @@ MODELOS_DISPONIVEIS: list[str] = [
 # Parâmetros padrão de geração
 # Temperatura baixa (0.0 a 1.0): reduz aleatoriedade e prioriza respostas fiéis ao documento
 TEMPERATURA_PADRAO: float = 0.1
+TOP_K_PADRAO: int = 40
+TOP_P_PADRAO: float = 0.90
 
 # Janela de contexto (num_ctx): quantidade máxima de tokens (entrada + saída) processados de uma vez
 CONTEXTO_PADRAO: int = 65536

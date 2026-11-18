@@ -12,6 +12,8 @@ from config import (
     SERVIDORES_OLLAMA,
     TEMPERATURA_PADRAO,
     TIMEOUT_REQUISICAO,
+    TOP_K_PADRAO,
+    TOP_P_PADRAO,
     obter_pasta_downloads,
 )
 
@@ -54,6 +56,8 @@ def consultar_ollama(
     url_servidor: str | None = None,
     temperatura: float = TEMPERATURA_PADRAO,
     num_ctx: int = CONTEXTO_PADRAO,
+    top_k: int = TOP_K_PADRAO,
+    top_p: float = TOP_P_PADRAO,
 ) -> dict:
     """Envia o prompt ao servidor Ollama escolhido e retorna o resultado convertido em dicionário.
 
@@ -63,6 +67,8 @@ def consultar_ollama(
         url_servidor: URL do servidor Ollama. Se None, detecta automaticamente.
         temperatura: Grau de aleatoriedade da resposta.
         num_ctx: Tamanho da janela de contexto em tokens.
+        top_k: Limita a seleção aos k tokens mais prováveis.
+        top_p: Limita a seleção ao menor conjunto de tokens cuja probabilidade acumulada atinge p.
 
     Returns:
         Dicionário Python validado a partir do JSON retornado pela IA.
@@ -84,6 +90,8 @@ def consultar_ollama(
         "options": {
             "temperature": temperatura,
             "num_ctx": num_ctx,
+            "top_k": top_k,
+            "top_p": top_p,
         },
     }
 
