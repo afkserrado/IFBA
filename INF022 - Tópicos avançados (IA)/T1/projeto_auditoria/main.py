@@ -8,8 +8,8 @@ from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 from cliente_ollama import consultar_ollama, detectar_servidor_ativo, salvar_resultado_json
 from config import MODELOS_DISPONIVEIS
-from leitor_documentos import extrair_texto_documento
-from prompts import TipoDocumento, montar_prompt_extracao
+from leitor_documentos import extrair_textos_multiplos_documentos
+from prompts import TipoDocumento, listar_tipos_disponiveis, montar_prompt_extracao
 
 class AplicacaoAuditoria(tk.Tk):
     """Janela principal para seleção de parâmetros, execução da análise e visualização do JSON."""
@@ -21,14 +21,14 @@ class AplicacaoAuditoria(tk.Tk):
         self.geometry("820x640") # Tamanho inicial
         self.minsize(720, 540)  # Tamanho mínimo
 
-        # Mapeia o texto amigável exibido no Combobox para o membro correspondente do Enum
+        # Mapeia o texto amigável exibido no Combobox apenas para tipos com prompt .txt disponível
         self._mapa_rotulo_para_tipo: dict[str, TipoDocumento] = {
-            tipo.value: tipo for tipo in TipoDocumento
+            tipo.value: tipo for tipo in listar_tipos_disponiveis()
         }
 
         self._var_tipo_doc = tk.StringVar()
         self._var_modelo = tk.StringVar()
-        self._var_caminho_arquivo = tk.StringVar()
+        self._caminhos_arquivos: list[Path] = []
         self._var_status = tk.StringVar(value="Pronto para iniciar.")
 
         self._construir_interface()
@@ -68,23 +68,29 @@ class AplicacaoAuditoria(tk.Tk):
         )
         self._combo_modelo.grid(row=1, column=1, columnspan=2, sticky=tk.EW, pady=6)
 
-        # Arquivo de Entrada (.docx / .pdf)
-        ttk.Label(quadro_config, text="Documento (.docx/.pdf):").grid(
-            row=2, column=0, sticky=tk.W, padx=(0, 8), pady=6
+        # Arquivos de Referência (.docx / .pdf)
+        ttk.Label(quadro_config, text="Documentos (.docx/.pdf):").grid(
+            row=2, column=0, sticky=tk.NW, padx=(0, 8), pady=6
         )
-        entrada_arquivo = ttk.Entry(
-            quadro_config,
-            textvariable=self._var_caminho_arquivo,
-            state="readonly",
-        )
-        entrada_arquivo.grid(row=2, column=1, sticky=tk.EW, padx=(0, 8), pady=6)
+        self._lista_arquivos = tk.Listbox(quadro_config, height=4)
+        self._lista_arquivos.grid(row=2, column=1, sticky=tk.EW, padx=(0, 8), pady=6)
 
-        self._btn_selecionar = ttk.Button(
-            quadro_config,
-            text="Selecionar Arquivo...",
-            command=self._selecionar_arquivo,
+        quadro_botoes_arquivo = ttk.Frame(quadro_config)
+        quadro_botoes_arquivo.grid(row=2, column=2, sticky=tk.NE, pady=6)
+
+        self._btn_adicionar = ttk.Button(
+            quadro_botoes_arquivo,
+            text="Adicionar Arquivos...",
+            command=self._adicionar_arquivos,
         )
-        self._btn_selecionar.grid(row=2, column=2, sticky=tk.E, pady=6)
+        self._btn_adicionar.pack(fill=tk.X, pady=(0, 4))
+
+        self._btn_limpar = ttk.Button(
+            quadro_botoes_arquivo,
+            text="Limpar Lista",
+            command=self._limpar_arquivos,
+        )
+        self._btn_limpar.pack(fill=tk.X)
 
         # --- Bloco 2: Ação e Progresso ---
         quadro_acoes = ttk.Frame(quadro_principal)
@@ -132,19 +138,35 @@ class AplicacaoAuditoria(tk.Tk):
         if MODELOS_DISPONIVEIS:
             self._var_modelo.set(MODELOS_DISPONIVEIS[0])
 
-    def _selecionar_arquivo(self) -> None:
-        """Abre o seletor de arquivos do sistema filtrado para .docx e .pdf."""
-        caminho = filedialog.askopenfilename(
-            title="Selecione o documento de origem",
+    def _adicionar_arquivos(self) -> None:
+        """Abre o seletor de múltiplos arquivos filtrado para .docx e .pdf."""
+        caminhos = filedialog.askopenfilenames(
+            title="Selecione os documentos de referência",
             filetypes=[
                 ("Documentos Suportados", "*.docx *.pdf"),
                 ("Documentos Word (*.docx)", "*.docx"),
                 ("Documentos PDF (*.pdf)", "*.pdf"),
             ],
         )
-        if caminho:
-            self._var_caminho_arquivo.set(caminho)
-            self._var_status.set(f"Arquivo selecionado: {Path(caminho).name}")
+        if not caminhos:
+            return
+
+        adicionados = 0
+        for caminho_str in caminhos:
+            caminho = Path(caminho_str)
+            if caminho not in self._caminhos_arquivos:
+                self._caminhos_arquivos.append(caminho)
+                self._lista_arquivos.insert(tk.END, caminho.name)
+                adicionados += 1
+
+        total = len(self._caminhos_arquivos)
+        self._var_status.set(f"{adicionados} arquivo(s) adicionado(s). Total na lista: {total}.")
+
+    def _limpar_arquivos(self) -> None:
+        """Remove todos os arquivos selecionados da lista."""
+        self._caminhos_arquivos.clear()
+        self._lista_arquivos.delete(0, tk.END)
+        self._var_status.set("Lista de documentos limpa.")
 
     def _alternar_estado_controles(self, processando: bool) -> None:
         """Habilita ou desabilita botões durante a inferência para evitar cliques duplicados."""
@@ -152,7 +174,8 @@ class AplicacaoAuditoria(tk.Tk):
         estado_combo = "disabled" if processando else "readonly"
 
         self._btn_executar.config(state=estado_botao)
-        self._btn_selecionar.config(state=estado_botao)
+        self._btn_adicionar.config(state=estado_botao)
+        self._btn_limpar.config(state=estado_botao)
         self._combo_tipo_doc.config(state=estado_combo)
         self._combo_modelo.config(state=estado_combo)
 
@@ -172,10 +195,12 @@ class AplicacaoAuditoria(tk.Tk):
         """Valida as entradas e dispara a execução em uma thread separada."""
         rotulo_doc = self._var_tipo_doc.get()
         modelo = self._var_modelo.get()
-        caminho_str = self._var_caminho_arquivo.get()
 
-        if not caminho_str:
-            messagebox.showwarning("Atenção", "Selecione um arquivo (.docx ou .pdf) antes de continuar.")
+        if not self._caminhos_arquivos:
+            messagebox.showwarning(
+                "Atenção",
+                "Adicione ao menos um arquivo (.docx ou .pdf) antes de continuar.",
+            )
             return
 
         tipo_documento = self._mapa_rotulo_para_tipo.get(rotulo_doc)
@@ -185,11 +210,13 @@ class AplicacaoAuditoria(tk.Tk):
 
         self._alternar_estado_controles(processando=True)
         self._exibir_json_na_tela("")
-        self._var_status.set("Iniciando extração de texto do documento...")
+        self._var_status.set(
+            f"Iniciando extração de texto de {len(self._caminhos_arquivos)} documento(s)..."
+        )
 
         thread = threading.Thread(
             target=self._executar_pipeline,
-            args=(tipo_documento, modelo, Path(caminho_str)),
+            args=(tipo_documento, modelo, list(self._caminhos_arquivos)),
             daemon=True,
         )
         thread.start()
@@ -198,12 +225,17 @@ class AplicacaoAuditoria(tk.Tk):
         self,
         tipo_documento: TipoDocumento,
         modelo: str,
-        caminho_arquivo: Path,
+        caminhos_arquivos: list[Path],
     ) -> None:
         """Executa o fluxo completo em segundo plano: leitura -> prompt -> Ollama -> salvamento."""
         try:
-            # 1. Extração de texto (nativo + OCR se necessário)
-            texto_documento = extrair_texto_documento(caminho_arquivo)
+            # 1. Extração e consolidação de texto (nativo + OCR se necessário)
+            self.after(
+                0,
+                self._var_status.set,
+                f"Extraindo texto de {len(caminhos_arquivos)} documento(s)...",
+            )
+            texto_documento = extrair_textos_multiplos_documentos(caminhos_arquivos)
 
             # 2. Montagem do prompt específico a partir do arquivo .txt correspondente
             self.after(0, self._var_status.set, "Localizando servidor Ollama ativo...")
@@ -223,7 +255,10 @@ class AplicacaoAuditoria(tk.Tk):
             )
 
             # 4. Salvamento automático na pasta Downloads
-            caminho_json_salvo = salvar_resultado_json(dados_extraidos, caminho_arquivo)
+            caminho_json_salvo = salvar_resultado_json(
+                dados_extraidos,
+                tipo_documento.name.lower(),
+            )
             json_formatado = json.dumps(dados_extraidos, indent=2, ensure_ascii=False)
 
             self.after(0, self._finalizar_com_sucesso, json_formatado, caminho_json_salvo)
