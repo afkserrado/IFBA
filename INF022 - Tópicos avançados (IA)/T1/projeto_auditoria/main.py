@@ -10,6 +10,7 @@ from cliente_ollama import consultar_ollama, detectar_servidor_ativo, salvar_res
 from config import MODELOS_DISPONIVEIS
 from leitor_documentos import extrair_textos_multiplos_documentos
 from prompts import TipoDocumento, listar_tipos_disponiveis, montar_prompt_extracao
+from config import obter_pasta_downloads
 
 class AplicacaoAuditoria(tk.Tk):
     """Janela principal para seleção de parâmetros, execução da análise e visualização do JSON."""
@@ -147,6 +148,7 @@ class AplicacaoAuditoria(tk.Tk):
                 ("Documentos Word (*.docx)", "*.docx"),
                 ("Documentos PDF (*.pdf)", "*.pdf"),
             ],
+            initialdir=str(obter_pasta_downloads())
         )
         if not caminhos:
             return
