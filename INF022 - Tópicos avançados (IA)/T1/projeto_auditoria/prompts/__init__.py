@@ -27,6 +27,14 @@ PROMPTS_POR_DOCUMENTO: dict[TipoDocumento, str] = {
     tipo: f"{tipo.name.lower()}.txt" for tipo in TipoDocumento
 }
 
+def listar_tipos_disponiveis() -> list[TipoDocumento]:
+    """Retorna apenas os tipos de documentos cujo arquivo .txt existe na pasta prompts/."""
+    return [
+        tipo
+        for tipo in TipoDocumento
+        if (DIRETORIO_PROMPTS / PROMPTS_POR_DOCUMENTO[tipo]).is_file()
+    ]
+
 def carregar_prompt(tipo_documento: TipoDocumento) -> str:
     """Lê e retorna o conteúdo do arquivo de prompt associado ao TipoDocumento.
 
@@ -72,10 +80,10 @@ def montar_prompt_extracao(
     instrucoes = carregar_prompt(tipo_documento)
 
     return (
-        "Analise o documento abaixo e responda à solicitação do usuário "
+        "Analise os documentos de referência fornecidos abaixo e responda à solicitação do usuário "
         "baseando-se estritamente no conteúdo fornecido.\n\n"
-        "=== CONTEÚDO DO ARQUIVO ===\n"
+        "=== DOCUMENTOS DE REFERÊNCIA ===\n"
         f"{conteudo_documento}\n"
-        "=== FIM DO ARQUIVO ===\n\n"
+        "=== FIM DOS DOCUMENTOS DE REFERÊNCIA ===\n\n"
         f"Solicitação do usuário: {instrucoes}"
     )
