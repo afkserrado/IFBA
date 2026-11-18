@@ -22,7 +22,7 @@ MODELOS_DISPONIVEIS: list[str] = [
 TEMPERATURA_PADRAO: float = 0.1
 
 # Janela de contexto (num_ctx): quantidade máxima de tokens (entrada + saída) processados de uma vez
-CONTEXTO_PADRAO: int = 32768
+CONTEXTO_PADRAO: int = 65536
 
 # Tempo limite (em segundos) aguardando resposta do servidor antes de acusar erro de conexão (300s = 5 min)
 TIMEOUT_REQUISICAO: int = 300
