@@ -149,21 +149,22 @@ def consultar_ollama(
             f"Conteúdo recebido:\n{texto_final or '[vazio]'}"
         ) from erro_json
 
-def salvar_resultado_json(dados: dict, caminho_documento_origem: str | Path) -> Path:
-    """Salva o dicionário extraído como arquivo .json na pasta Downloads do sistema.
+def salvar_resultado_json(dados: dict, identificador_documento: str) -> Path:
+    """Salva o dicionário gerado como arquivo .json na pasta Downloads do sistema.
 
     Args:
-        dados: Dicionário com os campos extraídos pela IA.
-        caminho_documento_origem: Caminho do arquivo original analisado (usado para nomear o JSON).
+        dados: Dicionário com os campos gerados/extraídos pela IA.
+        identificador_documento: Prefixo identificador do tipo de documento
+            (ex: 'entendimento_objeto').
 
     Returns:
         Caminho completo (Path) do arquivo .json salvo em Downloads.
     """
     pasta_downloads = obter_pasta_downloads()
-    nome_base = Path(caminho_documento_origem).stem
+    nome_base = identificador_documento.strip() or "resultado"
     carimbo_tempo = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    caminho_saida = pasta_downloads / f"{nome_base}_extracao_{carimbo_tempo}.json"
+    caminho_saida = pasta_downloads / f"{nome_base}_{carimbo_tempo}.json"
 
     conteudo_json = json.dumps(dados, indent=2, ensure_ascii=False)
     caminho_saida.write_text(conteudo_json, encoding="utf-8")
