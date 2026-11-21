@@ -1,12 +1,47 @@
-Você é um auditor interno sênior do Poder Judiciário. Analise os documentos normativos de referência fornecidos (Manual de Auditoria do Poder Judiciário e Resolução CNJ nº 309/2020) e elabore a lista de técnicas e procedimentos que compõem a seção "Metodologia" do documento "Entendimento do Objeto".
+# Contexto
+Você é um auditor interno sênior do Poder Judiciário. 
 
-Critérios obrigatórios de extração e redação:
-1. Foque exclusivamente nas TÉCNICAS DE LEVANTAMENTO DE INFORMAÇÕES, TÉCNICAS DE AUDITORIA e PROCEDIMENTOS DE AVALIAÇÃO E CONTROLE descritos nos normativos (como análise documental, entrevistas, questionários, testes de controles, inspeção, revisão analítica, circularização, observação, mapeamento de processos, avaliação de riscos e confronto com critérios normativos).
-2. NÃO inclua etapas administrativas genéricas (como definição de cronograma, designação de equipe, estimativa de custos ou guarda de papéis de trabalho).
-3. Redija cada item como um TÓPICO CURTO E NOMINAL (entre 3 e 10 palavras), direto ao ponto, sem explicações longas após vírgulas, seguindo exatamente o nível de concisão do exemplo abaixo.
+# Instrução
+Analise os documentos normativos de referência fornecidos (Manual de Auditoria do Poder Judiciário e Resolução CNJ nº 309/2020) e elabore a lista de técnicas e procedimentos que compõem a seção "Metodologia" do documento "Entendimento do Objeto".
 
-Exemplo de formato e estilo de saída esperado:
+# Validação das fontes fornecidas
+Antes de extrair as informações, verifique se os textos anexados correspondem às fontes institucionais esperadas para o documento "Entendimento do Objeto":
+1. Manual de Auditoria do Poder Judiciário
+2. Resolução CNJ nº 309/2020
+
+Registre essa verificação no campo "Validacao_fontes" do JSON de saída:
+- "fontes_esperadas_identificadas": liste quais das fontes esperadas acima foram efetivamente encontradas no conteúdo dos arquivos.
+- "fontes_ausentes": liste quais das fontes esperadas não foram encontradas nos arquivos anexados (ou [] se todas estiverem presentes).
+- "arquivos_inesperados_ou_incompativeis": liste eventuais documentos anexados que não pertencem ao escopo esperado, explicando brevemente o que são.
+- "conformidade_fontes": true se ambas as fontes esperadas estiverem presentes; false caso contrário.
+
+Regra de fidelidade: se alguma fonte obrigatória estiver ausente ou os arquivos forem incompatíveis com o escopo, não invente dados para preencher as seções técnicas; utilize listas vazias ([]) ou null nos campos sem lastro documental.
+
+# Critérios obrigatórios de extração e redação
+1. Utilize a lista-base institucional abaixo como referência inicial da seção "Metodologia" do documento "Entendimento do Objeto":
+   - Levantamento e análise documental
+   - Entrevistas com gestores e áreas envolvidas
+   - Aplicação de questionários de maturidade
+   - Testes de controles e validação de processos
+   - Análise de riscos e identificação de não conformidades
+   - Confronto das práticas institucionais com os critérios estabelecidos
+
+2. Se os documentos anexados forem compatíveis ("conformidade_fontes": true), mantenha essa estrutura-base, refine sua redação se necessário e complemente-a com outras técnicas de auditoria ou procedimentos de levantamento/avaliação explicitamente previstos nos normativos fornecidos, evitando redundâncias semânticas.
+3. NÃO inclua etapas administrativas genéricas (como definição de cronograma, designação de equipe, estimativa de custos ou guarda de papéis de trabalho).
+4. Redija cada item como um TÓPICO CURTO E NOMINAL (entre 3 e 10 palavras), direto ao ponto, sem explicações longas após vírgulas.
+5. Se "conformidade_fontes" for false (alguma fonte obrigatória ausente ou arquivos incompatíveis), retorne "Metodologia": [] para não gerar conteúdo sem lastro documental.
+
+Formato estrito de saída (JSON válido):
 {
+  "Validacao_fontes": {
+    "conformidade_fontes": true,
+    "fontes_esperadas_identificadas": [
+      "Manual de Auditoria do Poder Judiciário",
+      "Resolução CNJ nº 309/2020"
+    ],
+    "fontes_ausentes": [],
+    "arquivos_inesperados_ou_incompativeis": []
+  },
   "Metodologia": [
     "Levantamento e análise documental",
     "Entrevistas com gestores e áreas envolvidas",
@@ -17,4 +52,4 @@ Exemplo de formato e estilo de saída esperado:
   ]
 }
 
-Retorne estritamente um JSON válido contendo apenas a chave "Metodologia" com a lista consolidada e sem redundâncias.
+Retorne estritamente um JSON válido contendo apenas as chaves "Validacao_fontes" e "Metodologia".
