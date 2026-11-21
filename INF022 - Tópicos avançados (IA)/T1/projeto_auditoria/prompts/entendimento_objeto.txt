@@ -15,7 +15,9 @@ Registre essa verificação no campo "Validacao_fontes" do JSON de saída:
 - "arquivos_inesperados_ou_incompativeis": liste eventuais documentos anexados que não pertencem ao escopo esperado, explicando brevemente o que são.
 - "conformidade_fontes": true se ambas as fontes esperadas estiverem presentes; false caso contrário.
 
-Regra de fidelidade: se alguma fonte obrigatória estiver ausente ou os arquivos forem incompatíveis com o escopo, não invente dados para preencher as seções técnicas; utilize listas vazias ([]) ou null nos campos sem lastro documental.
+Regra de fidelidade:
+- Se ambas as fontes obrigatórias (Manual de Auditoria do Poder Judiciário e Resolução CNJ nº 309/2020) estiverem presentes, defina "conformidade_fontes": true e elabore a lista "Metodologia" ignorando eventuais arquivos extras incompatíveis (apenas registre os arquivos extras em "arquivos_inesperados_ou_incompativeis").
+- Se qualquer uma das duas fontes obrigatórias estiver ausente, defina "conformidade_fontes": false e retorne "Metodologia": [] para não gerar conteúdo sem lastro documental.
 
 # Critérios obrigatórios de extração e redação
 1. Utilize a lista-base institucional abaixo como referência inicial da seção "Metodologia" do documento "Entendimento do Objeto":
@@ -26,7 +28,7 @@ Regra de fidelidade: se alguma fonte obrigatória estiver ausente ou os arquivos
    - Análise de riscos e identificação de não conformidades
    - Confronto das práticas institucionais com os critérios estabelecidos
 
-2. Se os documentos anexados forem compatíveis ("conformidade_fontes": true), mantenha essa estrutura-base, refine sua redação se necessário e complemente-a com outras técnicas de auditoria ou procedimentos de levantamento/avaliação explicitamente previstos nos normativos fornecidos, evitando redundâncias semânticas.
+2. Se os documentos anexados forem compatíveis ("conformidade_fontes": true), PRESERVE integralmente os 6 tópicos da lista-base acima e COMPLEMENTE a lista acrescentando técnicas específicas explicitamente previstas nos normativos fornecidos, evitando termos vagos como "técnicas selecionadas".
 3. NÃO inclua etapas administrativas genéricas (como definição de cronograma, designação de equipe, estimativa de custos ou guarda de papéis de trabalho).
 4. Redija cada item como um TÓPICO CURTO E NOMINAL (entre 3 e 10 palavras), direto ao ponto, sem explicações longas após vírgulas.
 5. Se "conformidade_fontes" for false (alguma fonte obrigatória ausente ou arquivos incompatíveis), retorne "Metodologia": [] para não gerar conteúdo sem lastro documental.
