@@ -1,0 +1,26 @@
+# Define os contêineres (serviços) que compõem a aplicação
+services:
+  auditoria-app:
+    # Constrói a imagem usando o Dockerfile presente no diretório atual (.)
+    build: .
+    # Nome fixo do contêiner para facilitar inspeção e logs
+    container_name: projeto_auditoria
+
+    # Variáveis de ambiente injetadas dentro do contêiner Linux
+    environment:
+      # Repassa o identificador da tela gráfica do host para o Tkinter; se não existir, usa ':0'
+      - DISPLAY=${DISPLAY:-:0}
+      # Informa ao config.py a URL do Ollama rodando na máquina hospedeira (host)
+      - OLLAMA_HOST_URL=http://host.docker.internal:11434
+
+    # Mapeia o domínio 'host.docker.internal' para o IP real do host no Linux
+    # (No Docker Desktop do Windows isso já existe por padrão; no Linux Engine essa linha garante a compatibilidade)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    # Mapeamento de pastas/sockets entre a máquina física (host) e o contêiner
+    volumes:
+      # Espelha a pasta Downloads do usuário Linux para /root/Downloads (onde o app lê PDFs e salva JSONs)
+      - "${HOME}/Downloads:/root/Downloads"
+      # Conecta o socket do servidor gráfico X11 do Linux ao contêiner para exibir a janela Tkinter (rw = leitura e escrita)
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"

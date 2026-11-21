@@ -1,16 +1,23 @@
 """Configurações centrais do sistema de análise de documentos."""
 
+import os
 from pathlib import Path
 import requests
 
-# Servidores Ollama em ordem de prioridade (tenta o local primeiro; se falhar, tenta o remoto)
+# Permite apontar para o host do Docker (ex: http://host.docker.internal:11434) sem quebrar o uso nativo
+_SERVIDOR_AMBIENTE = os.getenv("OLLAMA_HOST_URL", "").strip()
+
+# Servidores Ollama em ordem de prioridade:
+# 1. Host do Docker (quando OLLAMA_HOST_URL estiver definida)
+# 2. Máquina local (execução nativa fora do Docker)
+# 3. Servidor remoto institucional (IFBA)
 SERVIDORES_OLLAMA: list[str] = [
+    *([_SERVIDOR_AMBIENTE] if _SERVIDOR_AMBIENTE else []),
     "http://localhost:11434",
     "https://ollama-api.ifba.edu.br",
 ]
 
 # Parâmetros padrão de geração
-# Temperatura baixa (0.0 a 1.0): reduz aleatoriedade e prioriza respostas fiéis ao documento
 TEMPERATURA_PADRAO: float = 0.1
 TOP_K_PADRAO: int = 40
 TOP_P_PADRAO: float = 0.90
@@ -18,23 +25,21 @@ TOP_P_PADRAO: float = 0.90
 # Janela de contexto (num_ctx): quantidade máxima de tokens (entrada + saída) processados de uma vez
 CONTEXTO_PADRAO: int = 65536
 
-# Tempo limite (em segundos) aguardando resposta do servidor antes de acusar erro de conexão (300s = 5 min)
+# Tempo limite (em segundos) aguardando resposta da inferência (300s = 5 min)
 TIMEOUT_REQUISICAO: int = 300
 
-def obter_modelos_locais(url_servidor: str = "http://localhost:11434", timeout: int = 5) -> list[str]:
-    """Consulta o servidor Ollama local e retorna a lista de modelos instalados."""
-    try:
-        # O endpoint /api/tags lista todos os modelos locais
-        resposta = requests.get(f"{url_servidor}/api/tags", timeout=timeout)
-        resposta.raise_for_status()
-        
-        dados = resposta.json()
-        # Extrai apenas o nome ('name') de cada modelo retornado
-        return [modelo["name"] for modelo in dados.get("models", [])]
-        
-    except requests.RequestException:
-        # Retorna uma lista vazia ou logs se o servidor estiver offline
-        return []
+def obter_modelos_disponiveis(timeout: int = 3) -> list[str]:
+    """Consulta os servidores configurados em ordem de prioridade e retorna os modelos instalados no primeiro ativo."""
+    for servidor in SERVIDORES_OLLAMA:
+        try:
+            resposta = requests.get(f"{servidor}/api/tags", timeout=timeout)
+            resposta.raise_for_status()
+            modelos = [modelo["name"] for modelo in resposta.json().get("models", [])]
+            if modelos:
+                return modelos
+        except requests.RequestException:
+            continue
+    return []
 
 def obter_pasta_downloads() -> Path:
     """Retorna o caminho da pasta Downloads do usuário (compatível com Linux e Windows)."""
@@ -42,5 +47,4 @@ def obter_pasta_downloads() -> Path:
     pasta_downloads.mkdir(parents=True, exist_ok=True)
     return pasta_downloads
 
-# Chamada movida para o final do arquivo, após o TIMEOUT_REQUISICAO ser definido
-MODELOS_DISPONIVEIS: list[str] = obter_modelos_locais(SERVIDORES_OLLAMA[0], TIMEOUT_REQUISICAO)
+MODELOS_DISPONIVEIS: list[str] = obter_modelos_disponiveis()

@@ -1,0 +1,17 @@
+services:
+  auditoria-app:
+    # Sobrescreve/adiciona variáveis de ambiente exigidas pelo subsistema gráfico WSLg no Windows
+    environment:
+      # Define explicitamente o display X11 padrão exposto pelo WSLg
+      - DISPLAY=:0
+      # Define o socket Wayland do WSLg (fallback gráfico moderno do Windows 11)
+      - WAYLAND_DISPLAY=wayland-0
+      # Diretório de tempo de execução exigido por bibliotecas gráficas no Linux do contêiner
+      - XDG_RUNTIME_DIR=/tmp
+
+    # Substitui a lista de volumes do arquivo base pelos caminhos equivalentes no Windows
+    volumes:
+      # Usa %USERPROFILE% (ex: C:\Users\SeuUsuario\Downloads) em vez de $HOME (que não existe no Windows nativo)
+      - "${USERPROFILE}/Downloads:/root/Downloads"
+      # Aponta para o caminho interno onde o Docker Desktop monta o socket gráfico X11 do WSLg
+      - "/run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix:rw"

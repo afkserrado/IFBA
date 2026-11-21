@@ -1,0 +1,10 @@
+# Evitar que o Docker copie os ambientes virtuais (.venv e .venv-win) e arquivos temporários para dentro da imagem
+.venv/
+.venv-win/
+__pycache__/
+*.py[cod]
+*.tmp
+*.log
+.git/
+.gitignore
+README.md
