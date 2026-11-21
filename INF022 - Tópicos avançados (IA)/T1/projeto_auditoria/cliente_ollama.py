@@ -9,6 +9,7 @@ import urllib.request
 
 from config import (
     CONTEXTO_PADRAO,
+    FONTES_OLLAMA,
     SERVIDORES_OLLAMA,
     TEMPERATURA_PADRAO,
     TIMEOUT_REQUISICAO,
@@ -17,19 +18,28 @@ from config import (
     obter_pasta_downloads,
 )
 
-def detectar_servidor_ativo(servidores: list[str] | None = None) -> str:
-    """Testa os servidores Ollama em ordem de prioridade e retorna a URL do primeiro ativo.
+def detectar_servidor_ativo(
+    fonte: str | None = None,
+    servidores: list[str] | None = None,
+) -> str:
+    """Testa os servidores Ollama da fonte selecionada e retorna a URL do primeiro ativo.
 
     Args:
-        servidores: Lista opcional de URLs. Se omitida, usa SERVIDORES_OLLAMA de config.py.
+        fonte: Nome da fonte selecionada (ex: 'Local' ou 'IFBA (Remoto)').
+        servidores: Lista opcional de URLs. Se omitida, usa os servidores da fonte ou SERVIDORES_OLLAMA.
 
     Returns:
         URL base do servidor acessível (ex: 'http://localhost:11434').
 
     Raises:
-        ConnectionError: Se nenhum servidor responder dentro do tempo limite.
+        ConnectionError: Se nenhum servidor da fonte responder dentro do tempo limite.
     """
-    lista_servidores = servidores or SERVIDORES_OLLAMA
+    if servidores is not None:
+        lista_servidores = servidores
+    elif fonte and fonte in FONTES_OLLAMA:
+        lista_servidores = FONTES_OLLAMA[fonte]
+    else:
+        lista_servidores = SERVIDORES_OLLAMA
 
     for servidor in lista_servidores:
         try:
@@ -39,9 +49,10 @@ def detectar_servidor_ativo(servidores: list[str] | None = None) -> str:
         except Exception:
             continue
 
+    detalhe_fonte = f" da fonte '{fonte}'" if fonte else " (nem local, nem IFBA)"
     raise ConnectionError(
-        "Não foi possível conectar a nenhum servidor Ollama (nem local, nem IFBA).\n"
-        "Verifique sua conexão de rede ou se o serviço local do Ollama está em execução."
+        f"Não foi possível conectar ao servidor Ollama{detalhe_fonte}.\n"
+        "Verifique sua conexão de rede ou se o serviço selecionado está em execução."
     )
 
 def _limpar_resposta_json(texto_bruto: str) -> str:

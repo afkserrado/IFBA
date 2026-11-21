@@ -8,10 +8,11 @@ from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 from cliente_ollama import consultar_ollama, detectar_servidor_ativo, salvar_resultado_json
 from config import (
-    MODELOS_DISPONIVEIS,
+    FONTES_OLLAMA,
     TEMPERATURA_PADRAO,
     TOP_K_PADRAO,
     TOP_P_PADRAO,
+    obter_modelos_disponiveis,
     obter_pasta_downloads,
 )
 from leitor_documentos import extrair_textos_multiplos_documentos
@@ -33,6 +34,7 @@ class AplicacaoAuditoria(tk.Tk):
         }
 
         self._var_tipo_doc = tk.StringVar()
+        self._var_fonte = tk.StringVar()
         self._var_modelo = tk.StringVar()
         self._var_temperatura = tk.DoubleVar(value=TEMPERATURA_PADRAO)
         self._var_top_p = tk.DoubleVar(value=TOP_P_PADRAO)
@@ -65,27 +67,40 @@ class AplicacaoAuditoria(tk.Tk):
         )
         self._combo_tipo_doc.grid(row=0, column=1, columnspan=2, sticky=tk.EW, pady=6)
 
+        # Fonte dos Modelos (Local / IFBA)
+        ttk.Label(quadro_config, text="Fonte dos Modelos:").grid(
+            row=1, column=0, sticky=tk.W, padx=(0, 8), pady=6
+        )
+        self._combo_fonte = ttk.Combobox(
+            quadro_config,
+            textvariable=self._var_fonte,
+            values=list(FONTES_OLLAMA.keys()),
+            state="readonly",
+        )
+        self._combo_fonte.grid(row=1, column=1, columnspan=2, sticky=tk.EW, pady=6)
+        self._combo_fonte.bind("<<ComboboxSelected>>", self._ao_selecionar_fonte)
+
         # Modelo Ollama
         ttk.Label(quadro_config, text="Modelo Ollama:").grid(
-            row=1, column=0, sticky=tk.W, padx=(0, 8), pady=6
+            row=2, column=0, sticky=tk.W, padx=(0, 8), pady=6
         )
         self._combo_modelo = ttk.Combobox(
             quadro_config,
             textvariable=self._var_modelo,
-            values=MODELOS_DISPONIVEIS,
+            values=[],
             state="readonly",
         )
-        self._combo_modelo.grid(row=1, column=1, columnspan=2, sticky=tk.EW, pady=6)
+        self._combo_modelo.grid(row=2, column=1, columnspan=2, sticky=tk.EW, pady=6)
 
         # Arquivos de Referência (.docx / .pdf)
         ttk.Label(quadro_config, text="Documentos (.docx/.pdf):").grid(
-            row=2, column=0, sticky=tk.NW, padx=(0, 8), pady=6
+            row=3, column=0, sticky=tk.NW, padx=(0, 8), pady=6
         )
         self._lista_arquivos = tk.Listbox(quadro_config, height=4)
-        self._lista_arquivos.grid(row=2, column=1, sticky=tk.EW, padx=(0, 8), pady=6)
+        self._lista_arquivos.grid(row=3, column=1, sticky=tk.EW, padx=(0, 8), pady=6)
 
         quadro_botoes_arquivo = ttk.Frame(quadro_config)
-        quadro_botoes_arquivo.grid(row=2, column=2, sticky=tk.NE, pady=6)
+        quadro_botoes_arquivo.grid(row=3, column=2, sticky=tk.NE, pady=6)
 
         self._btn_adicionar = ttk.Button(
             quadro_botoes_arquivo,
@@ -103,10 +118,10 @@ class AplicacaoAuditoria(tk.Tk):
 
         # Parâmetros de Geração (Temperatura, Top-P, Top-K)
         ttk.Label(quadro_config, text="Geração:").grid(
-            row=3, column=0, sticky=tk.W, padx=(0, 8), pady=6
+            row=4, column=0, sticky=tk.W, padx=(0, 8), pady=6
         )
         quadro_parametros = ttk.Frame(quadro_config)
-        quadro_parametros.grid(row=3, column=1, columnspan=2, sticky=tk.EW, pady=6)
+        quadro_parametros.grid(row=4, column=1, columnspan=2, sticky=tk.EW, pady=6)
 
         ttk.Label(quadro_parametros, text="Temperatura:").pack(side=tk.LEFT, padx=(0, 4))
         self._spin_temperatura = ttk.Spinbox(
@@ -193,8 +208,41 @@ class AplicacaoAuditoria(tk.Tk):
         rotulos = list(self._mapa_rotulo_para_tipo.keys())
         if rotulos:
             self._var_tipo_doc.set(rotulos[0])
-        if MODELOS_DISPONIVEIS:
-            self._var_modelo.set(MODELOS_DISPONIVEIS[0])
+
+        fontes = list(FONTES_OLLAMA.keys())
+        for fonte in fontes:
+            modelos = obter_modelos_disponiveis(fonte=fonte)
+            if modelos:
+                self._var_fonte.set(fonte)
+                self._combo_modelo["values"] = modelos
+                self._var_modelo.set(modelos[0])
+                self._var_status.set(f"{len(modelos)} modelo(s) carregado(s) da fonte '{fonte}'.")
+                return
+
+        if fontes:
+            self._var_fonte.set(fontes[0])
+            self._atualizar_modelos_por_fonte(fontes[0])
+
+    def _ao_selecionar_fonte(self, _evento: tk.Event | None = None) -> None:
+        """Evento disparado ao trocar a fonte de modelos na Combobox."""
+        fonte = self._var_fonte.get()
+        if fonte:
+            self._atualizar_modelos_por_fonte(fonte)
+
+    def _atualizar_modelos_por_fonte(self, fonte: str) -> None:
+        """Consulta os modelos disponíveis na fonte selecionada e atualiza a combobox."""
+        self._var_status.set(f"Buscando modelos disponíveis em '{fonte}'...")
+        self.update_idletasks()
+
+        modelos = obter_modelos_disponiveis(fonte=fonte)
+        self._combo_modelo["values"] = modelos
+
+        if modelos:
+            self._var_modelo.set(modelos[0])
+            self._var_status.set(f"{len(modelos)} modelo(s) carregado(s) da fonte '{fonte}'.")
+        else:
+            self._var_modelo.set("")
+            self._var_status.set(f"Nenhum modelo encontrado ou servidor indisponível em '{fonte}'.")
 
     def _adicionar_arquivos(self) -> None:
         """Abre o seletor de múltiplos arquivos filtrado para .docx e .pdf."""
@@ -247,6 +295,7 @@ class AplicacaoAuditoria(tk.Tk):
         self._spin_top_p.config(state=estado_botao)
         self._spin_top_k.config(state=estado_botao)
         self._combo_tipo_doc.config(state=estado_combo)
+        self._combo_fonte.config(state=estado_combo)
         self._combo_modelo.config(state=estado_combo)
 
         if processando:
@@ -264,7 +313,15 @@ class AplicacaoAuditoria(tk.Tk):
     def _iniciar_processamento(self) -> None:
         """Valida as entradas e dispara a execução em uma thread separada."""
         rotulo_doc = self._var_tipo_doc.get()
+        fonte = self._var_fonte.get()
         modelo = self._var_modelo.get()
+
+        if not modelo:
+            messagebox.showwarning(
+                "Atenção",
+                "Selecione uma fonte ativa e um modelo Ollama antes de continuar.",
+            )
+            return
 
         if not self._caminhos_arquivos:
             messagebox.showwarning(
@@ -299,6 +356,7 @@ class AplicacaoAuditoria(tk.Tk):
             target=self._executar_pipeline,
             args=(
                 tipo_documento,
+                fonte,
                 modelo,
                 list(self._caminhos_arquivos),
                 temperatura,
@@ -312,6 +370,7 @@ class AplicacaoAuditoria(tk.Tk):
     def _executar_pipeline(
         self,
         tipo_documento: TipoDocumento,
+        fonte: str,
         modelo: str,
         caminhos_arquivos: list[Path],
         temperatura: float,
@@ -329,8 +388,8 @@ class AplicacaoAuditoria(tk.Tk):
             texto_documento = extrair_textos_multiplos_documentos(caminhos_arquivos)
 
             # 2. Montagem do prompt específico a partir do arquivo .txt correspondente
-            self.after(0, self._var_status.set, "Localizando servidor Ollama ativo...")
-            servidor = detectar_servidor_ativo()
+            self.after(0, self._var_status.set, f"Conectando ao servidor Ollama ({fonte})...")
+            servidor = detectar_servidor_ativo(fonte=fonte)
             prompt_final = montar_prompt_extracao(texto_documento, tipo_documento)
 
             # 3. Consulta ao modelo no Ollama
