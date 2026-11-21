@@ -6,7 +6,7 @@ import requests
 # Servidores Ollama em ordem de prioridade (tenta o local primeiro; se falhar, tenta o remoto)
 SERVIDORES_OLLAMA: list[str] = [
     "http://localhost:11434",
-    "ollama-api.ifba.edu.br/api/tags",
+    "https://ollama-api.ifba.edu.br",
 ]
 
 # Parâmetros padrão de geração
