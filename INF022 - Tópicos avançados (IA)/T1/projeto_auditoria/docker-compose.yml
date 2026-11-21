@@ -20,7 +20,11 @@ services:
 
     # Mapeamento de pastas/sockets entre a máquina física (host) e o contêiner
     volumes:
-      # Espelha a pasta Downloads do usuário Linux para /root/Downloads (onde o app lê PDFs e salva JSONs)
-      - "${HOME}/Downloads:/root/Downloads"
+      # Mantém o salvamento automático na pasta Downloads real (usa HOME no Linux ou USERPROFILE no Windows)
+      - "${HOME:-${USERPROFILE}}/Downloads:/root/Downloads"
+      # Expõe toda a pasta pessoal do usuário (Documentos, Área de Trabalho, etc.) em /host_home
+      - "${HOME:-${USERPROFILE}}:/host_home:ro"
+      # Opcional: expõe a partição compartilhada caso use no Kubuntu
+      - "/mnt/Arquivos_D0P6LA:/host_arquivos:ro"
       # Conecta o socket do servidor gráfico X11 do Linux ao contêiner para exibir a janela Tkinter (rw = leitura e escrita)
       - "/tmp/.X11-unix:/tmp/.X11-unix:rw"

@@ -10,8 +10,13 @@ services:
       - XDG_RUNTIME_DIR=/tmp
 
     # Substitui a lista de volumes do arquivo base pelos caminhos equivalentes no Windows
-    volumes:
-      # Usa %USERPROFILE% (ex: C:\Users\SeuUsuario\Downloads) em vez de $HOME (que não existe no Windows nativo)
+    # (!override impede que o Docker Compose tente mesclar com os volumes de Linux do docker-compose.yml)
+    volumes: !override
+      # Mantém o salvamento automático na pasta Downloads real
       - "${USERPROFILE}/Downloads:/root/Downloads"
+      # Expõe toda a pasta do usuário (Documentos, Desktop, OneDrive, etc.) em /host_home
+      - "${USERPROFILE}:/host_home:ro"
+      # Opcional: caso queira acessar também o drive A:\ inteiro (onde está seu código)
+      - "A:/:/host_drive_a:ro"
       # Aponta para o caminho interno onde o Docker Desktop monta o socket gráfico X11 do WSLg
       - "/run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix:rw"
