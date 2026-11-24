@@ -1,0 +1,6 @@
+# Default text files to LF
+* text=auto eol=lf
+
+# Binary files
+*.pdf binary
+*.pyc binary
