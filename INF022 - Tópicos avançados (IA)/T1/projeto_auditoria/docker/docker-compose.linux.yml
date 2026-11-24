@@ -1,6 +1,6 @@
-# Sobrescrita para Linux (X11). Uso em conjunto com docker-compose.yml:
-#   docker compose -f docker-compose.yml -f docker-compose.linux.yml build
-#   docker compose -f docker-compose.yml -f docker-compose.linux.yml run --rm auditoria-app
+# Sobrescrita para Linux (X11). Uso a partir da raiz do projeto:
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.linux.yml build
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.linux.yml run --rm auditoria-app
 services:
   auditoria-app:
     # Usa a rede do host: "localhost:11434" dentro do contêiner alcança o Ollama

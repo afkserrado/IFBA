@@ -68,15 +68,15 @@ Ferramenta desktop em Python com interface gráfica (Tkinter) desenvolvida para 
 
 #### Linux
 ```bash
-xhost +local:docker                     # 1. Liberar acesso ao servidor gráfico X11 (uma vez por sessão)
-docker compose build                    # 2. Construir a imagem (a cada edição de código ou prompts)
-docker compose run --rm auditoria-app   # 3. Executar o programa
+xhost +local:docker                                                                         # 1. Liberar acesso ao servidor gráfico X11 (uma vez por sessão)
+docker compose -f docker/docker-compose.yml -f docker/docker-compose.linux.yml build        # 2. Construir a imagem (a cada edição de código ou prompts)
+docker compose -f docker/docker-compose.yml -f docker/docker-compose.linux.yml run --rm auditoria-app  # 3. Executar o programa
 ```
 
 #### Windows
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.windows.yml build                  # 1. Construir a imagem (a cada edição de código ou prompts)
-docker compose -f docker-compose.yml -f docker-compose.windows.yml run --rm auditoria-app  # 2. Executar o programa
+docker compose -f docker/docker-compose.yml -f docker/docker-compose.windows.yml build                  # 1. Construir a imagem (a cada edição de código ou prompts)
+docker compose -f docker/docker-compose.yml -f docker/docker-compose.windows.yml run --rm auditoria-app  # 2. Executar o programa
 ```
 
 ---
@@ -127,10 +127,11 @@ projeto_auditoria/
 ├── leitor_documentos.py            # Extração de texto nativo e OCR local para arquivos .docx e .pdf
 ├── main.py                         # Ponto de entrada e interface gráfica (Tkinter)
 ├── requirements.txt                # Dependências Python do projeto
-├── Dockerfile                      # Definição da imagem Docker (Python 3.12 + Tkinter + libs gráficas)
-├── docker-compose.yml              # Configuração comum (build, nome, Ollama)
-├── docker-compose.linux.yml        # Rede do host, X11 e volumes para Linux
-├── docker-compose.windows.yml      # Sobrescrita de volumes e variáveis para ambiente Windows (WSLg)
+├── docker/                         # Arquivos de containerização Docker
+│   ├── Dockerfile                  # Definição da imagem Docker (Python 3.12 + Tkinter + libs gráficas)
+│   ├── docker-compose.yml          # Configuração comum (build, nome, Ollama)
+│   ├── docker-compose.linux.yml    # Rede do host, X11 e volumes para Linux
+│   └── docker-compose.windows.yml  # Sobrescrita de volumes e variáveis para ambiente Windows (WSLg)
 └── README.md                       # Documentação do projeto
 ```
 

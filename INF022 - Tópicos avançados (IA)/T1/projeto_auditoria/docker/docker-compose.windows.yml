@@ -1,6 +1,6 @@
-# Sobrescrita para Windows (Docker Desktop + WSLg). Uso em conjunto com docker-compose.yml:
-#   docker compose -f docker-compose.yml -f docker-compose.windows.yml build
-#   docker compose -f docker-compose.yml -f docker-compose.windows.yml run --rm auditoria-app
+# Sobrescrita para Windows (Docker Desktop + WSLg). Uso a partir da raiz do projeto:
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.windows.yml build
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.windows.yml run --rm auditoria-app
 services:
   auditoria-app:
     # Variáveis de ambiente exigidas pelo subsistema gráfico WSLg no Windows

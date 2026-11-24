@@ -4,8 +4,10 @@
 # Define os contêineres (serviços) que compõem a aplicação
 services:
   auditoria-app:
-    # Constrói a imagem usando o Dockerfile presente no diretório atual (.)
-    build: .
+    # Constrói a imagem usando o Dockerfile em docker/ com contexto na raiz do projeto (..)
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     # Nome fixo do contêiner para facilitar inspeção e logs
     container_name: projeto_auditoria
 
