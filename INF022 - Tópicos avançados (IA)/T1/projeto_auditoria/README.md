@@ -128,7 +128,8 @@ projeto_auditoria/
 ├── main.py                         # Ponto de entrada e interface gráfica (Tkinter)
 ├── requirements.txt                # Dependências Python do projeto
 ├── Dockerfile                      # Definição da imagem Docker (Python 3.12 + Tkinter + libs gráficas)
-├── docker-compose.yml              # Orquestração padrão do contêiner (ambiente Linux / X11)
+├── docker-compose.yml              # Configuração comum (build, nome, Ollama)
+├── docker-compose.linux.yml        # Rede do host, X11 e volumes para Linux
 ├── docker-compose.windows.yml      # Sobrescrita de volumes e variáveis para ambiente Windows (WSLg)
 └── README.md                       # Documentação do projeto
 ```

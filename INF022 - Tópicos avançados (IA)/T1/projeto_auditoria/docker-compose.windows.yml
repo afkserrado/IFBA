@@ -1,6 +1,9 @@
+# Sobrescrita para Windows (Docker Desktop + WSLg). Uso em conjunto com docker-compose.yml:
+#   docker compose -f docker-compose.yml -f docker-compose.windows.yml build
+#   docker compose -f docker-compose.yml -f docker-compose.windows.yml run --rm auditoria-app
 services:
   auditoria-app:
-    # Sobrescreve/adiciona variáveis de ambiente exigidas pelo subsistema gráfico WSLg no Windows
+    # Variáveis de ambiente exigidas pelo subsistema gráfico WSLg no Windows
     environment:
       # Define explicitamente o display X11 padrão exposto pelo WSLg
       - DISPLAY=:0
@@ -9,14 +12,10 @@ services:
       # Diretório de tempo de execução exigido por bibliotecas gráficas no Linux do contêiner
       - XDG_RUNTIME_DIR=/tmp
 
-    # Substitui a lista de volumes do arquivo base pelos caminhos equivalentes no Windows
-    # (!override impede que o Docker Compose tente mesclar com os volumes de Linux do docker-compose.yml)
-    volumes: !override
-      # Mantém o salvamento automático na pasta Downloads real
+    volumes:
+      # Mantém o salvamento automático na pasta Downloads real do usuário
       - "${USERPROFILE}/Downloads:/root/Downloads"
-      # Expõe toda a pasta do usuário (Documentos, Desktop, OneDrive, etc.) em /host_home
+      # Expõe toda a pasta do usuário (Documentos, Desktop, OneDrive, etc.) em /host_home (somente leitura)
       - "${USERPROFILE}:/host_home:ro"
-      # Opcional: caso queira acessar também o drive A:\ inteiro (onde está seu código)
-      - "A:/:/host_drive_a:ro"
       # Aponta para o caminho interno onde o Docker Desktop monta o socket gráfico X11 do WSLg
       - "/run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix:rw"

@@ -1,0 +1,23 @@
+# Sobrescrita para Linux (X11). Uso em conjunto com docker-compose.yml:
+#   docker compose -f docker-compose.yml -f docker-compose.linux.yml build
+#   docker compose -f docker-compose.yml -f docker-compose.linux.yml run --rm auditoria-app
+services:
+  auditoria-app:
+    # Usa a rede do host: "localhost:11434" dentro do contêiner alcança o Ollama
+    # mesmo que ele escute apenas em 127.0.0.1 (configuração padrão do Ollama)
+    network_mode: host
+    # Com a rede do host, o mapeamento de 'host.docker.internal' do arquivo base não é necessário
+    # (!reset remove a lista herdada, pois extra_hosts é incompatível com network_mode: host)
+    extra_hosts: !reset []
+
+    environment:
+      # Repassa o identificador da tela gráfica do host para o Tkinter; se não existir, usa ':0'
+      - DISPLAY=${DISPLAY:-:0}
+
+    volumes:
+      # Mantém o salvamento automático na pasta Downloads real do usuário
+      - "${HOME}/Downloads:/root/Downloads"
+      # Expõe a pasta pessoal do usuário (Documentos, Área de Trabalho, etc.) em /host_home (somente leitura)
+      - "${HOME}:/host_home:ro"
+      # Conecta o socket do servidor gráfico X11 do Linux ao contêiner para exibir a janela Tkinter
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
