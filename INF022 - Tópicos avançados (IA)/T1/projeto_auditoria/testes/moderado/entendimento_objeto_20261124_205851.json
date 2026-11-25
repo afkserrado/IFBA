@@ -1,0 +1,30 @@
+{
+  "Validacao_fontes": {
+    "conformidade_fontes": true,
+    "fontes_esperadas_identificadas": [
+      "Manual de Auditoria do Poder Judiciário",
+      "Resolução CNJ nº 309/2020"
+    ],
+    "fontes_ausentes": [],
+    "arquivos_inesperados_ou_incompativeis": []
+  },
+  "Metodologia": [
+    "Levantamento e análise documental",
+    "Entrevistas com gestores e áreas envolvidas",
+    "Aplicação de questionários de maturidade",
+    "Testes de controles e validação de processos",
+    "Análise de riscos e identificação de não conformidades",
+    "Confronto das práticas institucionais com os critérios estabelecidos",
+    "Aplicação de técnicas de auditoria selecionadas",
+    "Teste substantivo de distorções relevantes"
+  ],
+  "Metadados_requisicao": {
+    "modelo": "gemma4:e4b",
+    "temperatura": 0.35,
+    "top_k": 40,
+    "top_p": 0.85,
+    "inicio_requisicao": "2026-11-24T20:58:31+00:00",
+    "fim_requisicao": "2026-11-24T20:58:51+00:00",
+    "tempo_total_segundos": 9.54
+  }
+}

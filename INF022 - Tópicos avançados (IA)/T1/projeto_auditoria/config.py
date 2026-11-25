@@ -53,7 +53,7 @@ def obter_modelos_disponiveis(fonte: str | None = None, timeout: int = 3) -> lis
 def obter_pasta_downloads() -> Path:
     """Retorna o caminho da pasta Downloads do usuário (compatível com Linux e Windows)."""
     pasta_downloads = Path.home() / "Downloads"
-    pasta_downloads.mkdir(parents=True, exist_ok=True)
+    pasta_downloads.mkdir(parents=True, exist_ok=True) # Cria a pasta caso ela não exista
     return pasta_downloads
 
 MODELOS_DISPONIVEIS: list[str] = obter_modelos_disponiveis()

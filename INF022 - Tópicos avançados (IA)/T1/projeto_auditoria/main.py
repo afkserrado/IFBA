@@ -18,15 +18,15 @@ from config import (
 from leitor_documentos import extrair_textos_multiplos_documentos
 from prompts import TipoDocumento, listar_tipos_disponiveis, montar_prompt_extracao
 
-class AplicacaoAuditoria(tk.Tk):
+class AplicacaoAuditoria(tk.Tk): # Herda de tk.Tk
     """Janela principal para seleção de parâmetros, execução da análise e visualização do JSON."""
 
     # Construtor
     def __init__(self) -> None:
         super().__init__()
-        self.title("Extrator de Documentos de Auditoria (Ollama)")
-        self.geometry("820x640") # Tamanho inicial
-        self.minsize(720, 540)  # Tamanho mínimo
+        self.title("Extrator de Documentos de Auditoria (Ollama)") # Título da janela
+        self.geometry("820x640") # Tamanho inicial da janela
+        self.minsize(720, 540)  # Tamanho mínimo da janela
 
         # Mapeia o texto amigável exibido no Combobox apenas para tipos com prompt .txt disponível
         self._mapa_rotulo_para_tipo: dict[str, TipoDocumento] = {
@@ -263,7 +263,7 @@ class AplicacaoAuditoria(tk.Tk):
             caminho = Path(caminho_str)
             if caminho not in self._caminhos_arquivos:
                 self._caminhos_arquivos.append(caminho)
-                self._lista_arquivos.insert(tk.END, caminho.name)
+                self._lista_arquivos.insert(tk.END, caminho.name) # Insere o nome do arquivo ao final da Listbox
                 adicionados += 1
 
         total = len(self._caminhos_arquivos)
@@ -380,7 +380,7 @@ class AplicacaoAuditoria(tk.Tk):
         """Executa o fluxo completo em segundo plano: leitura -> prompt -> Ollama -> salvamento."""
         try:
             # 1. Extração e consolidação de texto (nativo + OCR se necessário)
-            self.after(
+            self.after( # Agenda a atualização da barra de status para assim que possível
                 0,
                 self._var_status.set,
                 f"Extraindo texto de {len(caminhos_arquivos)} documento(s)...",
@@ -439,7 +439,9 @@ class AplicacaoAuditoria(tk.Tk):
 def main() -> None:
     """Inicializa a aplicação gráfica."""
     app = AplicacaoAuditoria()
-    app.mainloop()
+    app.mainloop() # Mantém a janela aberta e aguardando as interações do usuário
 
-if __name__ == "__main__":
+# Inicializa a plicação gráfica quando o comando 'python main.py' é executado
+# Evita que a aplicação gráfica seja inicializada caso outro módulo importe 'main.py'
+if __name__ == "__main__": 
     main()
