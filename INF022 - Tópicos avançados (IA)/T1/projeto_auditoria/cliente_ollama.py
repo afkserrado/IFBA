@@ -116,6 +116,8 @@ def consultar_ollama(
     partes_resposta: list[str] = []
     em_raciocinio = False
     motivo_termino = ""
+    estatisticas: dict = {}
+    inicio_dt = datetime.now().astimezone()
 
     try:
         with urllib.request.urlopen(requisicao, timeout=TIMEOUT_REQUISICAO) as resposta:
@@ -142,6 +144,7 @@ def consultar_ollama(
 
                 if pedaco.get("done"):
                     motivo_termino = pedaco.get("done_reason", "")
+                    estatisticas = pedaco
                     break
         print("\n")
 
@@ -153,10 +156,33 @@ def consultar_ollama(
     except Exception as erro:
         raise RuntimeError(f"Erro durante a comunicação com o Ollama: {erro}") from erro
 
+    fim_dt = datetime.now().astimezone()
+
+    # O Ollama informa durações em nanossegundos; o tempo de carregamento do modelo é descontado.
+    total_ns = estatisticas.get("total_duration")
+    carga_ns = estatisticas.get("load_duration", 0) or 0
+    if total_ns is not None:
+        tempo_s = round((total_ns - carga_ns) / 1e9, 2)
+    else:
+        tempo_s = round((fim_dt - inicio_dt).total_seconds(), 2)
+
+    metadados = {
+        "modelo": modelo,
+        "temperatura": temperatura,
+        "top_k": top_k,
+        "top_p": top_p,
+        "inicio_requisicao": inicio_dt.isoformat(timespec="seconds"),
+        "fim_requisicao": fim_dt.isoformat(timespec="seconds"),
+        "tempo_total_segundos": tempo_s,
+    }
+
     texto_final = _limpar_resposta_json("".join(partes_resposta))
 
     try:
-        return json.loads(texto_final)
+        dados = json.loads(texto_final)
+        if isinstance(dados, dict):
+            dados["Metadados_requisicao"] = metadados
+        return dados
     except json.JSONDecodeError as erro_json:
         aviso_limite = (
             f" (A janela de contexto de {num_ctx} tokens foi atingida antes de concluir o JSON.)"
